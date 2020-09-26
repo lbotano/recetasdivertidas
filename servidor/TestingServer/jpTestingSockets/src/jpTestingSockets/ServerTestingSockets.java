@@ -56,14 +56,13 @@ public class ServerTestingSockets {
 	            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
 	            String msg;
 	            
-	            while(in.hasNextLine()) {
+	            while(in.hasNextLine()) {	            	
 	            	msg = in.nextLine();
-	            	if(msg.contentEquals("exit")) {
-            			out.println("Leaving..." + socket);
-            			System.out.println("Leaving..." + socket);
-	            		
-	            	}
 	            	switch(msg){
+	            		case "exit":
+	            			out.println("Leaving..." + socket);
+	            			System.out.println("Leaving..." + socket);
+	            			break;
 	            		case "sp":
 	            			out.println("Calling store procedure...");
 	            			System.out.println("Calling store procedure...");
@@ -72,13 +71,12 @@ public class ServerTestingSockets {
 	            			this.rs = pstm.executeQuery();
 
 	            			out.println("Values: ");
-	            			System.out.println("Values: ");
+            				System.out.println("Sending data to socket: " + socket);	
 	            			while(rs.next()) {
-	            				System.out.println("Sending data to socket: " + socket);
 	            				out.println(rs.getInt(1));
-	            				Thread.sleep(150);
 	            			}
 	            			System.out.println("Completed!");
+	            			out.println("done");
 	            			pstm.close();
 	            			rs.close();
 	            			break;
@@ -86,6 +84,7 @@ public class ServerTestingSockets {
 	            			out.println("Type 'exit' or 'sp' ");
 	            	}	            	
 	            }
+	            System.out.println("exiting while");
 			} catch (Exception e) {
 				System.out.println("Error: " + socket+ " " + e.getMessage());
 			} finally {
