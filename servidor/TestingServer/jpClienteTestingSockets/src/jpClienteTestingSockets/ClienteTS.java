@@ -1,5 +1,6 @@
 package jpClienteTestingSockets;
 
+import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
@@ -7,12 +8,20 @@ import java.util.Scanner;
 public class ClienteTS {
 	public static void main(String[] args) throws Exception {
 		try (var socket = new Socket("127.0.0.1", 59898)) {
+			
             Scanner scanner = new Scanner(System.in);
             Scanner in = new Scanner(socket.getInputStream());
-            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-            String nextLine;
-            System.out.println("Enter 'sp' or 'exit' ");           
+            //PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+            String[] names = {"pepe", "carlos", "juan"};     
+            
+            ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+            System.out.println("Enviando nombres...");
+            out.writeObject(names);  
+            System.out.println("Enviado");
+            
+        	/*
             while (scanner.hasNextLine()) {
+
                 nextLine =scanner.nextLine();
             	if(nextLine.contentEquals("exit")) {
             		System.out.println("Leaving...");
@@ -28,7 +37,9 @@ public class ClienteTS {
             			}
                 	}
             	}
-            }
+
+            }    
+            */
             System.out.println("Exiting...");
         }
 	}
