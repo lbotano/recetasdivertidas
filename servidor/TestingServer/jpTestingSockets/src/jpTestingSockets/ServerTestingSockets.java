@@ -3,6 +3,8 @@ package jpTestingSockets;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -49,13 +51,22 @@ public class ServerTestingSockets {
 		public void run() {
 			try {
 				System.out.println("Connected with client");
-				this.con = cpds.getConnection();
-			    System.out.println("Database connected!");
+				//this.con = cpds.getConnection();
+			    //System.out.println("Database connected!");
 
-				Scanner in = new Scanner(socket.getInputStream());
-	            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-	            String msg;
+				//Scanner in = new Scanner(socket.getInputStream());
+	            //PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+			    //String msg;
 	            
+	            ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
+	            ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+	            
+	            Object[] string = (Object[]) in.readObject();
+	            for (int i = 0; i < string.length; i++) {
+					System.out.println("LLEGO: " + string[i].toString());
+				}
+
+	            /*
 	            while(in.hasNextLine()) {	            	
 	            	msg = in.nextLine();
 	            	switch(msg){
@@ -84,7 +95,7 @@ public class ServerTestingSockets {
 	            			out.println("Type 'exit' or 'sp' ");
 	            	}	            	
 	            }
-	            System.out.println("exiting while");
+	            */
 			} catch (Exception e) {
 				System.out.println("Error: " + socket+ " " + e.getMessage());
 			} finally {
