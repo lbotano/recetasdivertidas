@@ -210,3 +210,39 @@ BEGIN
     VALUES (puNickname, prID, pcalificacion);
 END//
 DELIMITER ;
+
+-- Buscar recetas (por ingredientes)
+-- Obtiene una lista de ingredientes (como string)
+--  Formato del string: (ingrediente), (ingrediente), ...
+-- Obtiene la página donde de la búsqueda
+-- Devuelve las ids de las recetas que se pueden preparar
+-- con esos ingrdientes
+DROP PROCEDURE IF EXISTS spBuscarRecetaPorIngr;
+DELIMITER //
+CREATE PROCEDURE spBuscarRecetaPorIngr
+(
+	IN ingredientes varchar(512),
+    IN pagina int
+)
+BEGIN
+	-- DROP TEMPORARY TABLE IF EXISTS IngredientesBusqueda;
+	-- SET @sql = CONCAT('CREATE TEMPORARY TABLE IngredientesBusqueda AS
+	SET @sql = CONCAT('
+    SELECT r.rID
+    FROM
+		Receta r,
+        Ingrediente i,
+        IngredienteReceta ir
+	WHERE
+		r.rID = ir.rID AND
+        i.iID = ir.iID AND
+        i.iNombre IN (', ingredientes, ')
+	LIMIT 10
+    OFFSET ', pagina, '
+    ORDER BY r.rID DESC;');
+    
+    PREPARE stmt FROM @sql;
+    EXECUTE stmt;
+    DEALLOCATE PREPARE stmt;
+END//
+DELIMITER ;
