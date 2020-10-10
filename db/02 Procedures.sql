@@ -16,6 +16,8 @@ CREATE FUNCTION fnRegistroUsuario
 	uMail varchar(64)	
 )
 RETURNS boolean
+MODIFIES SQL DATA
+NON DETERMINISTIC
 BEGIN
 	DECLARE existeUsuario int;
 	SET existeUsuario = 
@@ -50,6 +52,8 @@ CREATE FUNCTION fnInicioSesion
 	puContrasenia varchar(50)
 )
 RETURNS TINYINT
+READS SQL DATA
+NON DETERMINISTIC
 BEGIN
 	DECLARE contraDB varchar(50);
 	DECLARE cantUsuarios int;
