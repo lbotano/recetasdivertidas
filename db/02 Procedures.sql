@@ -2,22 +2,20 @@ USE RecetasDivertidasDB;
 
 -- Registro de usuarios --
 -- Devuelve un True si el usuario se creó con éxito
-DROP FUNCTION IF EXISTS fnRegistroUsuario;
+DROP PROCEDURE IF EXISTS spRegistroUsuario;
 DELIMITER //
-CREATE FUNCTION fnRegistroUsuario
+CREATE PROCEDURE spRegistroUsuario
 (
-	uNickname varchar(32),
-	uPreguntaSeguridad varchar(64),
-	uRespuestaSeguridad varchar(64),
-	uNombre varchar(50),
-	uApellido varchar(50),
-	uContrasenia varchar(50),
-	uGenero tinyint,
-	uMail varchar(64)	
+	IN uNickname varchar(32),
+	IN uPreguntaSeguridad varchar(64),
+	IN uRespuestaSeguridad varchar(64),
+	IN uNombre varchar(50),
+	IN uApellido varchar(50),
+	IN uContrasenia varchar(50),
+	IN uGenero tinyint,
+	IN uMail varchar(64),
+	OUT resultado boolean
 )
-RETURNS boolean
-MODIFIES SQL DATA
-NOT DETERMINISTIC
 BEGIN
 	DECLARE existeUsuario int;
 	SET existeUsuario = 
@@ -26,15 +24,14 @@ BEGIN
             FROM Usuario
 			WHERE uNickname = @uNickname
 		);
-	IF @ExisteUsuario = 0 THEN
+	IF existeUsuario = 0 THEN
 		INSERT INTO Usuario
 		VALUES (uNickname, uPreguntaSeguridad, uRespuestaSeguridad,
 				uNombre, uApellido, uContrasenia, uGenero, uMail);
-		RETURN true;
+		SELECT true;
 	ELSE
-		RETURN false;
+		SELECT false;
 	END IF;
- 
 END//
 
 DELIMITER ;
@@ -44,16 +41,14 @@ DELIMITER ;
 -- 	0 si el usuario ingresado no existe
 --  1 si el inicio de sesión es exitoso
 --  2 si la contraseña es la incorrecta
-DROP FUNCTION IF EXISTS fnInicioSesion;
+DROP PROCEDURE IF EXISTS spInicioSesion;
 DELIMITER //
-CREATE FUNCTION fnInicioSesion
+CREATE PROCEDURE spInicioSesion
 (	
-	puNickname varchar(32),
-	puContrasenia varchar(50)
+	IN puNickname varchar(32),
+	IN puContrasenia varchar(50),
+	OUT resultado tinyint
 )
-RETURNS TINYINT
-READS SQL DATA
-NOT DETERMINISTIC
 BEGIN
 	DECLARE contraDB varchar(50);
 	DECLARE cantUsuarios int;
@@ -64,7 +59,7 @@ BEGIN
     WHERE uNickname = puNickname;
 	-- Si no encuentra un usuario, devuelve 0
 	IF cantUsuarios = 0 THEN
-		RETURN 0;
+		SELECT 0 into resultado;
 	ELSE
         SELECT uContrasenia
         INTO contraDB
@@ -73,9 +68,9 @@ BEGIN
         LIMIT 1;
         
 		IF contraDB = puContrasenia THEN
-            RETURN 1;
+			SELECT 1 into resultado;
 		ELSE
-            RETURN 2;
+            SELECT 2 into resultado;
 		END IF;
 	END IF;
 END//
