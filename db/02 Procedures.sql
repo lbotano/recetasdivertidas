@@ -47,7 +47,7 @@ CREATE PROCEDURE spInicioSesion
 (	
 	IN puNickname varchar(32),
 	IN puContrasenia varchar(50),
-	OUT resultado boolean
+	OUT resultado tinyint
 )
 BEGIN
 	DECLARE contraDB varchar(50);
@@ -59,7 +59,7 @@ BEGIN
     WHERE uNickname = puNickname;
 	-- Si no encuentra un usuario, devuelve 0
 	IF cantUsuarios = 0 THEN
-		SELECT 0;
+		SELECT 0 into resultado;
 	ELSE
         SELECT uContrasenia
         INTO contraDB
@@ -68,9 +68,9 @@ BEGIN
         LIMIT 1;
         
 		IF contraDB = puContrasenia THEN
-			SELECT 1;
+			SELECT 1 into resultado;
 		ELSE
-            SELECT 2;
+            SELECT 2 into resultado;
 		END IF;
 	END IF;
 END//
