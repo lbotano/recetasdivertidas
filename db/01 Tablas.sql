@@ -34,33 +34,35 @@ CREATE TABLE Usuario(
 
 DROP TABLE IF EXISTS Ingrediente;
 CREATE TABLE Ingrediente(
-	iID int,
-	iNombre varchar(64) UNIQUE,
-	CONSTRAINT pk_i PRIMARY KEY (iID)
+	iID int NOT NULL AUTO_INCREMENT,
+	iNombre varchar(64) NOT NULL,
+	CONSTRAINT pk_i PRIMARY KEY (iID),
+    CONSTRAINT uk_i UNIQUE KEY (iNombre)
 );
 
 DROP TABLE IF EXISTS CategoriaDeIngrediente;
 CREATE TABLE CategoriaDeIngrediente (
-	cID int,
-	cNombre varchar(50),
+	cID int NOT NULL AUTO_INCREMENT,
+	cNombre varchar(50) NOT NULL,
 	CONSTRAINT pk_ci PRIMARY KEY (cID),
 	CONSTRAINT uk_ci UNIQUE (cNombre)
 );
 
 DROP TABLE IF EXISTS CategoriaDeReceta;
 CREATE TABLE CategoriaDeReceta(
-	cID int,
-	cNombre varchar(64),
-	CONSTRAINT pk_cr PRIMARY KEY (cID)
+	cID int NOT NULL AUTO_INCREMENT,
+	cNombre varchar(64) NOT NULL ,
+	CONSTRAINT pk_cr PRIMARY KEY (cID),
+    CONSTRAINT uk_ci UNIQUE (cNombre)
 );
 
 DROP TABLE IF EXISTS RelCatIngred;
 CREATE TABLE RelCatIngred(
-	iID int,
-	cID int,
+	iID int NOT NULL,
+	cID int NOT NULL,
 	CONSTRAINT pk_rci PRIMARY KEY (iID, cID),
 	CONSTRAINT fk_iid FOREIGN KEY (iID) REFERENCES Ingrediente(iID),
-	CONSTRAINT fk_cid FOREIGN KEY (iID) REFERENCES CategoriaDeIngrediente(cID) 
+	CONSTRAINT fk_cid FOREIGN KEY (cID) REFERENCES CategoriaDeIngrediente(cID) 
 );
 
 DROP TABLE IF EXISTS Receta;

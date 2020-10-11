@@ -6,14 +6,14 @@ DROP PROCEDURE IF EXISTS spRegistroUsuario;
 DELIMITER //
 CREATE PROCEDURE spRegistroUsuario
 (
-	IN uNickname varchar(32),
-	IN uPreguntaSeguridad int,
-	IN uRespuestaSeguridad varchar(64),
-	IN uNombre varchar(50),
-	IN uApellido varchar(50),
-	IN uContrasenia varchar(50),
-	IN uGenero tinyint,
-	IN uMail varchar(64),
+	IN nickname varchar(32),
+	IN preguntaSeguridad int,
+	IN respuestaSeguridad varchar(64),
+	IN nombre varchar(50),
+	IN apellido varchar(50),
+	IN contrasenia varchar(50),
+	IN genero tinyint,
+	IN mail varchar(64),
 	OUT resultado boolean
 )
 BEGIN
@@ -22,8 +22,9 @@ BEGIN
 		(
 			SELECT COUNT(*)
             FROM Usuario
-			WHERE uNickname = uNickname
+			WHERE uNickname = nickname
 		);
+    
 	IF existeUsuario = 0 THEN
 		INSERT INTO Usuario
 			(uNickname,
@@ -35,39 +36,40 @@ BEGIN
             uGenero,
             uMail)
 		VALUES 
-			(uNickname,
-			uPreguntaSeguridad,
-			uRespuestaSeguridad,
-			uNombre,
-			uApellido,
-			uContrasenia,
-			uGenero,
-			uMail);
+			(nickname,
+			preguntaSeguridad,
+			respuestaSeguridad,
+			nombre,
+			apellido,
+			contrasenia,
+			genero,
+			mail);
 		SELECT true INTO resultado;
 	ELSE
 		SELECT false INTO resultado;
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Este usuario ya existe.';
 	END IF;
 END//
-
 DELIMITER ;
 
 -- Inicio sesion --
 -- Devuelve:
--- 	0 si el usuario ingresado no existe
---  1 si el inicio de sesión es exitoso
---  2 si la contraseña es la incorrecta
+-- 	true: si se logueó correctamente.
+--  false: si hubo un error al loguearse.
 DROP PROCEDURE IF EXISTS spInicioSesion;
 DELIMITER //
 CREATE PROCEDURE spInicioSesion
 (	
 	IN puNickname varchar(32),
 	IN puContrasenia varchar(50),
-	OUT resultado tinyint
+	OUT resultado boolean
 )
 BEGIN
 	DECLARE contraDB varchar(50);
 	DECLARE cantUsuarios int;
+    
+    -- Por defecto devuelve 0
+    SELECT false INTO resultado;
     
 	SELECT COUNT(*)
     INTO cantUsuarios
@@ -75,7 +77,7 @@ BEGIN
     WHERE uNickname = puNickname;
 	-- Si no encuentra un usuario, devuelve 0
 	IF cantUsuarios = 0 THEN
-		SELECT 0 into resultado;
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Este usuario no existe.';
 	ELSE
         SELECT uContrasenia
         INTO contraDB
@@ -84,11 +86,91 @@ BEGIN
         LIMIT 1;
         
 		IF contraDB = puContrasenia THEN
-			SELECT 1 INTO resultado;
+			SELECT true INTO resultado;
 		ELSE
-            SELECT 2 INTO resultado;
+            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Contraseña incorrecta';
 		END IF;
 	END IF;
+END//
+DELIMITER ;
+
+-- Añadir categoría de receta (Solo para admin)
+DROP PROCEDURE IF EXISTS spAgregarCategoriaReceta;
+DELIMITER //
+CREATE PROCEDURE spAgregarCategoriaReceta
+(
+	IN nombre varchar(64)
+)
+BEGIN
+	DECLARE EXIT HANDLER FOR 1062
+    BEGIN
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Esta categoría ya existe';
+    END;
+    
+    INSERT INTO CategoriaDeReceta (cNombre)
+    VALUES (nombre);
+END//
+DELIMITER ;
+
+-- Añadir categoría de ingrediente (Solo para admin)
+DROP PROCEDURE IF EXISTS spAgregarCategoriaIngrediente;
+DELIMITER //
+CREATE PROCEDURE spAgregarCategoriaIngrediente
+(
+	IN nombre varchar(50)
+)
+BEGIN
+	DECLARE EXIT HANDLER FOR 1062
+    BEGIN
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Esta categoría ya existe';
+	END;
+    
+    INSERT INTO CategoriaDeIngrediente (cNombre)
+    VALUES (nombre);
+END//
+DELIMITER ;
+
+-- Añadir ingrediente
+-- Luego de este SP hay que llamar a spAsignarCategoriaIngrediente
+DROP PROCEDURE IF EXISTS spAgregarIngrediente;
+DELIMITER //
+CREATE PROCEDURE spAgregarIngrediente(
+	nombre varchar(64)
+)
+BEGIN
+	DECLARE EXIT HANDLER FOR 1062
+    BEGIN
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Este ingrediente ya existe';
+	END;
+    
+    INSERT INTO Ingrediente (iNombre)
+    VALUES (nombre);
+END//
+DELIMITER ;
+
+-- Asociar categoria de ingrediente a un ingrediente
+-- Parámetros:
+--  iID: ID del ingrediente
+--  cID: ID de la categoría del ingrediente
+DROP PROCEDURE IF EXISTS spAsignarCategoriaIngrediente;
+DELIMITER //
+CREATE PROCEDURE spAsignarCategoriaIngrediente (
+	iID int,
+    cID int
+)
+BEGIN
+	DECLARE EXIT HANDLER FOR 1062
+    BEGIN
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El ingrediente ya es de esta categoría.';
+	END;
+    
+    DECLARE EXIT HANDLER FOR 1452
+    BEGIN
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El ingrediente o la categoría no existen.';
+    END;
+    
+	INSERT INTO RelCatIngred
+    VALUES (iID, cID);
 END//
 DELIMITER ;
 
