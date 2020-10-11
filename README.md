@@ -17,6 +17,7 @@ Subir los cambios de tu repositorio local al repositorio remoto (Github): `git p
 Puede pedir que te loguees en Github para comprobar tus permisos.
 
 ## Organización de las carpetas
-* `diagramas`: para los diagramas xd
-* `proyectoJava`: para el proyecto java xd
-* `baseDeDatos`: los scripts de la base de datos
+`Documentacion`: La documentación.
+`cliente`: Proyecto Java del cliente de Recetas Divertidas.
+`db`: Scripts de la base de datos (MySQL)
+`servidor`: Proyecto Java del servidor de Recetas Divertidas.
