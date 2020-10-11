@@ -3,19 +3,33 @@ USE RecetasDivertidasDB;
 
 SET FOREIGN_KEY_CHECKS = 0;
 
+DROP TABLE IF EXISTS PreguntasSeguridad;
+CREATE TABLE PreguntasSeguridad(
+	id int NOT NULL AUTO_INCREMENT,
+    pregunta varchar(64) NOT NULL,
+    CONSTRAINT pk_preguntaSeguridad PRIMARY KEY (id)
+);
+
+-- Género:
+-- 	0: masculino
+-- 	1: femenino
+-- 	cualquier otro nro: otro
 DROP TABLE IF EXISTS Usuario;
 CREATE TABLE Usuario(
 	uNickname varchar(32) NOT NULL,
-	uPreguntaSeguridad varchar(64) NOT NULL,
+	uPreguntaSeguridad int,
 	uRespuestaSeguridad varchar(64) NOT NULL,
 	uNombre varchar(50) NOT NULL,
 	uApellido varchar(50) NOT NULL,
 	uContrasenia varchar(50) NOT NULL,
 	uGenero boolean,
 	uMail varchar(64) NOT NULL,
-    uHabilitado boolean DEFAULT true, 
+    uHabilitado boolean NOT NULL DEFAULT true, 
 	CONSTRAINT pk_u PRIMARY KEY (uNickname),
-	CONSTRAINT uk_um UNIQUE (uMail)
+	CONSTRAINT uk_um UNIQUE (uMail),
+    CONSTRAINT fk_usuario_preguntaSeguridad
+		FOREIGN KEY (uPreguntaSeguridad)
+		REFERENCES PreguntasSeguridad(id)
 );
 
 DROP TABLE IF EXISTS Ingrediente;

@@ -7,7 +7,7 @@ DELIMITER //
 CREATE PROCEDURE spRegistroUsuario
 (
 	IN uNickname varchar(32),
-	IN uPreguntaSeguridad varchar(64),
+	IN uPreguntaSeguridad int,
 	IN uRespuestaSeguridad varchar(64),
 	IN uNombre varchar(50),
 	IN uApellido varchar(50),
@@ -22,15 +22,31 @@ BEGIN
 		(
 			SELECT COUNT(*)
             FROM Usuario
-			WHERE uNickname = @uNickname
+			WHERE uNickname = uNickname
 		);
 	IF existeUsuario = 0 THEN
 		INSERT INTO Usuario
-		VALUES (uNickname, uPreguntaSeguridad, uRespuestaSeguridad,
-				uNombre, uApellido, uContrasenia, uGenero, uMail);
-		SELECT true;
+			(uNickname,
+            uPreguntaSeguridad,
+            uRespuestaSeguridad,
+            uNombre,
+            uApellido,
+            uContrasenia,
+            uGenero,
+            uMail)
+		VALUES 
+			(uNickname,
+			uPreguntaSeguridad,
+			uRespuestaSeguridad,
+			uNombre,
+			uApellido,
+			uContrasenia,
+			uGenero,
+			uMail);
+		SELECT true INTO resultado;
 	ELSE
-		SELECT false;
+		SELECT false INTO resultado;
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Este usuario ya existe.';
 	END IF;
 END//
 
@@ -68,9 +84,9 @@ BEGIN
         LIMIT 1;
         
 		IF contraDB = puContrasenia THEN
-			SELECT 1 into resultado;
+			SELECT 1 INTO resultado;
 		ELSE
-            SELECT 2 into resultado;
+            SELECT 2 INTO resultado;
 		END IF;
 	END IF;
 END//
