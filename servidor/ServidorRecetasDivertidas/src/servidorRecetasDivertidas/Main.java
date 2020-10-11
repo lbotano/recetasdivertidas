@@ -41,9 +41,20 @@ public class Main {
 		private Socket socket;
 		private Connection conn;
 		private ArrayList<String> answer;
-		private CallableStatement stmt;;
-		
-		private static final String CALLLOGIN = "{call spInicioSesion(?,?,?)}";
+		private CallableStatement stmt;
+
+		//Strings para los callableStatement, es decir para llamar a las sp.
+		private static final String CONSRECETASCAT = "";
+		private static final String CONSRECETAING = "";
+		private static final String CONSRECETATEXT = "";
+		private static final String CALIFICAR = "";
+		private static final String DATOSRECETA = "";
+		private static final String LISTARCATREC = "";
+		private static final String LISTARCATING = "";
+		private static final String LOGIN = "{call spInicioSesion(?,?,?)}";
+		private static final String PREGUNTASSEG = "";
+		private static final String REGISTRO = "{call spRegistroUsuario(?,?,?,?,?,?,?,?,?)}";
+		private static final String SUBIRRECETA = "";
 		
 		public Server (Socket socket) {
 			this.socket = socket;
@@ -54,7 +65,7 @@ public class Main {
 				System.out.println("Connected with client" + socket);
 				this.conn = cpds.getConnection();
 			    System.out.println("Database connected for " + socket);
-
+			    System.out.println();
 	            ObjectOutputStream output = new ObjectOutputStream(socket.getOutputStream());
 	            ObjectInputStream input = new ObjectInputStream(socket.getInputStream());
 	            answer = new ArrayList<String>();
@@ -65,28 +76,70 @@ public class Main {
     			answer.clear();
 	            
 	            switch(message.get(0)) {
-	            	case "LOGIN":
-	            		stmt = conn.prepareCall(CALLLOGIN);
-	            		stmt.setString(1, message.get(1));
-	            		stmt.setString(2, message.get(2));
-	            		stmt.registerOutParameter(3, Types.TINYINT);
-	            		System.out.println("Sending login message to db for socket: " + socket);
-	            		stmt.execute();
-	            		if(stmt.getInt(3) == 0) {
-		            		answer.add("LOGINFAIL");
-		            		answer.add("usuario no existe");
-	            		}else if(stmt.getInt(3) == 1) {
-	            			answer.add("LOGINOK");
-	            		}else {
-	            			answer.add("LOGINFAIL");
-	            			answer.add("contraseña incorrecta");
-	            		}
-	            		output.writeObject(answer);
+	            case "CONSRECETASCAT": 
 	            	break;
-	            	default:
-	            		answer.clear();
-	            		answer.add("MESSAGEERROR");
-	            		output.writeObject(answer);
+	            case "CONSRECETAING":
+	            	break;
+	            case "CONSRECETATEXT":
+	            	break;
+	            case "CALIFICAR":
+	            	break;
+	            case "DATOSRECETA":
+	            	break;
+	            case "LISTARCATREC":
+	            	break;
+	            case "LISTARCATING":
+	            	break;
+	            case "LOGIN":
+            		stmt = conn.prepareCall(LOGIN);
+            		stmt.setString(1, message.get(1));
+            		stmt.setString(2, message.get(2));
+            		stmt.registerOutParameter(3, Types.TINYINT);
+            		
+            		System.out.println("Sending LOGIN message to db for socket: " + socket);
+            		stmt.execute();
+            		if(stmt.getInt(3) == 0) {
+	            		answer.add("LOGINFAIL");
+	            		answer.add("usuario no existe");
+            		}else if(stmt.getInt(3) == 1) {
+            			answer.add("LOGINOK");
+            		}else {
+            			answer.add("LOGINFAIL");
+            			answer.add("contraseña incorrecta");
+            		}
+            		output.writeObject(answer);
+	            	break;
+	            case "PREGUNTASSEG":
+	            	break;
+	            case "REGISTRO":
+            		stmt = conn.prepareCall(REGISTRO);            		
+            		//poner en el statement todos los parametros de registro
+            		for (int i = 1; i < message.size(); i++) {
+            			if (i == 2 || i == 7) {
+            				stmt.setInt(i, Integer.parseInt(message.get(i)));
+            			}else {
+                    		stmt.setString(i, message.get(i));            				
+            			}
+					}
+            		stmt.registerOutParameter(9, Types.BOOLEAN);
+            		System.out.println("Sending REGISTER message to db for socket: " + socket);
+            		
+            		try {
+                		stmt.execute();
+                		answer.add("REGISTEROK");
+					} catch (SQLException e) {
+	            		answer.add("REGISTERFAIL");
+	            		answer.add(e.getMessage());
+					}
+            		
+            		output.writeObject(answer);
+            		break;
+	            case "SUBIRRECETA":
+	            	break;
+            	default:
+            		answer.clear();
+            		answer.add("MESSAGEERROR");
+            		output.writeObject(answer);
 	            }
 	            
 			}catch (Exception e){
