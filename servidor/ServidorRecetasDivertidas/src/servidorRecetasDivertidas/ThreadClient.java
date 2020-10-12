@@ -1,63 +1,93 @@
 package servidorRecetasDivertidas;
 
-import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.sql.CallableStatement;
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
-public class ThreadClient implements Runnable{
-	private static ComboPooledDataSource cpds;
-	private Socket socket;
-	private ArrayList<String> answer;
-	private ArrayList<String> message;
-	private CallableStatement stmt;
-	private Connection conn;
-	
-	private static final String CONSRECETASCAT = "";
-	private static final String CONSRECETAING = "";
-	private static final String CONSRECETATEXT = "";
-	private static final String CALIFICAR = "";
-	private static final String DATOSRECETA = "";
-	private static final String LISTARCATREC = "";
-	private static final String LISTARCATING = "";
+public class ThreadClient extends User implements Runnable{
+
+	//llamadas a SPs
+	//private static final String CONSRECETASCAT = "";
+	//private static final String CONSRECETAING = "";
+	//private static final String CONSRECETATEXT = "";
+	//private static final String CALIFICAR = "";
+	//private static final String DATOSRECETA = "{call spGetDatosReceta()}";
+	//private static final String LISTARCATREC = "";
+	//private static final String LISTARCATING = "";
 	private static final String LOGIN = "{call spInicioSesion(?,?,?)}";
-	private static final String PREGUNTASSEG = "";
+	//private static final String PREGUNTASSEG = "";
 	private static final String REGISTRO = "{call spRegistroUsuario(?,?,?,?,?,?,?,?,?)}";
-	private static final String SUBIRRECETA = "";
+	//private static final String SUBIRRECETA = "";
 	
 	public ThreadClient(ComboPooledDataSource c, Socket s) {
 		ThreadClient.cpds = c;
 		this.socket = s;
 	}
 	
-	synchronized private void login() {
+	private void calificar() {
+		
+	}
+	
+	private void consRecetasCat() {
+		
+	}
+	
+	private void consRecetasIng() {
+		
+	}
+	
+	private void consRecetasText() {
+		
+	}
+	
+	private void datosReceta() {
+		
+	}
+	
+	private void listarCatIng() {
+		
+	}
+	
+	private void listarCatRec() {
+		
+	}
+	
+	private void login() {
 		try {
+			//establece q codigo sql va a ejecutar
 			stmt = conn.prepareCall(LOGIN);
+			//setea los parametros a partir del mensaje del cliente
 			stmt.setString(1, message.get(1));
 			stmt.setString(2, message.get(2));
+			//setea los parametros de salida del sp
 			stmt.registerOutParameter(3, Types.TINYINT);
-			
 			System.out.println("Sending LOGIN message to db for socket: " + socket);
+			//ejecuta la consulta			
 			stmt.execute();
+			//si no hubo ningun error, entonces manda el siguiente mensaje
 			answer.add("LOGINOK");
 		} catch (SQLException e) {
+			//si hubo un error y esta definido por los devs, se lo manda al cliente
 			answer.add("LOGINFAIL");
 			if(e.getSQLState().contentEquals("45000")) {
         		answer.add(e.getMessage());
     		}else {
+    			//sino, le manda el siguiente mensaje
     			answer.add("Error en la base de datos");
     		}
 		}		
+	}	
+	
+	private void preguntasSeg() {
+		
 	}
-
-	synchronized private void registro() {
+	
+	private void registro() {
 		try {
 			stmt = conn.prepareCall(REGISTRO); 
 			//poner en el statement todos los parametros de registro
@@ -83,50 +113,60 @@ public class ThreadClient implements Runnable{
 		 
 	}
 	
+	private void subirReceta() {
+		
+	}
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public void run() {
-		try {
-	
-			System.out.println("Connected with client" + socket);
-			this.conn = cpds.getConnection();
-		    System.out.println("Database connected for " + socket);
-		    
-	        ObjectOutputStream output = new ObjectOutputStream(socket.getOutputStream());
-	        ObjectInputStream input = new ObjectInputStream(socket.getInputStream());
-	        //array list que guarda la respuesta que genera el servidor
-	        answer = new ArrayList<String>();	        
-	        //array list que tiene el mensaje del cliente
-	        //recibe el mensaje del cleinte
-			this.message = (ArrayList<String>) input.readObject();
+		try {	
+			System.out.println("Connected with client" + this.socket);
+			//inicializacion de los atributos
+			this.conn = cpds.getConnection();		    
+	        this.output = new ObjectOutputStream(this.socket.getOutputStream());
+	        this.input = new ObjectInputStream(this.socket.getInputStream());
+	        this.answer = new ArrayList<String>();	        
+	        //recibe el mensaje del cliente
+			this.message = (ArrayList<String>) this.input.readObject();
 	        
 	        //segun la peticion, ejecuta cierto metodo
 	        switch(message.get(0)) {
-	        case "CONSRECETASCAT": 
-	        	break;
-	        case "CONSRECETAING":
-	        	break;
-	        case "CONSRECETATEXT":
-	        	break;
 	        case "CALIFICAR":
+	        	calificar();
+	        	break;
+	        case "CONSRECETASCAT": 
+	        	consRecetasCat();
+	        	break;
+	        case "CONSRECETASING":
+	        	consRecetasIng();
+	        	break;
+	        case "CONSRECETASTEXT":
+	        	consRecetasText();
 	        	break;
 	        case "DATOSRECETA":
-	        	break;
-	        case "LISTARCATREC":
+	        	datosReceta();
 	        	break;
 	        case "LISTARCATING":
+	        	listarCatIng();
 	        	break;
-	        case "LOGIN":
+	        case "LISTARCATREC":
+	        	listarCatRec();
+	        	break;
+	        case "LOGIN"://
 	        	login();
 	        	break;
 	        case "PREGUNTASSEG":
+	        	preguntasSeg();
 	        	break;
 	        case "REGISTRO":          		
 	    		registro();           		
 	    		break;
 	        case "SUBIRRECETA":
+	        	subirReceta();
 	        	break;
 	    	default:
+	    		//se manda esta respuesta si la peticion es invalida
 	    		answer.add("MESSAGEERROR");
 	        }
 	        //una vez ejecutados los metodos correspondientes, manda la respuesta
@@ -135,13 +175,17 @@ public class ThreadClient implements Runnable{
 			answer.clear();
 			
 		}catch (Exception e){
-			System.out.println(e);
-			System.out.println(e.getMessage());
+        	System.out.println();
+        	System.out.println("Client error: " + e.getMessage() + " in socket: " + socket);
 		}finally {
-	
 	        try {
-	            socket.close();
-	        } catch (IOException e) {
+	        	this.output.close();
+	        	this.input.close();
+	        	this.conn.close();
+	            this.socket.close();
+	        } catch (Exception e) {
+	        	System.out.println();
+	        	System.out.println("Client error: " + e.getMessage() + " in socket: " + socket);
 	        }
 	        System.out.println("Closed: " + socket );
 	        System.out.println();
