@@ -3,14 +3,31 @@ package servidorRecetasDivertidas;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.sql.CallableStatement;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
-public class ThreadClient extends User implements Runnable{
+public class ThreadClient implements Runnable{
+	//referencia al objeto que maneja las conexiones a la base de datos
+	protected static ComboPooledDataSource cpds;
+	//objeto que maneja el enlace con el cliente
+	protected Socket socket;
+	//objetos que guardan los mensajes que se transmiten
+	protected ArrayList<String> answer;
+	protected ArrayList<String> message;
+	//objeto para llamar a store procedures
+	protected CallableStatement stmt;
+	//objeto para guardar la conexion a la base de datos
+	protected Connection conn;
+	//objetos para pasar mensajes
+	protected ObjectOutputStream output;
+	protected ObjectInputStream input;
 
+	
 	//llamadas a SPs
 	//private static final String CONSRECETASCAT = "";
 	//private static final String CONSRECETAING = "";
@@ -117,9 +134,53 @@ public class ThreadClient extends User implements Runnable{
 		
 	}
 	
+	protected void opcionesCliente(String peticion) {
+		//segun la peticion, ejecuta cierto metodo
+        switch(message.get(0)) {
+        case "CALIFICAR":
+        	calificar();
+        	break;
+        case "CONSRECETASCAT": 
+        	consRecetasCat();
+        	break;
+        case "CONSRECETASING":
+        	consRecetasIng();
+        	break;
+        case "CONSRECETASTEXT":
+        	consRecetasText();
+        	break;
+        case "DATOSRECETA":
+        	datosReceta();
+        	break;
+        case "LISTARCATING":
+        	listarCatIng();
+        	break;
+        case "LISTARCATREC":
+        	listarCatRec();
+        	break;
+        case "LOGIN"://
+        	login();
+        	break;
+        case "PREGUNTASSEG":
+        	preguntasSeg();
+        	break;
+        case "REGISTRO":          		
+    		registro();           		
+    		break;
+        case "SUBIRRECETA":
+        	subirReceta();
+        	break;
+    	default:
+    		//se manda esta respuesta si la peticion es invalida
+    		answer.add("MESSAGEERROR");
+        }
+	}
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public void run() {
+
+
 		try {	
 			System.out.println("Connected with client" + this.socket);
 			//inicializacion de los atributos
@@ -129,46 +190,10 @@ public class ThreadClient extends User implements Runnable{
 	        this.answer = new ArrayList<String>();	        
 	        //recibe el mensaje del cliente
 			this.message = (ArrayList<String>) this.input.readObject();
+			
+			//switch de opcioens del cliente
+	        opcionesCliente(message.get(0));
 	        
-	        //segun la peticion, ejecuta cierto metodo
-	        switch(message.get(0)) {
-	        case "CALIFICAR":
-	        	calificar();
-	        	break;
-	        case "CONSRECETASCAT": 
-	        	consRecetasCat();
-	        	break;
-	        case "CONSRECETASING":
-	        	consRecetasIng();
-	        	break;
-	        case "CONSRECETASTEXT":
-	        	consRecetasText();
-	        	break;
-	        case "DATOSRECETA":
-	        	datosReceta();
-	        	break;
-	        case "LISTARCATING":
-	        	listarCatIng();
-	        	break;
-	        case "LISTARCATREC":
-	        	listarCatRec();
-	        	break;
-	        case "LOGIN"://
-	        	login();
-	        	break;
-	        case "PREGUNTASSEG":
-	        	preguntasSeg();
-	        	break;
-	        case "REGISTRO":          		
-	    		registro();           		
-	    		break;
-	        case "SUBIRRECETA":
-	        	subirReceta();
-	        	break;
-	    	default:
-	    		//se manda esta respuesta si la peticion es invalida
-	    		answer.add("MESSAGEERROR");
-	        }
 	        //una vez ejecutados los metodos correspondientes, manda la respuesta
     		output.writeObject(answer);
     		//vacia el objeto para la proxima respuesta
@@ -189,6 +214,6 @@ public class ThreadClient extends User implements Runnable{
 	        }
 	        System.out.println("Closed: " + socket );
 	        System.out.println();
-		}		
+		}
 	}
 }

@@ -2,10 +2,17 @@ package servidorRecetasDivertidas;
 
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.Socket;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class ThreadAdmin extends User implements Runnable{
+import com.mchange.v2.c3p0.ComboPooledDataSource;
+
+public class ThreadAdmin extends ThreadClient{
+
+	public ThreadAdmin(ComboPooledDataSource c, Socket s) {
+		super(c, s);
+	}
 
 	//private static final String BORRARCATING = "";
 	//private static final String BORRARCATREC = "";
@@ -13,26 +20,27 @@ public class ThreadAdmin extends User implements Runnable{
 	//private static final String BORRARREC = "";
 	private static final String SUBIRCATING = "{call spAgregarCategoriaIngrediente(?)}";
 	private static final String SUBIRCATREC = "{call spAgregarCategoriaReceta(?)}"; 
+	//private static final String SUBIRING = "";
 	
-	public void borrarCatIng() {
+	private void borrarCatIng() {
 		
 	}
 	
-	public void borrarCatRec() {
+	private void borrarCatRec() {
 		
 	}
 	
-	public void borrarRec(){
+	private void borrarRec(){
 		
 	}
 	
-	public void borrarUsuario() {
+	private void borrarUsuario() {
 		
 	}
 	
 	//true: subir ingrediente
 	//false: subir receta
-	public void subirCatRecIng(boolean recoing) {
+	private void subirCatRecIng(boolean recoing) {
 		String ok, fail = "";
 		try {
 			if(recoing) {
@@ -57,9 +65,14 @@ public class ThreadAdmin extends User implements Runnable{
 		}
 	}
 	
+	private void subirIng() {
+		
+	}
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public void run() {
+
 		try {
 			System.out.println("Connected with admin" + this.socket);
 			//inicializacion de los atributos
@@ -89,9 +102,11 @@ public class ThreadAdmin extends User implements Runnable{
 			case "SUBIRCATREC":
 				subirCatRecIng(false);
 				break;
+			case "SUBIRING":
+				subirIng();
+				break;
 			default:	    		
-				//se manda esta respuesta si la peticion es invalida
-	    		answer.add("MESSAGEERROR");
+				opcionesCliente(message.get(0));
 				break;
 			}
 	        //una vez ejecutados los metodos correspondientes, manda la respuesta
