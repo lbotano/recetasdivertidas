@@ -92,6 +92,7 @@ public class LayoutLogin extends BorderPane {
     private void checkEntries(TextField tbU, TextField tbP) throws IOException {
         //Si la consulta es true entonces pasa a la siguiente stage
         if(consLogin(tbU.getText(),tbP.getText())){
+            System.out.println("Datos OK");
             //Aca iria la proxima stage, si tuviera una..
         }
     }
