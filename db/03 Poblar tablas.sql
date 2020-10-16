@@ -8,6 +8,9 @@ TRUNCATE TABLE CategoriaDeReceta;
 TRUNCATE TABLE CategoriaDeIngrediente;
 TRUNCATE TABLE Ingrediente;
 TRUNCATE TABLE RelCatIngred;
+TRUNCATE TABLE Receta;
+TRUNCATE TABLE Multimedia;
+TRUNCATE TABLE IngredienteReceta;
 SET FOREIGN_KEY_CHECKS = 1;
 
 -- Insertar preguntas de seguridad
@@ -55,4 +58,13 @@ CALL spAgregarIngrediente("Azúcar");
 CALL spAsignarCategoriaIngrediente(1, 2);
 CALL spAsignarCategoriaIngrediente(2, 1);
 CALL spAsignarCategoriaIngrediente(2, 2);
-CALL spAsignarCategoriaIngrediente(1, 5);
+
+
+-- Subir receta
+CALL spSubirReceta (
+	'Alfajor Jorgito',
+    'Es hermoso',
+    'Hacelo',
+    '[{"iID": 1, "cantidad": 100, "unidadCantidad": "ml"}, {"iID": 2, "cantidad": 200, "unidadCantidad": "g"}]',
+    '[{"link":"http://www.google.com/foto.png"}, {"link":"http://www.cuantocabron.com/gracioso.jpg"}]'
+);

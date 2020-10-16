@@ -67,9 +67,10 @@ CREATE TABLE RelCatIngred(
 
 DROP TABLE IF EXISTS Receta;
 CREATE TABLE Receta (
-	rID int,
-	rNombre varchar (128),
-	rDescripcion text,
+	rID int NOT NULL AUTO_INCREMENT,
+	rNombre varchar(128) NOT NULL,
+	rDescripcion text(512) NOT NULL,
+    rInstrucciones text(2048) NOT NULL,
 	CONSTRAINT pk_r PRIMARY KEY (rID)
 );
 
@@ -84,10 +85,10 @@ CREATE TABLE RelCatReceta (
 
 DROP TABLE IF EXISTS IngredienteReceta;
 CREATE TABLE IngredienteReceta (
-	rID int,
-	iID int,
-	cantidad int,
-	unidadCantidad varchar(16),
+	rID int NOT NULL,
+	iID int NOT NULL,
+	cantidad int NOT NULL DEFAULT 1,
+	unidadCantidad varchar(16) NULL,
 	CONSTRAINT pk_ir PRIMARY KEY (rID, iID),
 	CONSTRAINT fk_irrID FOREIGN KEY (rID) REFERENCES Receta (rID),
 	CONSTRAINT fk_iriID FOREIGN KEY (iID) REFERENCES Ingrediente(iID)

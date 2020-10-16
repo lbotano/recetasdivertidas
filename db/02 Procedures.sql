@@ -174,6 +174,112 @@ BEGIN
 END//
 DELIMITER ;
 
+-- Subir receta --
+-- Parámetros:
+-- 	nombre: nombre de la receta
+--  descripcion: descripcion de la receta
+--  instrucciones: instrucciones de la receta
+--  ingredientes: ingredientes en JSON
+-- 		iID number: ID del Ingrediente
+--      cantidad int: Cantidad necesaria del ingrediente
+-- 		unidadCantidad string: Unidad de medida de la cantidad
+--  multimedia: medios audiovisuales de la receta
+-- 		iID
+DROP PROCEDURE IF EXISTS spSubirReceta;
+DELIMITER //
+CREATE PROCEDURE spSubirReceta
+(
+    nombre varchar(128),
+    descripcion text(512),
+    instrucciones text(2048),
+    ingredientes text,
+    multimedia text
+)
+BEGIN
+	DECLARE idReceta INT;
+    
+    /*DECLARE exit handler for sqlexception
+		BEGIN
+			SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Error inesperado.';
+        ROLLBACK;
+	END;
+    
+    DECLARE exit handler for sqlwarning
+		BEGIN
+			SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Error inesperado.';
+        ROLLBACK;
+	END;*/
+    
+    START TRANSACTION;
+    
+	-- Añadir la receta a la tabla
+	INSERT INTO Receta (
+		rNombre,
+        rDescripcion,
+        rInstrucciones
+	)
+    VALUES (
+		nombre,
+        descripcion,
+        instrucciones
+    );
+    
+    -- Guardar el ID de la nueva receta
+    SELECT LAST_INSERT_ID() INTO idReceta;
+    
+    -- Asignar los ingredientes
+    CREATE TEMPORARY TABLE tmpIngRec
+    SELECT *
+    FROM JSON_TABLE(
+		ingredientes,
+        '$[*]' COLUMNS(
+            iID int PATH '$.iID',
+            cantidad int PATH '$.cantidad',
+            unidadCantidad varchar(16) PATH '$.unidadCantidad'
+		)
+	) as jt;
+    
+    INSERT INTO IngredienteReceta (
+		rID,
+        iID,
+        cantidad,
+        unidadCantidad
+	)
+    SELECT
+		idReceta AS rID,
+        iID,
+        cantidad,
+        unidadCantidad
+	FROM tmpIngRec;
+    
+    DROP TEMPORARY TABLE IF EXISTS tmpIngRec;
+    
+    -- Asignar los multimedios
+    CREATE TEMPORARY TABLE tmpMultimedia
+    SELECT *
+    FROM JSON_TABLE(
+		multimedia,
+        '$[*]' COLUMNS (
+            link text PATH '$.link'
+		)
+	) as jt;
+    
+    INSERT INTO Multimedia (
+        link,
+        rID
+	)
+    SELECT
+        link,
+        idReceta AS rID
+	FROM tmpMultimedia;
+    
+    DROP TEMPORARY TABLE IF EXISTS tmpMultimedia;
+    
+    COMMIT;
+    
+END//
+DELIMITER ;
+
 -- Obtener las id de las recetas de un usuario---
 -- Devuelve -1 si el usuario no existe
 DROP PROCEDURE IF EXISTS spGetRecetasUsuario;
