@@ -1,7 +1,6 @@
 package pkgLogin;
 
 import javafx.geometry.Insets;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -9,7 +8,11 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import pkgConexion.Conexion;
 import pkgRecetasDivertidas.RecetasDivertidas;
+
+import java.io.IOException;
+import java.util.ArrayList;
 
 public class LayoutLogin extends BorderPane {
 
@@ -68,42 +71,58 @@ public class LayoutLogin extends BorderPane {
         btnLogin = new Button();
         btnLogin.setText("Entrar");
         btnLogin.setPrefSize(120,10);
-        btnLogin.setOnAction(e -> checkEntries(tbUsername,tbPassword));
+        btnLogin.setOnAction(e -> {
+            try {
+                checkEntries(tbUsername,tbPassword);
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
+        });
 
         btnRegister = new Button();
         btnRegister.setText("Registrarse");
         btnRegister.setPrefSize(120,10);
-        btnRegister.setOnAction(e -> checkRegister());
+        btnRegister.setOnAction(e -> openRegister());
 
         hbox.getChildren().addAll(btnLogin,btnRegister);
 
         return hbox;
     }
 
-    private void checkEntries(TextField tbU, TextField tbP){
+    private void checkEntries(TextField tbU, TextField tbP) throws IOException {
         //Si la consulta es true entonces pasa a la siguiente stage
         if(consLogin(tbU.getText(),tbP.getText())){
-            //actions
-        }else{
+            //Aca iria la proxima stage, si tuviera una..
+        }
+    }
+
+    private void openRegister(){
+        register = new Register();
+        register.show();
+    }
+
+    private boolean consLogin(String Usr, String Pwd) throws IOException {
+        ArrayList<String> login = new ArrayList<String>();
+
+        login.add("LOGIN");
+        login.add(Usr);
+        login.add(Pwd);
+
+        ArrayList<String> ans = Conexion.sendMessage(login);
+
+        if (ans.get(0).equals("LOGINFAIL")){
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Hubo un problema");
-            alert.setHeaderText("Los datos no coinciden con nuestra base de datos");
-            //Usar string message
-            alert.setContentText("El nombre de usuario o contraseña son incorrectos");
+            alert.setHeaderText("Se ha detectado un problema con el servidor");
+            //Aca se usa el mensaje de error proporcionado con el servidor
+            alert.setContentText(ans.get(1));
             alert.initOwner(RecetasDivertidas.window.getScene().getWindow());
             alert.showAndWait();
+
+            return false;
         }
-    }
 
-    private void checkRegister(){
-        if(!register.isShowing()){
-            register.show();
-        }
-    }
-
-    private boolean consLogin(String Usr, String Pwd){
-
-        return false; //aca va la consulta;
+        return true;
     }
 
 }
