@@ -111,15 +111,18 @@ public class LayoutLogin extends BorderPane {
 
         ArrayList<String> ans = Conexion.sendMessage(login);
 
-        if (ans.get(0).equals("LOGINFAIL")){
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Hubo un problema");
-            alert.setHeaderText("Se ha detectado un problema con el servidor");
-            //Aca se usa el mensaje de error proporcionado con el servidor
-            alert.setContentText(ans.get(1));
-            alert.initOwner(RecetasDivertidas.window.getScene().getWindow());
-            alert.showAndWait();
+        if (ans.size() != 0){
+            if(ans.get(0).equals("LOGINFAIL") || ans.get(0).equals("MESSAGEERROR")) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Hubo un problema");
+                alert.setHeaderText("Se ha detectado un problema con el servidor");
+                //Aca se usa el mensaje de error proporcionado con el servidor
+                alert.setContentText(ans.get(1));
+                alert.initOwner(RecetasDivertidas.window.getScene().getWindow());
+                alert.showAndWait();
 
+                return false;
+            }
             return false;
         }
 

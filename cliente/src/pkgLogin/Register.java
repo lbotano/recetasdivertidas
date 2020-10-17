@@ -62,13 +62,13 @@ public class Register extends Stage {
 
         tooltip[0].setText(
                 """
-                Tu nombre de usuario debe ser
+                Su nombre de usuario debe ser
                 de 3 a 32 caracteres de largo
                 """
         );
         tooltip[1].setText(
                 """
-                Tu respuesta de seguridad debe ser
+                Su respuesta de seguridad debe ser
                 de 4 a 64 caracteres de largo
                 """
         );
@@ -86,7 +86,7 @@ public class Register extends Stage {
         );
         tooltip[4].setText(
                 """
-                Tu contraseña debe ser de 
+                Su contraseña debe ser de 
                 8 a 50 caracteres de largo
                 """
         );
@@ -147,6 +147,7 @@ public class Register extends Stage {
         genero.setPromptText("Género");
         genero.setPrefSize(250,10);
 
+        ArrayList<String> optionPS = new ArrayList<String>();
         ComboBox preguntaSeguridad = new ComboBox(options);
         preguntaSeguridad.setPromptText("Elija una pregunta de seguridad");
         preguntaSeguridad.setPrefSize(250,10);
@@ -199,11 +200,15 @@ public class Register extends Stage {
 
     private boolean consRegister() throws IOException {
         ArrayList<String> message = new ArrayList<String>();
-
+        message.add("Register");
 
         ArrayList<String> ans = Conexion.sendMessage(message);
 
 
         return false;
     }
+
+    /*private ArrayList<String> getPreguntasSeguridad(){
+
+    }*/
 }
