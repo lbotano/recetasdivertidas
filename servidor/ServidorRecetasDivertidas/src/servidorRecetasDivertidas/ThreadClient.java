@@ -8,6 +8,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
+import com.google.gson.*;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
@@ -39,7 +40,7 @@ public class ThreadClient implements Runnable{
 	private static final String LOGIN = "{call spInicioSesion(?,?,?)}";
 	//private static final String PREGUNTASSEG = "";
 	private static final String REGISTRO = "{call spRegistroUsuario(?,?,?,?,?,?,?,?,?)}";
-	//private static final String SUBIRRECETA = "";
+	private static final String SUBIRRECETA = "{call spSubirReceta(?,?,?,?,?,?}";
 	
 	public ThreadClient(ComboPooledDataSource c, Socket s) {
 		ThreadClient.cpds = c;
@@ -90,6 +91,7 @@ public class ThreadClient implements Runnable{
 			answer.add("LOGINOK");
 		} catch (SQLException e) {
 			//si hubo un error y esta definido por los devs, se lo manda al cliente
+			System.out.println("fail");
 			answer.add("LOGINFAIL");
 			if(e.getSQLState().contentEquals("45000")) {
         		answer.add(e.getMessage());
@@ -114,6 +116,7 @@ public class ThreadClient implements Runnable{
     			}else {
             		stmt.setString(i, message.get(i));            				
     			}
+    	
 			}
     		stmt.registerOutParameter(9, Types.BOOLEAN);
     		System.out.println("Sending REGISTER message to db for socket: " + socket);
@@ -131,12 +134,54 @@ public class ThreadClient implements Runnable{
 	}
 	
 	private void subirReceta() {
-		
+		try {
+			stmt = conn.prepareCall(SUBIRRECETA);
+			ArrayList<Ingrediente> ing = new ArrayList<Ingrediente>();
+			ArrayList<CategoriaReceta> catRec = new ArrayList<CategoriaReceta>();
+			ArrayList<Multimedia> mult = new ArrayList<Multimedia>();
+			int i;
+			for (i = 1; i < 4; i++) {
+				//nickname, nombre receta, descripcion
+				stmt.setString(i, message.get(i));
+			}
+			//agregar ingredientes
+			while(!(message.get(i).contentEquals("CATEGORIASRECETA"))){
+				ing.add(new Ingrediente(Integer.parseInt(message.get(i)) ,Integer.parseInt(message.get(i+1)),message.get(i+2)));
+				i+=3;
+			}
+			//agregar categorias de recetas
+			while(!(message.get(i).contentEquals("INICIOMULTIMEDIA"))){
+				catRec.add(new CategoriaReceta(Integer.parseInt(message.get(i))));
+				i++;
+			}	
+			//agregar multimedia
+			while(i < message.size()){
+				mult.add(new Multimedia(message.get(i)));
+				i++;
+			}
+			//cuarto elemento el json de ingredientes
+		    stmt.setString(4,new Gson().toJson(ing));
+			//cuarto elemento el json de categorias de recetas
+		    stmt.setString(4,new Gson().toJson(catRec));
+			//cuarto elemento el json de multimedia
+		    stmt.setString(4,new Gson().toJson(mult));
+		    
+			stmt.execute();
+			answer.add("SUBIRRECETAOK");
+		}catch(SQLException e) {
+			answer.add("SUBIRRECETAFAIL");
+			if(e.getSQLState().contentEquals("45000")) {
+        		answer.add(e.getMessage());
+    		}else {
+    			answer.add("Error en la base de datos");
+    		}
+		}
 	}
 	
 	protected void opcionesCliente(String peticion) {
 		//segun la peticion, ejecuta cierto metodo
-        switch(message.get(0)) {
+		System.out.println(peticion);
+        switch(peticion) {
         case "CALIFICAR":
         	calificar();
         	break;
@@ -190,10 +235,9 @@ public class ThreadClient implements Runnable{
 	        this.answer = new ArrayList<String>();	        
 	        //recibe el mensaje del cliente
 			this.message = (ArrayList<String>) this.input.readObject();
-			
 			//switch de opcioens del cliente
 	        opcionesCliente(message.get(0));
-	        
+	        System.out.println(answer.get(0));
 	        //una vez ejecutados los metodos correspondientes, manda la respuesta
     		output.writeObject(answer);
     		//vacia el objeto para la proxima respuesta
