@@ -59,7 +59,6 @@ CALL spAsignarCategoriaIngrediente(1, 2);
 CALL spAsignarCategoriaIngrediente(2, 1);
 CALL spAsignarCategoriaIngrediente(2, 2);
 
-
 -- Subir receta
 CALL spSubirReceta (
 	'lbotano',
