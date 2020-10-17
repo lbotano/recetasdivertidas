@@ -40,7 +40,7 @@ public class Main {
 					System.out.println("Client server running ");
 					var pool = Executors.newFixedThreadPool(50);	
 					while(true) {
-						pool.execute(new ThreadAdmin(cpds , ss.accept()));
+						pool.execute(new ThreadClient(cpds , ss.accept()));
 					}
 				} catch (IOException e) {
 				}
