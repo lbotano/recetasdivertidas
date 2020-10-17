@@ -62,6 +62,7 @@ CALL spAsignarCategoriaIngrediente(2, 2);
 
 -- Subir receta
 CALL spSubirReceta (
+	'lbotano',
 	'Alfajor Jorgito',
     'Es hermoso',
     'Hacelo',

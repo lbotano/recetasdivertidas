@@ -189,6 +189,7 @@ DROP PROCEDURE IF EXISTS spSubirReceta;
 DELIMITER //
 CREATE PROCEDURE spSubirReceta
 (
+	autor varchar(32),
     nombre varchar(128),
     descripcion text(512),
     instrucciones text(2048),
@@ -198,7 +199,7 @@ CREATE PROCEDURE spSubirReceta
 BEGIN
 	DECLARE idReceta INT;
     
-    /*DECLARE exit handler for sqlexception
+    DECLARE exit handler for sqlexception
 		BEGIN
 			SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Error inesperado.';
         ROLLBACK;
@@ -208,18 +209,20 @@ BEGIN
 		BEGIN
 			SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Error inesperado.';
         ROLLBACK;
-	END;*/
+	END;
     
     START TRANSACTION;
     
 	-- Añadir la receta a la tabla
 	INSERT INTO Receta (
 		rNombre,
+        rAutor,
         rDescripcion,
         rInstrucciones
 	)
     VALUES (
 		nombre,
+        autor,
         descripcion,
         instrucciones
     );

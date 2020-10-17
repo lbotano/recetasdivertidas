@@ -68,10 +68,12 @@ CREATE TABLE RelCatIngred(
 DROP TABLE IF EXISTS Receta;
 CREATE TABLE Receta (
 	rID int NOT NULL AUTO_INCREMENT,
+	rAutor varchar(32) NOT NULL,
 	rNombre varchar(128) NOT NULL,
 	rDescripcion text(512) NOT NULL,
     rInstrucciones text(2048) NOT NULL,
-	CONSTRAINT pk_r PRIMARY KEY (rID)
+	CONSTRAINT pk_r PRIMARY KEY (rID),
+    CONSTRAINT fk_r_u FOREIGN KEY (rAutor) REFERENCES Usuario(uNickname)
 );
 
 DROP TABLE IF EXISTS RelCatReceta;
