@@ -194,7 +194,8 @@ CREATE PROCEDURE spSubirReceta
     descripcion text(512),
     instrucciones text(2048),
     ingredientes text,
-    multimedia text
+    multimedia text,
+    categoriasReceta text
 )
 BEGIN
 	DECLARE idReceta INT;
@@ -277,6 +278,25 @@ BEGIN
 	FROM tmpMultimedia;
     
     DROP TEMPORARY TABLE IF EXISTS tmpMultimedia;
+    
+    -- Asignar las categorías de receta
+    CREATE TEMPORARY TABLE tmpCategoriasReceta
+    SELECT *
+    FROM JSON_TABLE(
+		categoriasReceta,
+        '$[*]' COLUMNS (
+			cID int PATH '$.cID'
+		)
+	) as jt;
+    
+    INSERT INTO RelCatReceta (
+		rID,
+        cID
+	)
+    SELECT
+		idReceta AS rID,
+        cID
+	FROM tmpCategoriasReceta;
     
     COMMIT;
     

@@ -67,5 +67,6 @@ CALL spSubirReceta (
     'Es hermoso',
     'Hacelo',
     '[{"iID": 1, "cantidad": 100, "unidadCantidad": "ml"}, {"iID": 2, "cantidad": 200, "unidadCantidad": "g"}]',
-    '[{"link":"http://www.google.com/foto.png"}, {"link":"http://www.cuantocabron.com/gracioso.jpg"}]'
+    '[{"link":"http://www.google.com/foto.png"}, {"link":"http://www.cuantocabron.com/gracioso.jpg"}]',
+    '[{"cID":1},{"cID":2}]'
 );
