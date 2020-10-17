@@ -7,9 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -23,26 +21,24 @@ public class Register extends Stage {
     public Register(){
         super();
 
-        HBox hbox = new HBox();
-        hbox.setPadding(new Insets(12, 12, 12, 12));
-        hbox.setSpacing(10);
-        VBox vbox = getInputLayout();
-        hbox.getChildren().addAll(vbox);
+        VBox vbox = getLayout();
+        vbox.setPadding(new Insets(12, 12, 12, 12));
+        vbox.setSpacing(10);
 
-        Scene scnRegister = new Scene(hbox, 430, 350);
+        Scene scnRegister = new Scene(vbox, 300, 300);
         setScene(scnRegister);
         getIcons().add(new Image("https://cdn.discordapp.com/attachments/453644623168929803/764301261523779614/logo_chiquito.png"));
         setTitle("Registrate!");
         this.initModality(Modality.APPLICATION_MODAL);
-        this.setHeight(550);
+        this.setHeight(588);
         this.setWidth(290);
-        setResizable(true);
+        setResizable(false);
     }
-
-    private VBox getInputLayout(){
+    //Añadir un checkentries que se fije que las entradas esten bien puestas
+    private VBox getLayout(){
         VBox vbox = new VBox(8);
 
-        //---------------------------------------TextField Section BEGIN---------------------------------------
+        //---------------------------------------TextField Section BEGIN------------------------------------------------
         TextField[] inputRegistro = new TextField[6];
 
         for (int i = 0; i < inputRegistro.length ; i++){
@@ -55,9 +51,9 @@ public class Register extends Stage {
         inputRegistro[3].setPromptText("Escriba su apellido aqui");
         inputRegistro[4].setPromptText("Escriba su contraseña aqui");
         inputRegistro[5].setPromptText("Escriba su mail aqui");
-        //---------------------------------------TextField Section END---------------------------------------
+        //---------------------------------------TextField Section END--------------------------------------------------
 
-        //---------------------------------------Tooltip Section BEGIN--------------------------------------
+        //---------------------------------------Tooltip Section BEGIN--------------------------------------------------
         Tooltip[] tooltip = new Tooltip[6];
 
         for (int i = 0; i < tooltip.length; i++) {
@@ -78,26 +74,26 @@ public class Register extends Stage {
         );
         tooltip[2].setText(
                 """
-                Tu nombre de usuario debe ser
-                de 3 a 32 caracteres de largo
+                Escriba su nombre como figura
+                en el documento
                 """
         );
         tooltip[3].setText(
                 """
-                Tu nombre de usuario debe ser
-                de 3 a 32 caracteres de largo
+                Escriba su apellido como figura
+                en el documento
                 """
         );
         tooltip[4].setText(
                 """
-                Tu nombre de usuario debe ser
-                de 3 a 32 caracteres de largo
+                Tu contraseña debe ser de 
+                8 a 50 caracteres de largo
                 """
         );
         tooltip[5].setText(
                 """
-                Tu nombre de usuario debe ser
-                de 3 a 32 caracteres de largo
+                Asegurese de escribir una
+                direccion de mail real
                 """
         );
 
@@ -119,9 +115,9 @@ public class Register extends Stage {
            tooltip[i].setGraphic(epicasso[i]);
            tooltip[i].setShowDelay(Duration.ZERO);
         }
-        //---------------------------------------Tooltip Section END---------------------------------------
+        //---------------------------------------Tooltip Section END----------------------------------------------------
 
-        //---------------------------------------Label Section BEGIN---------------------------------------
+        //---------------------------------------Label Section BEGIN----------------------------------------------------
         Label[] lblRegistro = new Label[8];
 
         for (int i = 0; i < lblRegistro.length ; i++){
@@ -138,8 +134,9 @@ public class Register extends Stage {
         lblRegistro[6].setText("Mail");
         lblRegistro[7].setText("Genero");
 
-        //---------------------------------------Label Section END-----------------------------------------
+        //---------------------------------------Label Section END------------------------------------------------------
 
+        //---------------------------------------ComboBox Section BEGIN-------------------------------------------------
         ObservableList<String> options =
                 FXCollections.observableArrayList(
                         "Masculino",
@@ -154,6 +151,9 @@ public class Register extends Stage {
         preguntaSeguridad.setPromptText("Elija una pregunta de seguridad");
         preguntaSeguridad.setPrefSize(250,10);
 
+        //---------------------------------------ComboBox Section END---------------------------------------------------
+
+        //---------------------------------------Añadir al VBox Section BEGIN-------------------------------------------
         int i = 0;
         int j = 0;
 
@@ -181,6 +181,7 @@ public class Register extends Stage {
         });
 
         vbox.getChildren().add(btnRegister);
+        //---------------------------------------Añadir al VBox Section END-----------------------------------------
 
         //Boton para saber cuanto mide una stage XD
         /*Button btn = new Button("pRESS ME");
