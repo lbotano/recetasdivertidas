@@ -14,23 +14,16 @@ public class ClienteTS {
             
     		ArrayList<String> asd = new ArrayList<String>();
     		
-    		asd.add("REGISTRO");
-    		asd.add("asd");
-    		asd.add("1");
-    		asd.add("asd");
-    		asd.add("asd");
-    		asd.add("asd");
-    		asd.add("asd");
-    		asd.add("0");
-    		asd.add("asd");
+    		asd.add("RECETASDEUSUARIO");
+    		asd.add("lbotano");
     		
     		
     		output.writeObject(asd);    		
             @SuppressWarnings("unchecked")
             ArrayList<String> message = (ArrayList<String>) input.readObject();    
-            System.out.println(message.get(0));
-            
-            System.out.println(message.get(1));
+			for (int i = 0; i < message.size(); i++) {
+				System.out.println(message.get(i));
+			}
 
             System.out.println("Exiting...");
         }

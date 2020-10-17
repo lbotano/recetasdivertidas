@@ -5,6 +5,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.sql.CallableStatement;
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
@@ -33,14 +34,16 @@ public class ThreadClient implements Runnable{
 	//private static final String CONSRECETASCAT = "";
 	//private static final String CONSRECETAING = "";
 	//private static final String CONSRECETATEXT = "";
-	//private static final String CALIFICAR = "";
+	private static final String CALIFICAR = "{call spCalificarReceta(?,?,?)}";
 	//private static final String DATOSRECETA = "{call spGetDatosReceta()}";
 	//private static final String LISTARCATREC = "";
 	//private static final String LISTARCATING = "";
 	private static final String LOGIN = "{call spInicioSesion(?,?,?)}";
 	//private static final String PREGUNTASSEG = "";
+	private static final String RECETASDEUSUARIO = "{call spGetRecetasUsuario(?)}";
 	private static final String REGISTRO = "{call spRegistroUsuario(?,?,?,?,?,?,?,?,?)}";
-	private static final String SUBIRRECETA = "{call spSubirReceta(?,?,?,?,?,?}";
+	private static final String SUBIRRECETA = "{call spSubirReceta(?,?,?,?,?,?,?}";
+	private static final String DefaultSQLErrorMsg = "Error en la base de datos";
 	
 	public ThreadClient(ComboPooledDataSource c, Socket s) {
 		ThreadClient.cpds = c;
@@ -48,7 +51,27 @@ public class ThreadClient implements Runnable{
 	}
 	
 	private void calificar() {
-		
+		try {
+			//define que utiliza el sp de calificar
+			stmt = conn.prepareCall(CALIFICAR);
+			//establece los parametros segun lo que haya enviado el cliente
+			stmt.setString(1, message.get(1));
+			stmt.setString(2, message.get(2));
+			stmt.setString(3, message.get(3));
+			//ejecuta el sp
+			stmt.execute();
+			//si sql no tira ningun error, significa que se pudo calificar correctamente
+			answer.add("CALIFICAOK");
+		} catch (SQLException e) {
+			//si hubo un error manda el siguiente mensaje y el mensaje de error
+			answer.add("CALIFICARFAIL");
+			//si el mensaje de error no es uno declarado por un dev, entonces manda el mensaje por defecto
+			if(e.getSQLState().contentEquals("45000")) {
+        		answer.add(e.getMessage());
+    		}else {
+    			answer.add(DefaultSQLErrorMsg);
+    		}			
+		}
 	}
 	
 	private void consRecetasCat() {
@@ -91,19 +114,52 @@ public class ThreadClient implements Runnable{
 			answer.add("LOGINOK");
 		} catch (SQLException e) {
 			//si hubo un error y esta definido por los devs, se lo manda al cliente
-			System.out.println("fail");
 			answer.add("LOGINFAIL");
 			if(e.getSQLState().contentEquals("45000")) {
         		answer.add(e.getMessage());
     		}else {
     			//sino, le manda el siguiente mensaje
-    			answer.add("Error en la base de datos");
+    			answer.add(DefaultSQLErrorMsg);
     		}
 		}		
 	}	
 	
 	private void preguntasSeg() {
 		
+	}
+	
+	private void recetaUsuario() {
+		try {
+			stmt = conn.prepareCall(RECETASDEUSUARIO);
+			//pone de parametro del sp el nickname recibido del cliente
+			stmt.setString(1, message.get(1));
+			stmt.execute();
+
+			ResultSet resultadoSP = stmt.getResultSet();
+			//next = false: resultset vacio
+			//next = true: resultset con datos, mueve el cursor a la fila 1.
+			if(resultadoSP.next()) {
+
+				answer.add("RECETASDEUSUARIOOK");
+				do {
+					//agarra los elementos de la fila y los pone en el aeeay de respuesta
+					answer.add(resultadoSP.getString(1));
+					answer.add(resultadoSP.getString(2));
+					answer.add(resultadoSP.getString(3));		
+				//Mueve el cursor a la siguiente fila, si hay mas resultados devuelve true
+				} while (resultadoSP.next());
+			}else {
+				answer.add("RECETASDEUSUARIONULL");				
+			}
+		
+		}catch (SQLException e) {
+			answer.add("RECETASDEUSUARIOFAIL");
+			if(e.getSQLState().contentEquals("45000")) {
+        		answer.add(e.getMessage());
+    		}else {
+    			answer.add(DefaultSQLErrorMsg);
+    		}
+		}
 	}
 	
 	private void registro() {
@@ -127,7 +183,7 @@ public class ThreadClient implements Runnable{
 			if(e.getSQLState().contentEquals("45000")) {
         		answer.add(e.getMessage());
     		}else {
-    			answer.add("Error en la base de datos");
+    			answer.add(DefaultSQLErrorMsg);
     		}
 		}
 		 
@@ -141,9 +197,15 @@ public class ThreadClient implements Runnable{
 			ArrayList<Multimedia> mult = new ArrayList<Multimedia>();
 			int i;
 			for (i = 1; i < 4; i++) {
-				//nickname, nombre receta, descripcion
+				//1: nickname, 2: nombre receta, 3: descripcion
 				stmt.setString(i, message.get(i));
 			}
+			
+			//4: instrucciones
+			/*
+			 * 
+			 * */
+			
 			//agregar ingredientes
 			while(!(message.get(i).contentEquals("CATEGORIASRECETA"))){
 				ing.add(new Ingrediente(Integer.parseInt(message.get(i)) ,Integer.parseInt(message.get(i+1)),message.get(i+2)));
@@ -160,11 +222,11 @@ public class ThreadClient implements Runnable{
 				i++;
 			}
 			//cuarto elemento el json de ingredientes
-		    stmt.setString(4,new Gson().toJson(ing));
-			//cuarto elemento el json de categorias de recetas
-		    stmt.setString(4,new Gson().toJson(catRec));
+		    stmt.setString(5,new Gson().toJson(ing));
 			//cuarto elemento el json de multimedia
-		    stmt.setString(4,new Gson().toJson(mult));
+		    stmt.setString(6,new Gson().toJson(mult));
+			//cuarto elemento el json de categorias de recetas
+		    stmt.setString(7,new Gson().toJson(catRec));
 		    
 			stmt.execute();
 			answer.add("SUBIRRECETAOK");
@@ -173,14 +235,13 @@ public class ThreadClient implements Runnable{
 			if(e.getSQLState().contentEquals("45000")) {
         		answer.add(e.getMessage());
     		}else {
-    			answer.add("Error en la base de datos");
+    			answer.add(DefaultSQLErrorMsg);
     		}
 		}
 	}
 	
 	protected void opcionesCliente(String peticion) {
 		//segun la peticion, ejecuta cierto metodo
-		System.out.println(peticion);
         switch(peticion) {
         case "CALIFICAR":
         	calificar();
@@ -208,6 +269,9 @@ public class ThreadClient implements Runnable{
         	break;
         case "PREGUNTASSEG":
         	preguntasSeg();
+        	break;
+        case "RECETASDEUSUARIO":
+        	recetaUsuario();
         	break;
         case "REGISTRO":          		
     		registro();           		
@@ -237,7 +301,6 @@ public class ThreadClient implements Runnable{
 			this.message = (ArrayList<String>) this.input.readObject();
 			//switch de opcioens del cliente
 	        opcionesCliente(message.get(0));
-	        System.out.println(answer.get(0));
 	        //una vez ejecutados los metodos correspondientes, manda la respuesta
     		output.writeObject(answer);
     		//vacia el objeto para la proxima respuesta
