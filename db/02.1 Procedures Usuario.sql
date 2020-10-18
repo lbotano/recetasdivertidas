@@ -113,25 +113,26 @@ CREATE PROCEDURE spSubirReceta
     nombre varchar(128),
     descripcion text(512),
     instrucciones text(2048),
-    ingredientes text,
-    multimedia text,
-    categoriasReceta text
+    ingredientes json,
+    multimedia json,
+    categoriasReceta json
 )
 BEGIN
 	DECLARE idReceta INT;
     
     DECLARE exit handler for sqlexception
-		BEGIN
-			SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Error inesperado.';
+	BEGIN
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Error inesperado.';
         ROLLBACK;
 	END;
     
     DECLARE exit handler for sqlwarning
-		BEGIN
-			SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Error inesperado.';
+	BEGIN
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Error inesperado.';
         ROLLBACK;
 	END;
     
+    SET autocommit=0;
     START TRANSACTION;
     
 	-- Añadir la receta a la tabla
@@ -152,6 +153,7 @@ BEGIN
     SELECT LAST_INSERT_ID() INTO idReceta;
     
     -- Asignar los ingredientes
+    DROP TEMPORARY TABLE IF EXISTS tmpIngRec;
     CREATE TEMPORARY TABLE tmpIngRec
     SELECT *
     FROM JSON_TABLE(
@@ -176,9 +178,8 @@ BEGIN
         unidadCantidad
 	FROM tmpIngRec;
     
-    DROP TEMPORARY TABLE IF EXISTS tmpIngRec;
-    
     -- Asignar los multimedios
+    DROP TEMPORARY TABLE IF EXISTS tmpMultimedia;
     CREATE TEMPORARY TABLE tmpMultimedia
     SELECT *
     FROM JSON_TABLE(
@@ -197,9 +198,8 @@ BEGIN
         idReceta AS rID
 	FROM tmpMultimedia;
     
-    DROP TEMPORARY TABLE IF EXISTS tmpMultimedia;
-    
     -- Asignar las categorías de receta
+    DROP TEMPORARY TABLE IF EXISTS tmpCategoriasReceta;
     CREATE TEMPORARY TABLE tmpCategoriasReceta
     SELECT *
     FROM JSON_TABLE(
@@ -218,8 +218,8 @@ BEGIN
         cID
 	FROM tmpCategoriasReceta;
     
+    SET autocommit=1;
     COMMIT;
-    
 END//
 DELIMITER ;
 

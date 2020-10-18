@@ -39,42 +39,56 @@ DELIMITER ;
 DROP PROCEDURE IF EXISTS spAgregarIngrediente;
 DELIMITER //
 CREATE PROCEDURE spAgregarIngrediente(
-	nombre varchar(64)
+	nombre varchar(64),
+    categorias json
 )
 BEGIN
-	DECLARE EXIT HANDLER FOR 1062
+	DECLARE idIngrediente int;
+    
+    DECLARE EXIT HANDLER FOR sqlexception
     BEGIN
-		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Este ingrediente ya existe';
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Error inesperado';
+        ROLLBACK;
 	END;
     
+    DECLARE EXIT HANDLER FOR sqlwarning
+    BEGIN
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Error inesperado';
+        ROLLBACK;
+	END;
+    
+    SET autocommit = 0;
+    
+    START TRANSACTION;
+    
+    -- Agregar ingrediente
     INSERT INTO Ingrediente (iNombre)
     VALUES (nombre);
-END//
-DELIMITER ;
-
--- Asociar categoria de ingrediente a un ingrediente
--- Parámetros:
---  iID: ID del ingrediente
---  cID: ID de la categoría del ingrediente
-DROP PROCEDURE IF EXISTS spAsignarCategoriaIngrediente;
-DELIMITER //
-CREATE PROCEDURE spAsignarCategoriaIngrediente (
-	iID int,
-    cID int
-)
-BEGIN
-	DECLARE EXIT HANDLER FOR 1062
-    BEGIN
-		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El ingrediente ya es de esta categoría.';
-	END;
     
-    DECLARE EXIT HANDLER FOR 1452
-    BEGIN
-		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El ingrediente o la categoría no existen.';
-    END;
+    -- Asignarle las categorías
+    SELECT LAST_INSERT_ID() INTO idIngrediente;
     
-	INSERT INTO RelCatIngred
-    VALUES (iID, cID);
+    DROP TEMPORARY TABLE IF EXISTS relCategoriaIngrediente;
+    CREATE TEMPORARY TABLE relCategoriaIngrediente
+    SELECT *
+    FROM JSON_TABLE(
+		categorias,
+		'$[*]' COLUMNS (
+			cID int PATH '$.cID'
+        )
+	) AS jt;
+    
+    INSERT INTO RelCatIngred (
+		iID,
+		cID
+    )
+    SELECT
+		idIngrediente,
+        cID
+	FROM relCategoriaIngrediente;
+    
+    COMMIT;
+    SET autocommit=1;
 END//
 DELIMITER ;
 

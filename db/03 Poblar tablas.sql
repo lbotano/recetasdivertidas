@@ -11,6 +11,7 @@ TRUNCATE TABLE RelCatIngred;
 TRUNCATE TABLE Receta;
 TRUNCATE TABLE Multimedia;
 TRUNCATE TABLE IngredienteReceta;
+TRUNCATE TABLE RelCatReceta;
 SET FOREIGN_KEY_CHECKS = 1;
 
 -- Insertar preguntas de seguridad
@@ -43,21 +44,18 @@ CALL spRegistroUsuario (
     @resultado);
     
 -- Añadir categorías de recetas
-CALL spAgregarCategoriaReceta ("Almuerzo");
-CALL spAgregarCategoriaReceta ("Postre");
+CALL spAgregarCategoriaReceta("Almuerzo");
+CALL spAgregarCategoriaReceta("Postre");
 
 -- Añadir categorías de ingredientes
-CALL spAgregarCategoriaIngrediente ("Vegano");
-CALL spAgregarCategoriaIngrediente ("Celíaco");
+CALL spAgregarCategoriaIngrediente("Vegano");
+CALL spAgregarCategoriaIngrediente("Celíaco");
+CALL spAgregarCategoríaIngrediente("Vegetariano");
+CALL spAgregarCategoríaIngrediente("Con azucar");
 
 -- Añadir ingredientes
-CALL spAgregarIngrediente("Leche");
-CALL spAgregarIngrediente("Azúcar");
-
--- Asignar categorias a ingredientes
-CALL spAsignarCategoriaIngrediente(1, 2);
-CALL spAsignarCategoriaIngrediente(2, 1);
-CALL spAsignarCategoriaIngrediente(2, 2);
+CALL spAgregarIngrediente("Leche", '[{"cID":1},{"cID":3}]');
+CALL spAgregarIngrediente("Azúcar", '[{"cID":1},{"cID":2}]');
 
 -- Subir receta
 CALL spSubirReceta (
@@ -68,4 +66,14 @@ CALL spSubirReceta (
     '[{"iID": 1, "cantidad": 100, "unidadCantidad": "ml"}, {"iID": 2, "cantidad": 200, "unidadCantidad": "g"}]',
     '[{"link":"http://www.google.com/foto.png"}, {"link":"http://www.cuantocabron.com/gracioso.jpg"}]',
     '[{"cID":1},{"cID":2}]'
+);
+
+CALL spSubirReceta (
+	'jorgelina',
+	'Empanada',
+    'Se come',
+    'Haces empanadas ._.',
+    '[{"iID": 2, "cantidad": 4, "unidadCantidad": "kg"}]',
+    NULL,
+    '[{"cID":1}]'
 );
