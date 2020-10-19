@@ -11,7 +11,7 @@ public class Alerta extends Alert {
     public Alerta(AlertType alertType,String header, String content) {
         super(alertType);
 
-
+        //Depende que tipo de alerta, depende que tipo de imagen
         switch (alertType){
             case CONFIRMATION -> {
                 img = new Image(getClass().getResourceAsStream("ok.png"));
@@ -21,7 +21,6 @@ public class Alerta extends Alert {
             }
         }
 
-        //Aca se usa el mensaje de error proporcionado con el servidor
         imgView = new ImageView(img);
         imgView.setSmooth(false);
         this.setTitle("Recetas divertidas");
