@@ -9,6 +9,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import pkgConexion.Conexion;
+import pkgRecetasDivertidas.Alerta;
 import pkgRecetasDivertidas.RecetasDivertidas;
 
 import java.io.IOException;
@@ -82,7 +83,14 @@ public class LayoutLogin extends BorderPane {
         btnRegister = new Button();
         btnRegister.setText("Registrarse");
         btnRegister.setPrefSize(120,10);
-        btnRegister.setOnAction(e -> openRegister());
+        btnRegister.setOnAction(e -> {
+            try {
+                register = new Register();
+                register.show();
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
+        });
 
         hbox.getChildren().addAll(btnLogin,btnRegister);
 
@@ -92,18 +100,14 @@ public class LayoutLogin extends BorderPane {
     private void checkEntries(TextField tbU, TextField tbP) throws IOException {
         //Si la consulta es true entonces pasa a la siguiente stage
         if(consLogin(tbU.getText(),tbP.getText())){
-            System.out.println("Datos OK");
+            Alerta alerta = new Alerta(Alert.AlertType.CONFIRMATION,"Bienvenidx de nuevo!","Identidad confimada con exito");
+            alerta.showAndWait();
             //Aca iria la proxima stage, si tuviera una..
         }
     }
 
-    private void openRegister(){
-        register = new Register();
-        register.show();
-    }
-
     private boolean consLogin(String Usr, String Pwd) throws IOException {
-        ArrayList<String> login = new ArrayList<String>();
+        ArrayList<String> login = new ArrayList<>();
 
         login.add("LOGIN");
         login.add(Usr);
@@ -113,16 +117,11 @@ public class LayoutLogin extends BorderPane {
 
         if (ans.size() != 0){
             if(ans.get(0).equals("LOGINFAIL") || ans.get(0).equals("MESSAGEERROR")) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Hubo un problema");
-                alert.setHeaderText("Se ha detectado un problema con el servidor");
-                //Aca se usa el mensaje de error proporcionado con el servidor
-                alert.setContentText(ans.get(1));
-                alert.initOwner(RecetasDivertidas.window.getScene().getWindow());
+                Alerta alert = new Alerta(Alert.AlertType.ERROR,"Hubo un problema con el servidor",ans.get(1));
                 alert.showAndWait();
-
                 return false;
             }
+        }else{
             return false;
         }
 

@@ -1,6 +1,9 @@
 package pkgConexion;
 
 import javafx.scene.control.Alert;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import pkgRecetasDivertidas.Alerta;
 import pkgRecetasDivertidas.RecetasDivertidas;
 
 import java.io.IOException;
@@ -27,12 +30,7 @@ public final class Conexion {
 
             socket.close();
         } catch(Exception e){
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Hubo un problema");
-            alert.setHeaderText("Se ha detectado un problema con el servidor");
-            //Aca se usa el mensaje de error proporcionado con el servidor
-            alert.setContentText("Upsi! Estamos teniendo problemas en nuestros servidores!!!");
-            alert.initOwner(RecetasDivertidas.window.getScene().getWindow());
+            Alerta alert = new Alerta(Alert.AlertType.ERROR,"Se ha detectado un problema con el servidor", "Upsi! Estamos teniendo problemas en nuestros servidores!!!");
             alert.showAndWait();
         }
 

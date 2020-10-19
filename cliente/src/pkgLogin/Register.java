@@ -12,13 +12,14 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import pkgConexion.Conexion;
+import pkgRecetasDivertidas.Alerta;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
 public class Register extends Stage {
 
-    public Register(){
+    public Register() throws IOException {
         super();
 
         VBox vbox = getLayout();
@@ -35,7 +36,7 @@ public class Register extends Stage {
         setResizable(false);
     }
     //Añadir un checkentries que se fije que las entradas esten bien puestas
-    private VBox getLayout(){
+    private VBox getLayout() throws IOException {
         VBox vbox = new VBox(8);
 
         //---------------------------------------TextField Section BEGIN------------------------------------------------
@@ -101,7 +102,7 @@ public class Register extends Stage {
             inputRegistro[i].setTooltip(tooltip[i]);
         }
 
-        Image img = new Image(getClass().getResourceAsStream("error.png"));
+        Image img = new Image(getClass().getResourceAsStream("atention.png"));
         ImageView[] epicasso = new ImageView[tooltip.length];
 
         //Aca instanciamos el array de imageview, que aunque muestren la misma imagen, si no lo haces asi se re bugea
@@ -143,12 +144,14 @@ public class Register extends Stage {
                         "Femenino",
                         "Otro"
                 );
-        ComboBox genero = new ComboBox(options);
+        ComboBox<String> genero = new ComboBox<>(options);
         genero.setPromptText("Género");
         genero.setPrefSize(250,10);
 
-        ArrayList<String> optionPS = new ArrayList<String>();
-        ComboBox preguntaSeguridad = new ComboBox(options);
+        //ComboBox<String> preguntaSeguridad = getPreguntasSeguridad();
+        ComboBox<String> preguntaSeguridad = new ComboBox<>();
+        ArrayList<String> asd = getPreguntasSeguridad();
+        preguntaSeguridad.getItems().addAll(asd);
         preguntaSeguridad.setPromptText("Elija una pregunta de seguridad");
         preguntaSeguridad.setPrefSize(250,10);
 
@@ -178,37 +181,51 @@ public class Register extends Stage {
         btnRegister.setPrefSize(250,10);
         btnRegister.setOnAction(e -> {
                 inputRegistro[0].setStyle("-fx-control-inner-background: #FFCCCC");
-                //register();
+            try {
+                register();
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
         });
 
         vbox.getChildren().add(btnRegister);
-        //---------------------------------------Añadir al VBox Section END-----------------------------------------
-
-        //Boton para saber cuanto mide una stage XD
-        /*Button btn = new Button("pRESS ME");
-        btn.setOnAction(e -> System.out.println("width:" + this.getWidth() + " height:" + this.getHeight()));
-        vbox.getChildren().add(btn);*/
+        //---------------------------------------Añadir al VBox Section END---------------------------------------------
 
         return vbox;
     }
 
     private void register() throws IOException {
         if(consRegister()){
-
+            Alerta alerta = new Alerta(Alert.AlertType.CONFIRMATION,"Bienvenidx a Recetas Divertidas","Datos registrados con exito!");
+            alerta.showAndWait();
         }
     }
 
     private boolean consRegister() throws IOException {
-        ArrayList<String> message = new ArrayList<String>();
-        message.add("Register");
+        ArrayList<String> message = new ArrayList<>();
+        message.add("REGISTRO");
 
-        ArrayList<String> ans = Conexion.sendMessage(message);
+        //DEJA DE ROMPER LAS BOLAS Y HACE LA CONFIRMACION DEL REGISTRO PUTO DE MIERDA
+        //Aca instanciamos el array de imageview, que aunque muestren la misma imagen, si no lo haces asi se re bugea
+
+        /*try{
+            ArrayList<String> ans = Conexion.sendMessage(message);
+        }catch(Exception e){
+            Alerta alert = new Alerta(Alert.AlertType.ERROR,"xd");
+            alert.setGraphic(epicasso);
+            alert.showAndWait();
+        }*/
 
 
-        return false;
+        return true;
     }
 
-    /*private ArrayList<String> getPreguntasSeguridad(){
+    private ArrayList<String> getPreguntasSeguridad() throws IOException {
+        ArrayList<String> message = new ArrayList<>();
 
-    }*/
+        message.add("REGISTRO");
+        ArrayList<String> ans = Conexion.sendMessage(message);
+
+        return ans;
+    }
 }
