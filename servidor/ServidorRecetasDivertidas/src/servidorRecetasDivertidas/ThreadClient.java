@@ -49,6 +49,21 @@ public class ThreadClient implements Runnable{
 		ThreadClient.cpds = c;
 		this.socket = s;
 	}
+	/*
+	 * Cuando se ejecuta un sp puede tirar un error, este metodo recibe el SQLException
+	 * y el mensaje de error que se la va a comunicar al cliente si el error de sql
+	 * es 45000 (estos son los mensajes de error definidos por lauti pro gamer), si no lo es
+	 * entonces le manda el 'DefaultSQLErrorMsg'
+	 */
+	
+	protected void exceptionHandler(SQLException e, String failMsg) {
+		answer.add(failMsg);
+		if(e.getSQLState().contentEquals("45000")) {
+    		answer.add(e.getMessage());
+		}else {
+			answer.add(DefaultSQLErrorMsg);
+		}
+	}
 	
 	private void calificar() {
 		try {
@@ -63,14 +78,7 @@ public class ThreadClient implements Runnable{
 			//si sql no tira ningun error, significa que se pudo calificar correctamente
 			answer.add("CALIFICAOK");
 		} catch (SQLException e) {
-			//si hubo un error manda el siguiente mensaje y el mensaje de error
-			answer.add("CALIFICARFAIL");
-			//si el mensaje de error no es uno declarado por un dev, entonces manda el mensaje por defecto
-			if(e.getSQLState().contentEquals("45000")) {
-        		answer.add(e.getMessage());
-    		}else {
-    			answer.add(DefaultSQLErrorMsg);
-    		}			
+			exceptionHandler(e, "CALIFICARFAIL");
 		}
 	}
 	
@@ -112,15 +120,8 @@ public class ThreadClient implements Runnable{
 			stmt.execute();
 			//si no hubo ningun error, entonces manda el siguiente mensaje
 			answer.add("LOGINOK");
-		} catch (SQLException e) {
-			//si hubo un error y esta definido por los devs, se lo manda al cliente
-			answer.add("LOGINFAIL");
-			if(e.getSQLState().contentEquals("45000")) {
-        		answer.add(e.getMessage());
-    		}else {
-    			//sino, le manda el siguiente mensaje
-    			answer.add(DefaultSQLErrorMsg);
-    		}
+		} catch (SQLException e) {	
+			exceptionHandler(e, "LOGINFAIL");	
 		}		
 	}	
 	
@@ -153,12 +154,7 @@ public class ThreadClient implements Runnable{
 			}
 		
 		}catch (SQLException e) {
-			answer.add("RECETASDEUSUARIOFAIL");
-			if(e.getSQLState().contentEquals("45000")) {
-        		answer.add(e.getMessage());
-    		}else {
-    			answer.add(DefaultSQLErrorMsg);
-    		}
+			exceptionHandler(e, "RECETASDEUSUARIOFAIL");	
 		}
 	}
 	
@@ -179,12 +175,7 @@ public class ThreadClient implements Runnable{
     		stmt.execute();
     		answer.add("REGISTEROK");
 		} catch (SQLException e) {
-			answer.add("REGISTERFAIL");
-			if(e.getSQLState().contentEquals("45000")) {
-        		answer.add(e.getMessage());
-    		}else {
-    			answer.add(DefaultSQLErrorMsg);
-    		}
+			exceptionHandler(e, "REGISTERFAIL");
 		}
 		 
 	}
@@ -193,7 +184,7 @@ public class ThreadClient implements Runnable{
 		try {
 			stmt = conn.prepareCall(SUBIRRECETA);
 			ArrayList<Ingrediente> ing = new ArrayList<Ingrediente>();
-			ArrayList<CategoriaReceta> catRec = new ArrayList<CategoriaReceta>();
+			ArrayList<Categoria> catRec = new ArrayList<Categoria>();
 			ArrayList<Multimedia> mult = new ArrayList<Multimedia>();
 			int i;
 			for (i = 1; i < 4; i++) {
@@ -213,7 +204,7 @@ public class ThreadClient implements Runnable{
 			}
 			//agregar categorias de recetas
 			while(!(message.get(i).contentEquals("INICIOMULTIMEDIA"))){
-				catRec.add(new CategoriaReceta(Integer.parseInt(message.get(i))));
+				catRec.add(new Categoria(Integer.parseInt(message.get(i))));
 				i++;
 			}	
 			//agregar multimedia
@@ -231,12 +222,7 @@ public class ThreadClient implements Runnable{
 			stmt.execute();
 			answer.add("SUBIRRECETAOK");
 		}catch(SQLException e) {
-			answer.add("SUBIRRECETAFAIL");
-			if(e.getSQLState().contentEquals("45000")) {
-        		answer.add(e.getMessage());
-    		}else {
-    			answer.add(DefaultSQLErrorMsg);
-    		}
+			exceptionHandler(e, "SUBIRRECETAFAIL");
 		}
 	}
 	

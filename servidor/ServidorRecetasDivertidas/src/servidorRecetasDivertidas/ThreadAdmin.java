@@ -6,6 +6,7 @@ import java.net.Socket;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import com.google.gson.Gson;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
 public class ThreadAdmin extends ThreadClient{
@@ -13,14 +14,14 @@ public class ThreadAdmin extends ThreadClient{
 	public ThreadAdmin(ComboPooledDataSource c, Socket s) {
 		super(c, s);
 	}
-
+	
 	//private static final String BORRARCATING = "";
 	//private static final String BORRARCATREC = "";
-	//private static final String BORRARUSUARIO = "";
+	private static final String BORRARUSUARIO = "{call spBaneoUsuario(?)}";
 	//private static final String BORRARREC = "";
 	private static final String SUBIRCATING = "{call spAgregarCategoriaIngrediente(?)}";
 	private static final String SUBIRCATREC = "{call spAgregarCategoriaReceta(?)}"; 
-	//private static final String SUBIRING = "";
+	private static final String SUBIRING = "{call spAgregarIngrediente(?,?)}";
 	
 	private void borrarCatIng() {
 		
@@ -35,7 +36,14 @@ public class ThreadAdmin extends ThreadClient{
 	}
 	
 	private void borrarUsuario() {
-		
+		try {
+			stmt = conn.prepareCall(BORRARUSUARIO);
+			stmt.setString(1, message.get(1));			
+			stmt.execute();
+			answer.add("BORRARRECOK");
+		}catch(SQLException e) {
+			exceptionHandler(e, "BORRARUSUFAIL");
+		}
 	}
 	
 	//true: subir ingrediente
@@ -56,17 +64,28 @@ public class ThreadAdmin extends ThreadClient{
 			stmt.execute();
 			answer.add(ok);
 		} catch (SQLException e) {
-			answer.add(fail);
-			if(e.getSQLState().contentEquals("45000")) {
-        		answer.add(e.getMessage());
-    		}else {
-    			answer.add("Error en la base de datos");
-    		}
+			exceptionHandler(e,fail);
 		}
 	}
 	
 	private void subirIng() {
-		
+		try {
+			stmt = conn.prepareCall(SUBIRING);
+			ArrayList<Categoria> catIng = new ArrayList<Categoria>();
+			//primer parametro: nombre del ingrediente
+			stmt.setString(1, message.get(1));
+			int i = 2;
+			//Arma el json con los ingredientes
+			while(i < message.size()) {
+				catIng.add(new Categoria(Integer.parseInt(message.get(i))));
+				i++;
+			}
+			stmt.setString(2, new Gson().toJson(catIng));
+			stmt.execute();
+			answer.add("SUBIRINGOK");
+		}catch (SQLException e) {
+			exceptionHandler(e, "SUBIRINGFAIL");
+		}
 	}
 	
 	@SuppressWarnings("unchecked")
