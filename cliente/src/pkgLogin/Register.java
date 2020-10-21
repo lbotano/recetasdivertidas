@@ -16,8 +16,19 @@ import pkgRecetasDivertidas.Alerta;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.regex.Pattern;
 
 public class Register extends Stage {
+    private Button btnRegister;
+    private TextField[] inputRegistro;
+    private PasswordField pwdRegistro;
+    private Tooltip[] tooltip;
+    private Image img;
+    private ImageView[] epicasso;
+    private Label[] lblRegistro;
+    private ComboBox<String> genero;
+    private ComboBox<String> preguntaSeguridad;
+    private ArrayList<String> resPreguntas = getPreguntasSeguridad();
 
     public Register() throws IOException {
         super();
@@ -33,14 +44,19 @@ public class Register extends Stage {
         this.initModality(Modality.APPLICATION_MODAL);
         this.setHeight(588);
         this.setWidth(290);
-        setResizable(false);
+        setResizable(true);
     }
     //Añadir un checkentries que se fije que las entradas esten bien puestas
     private VBox getLayout() throws IOException {
         VBox vbox = new VBox(8);
+        //---------------------------------------PasswordField Section BEGIN--------------------------------------------
+        pwdRegistro = new PasswordField();
+        pwdRegistro.setPrefSize(250,10);
+        pwdRegistro.setPromptText("Escriba su contraseña aqui");
+        //---------------------------------------PasswordField Section END--------------------------------------------
 
         //---------------------------------------TextField Section BEGIN------------------------------------------------
-        TextField[] inputRegistro = new TextField[6];
+        inputRegistro = new TextField[5];
 
         for (int i = 0; i < inputRegistro.length ; i++){
             inputRegistro[i] = new TextField();
@@ -50,12 +66,11 @@ public class Register extends Stage {
         inputRegistro[1].setPromptText("Escriba su respuesta de seguridad aqui");
         inputRegistro[2].setPromptText("Escriba su nombre de pila aqui");
         inputRegistro[3].setPromptText("Escriba su apellido aqui");
-        inputRegistro[4].setPromptText("Escriba su contraseña aqui");
-        inputRegistro[5].setPromptText("Escriba su mail aqui");
+        inputRegistro[4].setPromptText("Escriba su mail aqui");
         //---------------------------------------TextField Section END--------------------------------------------------
 
         //---------------------------------------Tooltip Section BEGIN--------------------------------------------------
-        Tooltip[] tooltip = new Tooltip[6];
+        tooltip = new Tooltip[6];
 
         for (int i = 0; i < tooltip.length; i++) {
             tooltip[i] = new Tooltip();
@@ -87,23 +102,26 @@ public class Register extends Stage {
         );
         tooltip[4].setText(
                 """
-                Su contraseña debe ser de 
-                8 a 50 caracteres de largo
-                """
-        );
-        tooltip[5].setText(
-                """
                 Asegurese de escribir una
                 direccion de mail real
                 """
         );
-
-        for(int i = 0 ; i < inputRegistro.length ; i++){
-            inputRegistro[i].setTooltip(tooltip[i]);
+        tooltip[5].setText(
+                """
+                Su contraseña debe ser de 
+                8 a 50 caracteres de largo
+                """
+        );
+        for(int i = 0 ; i < tooltip.length ; i++){
+            if(i < inputRegistro.length){
+                inputRegistro[i].setTooltip(tooltip[i]);
+            }else{
+                pwdRegistro.setTooltip(tooltip[i]);
+            }
         }
 
-        Image img = new Image(getClass().getResourceAsStream("atention.png"));
-        ImageView[] epicasso = new ImageView[tooltip.length];
+        img = new Image(getClass().getResourceAsStream("atention.png"));
+        epicasso = new ImageView[tooltip.length];
 
         //Aca instanciamos el array de imageview, que aunque muestren la misma imagen, si no lo haces asi se re bugea
         for (int i = 0; i < epicasso.length; i++) {
@@ -119,7 +137,7 @@ public class Register extends Stage {
         //---------------------------------------Tooltip Section END----------------------------------------------------
 
         //---------------------------------------Label Section BEGIN----------------------------------------------------
-        Label[] lblRegistro = new Label[8];
+        lblRegistro = new Label[8];
 
         for (int i = 0; i < lblRegistro.length ; i++){
             lblRegistro[i] = new Label();
@@ -144,14 +162,14 @@ public class Register extends Stage {
                         "Femenino",
                         "Otro"
                 );
-        ComboBox<String> genero = new ComboBox<>(options);
+        genero = new ComboBox<>(options);
         genero.setPromptText("Género");
         genero.setPrefSize(250,10);
 
         //ComboBox<String> preguntaSeguridad = getPreguntasSeguridad();
-        ComboBox<String> preguntaSeguridad = new ComboBox<>();
-        ArrayList<String> asd = getPreguntasSeguridad();
-        preguntaSeguridad.getItems().addAll(asd);
+        preguntaSeguridad = new ComboBox<>();
+        resPreguntas = getPreguntasSeguridad();
+        preguntaSeguridad.getItems().addAll(resPreguntas);
         preguntaSeguridad.setPromptText("Elija una pregunta de seguridad");
         preguntaSeguridad.setPrefSize(250,10);
 
@@ -168,19 +186,23 @@ public class Register extends Stage {
                 i++;
                 vbox.getChildren().add(lblRegistro[i]);
             }
+            if (i == 5){
+                vbox.getChildren().add(pwdRegistro);
+                i++;
+                vbox.getChildren().add(lblRegistro[i]);
+            }
             if(j < inputRegistro.length) {
                 vbox.getChildren().add(inputRegistro[j]);
                 j++;
             }
             i++;
         }while(i < lblRegistro.length);
-
         vbox.getChildren().add(genero);
 
-        Button btnRegister = new Button("Registrarme");
+        btnRegister = new Button("Registrarme");
         btnRegister.setPrefSize(250,10);
         btnRegister.setOnAction(e -> {
-                inputRegistro[0].setStyle("-fx-control-inner-background: #FFCCCC");
+
             try {
                 register();
             } catch (IOException ioException) {
@@ -204,8 +226,67 @@ public class Register extends Stage {
     private boolean consRegister() throws IOException {
         ArrayList<String> message = new ArrayList<>();
         message.add("REGISTRO");
+        boolean datosok = true;
 
-        //DEJA DE ROMPER LAS BOLAS Y HACE LA CONFIRMACION DEL REGISTRO PUTO DE MIERDA
+        for (int i = 0; i < inputRegistro.length; i++)
+        {
+            switch (i)
+            {
+                case 0:
+                    if (!(inputRegistro[i].getText().trim().length() <= 32 && inputRegistro[i].getText().trim().length() >= 3 )){
+                        inputRegistro[i].setStyle("-fx-control-inner-background: #FFCCCC");
+                        datosok = false;
+                    }else {
+                        inputRegistro[i].setStyle("-fx-control-inner-background: #CCFFCC");
+                    }
+
+                    break;
+                case 1:
+                    if (!(inputRegistro[i].getText().length() <= 50 && inputRegistro[i].getText().length() >= 8 )){
+                        inputRegistro[i].setStyle("-fx-control-inner-background: #FFCCCC");
+                        datosok = false;
+                    }else {
+                        inputRegistro[i].setStyle("-fx-control-inner-background: #CCFFCC");
+                    }
+
+                    break;
+                case 2:
+                    if (!(inputRegistro[i].getText().length() <= 64 && inputRegistro[i].getText().length() >= 4 )){
+                        inputRegistro[i].setStyle("-fx-control-inner-background: #FFCCCC");
+                        datosok = false;
+                    }else {
+                        inputRegistro[i].setStyle("-fx-control-inner-background: #CCFFCC");
+                    }
+
+                    break;
+                case 3:
+                    if (!(inputRegistro[i].getText().length() <= 100 && inputRegistro[i].getText().length() >= 1 )){
+                        inputRegistro[i].setStyle("-fx-control-inner-background: #FFCCCC");
+                        datosok = false;
+                    }else {
+                        inputRegistro[i].setStyle("-fx-control-inner-background: #CCFFCC");
+                    }
+
+                    break;
+                case 4:
+                    if (!validarMail(inputRegistro[i].getText())){
+                        inputRegistro[i].setStyle("-fx-control-inner-background: #FFCCCC");
+                        datosok = false;
+                    }else {
+                        inputRegistro[i].setStyle("-fx-control-inner-background: #CCFFCC");
+                    }
+
+                    break;
+            }
+        }
+
+        if(pwdRegistro.getText().length() >= 8){
+            pwdRegistro.setStyle("-fx-control-inner-background: #FFCCCC");
+            datosok = false;
+        }else {
+            pwdRegistro.setStyle("-fx-control-inner-background: #CCFFCC");
+        }
+
         //Aca instanciamos el array de imageview, que aunque muestren la misma imagen, si no lo haces asi se re bugea
 
         /*try{
@@ -217,7 +298,20 @@ public class Register extends Stage {
         }*/
 
 
-        return true;
+        return datosok;
+    }
+
+    public boolean validarMail(String email)
+    {
+        String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\."+
+                "[a-zA-Z0-9_+&*-]+)*@" +
+                "(?:[a-zA-Z0-9-]+\\.)+[a-z" +
+                "A-Z]{2,7}$";
+
+        Pattern pat = Pattern.compile(emailRegex);
+        if (email == null)
+            return false;
+        return pat.matcher(email).matches();
     }
 
     private ArrayList<String> getPreguntasSeguridad() throws IOException {
