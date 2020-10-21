@@ -115,13 +115,13 @@ public class ThreadAdmin extends ThreadClient{
 			case "BORRARUSUARIO":
 				borrarUsuario();
 				break;
-			case "SUBIRCATING":
+			case "SUBIRCATING"://
 				subirCatRecIng(true);
 				break;
-			case "SUBIRCATREC":
+			case "SUBIRCATREC"://
 				subirCatRecIng(false);
 				break;
-			case "SUBIRING":
+			case "SUBIRING"://
 				subirIng();
 				break;
 			default:	    		

@@ -28,6 +28,7 @@ public class ThreadClient implements Runnable{
 	//objetos para pasar mensajes
 	protected ObjectOutputStream output;
 	protected ObjectInputStream input;
+	protected StringValidator sv;
 
 	
 	//llamadas a SPs
@@ -187,15 +188,10 @@ public class ThreadClient implements Runnable{
 			ArrayList<Categoria> catRec = new ArrayList<Categoria>();
 			ArrayList<Multimedia> mult = new ArrayList<Multimedia>();
 			int i;
-			for (i = 1; i < 4; i++) {
-				//1: nickname, 2: nombre receta, 3: descripcion
+			for (i = 1; i < 5; i++) {
+				//1: nickname, 2: nombre receta, 3: descripcion, 4: instrucciones
 				stmt.setString(i, message.get(i));
 			}
-			
-			//4: instrucciones
-			/*
-			 * 
-			 * */
 			
 			//agregar ingredientes
 			while(!(message.get(i).contentEquals("CATEGORIASRECETA"))){
@@ -229,8 +225,8 @@ public class ThreadClient implements Runnable{
 	protected void opcionesCliente(String peticion) {
 		//segun la peticion, ejecuta cierto metodo
         switch(peticion) {
-        case "CALIFICAR":
-        	calificar();
+        case "CALIFICAR"://
+        	if(sv.esCalificarValido()) calificar();
         	break;
         case "CONSRECETASCAT": 
         	consRecetasCat();
@@ -250,7 +246,7 @@ public class ThreadClient implements Runnable{
         case "LISTARCATREC":
         	listarCatRec();
         	break;
-        case "LOGIN"://
+        case "LOGIN":
         	login();
         	break;
         case "PREGUNTASSEG":
@@ -259,10 +255,10 @@ public class ThreadClient implements Runnable{
         case "RECETASDEUSUARIO":
         	recetaUsuario();
         	break;
-        case "REGISTRO":          		
+        case "REGISTRO":   //       		
     		registro();           		
     		break;
-        case "SUBIRRECETA":
+        case "SUBIRRECETA"://
         	subirReceta();
         	break;
     	default:
@@ -274,8 +270,6 @@ public class ThreadClient implements Runnable{
 	@SuppressWarnings("unchecked")
 	@Override
 	public void run() {
-
-
 		try {	
 			System.out.println("Connected with client" + this.socket);
 			//inicializacion de los atributos
@@ -286,7 +280,12 @@ public class ThreadClient implements Runnable{
 	        //recibe el mensaje del cliente
 			this.message = (ArrayList<String>) this.input.readObject();
 			//switch de opcioens del cliente
-	        opcionesCliente(message.get(0));
+			sv = new StringValidator(message);
+			if(sv.elementArrayListBlank(message)) {
+				answer.add("ELEMENTBLANK");
+			}else {
+		        opcionesCliente(message.get(0));
+			}
 	        //una vez ejecutados los metodos correspondientes, manda la respuesta
     		output.writeObject(answer);
     		//vacia el objeto para la proxima respuesta
