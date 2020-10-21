@@ -2,8 +2,10 @@ package pkgRecetasDivertidas;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import pkgConexion.Conexion;
 import pkgLogin.LayoutLogin;
 
 public final class RecetasDivertidas extends Application {
@@ -21,14 +23,26 @@ public final class RecetasDivertidas extends Application {
     public void start(Stage stage) throws Exception {
         window = stage;
         window.setScene(Login);
-        window.getIcons().add(new Image("https://cdn.discordapp.com/attachments/453644623168929803/764301261523779614/logo_chiquito.png"));
+        window.getIcons().add(new Image(getClass().getResourceAsStream("/res/logo_chiquito.png")));
         window.setTitle("Recetas Divertidas");
         window.setResizable(false);
-        window.show();
+
+        //Si queres probar el cliente sin conexion metele un ! aca y en LayoutLogin
+        if(Conexion.isSvResponse()){
+
+            window.show();
+        }else{
+            Alerta alerta = new Alerta(Alert.AlertType.ERROR, "No se ha podido conectar con el servidor",
+                    "Asegurese de estar conectado antes de iniciar el programa");
+            alerta.showAndWait();
+
+            stop();
+        }
+
     }
 
-    public static void setScene(Scene scnName){
-        window.setScene(scnName);
+    public static void hide(){
+        window.hide();
     }
 
     @Override
@@ -36,5 +50,10 @@ public final class RecetasDivertidas extends Application {
         super.init();
         layoLg = new LayoutLogin();
         Login = new Scene(layoLg);
+    }
+
+    @Override
+    public void stop() throws Exception {
+        super.stop();
     }
 }

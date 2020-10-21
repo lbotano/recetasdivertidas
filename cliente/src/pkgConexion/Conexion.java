@@ -16,6 +16,7 @@ public final class Conexion {
     public static Socket socket;
     public static ObjectOutputStream output;
     public static ObjectInputStream input;
+    public static boolean svResponse;
 
     public static ArrayList<String> sendMessage(ArrayList<String> message) throws IOException {
         ArrayList<String> answer = new ArrayList<>();
@@ -29,11 +30,39 @@ public final class Conexion {
             answer = (ArrayList<String>) input.readObject();
 
             socket.close();
-        } catch(Exception e){
-            Alerta alert = new Alerta(Alert.AlertType.ERROR,"Se ha detectado un problema con el servidor", "Upsi! Estamos teniendo problemas en nuestros servidores!!!");
+        } catch (Exception e) {
+            Alerta alert = new Alerta(Alert.AlertType.ERROR, "Se ha detectado un problema con el servidor",
+                    "Upsi! Estamos teniendo problemas en nuestros servidores!!!");
             alert.showAndWait();
         }
 
         return answer;
+    }
+
+    public static boolean isSvResponse() {
+        try {
+            socket = new Socket("127.0.0.1", 7070);
+
+            svResponse = true;
+            socket.close();
+        } catch(Exception e){
+            svResponse = false;
+        }
+        return svResponse;
+    }
+
+    public static void probarConexion(){
+        try {
+            socket = new Socket("127.0.0.1", 7070);
+
+            svResponse = true;
+            socket.close();
+        } catch(Exception e){
+            svResponse = false;
+            Alerta alert = new Alerta(Alert.AlertType.ERROR,"Se ha detectado un problema con el servidor",
+                    "No se ha detectado conexion con el servidor");
+
+            alert.showAndWait();
+        }
     }
 }

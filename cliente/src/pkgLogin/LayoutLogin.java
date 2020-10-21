@@ -24,14 +24,10 @@ public class LayoutLogin extends BorderPane {
     private Label lblUsername;
     private Label lblPassword;
     public Register register;
-    private String message;
-    private LayoutLogin login;
-
 
     public LayoutLogin(){
         this.setTop(addGridPane());
         this.setBottom(addHBox());
-        //register = new Register();
     }
 
     private GridPane addGridPane(){
@@ -85,8 +81,11 @@ public class LayoutLogin extends BorderPane {
         btnRegister.setPrefSize(120,10);
         btnRegister.setOnAction(e -> {
             try {
-                register = new Register();
-                register.show();
+                //Sacar el NOT de aca o poner un NOT para probar el registro
+                if(Conexion.isSvResponse()) {
+                    register = new Register();
+                    register.show();
+                }
             } catch (IOException ioException) {
                 ioException.printStackTrace();
             }

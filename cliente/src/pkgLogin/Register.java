@@ -28,7 +28,7 @@ public class Register extends Stage {
     private Label[] lblRegistro;
     private ComboBox<String> genero;
     private ComboBox<String> preguntaSeguridad;
-    private ArrayList<String> resPreguntas = getPreguntasSeguridad();
+    private ArrayList<String> resPreguntas;
 
     public Register() throws IOException {
         super();
@@ -120,7 +120,7 @@ public class Register extends Stage {
             }
         }
 
-        img = new Image(getClass().getResourceAsStream("atention.png"));
+        img = new Image(getClass().getResourceAsStream("/res/atention.png"));
         epicasso = new ImageView[tooltip.length];
 
         //Aca instanciamos el array de imageview, que aunque muestren la misma imagen, si no lo haces asi se re bugea
@@ -202,7 +202,6 @@ public class Register extends Stage {
         btnRegister = new Button("Registrarme");
         btnRegister.setPrefSize(250,10);
         btnRegister.setOnAction(e -> {
-
             try {
                 register();
             } catch (IOException ioException) {
@@ -226,6 +225,55 @@ public class Register extends Stage {
     private boolean consRegister() throws IOException {
         ArrayList<String> message = new ArrayList<>();
         message.add("REGISTRO");
+        boolean consRes = false;
+        Alerta alerta;
+
+        if (corroborarDatos()){
+            message.addAll(getItems());
+
+            ArrayList<String> ans = Conexion.sendMessage(message);
+            if(ans.size() != 0) {
+                switch (ans.get(0)) {
+                    case "REGISTEROK" -> consRes = true;
+                    case "REGISTERFAIL" -> {
+                        alerta = new Alerta(Alert.AlertType.ERROR, "Error al registrarse", ans.get(1));
+                        alerta.showAndWait();
+                    }
+                    case "MESSAGEERROR" -> {
+                        alerta = new Alerta(Alert.AlertType.ERROR, "Hubo un error en la comunicacion con el server", ans.get(1));
+                        alerta.showAndWait();
+                    }
+                    default -> {
+                        alerta = new Alerta(Alert.AlertType.ERROR, "This is akward", "Esto no deberia haber sucedido");
+                        alerta.showAndWait();
+                    }
+                }
+            }
+        }else{
+            Alerta alert = new Alerta(Alert.AlertType.ERROR, "Datos erroneos",
+                    "Corrobore que haya completado bien el formulario");
+            alert.showAndWait();
+        }
+
+        return consRes;
+    }
+
+    private ArrayList<String> getItems(){
+        ArrayList<String> itemList = new ArrayList<>();
+
+        itemList.add(inputRegistro[0].getText());
+        itemList.add(preguntaSeguridad.getValue());
+        itemList.add(inputRegistro[1].getText());
+        itemList.add(inputRegistro[2].getText());
+        itemList.add(inputRegistro[3].getText());
+        itemList.add(pwdRegistro.getText());
+        itemList.add(inputRegistro[4].getText());
+        itemList.add(genero.getValue());
+
+        return itemList;
+    }
+
+    private boolean corroborarDatos(){
         boolean datosok = true;
 
         for (int i = 0; i < inputRegistro.length; i++)
@@ -280,23 +328,16 @@ public class Register extends Stage {
             }
         }
 
-        if(pwdRegistro.getText().length() >= 8){
+        if(!(pwdRegistro.getText().length() >= 8)){
             pwdRegistro.setStyle("-fx-control-inner-background: #FFCCCC");
             datosok = false;
         }else {
             pwdRegistro.setStyle("-fx-control-inner-background: #CCFFCC");
         }
 
-        //Aca instanciamos el array de imageview, que aunque muestren la misma imagen, si no lo haces asi se re bugea
-
-        /*try{
-            ArrayList<String> ans = Conexion.sendMessage(message);
-        }catch(Exception e){
-            Alerta alert = new Alerta(Alert.AlertType.ERROR,"xd");
-            alert.setGraphic(epicasso);
-            alert.showAndWait();
-        }*/
-
+        if(genero.getValue() == null || preguntaSeguridad.getValue() == null ){
+            datosok = false;
+        }
 
         return datosok;
     }
