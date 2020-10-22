@@ -57,8 +57,8 @@ DELIMITER ;
 
 -- Inicio sesion --
 -- Devuelve:
--- 	true: si se logueó correctamente.
---  false: si hubo un error al loguearse.
+-- 	resultado: si se logueó correctamente
+-- 	esAdmin: si el usuario es admin
 DROP PROCEDURE IF EXISTS spInicioSesion;
 DELIMITER //
 CREATE PROCEDURE spInicioSesion
@@ -71,6 +71,7 @@ CREATE PROCEDURE spInicioSesion
 BEGIN
 	DECLARE contraDB varchar(50);
 	DECLARE cantUsuarios int;
+    DECLARE estaBaneado boolean;
     
     -- Por defecto devuelve 0
     SELECT false INTO resultado;
@@ -79,9 +80,18 @@ BEGIN
     INTO cantUsuarios
     FROM Usuario
     WHERE uNickname = puNickname;
+    
+    -- Ver si el usuario no está baneado
+    SELECT NOT uHabilitado
+    INTO estaBaneado
+    FROM Usuario
+    WHERE uNickname = puNickname;
+    
 	-- Si no encuentra un usuario, devuelve 0
 	IF cantUsuarios = 0 THEN
 		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Este usuario no existe.';
+	ELSEIF estaBaneado THEN
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'La cuenta está suspendida.';
 	ELSE
         SELECT uContrasenia
         INTO contraDB

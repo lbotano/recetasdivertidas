@@ -100,8 +100,20 @@ CREATE PROCEDURE spBaneoUsuario
 	puNickname varchar(32)
 )
 BEGIN
-	UPDATE Usuario
-    SET uHabilitado = false
-    WHERE uNickname = puNichname;
+	DECLARE existeUsuario boolean;
+    
+    -- Averiguar si el usuario existe
+	SELECT COUNT(*) > 0
+    INTO existeUsuario
+	FROM Usuario
+    WHERE uNickname = puNickname;
+    
+    IF NOT existeUsuario THEN
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Este usuario no existe';
+    ELSE
+		UPDATE Usuario
+		SET uHabilitado = false
+		WHERE uNickname = puNickname;
+    END IF;
 END//
 DELIMITER ;
