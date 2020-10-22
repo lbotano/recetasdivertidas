@@ -24,7 +24,8 @@ CREATE TABLE Usuario(
 	uContrasenia varchar(50) NOT NULL,
 	uGenero boolean,
 	uMail varchar(64) NOT NULL,
-    uHabilitado boolean NOT NULL DEFAULT true, 
+    uHabilitado boolean NOT NULL DEFAULT true,
+    uEsAdmin boolean NOT NULL DEFAULT false,
 	CONSTRAINT pk_u PRIMARY KEY (uNickname),
 	CONSTRAINT uk_um UNIQUE (uMail),
     CONSTRAINT fk_usuario_preguntaSeguridad

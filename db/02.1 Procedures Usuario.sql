@@ -14,6 +14,7 @@ CREATE PROCEDURE spRegistroUsuario
 	IN contrasenia varchar(50),
 	IN genero tinyint,
 	IN mail varchar(64),
+    IN esAdmin boolean,
 	OUT resultado boolean
 )
 BEGIN
@@ -34,7 +35,8 @@ BEGIN
             uApellido,
             uContrasenia,
             uGenero,
-            uMail)
+            uMail,
+            uEsAdmin)
 		VALUES 
 			(nickname,
 			preguntaSeguridad,
@@ -43,7 +45,8 @@ BEGIN
 			apellido,
 			contrasenia,
 			genero,
-			mail);
+			mail,
+            esAdmin);
 		SELECT true INTO resultado;
 	ELSE
 		SELECT false INTO resultado;
@@ -62,7 +65,8 @@ CREATE PROCEDURE spInicioSesion
 (	
 	IN puNickname varchar(32),
 	IN puContrasenia varchar(50),
-	OUT resultado boolean
+	OUT resultado boolean,
+    OUT esAdmin boolean
 )
 BEGIN
 	DECLARE contraDB varchar(50);
@@ -87,6 +91,7 @@ BEGIN
         
 		IF contraDB = puContrasenia THEN
 			SELECT true INTO resultado;
+            SELECT uEsAdmin INTO esAdmin FROM Usuario WHERE uNickname = puNickname;
 		ELSE
             SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Contraseña incorrecta';
 		END IF;

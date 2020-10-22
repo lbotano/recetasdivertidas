@@ -30,6 +30,7 @@ CALL spRegistroUsuario (
 	"lautaro123",
 	0,
 	"otanolautarob@gmail.com",
+    true,
 	@resultado);
 
 CALL spRegistroUsuario (
@@ -41,6 +42,7 @@ CALL spRegistroUsuario (
     "jorgelina123",
     1,
     "jorgelina@jorgelinaventiladores.cl",
+    false,
     @resultado);
     
 -- Añadir categorías de recetas
