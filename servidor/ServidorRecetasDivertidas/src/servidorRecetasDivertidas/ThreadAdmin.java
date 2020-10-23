@@ -101,37 +101,53 @@ public class ThreadAdmin extends ThreadClient{
 	        this.answer = new ArrayList<String>();	        
 	        //recibe el mensaje del cliente
 			this.message = (ArrayList<String>) input.readObject();
-			
-			switch(message.get(0)) {
-			case "BORRARCATING":
-				borrarCatIng();
-				break;
-			case "BORRARCATREC":
-				borrarCatRec();
-				break;
-			case "BORRARREC":
-				borrarRec();
-				break;
-			case "BORRARUSUARIO":
-				borrarUsuario();
-				break;
-			case "SUBIRCATING"://
-				subirCatRecIng(true);
-				break;
-			case "SUBIRCATREC"://
-				subirCatRecIng(false);
-				break;
-			case "SUBIRING"://
-				subirIng();
-				break;
-			default:	    		
-				opcionesCliente(message.get(0));
-				break;
+			sv = new StringValidator(message);		
+			if(sv.elementArrayListBlank(message)) {
+				answer.add("ELEMENTBLANK");
+			}else {
+				switch(message.get(0)) {
+				case "BORRARCATING":
+					borrarCatIng();
+					break;
+				case "BORRARCATREC":
+					borrarCatRec();
+					break;
+				case "BORRARREC":
+					borrarRec();
+					break;
+				case "BORRARUSUARIO":
+					borrarUsuario();
+					break;
+				case "SUBIRCATING"://
+		        	if(sv.esSubirCatValido()) { 
+						subirCatRecIng(true);
+		        	}else {
+		        		answer.add("FORMATERROR");
+		        	}
+					break;
+				case "SUBIRCATREC"://		        	
+					if(sv.esSubirCatValido()) { 
+						subirCatRecIng(false);
+		        	}else {
+		        		answer.add("FORMATERROR");
+		        	}
+					break;
+				case "SUBIRING"://
+					if(sv.esSubirIngValido()) { 
+						subirIng();
+		        	}else {
+		        		answer.add("FORMATERROR");
+		        	}
+					break;
+				default:	    		
+					opcionesCliente(message.get(0));
+					break;
+				}
+		        //una vez ejecutados los metodos correspondientes, manda la respuesta
+	    		output.writeObject(answer);
+	    		//vacia el objeto para la proxima respuesta
+				answer.clear();
 			}
-	        //una vez ejecutados los metodos correspondientes, manda la respuesta
-    		output.writeObject(answer);
-    		//vacia el objeto para la proxima respuesta
-			answer.clear();
 		
 		}catch (Exception e){
         	System.out.println();

@@ -226,7 +226,11 @@ public class ThreadClient implements Runnable{
 		//segun la peticion, ejecuta cierto metodo
         switch(peticion) {
         case "CALIFICAR"://
-        	if(sv.esCalificarValido()) calificar();
+        	if(sv.esCalificarValido()) {
+        		calificar();
+        	}else {
+        		answer.add("FORMATERROR");
+        	}
         	break;
         case "CONSRECETASCAT": 
         	consRecetasCat();
@@ -255,11 +259,19 @@ public class ThreadClient implements Runnable{
         case "RECETASDEUSUARIO":
         	recetaUsuario();
         	break;
-        case "REGISTRO":   //       		
-    		registro();           		
+        case "REGISTRO":   //       	
+        	if(sv.esResgistroValido()) {     		
+        		registro();     
+        	}else {
+        		answer.add("FORMATERROR");
+        	}
     		break;
-        case "SUBIRRECETA"://
-        	subirReceta();
+        case "SUBIRRECETA"://  	
+        	if(sv.esSubirRecetaValido()) { 
+        		subirReceta();    
+        	}else {
+        		answer.add("FORMATERROR");
+        	}
         	break;
     	default:
     		//se manda esta respuesta si la peticion es invalida
@@ -279,11 +291,11 @@ public class ThreadClient implements Runnable{
 	        this.answer = new ArrayList<String>();	        
 	        //recibe el mensaje del cliente
 			this.message = (ArrayList<String>) this.input.readObject();
-			//switch de opcioens del cliente
 			sv = new StringValidator(message);
 			if(sv.elementArrayListBlank(message)) {
 				answer.add("ELEMENTBLANK");
 			}else {
+				//switch de opcioens del cliente
 		        opcionesCliente(message.get(0));
 			}
 	        //una vez ejecutados los metodos correspondientes, manda la respuesta

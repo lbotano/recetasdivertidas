@@ -44,7 +44,7 @@ CREATE TABLE Ingrediente(
 DROP TABLE IF EXISTS CategoriaDeIngrediente;
 CREATE TABLE CategoriaDeIngrediente (
 	cID int NOT NULL AUTO_INCREMENT,
-	cNombre varchar(50) NOT NULL,
+	cNombre varchar(64) NOT NULL,
 	CONSTRAINT pk_ci PRIMARY KEY (cID),
 	CONSTRAINT uk_ci UNIQUE (cNombre)
 );
