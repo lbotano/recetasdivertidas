@@ -39,7 +39,7 @@ public class ThreadClient implements Runnable{
 	//private static final String DATOSRECETA = "{call spGetDatosReceta()}";
 	//private static final String LISTARCATREC = "";
 	//private static final String LISTARCATING = "";
-	private static final String LOGIN = "{call spInicioSesion(?,?,?)}";
+	private static final String LOGIN = "{call spInicioSesion(?,?,?,?)}";
 	//private static final String PREGUNTASSEG = "";
 	private static final String RECETASDEUSUARIO = "{call spGetRecetasUsuario(?)}";
 	private static final String REGISTRO = "{call spRegistroUsuario(?,?,?,?,?,?,?,?,?)}";
@@ -111,16 +111,30 @@ public class ThreadClient implements Runnable{
 		try {
 			//establece q codigo sql va a ejecutar
 			stmt = conn.prepareCall(LOGIN);
-			//setea los parametros a partir del mensaje del cliente
+			/*setea los parametros a partir del mensaje del cliente
+			 * 1: nickname 2: contraseña 3: resultado 4: esAdmin
+			 * 3 y 4 son parametros de salida
+			 */			
 			stmt.setString(1, message.get(1));
 			stmt.setString(2, message.get(2));
-			//setea los parametros de salida del sp
-			stmt.registerOutParameter(3, Types.TINYINT);
-			System.out.println("Sending LOGIN message to db for socket: " + socket);
+			
+			stmt.registerOutParameter(3, Types.BOOLEAN);
+			stmt.registerOutParameter(4, Types.BOOLEAN);
+			
 			//ejecuta la consulta			
 			stmt.execute();
-			//si no hubo ningun error, entonces manda el siguiente mensaje
-			answer.add("LOGINOK");
+			/*Si pudo logearse entonces manda un LOGINOK
+			 * y si es admin o no (true: si)
+			 * Se fija por el 3er parametro que es el resultado
+			 * si es false cagaada xd
+			 */
+			if(stmt.getBoolean(3)) {
+				answer.add("LOGINOK");
+				answer.add(String.valueOf(stmt.getBoolean(4)));
+			}else {
+				answer.add("LOGINFAIL");
+				answer.add("cagada");
+			}
 		} catch (SQLException e) {	
 			exceptionHandler(e, "LOGINFAIL");	
 		}		
