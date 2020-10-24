@@ -4,8 +4,7 @@ USE RecetasDivertidasDB;
 -- Devuelve un True si el usuario se creó con éxito
 DROP PROCEDURE IF EXISTS spRegistroUsuario;
 DELIMITER //
-CREATE PROCEDURE spRegistroUsuario
-(
+CREATE PROCEDURE spRegistroUsuario (
 	IN nickname varchar(32),
 	IN preguntaSeguridad int,
 	IN respuestaSeguridad varchar(64),
@@ -61,8 +60,7 @@ DELIMITER ;
 -- 	esAdmin: si el usuario es admin
 DROP PROCEDURE IF EXISTS spInicioSesion;
 DELIMITER //
-CREATE PROCEDURE spInicioSesion
-(	
+CREATE PROCEDURE spInicioSesion (
 	IN puNickname varchar(32),
 	IN puContrasenia varchar(50),
 	OUT resultado boolean,
@@ -110,26 +108,15 @@ END//
 DELIMITER ;
 
 -- Subir receta --
--- Parámetros:
--- 	nombre: nombre de la receta
---  descripcion: descripcion de la receta
---  instrucciones: instrucciones de la receta
---  ingredientes: ingredientes en JSON
--- 		iID number: ID del Ingrediente
---      cantidad int: Cantidad necesaria del ingrediente
--- 		unidadCantidad string: Unidad de medida de la cantidad
---  multimedia: medios audiovisuales de la receta
--- 		iID
 DROP PROCEDURE IF EXISTS spSubirReceta;
 DELIMITER //
-CREATE PROCEDURE spSubirReceta
-(
+CREATE PROCEDURE spSubirReceta (
 	autor varchar(32),
-    nombre varchar(128),
-    descripcion text(512),
-    instrucciones text(2048),
-    ingredientes json,
-    multimedia json,
+    nombre varchar(128), -- Nombre de la receta
+    descripcion text(512), -- Descripción de la receta
+    instrucciones text(2048), -- Instrucciones de la receta
+    ingredientes json, -- Los ingredientes (en JSON): iID:number, cantidad:number y unidadCantidad:string
+    multimedia json, -- Los medios audiovisiales de la receta (en JSON): link:string
     categoriasReceta json
 )
 BEGIN
@@ -242,8 +229,7 @@ DELIMITER ;
 -- Devuelve -1 si el usuario no existe
 DROP PROCEDURE IF EXISTS spGetRecetasUsuario;
 DELIMITER //
-CREATE PROCEDURE spGetRecetasUsuario
-(
+CREATE PROCEDURE spGetRecetasUsuario (
 	uNickname varchar(32)
 )
 BEGIN
@@ -261,8 +247,7 @@ DELIMITER ;
 -- 5. Multimedia
 DROP PROCEDURE IF EXISTS spGetDatosReceta;
 DELIMITER //
-CREATE PROCEDURE spGetDatosReceta
-(
+CREATE PROCEDURE spGetDatosReceta (
 	prID int
 )
 BEGIN
@@ -322,8 +307,7 @@ DELIMITER ;
 -- Listar usuarios o datos de un usuario --
 DROP PROCEDURE IF EXISTS spDatosUsuario;
 DELIMITER //
-CREATE PROCEDURE spDatosUsuario
-(
+CREATE PROCEDURE spDatosUsuario (
 	puNickname varchar(32)
 )
 BEGIN
@@ -342,13 +326,21 @@ DELIMITER ;
 -- Calificar receta --
 DROP PROCEDURE IF EXISTS spCalificarReceta;
 DELIMITER //
-CREATE PROCEDURE spCalificarReceta
-(
-	prID int,
+CREATE PROCEDURE spCalificarReceta (
 	puNickname varchar(32),
+	prID int,
 	pCalificacion tinyint
 )
 BEGIN
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Error inesperado';
+    END;
+    
+    DECLARE EXIT HANDLER FOR SQLWARNING
+    BEGIN
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Error inesperado';
+    END;
 	-- Se borra la calificación anterior (si es que la tiene)
     -- por si el usuario quiso cambiarla
 	DELETE FROM Calificacion
@@ -369,8 +361,7 @@ DELIMITER ;
 -- con esos ingrdientes
 DROP PROCEDURE IF EXISTS spBuscarRecetaPorIngr;
 DELIMITER //
-CREATE PROCEDURE spBuscarRecetaPorIngr
-(
+CREATE PROCEDURE spBuscarRecetaPorIngr (
 	IN ingredientes varchar(512),
     IN pagina int
 )
@@ -394,5 +385,61 @@ BEGIN
     PREPARE stmt FROM @sql;
     EXECUTE stmt;
     DEALLOCATE PREPARE stmt;
+END//
+DELIMITER ;
+
+-- Borrar receta (como usuario, sólo se puede borrar la receta de uno mismo)
+DROP PROCEDURE IF EXISTS spUsuarioBorrarReceta;
+DELIMITER //
+CREATE PROCEDURE spUsuarioBorrarReceta (
+	IN idReceta int, -- ID de la receta que el usuario quiere borrar
+    IN nickname varchar(32) -- Nickname del usuario que quiere borrar la receta
+)
+BEGIN
+	DECLARE usuarioDeReceta varchar(32); -- El verdadero usuario que hizo la receta que se quiere borrar
+    
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Error inesperado al borrar receta';
+        ROLLBACK;
+    END;
+    
+    DECLARE EXIT HANDLER FOR SQLWARNING
+    BEGIN
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Error inesperado al borrar receta';
+        ROLLBACK;
+    END;
+    
+    -- Verificar que el usuario este borrando una receta suya
+    SELECT rAutor
+    INTO usuarioDeReceta
+    FROM Receta
+    WHERE rID = idReceta;
+    
+    IF usuarioDeReceta != nickname THEN
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Error: Estás tratando de borrar una receta que no es tuya';
+    END IF;
+	
+    -- Borrar la receta
+	SET autocommit = 0;
+    START TRANSACTION;
+    
+	DELETE FROM RelCatReceta
+    WHERE rID = idReceta;
+    
+    DELETE FROM Multimedia
+    WHERE rID = idReceta;
+    
+    DELETE FROM IngredienteReceta
+    WHERE rID = idReceta;
+    
+    DELETE FROM Calificacion
+    WHERE rID = idReceta;
+    
+    DELETE FROM Receta
+    WHERE rID = idReceta;
+    
+    COMMIT;
+    SET autocommit = 1;
 END//
 DELIMITER ;

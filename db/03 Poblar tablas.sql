@@ -2,16 +2,17 @@ USE RecetasDivertidasDB;
 
 -- Truncar tablas
 SET FOREIGN_KEY_CHECKS = 0;
-TRUNCATE TABLE PreguntasSeguridad;
-TRUNCATE TABLE Usuario;
-TRUNCATE TABLE CategoriaDeReceta;
+TRUNCATE TABLE Calificacion;
 TRUNCATE TABLE CategoriaDeIngrediente;
+TRUNCATE TABLE CategoriaDeReceta;
 TRUNCATE TABLE Ingrediente;
-TRUNCATE TABLE RelCatIngred;
-TRUNCATE TABLE Receta;
-TRUNCATE TABLE Multimedia;
 TRUNCATE TABLE IngredienteReceta;
+TRUNCATE TABLE Multimedia;
+TRUNCATE TABLE PreguntasSeguridad;
+TRUNCATE TABLE Receta;
+TRUNCATE TABLE RelCatIngred;
 TRUNCATE TABLE RelCatReceta;
+TRUNCATE TABLE Usuario;
 SET FOREIGN_KEY_CHECKS = 1;
 
 -- Insertar preguntas de seguridad
@@ -79,3 +80,8 @@ CALL spSubirReceta (
     NULL,
     '[{"cID":1}]'
 );
+
+-- Calificar recetas
+CALL spCalificarReceta('lbotano', 1, 5);
+CALL spCalificarReceta('jorgelina', 1, 3);
+CALL spCalificarReceta('jorgelina', 2, 1);

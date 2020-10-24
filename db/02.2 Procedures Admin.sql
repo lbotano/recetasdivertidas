@@ -88,7 +88,7 @@ BEGIN
 	FROM relCategoriaIngrediente;
     
     COMMIT;
-    SET autocommit=1;
+    SET autocommit = 1;
 END//
 DELIMITER ;
 
@@ -115,5 +115,49 @@ BEGIN
 		SET uHabilitado = false
 		WHERE uNickname = puNickname;
     END IF;
+END//
+DELIMITER ;
+
+-- Borrar receta (como usuario, sólo se puede borrar la receta de uno mismo)
+DROP PROCEDURE IF EXISTS spAdminBorrarReceta;
+DELIMITER //
+CREATE PROCEDURE spAdminBorrarReceta (
+	IN idReceta int, -- ID de la receta que el usuario quiere borrar
+    IN nickname varchar(32) -- Nickname del usuario que quiere borrar la receta
+)
+BEGIN
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Error inesperado al borrar receta';
+        ROLLBACK;
+    END;
+    
+    DECLARE EXIT HANDLER FOR SQLWARNING
+    BEGIN
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Error inesperado al borrar receta';
+        ROLLBACK;
+    END;
+	
+    -- Borrar la receta
+	SET autocommit = 0;
+    START TRANSACTION;
+    
+	DELETE FROM RelCatReceta
+    WHERE rID = idReceta;
+    
+    DELETE FROM Multimedia
+    WHERE rID = idReceta;
+    
+    DELETE FROM IngredienteReceta
+    WHERE rID = idReceta;
+    
+    DELETE FROM Calificacion
+    WHERE rID = idReceta;
+    
+    DELETE FROM Receta
+    WHERE rID = idReceta;
+    
+    COMMIT;
+    SET autocommit = 1;
 END//
 DELIMITER ;
