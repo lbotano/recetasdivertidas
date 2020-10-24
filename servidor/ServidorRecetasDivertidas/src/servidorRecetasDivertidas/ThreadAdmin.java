@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import com.google.gson.Gson;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
+import jsonClasess.Categoria;
+
 public class ThreadAdmin extends ThreadClient{
 
 	public ThreadAdmin(ComboPooledDataSource c, Socket s) {

@@ -13,6 +13,11 @@ import com.google.gson.*;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
+import jsonClasess.Categoria;
+import jsonClasess.IdIngrediente;
+import jsonClasess.Ingrediente;
+import jsonClasess.Multimedia;
+
 public class ThreadClient implements Runnable{
 	//referencia al objeto que maneja las conexiones a la base de datos
 	protected static ComboPooledDataSource cpds;
@@ -33,10 +38,10 @@ public class ThreadClient implements Runnable{
 	
 	//llamadas a SPs
 	//private static final String CONSRECETASCAT = "";
-	//private static final String CONSRECETAING = "";
+	private static final String CONSRECETAING = "{callspBuscarRecetaPorIngr(?,?)}";
 	//private static final String CONSRECETATEXT = "";
 	private static final String CALIFICAR = "{call spCalificarReceta(?,?,?)}";
-	//private static final String DATOSRECETA = "{call spGetDatosReceta()}";
+	private static final String DATOSRECETA = "{call spGetDatosReceta(?)}";
 	//private static final String LISTARCATREC = "";
 	//private static final String LISTARCATING = "";
 	private static final String LOGIN = "{call spInicioSesion(?,?,?,?)}";
@@ -88,6 +93,32 @@ public class ThreadClient implements Runnable{
 	}
 	
 	private void consRecetasIng() {
+		try {
+			stmt = conn.prepareCall(CONSRECETAING);
+			ArrayList<IdIngrediente> ingredientes = new ArrayList<IdIngrediente>();
+			int i = 2;
+			//llena el arraylist con los id de ingredientes
+			while(i < message.size()) {
+				ingredientes.add(new IdIngrediente(Integer.parseInt(message.get(i))));
+				i++;
+			}
+			//pone el json en el primer parametro del sp
+			stmt.setString(1, new Gson().toJson(ingredientes));
+			//numero de pagina
+			stmt.setInt(2, Integer.parseInt(message.get(1)));
+			stmt.execute();			
+			answer.add("RESPCONSULTA");
+			ResultSet rs = stmt.getResultSet();
+			while(rs.next()) {
+				//id de la receta
+				answer.add(Integer.toString(rs.getInt(1)));
+				//nombre de la receta
+				answer.add(rs.getString(2));
+			}
+			rs.close();
+		}catch (SQLException e) {
+			exceptionHandler(e, "RESPOCONSULTAFAIL");
+		}
 		
 	}
 	
@@ -96,7 +127,33 @@ public class ThreadClient implements Runnable{
 	}
 	
 	private void datosReceta() {
-		
+		try {
+			stmt = conn.prepareCall(DATOSRECETA);
+			//pone la id de la receta
+			stmt.setString(1, message.get(1));
+			stmt.execute();
+			answer.add("DATOSRECETAOK");
+			/*El primer resultset se debe tomar despues de llamar a execute()
+			 * Si se llama a getMoreResults() primero, se perderia el primer resultset
+			 * 
+			 * Resultsets:
+			 * 1. Datos basicos receta
+			 * 2. Ingredientes de la receta
+			 * 3. Categorías de la receta
+			 * 4. Categorías de sus ingredientes
+			 * 5. Multimedia* 
+			 */
+			ResultSet rs = stmt.getResultSet();
+			do {
+				while(rs.next()) {
+					
+				}
+				rs.close();
+			}while(stmt.getMoreResults());
+			
+		}catch (SQLException e) {
+			exceptionHandler(e, "DATOSRECETAFAIL");
+		}
 	}
 	
 	private void listarCatIng() {

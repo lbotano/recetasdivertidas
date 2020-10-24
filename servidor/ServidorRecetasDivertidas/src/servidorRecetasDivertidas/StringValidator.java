@@ -131,16 +131,16 @@ public class StringValidator {
 	//General
 	//-----------------------------------
 	
-	private boolean vMail(String s) {
+	public boolean vMail(String s) {
 		return Pattern.matches(patternMail, s);
 	}
-	private boolean vDato(String s, int min, int max) {
+	public boolean vDato(String s, int min, int max) {
 		return Pattern.matches(String.format(patternDato, min,max), s);
 	}
-	private boolean vNum(String s, int min, int max) {
+	public boolean vNum(String s, int min, int max) {
 		return Pattern.matches(String.format(patternNumero, min, max), s);
 	}
-	private boolean vURL(String s){
+	public boolean vURL(String s){
 		return Pattern.matches(patternURL, s);
 	}
 	
