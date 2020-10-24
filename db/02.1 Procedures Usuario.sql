@@ -269,10 +269,14 @@ BEGIN
 	-- Obtener los datos de la receta
     SELECT *
     FROM Receta
-    WHERE rID = prID;
+    -- WHERE rID = prID
+    INNER JOIN
+    (
+		SELECT IFNULL(AVG(calificacion), 0) FROM Calificacion WHERE rID = prID
+	) promedioCalificacion ON rID = prID;
     
     -- Seleccionar ingredientes
-	SELECT i.iID, i.iNombre
+	SELECT i.iID, i.iNombre, ir.cantidad, ir.unidadCantidad
 	FROM
 		Ingrediente i,
 		IngredienteReceta ir,
@@ -299,20 +303,19 @@ BEGIN
         c.cNombre
     FROM
 		CategoriaDeIngrediente c,
-        RelCatIngrediente cr,
+        RelCatIngred cr,
         Ingrediente i,
         IngredienteReceta ir
 	WHERE
 		i.iID = cr.iID AND
         c.cID = cr.cID AND
         i.iID = ir.iID AND
-        r.rID = ir.rID AND
         ir.rID = prID;
 	
     -- Seleccionar multimedia
     SELECT mID, link
-	FROM Multimedia
-    WHERE rID = prID;
+	FROM Multimedia m
+    WHERE m.rID = prID;
 END//
 DELIMITER ;
 
@@ -343,7 +346,7 @@ CREATE PROCEDURE spCalificarReceta
 (
 	prID int,
 	puNickname varchar(32),
-	pcalificacion tinyint
+	pCalificacion tinyint
 )
 BEGIN
 	-- Se borra la calificación anterior (si es que la tiene)
@@ -354,7 +357,7 @@ BEGIN
         uNickname = puNickname;
 	
     INSERT INTO Calificacion
-    VALUES (puNickname, prID, pcalificacion);
+    VALUES (puNickname, prID, pCalificacion);
 END//
 DELIMITER ;
 
