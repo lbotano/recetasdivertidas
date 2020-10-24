@@ -47,14 +47,14 @@ BEGIN
     
     DECLARE EXIT HANDLER FOR sqlexception
     BEGIN
+		ROLLBACK;
 		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Error inesperado';
-        ROLLBACK;
 	END;
     
     DECLARE EXIT HANDLER FOR sqlwarning
     BEGIN
+		ROLLBACK;
 		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Error inesperado';
-        ROLLBACK;
 	END;
     
     SET autocommit = 0;
@@ -128,14 +128,14 @@ CREATE PROCEDURE spAdminBorrarReceta (
 BEGIN
 	DECLARE EXIT HANDLER FOR SQLEXCEPTION
     BEGIN
-		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Error inesperado al borrar receta';
         ROLLBACK;
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Error inesperado al borrar receta';
     END;
     
     DECLARE EXIT HANDLER FOR SQLWARNING
     BEGIN
-		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Error inesperado al borrar receta';
         ROLLBACK;
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Error inesperado al borrar receta';
     END;
 	
     -- Borrar la receta
@@ -156,6 +156,70 @@ BEGIN
     
     DELETE FROM Receta
     WHERE rID = idReceta;
+    
+    COMMIT;
+    SET autocommit = 1;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS spBorrarCategoriaIngrediente;
+DELIMITER //
+CREATE PROCEDURE spBorrarCategoriaIngrediente (
+	pcID int
+)
+BEGIN
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+		ROLLBACK;
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Error inesperado';
+    END;
+    
+    DECLARE EXIT HANDLER FOR SQLWARNING
+    BEGIN
+		ROLLBACK;
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Error inesperado';
+    END;
+    
+    SET autocommit = 0;
+    START TRANSACTION;
+    
+    DELETE FROM RelCatIngred
+    WHERE cID = pcID;
+    
+    DELETE FROM CategoriaDeIngrediente
+    WHERE cID = pcID;
+    
+    COMMIT;
+    SET autocommit = 1;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS spBorrarCategoriaReceta;
+DELIMITER //
+CREATE PROCEDURE spBorrarCategoriaReceta (
+	pcID int
+)
+BEGIN
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+		ROLLBACK;
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Error inesperado';
+    END;
+    
+    DECLARE EXIT HANDLER FOR SQLWARNING
+    BEGIN
+		ROLLBACK;
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Error inesperado';
+    END;
+    
+    SET autocommit = 0;
+    START TRANSACTION;
+    
+    DELETE FROM RelCatReceta
+    WHERE cID = pcID;
+    
+    DELETE FROM CategoriaDeReceta
+    WHERE cID = pcID;
     
     COMMIT;
     SET autocommit = 1;
