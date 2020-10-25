@@ -12,23 +12,17 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import pkgConexion.Conexion;
-import pkgRecetasDivertidas.Alerta;
+import pkgAplicacion.Alerta;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
 
 public class Register extends Stage {
-    private Button btnRegister;
     private TextField[] inputRegistro;
     private PasswordField pwdRegistro;
-    private Tooltip[] tooltip;
-    private Image img;
-    private ImageView[] epicasso;
-    private Label[] lblRegistro;
     private ComboBox<String> genero;
     private ComboBox<String> preguntaSeguridad;
-    private ArrayList<String> resPreguntas;
 
     public Register() throws IOException {
         super();
@@ -39,14 +33,14 @@ public class Register extends Stage {
 
         Scene scnRegister = new Scene(vbox, 300, 300);
         setScene(scnRegister);
-        getIcons().add(new Image("https://cdn.discordapp.com/attachments/453644623168929803/764301261523779614/logo_chiquito.png"));
+        getIcons().add(new Image(getClass().getResourceAsStream("/res/logo_chiquito.png")));
         setTitle("Registrate!");
         this.initModality(Modality.APPLICATION_MODAL);
         this.setHeight(588);
         this.setWidth(290);
-        setResizable(true);
+        setResizable(false);
     }
-    //Añadir un checkentries que se fije que las entradas esten bien puestas
+
     private VBox getLayout() throws IOException {
         VBox vbox = new VBox(8);
         //---------------------------------------PasswordField Section BEGIN--------------------------------------------
@@ -70,7 +64,7 @@ public class Register extends Stage {
         //---------------------------------------TextField Section END--------------------------------------------------
 
         //---------------------------------------Tooltip Section BEGIN--------------------------------------------------
-        tooltip = new Tooltip[6];
+        Tooltip[] tooltip = new Tooltip[6];
 
         for (int i = 0; i < tooltip.length; i++) {
             tooltip[i] = new Tooltip();
@@ -112,7 +106,7 @@ public class Register extends Stage {
                 8 a 50 caracteres de largo
                 """
         );
-        for(int i = 0 ; i < tooltip.length ; i++){
+        for(int i = 0; i < tooltip.length ; i++){
             if(i < inputRegistro.length){
                 inputRegistro[i].setTooltip(tooltip[i]);
             }else{
@@ -120,24 +114,24 @@ public class Register extends Stage {
             }
         }
 
-        img = new Image(getClass().getResourceAsStream("/res/atention.png"));
-        epicasso = new ImageView[tooltip.length];
+        Image img = new Image(getClass().getResourceAsStream("/res/atention.png"));
+        ImageView[] imageViews = new ImageView[tooltip.length];
 
         //Aca instanciamos el array de imageview, que aunque muestren la misma imagen, si no lo haces asi se re bugea
-        for (int i = 0; i < epicasso.length; i++) {
-            epicasso[i] = new ImageView(img);
-            epicasso[i].setFitHeight(30);
-            epicasso[i].setFitWidth(30);
+        for (int i = 0; i < imageViews.length; i++) {
+            imageViews[i] = new ImageView(img);
+            imageViews[i].setFitHeight(30);
+            imageViews[i].setFitWidth(30);
         }
 
-        for (int i = 0 ; i < tooltip.length ; i++){
-           tooltip[i].setGraphic(epicasso[i]);
+        for (int i = 0; i < tooltip.length ; i++){
+           tooltip[i].setGraphic(imageViews[i]);
            tooltip[i].setShowDelay(Duration.ZERO);
         }
         //---------------------------------------Tooltip Section END----------------------------------------------------
 
         //---------------------------------------Label Section BEGIN----------------------------------------------------
-        lblRegistro = new Label[8];
+        Label[] lblRegistro = new Label[8];
 
         for (int i = 0; i < lblRegistro.length ; i++){
             lblRegistro[i] = new Label();
@@ -166,9 +160,8 @@ public class Register extends Stage {
         genero.setPromptText("Género");
         genero.setPrefSize(250,10);
 
-        //ComboBox<String> preguntaSeguridad = getPreguntasSeguridad();
         preguntaSeguridad = new ComboBox<>();
-        resPreguntas = getPreguntasSeguridad();
+        ArrayList<String> resPreguntas = getPreguntasSeguridad();
         preguntaSeguridad.getItems().addAll(resPreguntas);
         preguntaSeguridad.setPromptText("Elija una pregunta de seguridad");
         preguntaSeguridad.setPrefSize(250,10);
@@ -199,7 +192,7 @@ public class Register extends Stage {
         }while(i < lblRegistro.length);
         vbox.getChildren().add(genero);
 
-        btnRegister = new Button("Registrarme");
+        Button btnRegister = new Button("Registrarme");
         btnRegister.setPrefSize(250,10);
         btnRegister.setOnAction(e -> {
             try {
@@ -356,10 +349,49 @@ public class Register extends Stage {
     }
 
     private ArrayList<String> getPreguntasSeguridad() throws IOException {
+        //Se crea el arraylist y se le añade el mensaje que se manda
         ArrayList<String> message = new ArrayList<>();
-
-        message.add("REGISTRO");
+        message.add("PREGUNTASSEG");
+        //Espera a que le manden una respuesta
         ArrayList<String> ans = Conexion.sendMessage(message);
+        //Se crea el arraylist que contiene las preguntas de seguridad
+        /*if (ans.size() == 0) {
+
+        }else{
+            switch (ans.get(0)) {
+                case "LOGINFAIL":
+                    alert = new Alerta(Alert.AlertType.ERROR, "Error al logearse", ans.get(1));
+                    alert.showAndWait();
+
+                    return false;
+                case "MESSAGEERROR":
+                    alert = new Alerta(Alert.AlertType.ERROR, "Error al logearse",
+                            "Hubo un problema al enviar la peticion");
+                    alert.showAndWait();
+
+                    return false;
+                case "LOGINOK":
+                    admin = ans.get(1).equals("true");
+
+                    return true;
+                default:
+                    return false;
+            }
+        }
+        ArrayList<String> preguntas = new ArrayList<>();
+
+        int i = 0;
+        while(i < ans.size()){
+            //El primer elemento de "ans" es el ID de la pregunta, y el segundo es la pregunta
+            //i = 0 entonces añade i=1 y despues i= 2 y se añade i=3 y despues i=4 y se añade i=5
+            //
+            preguntas.add(ans.get(i+1));
+            i = i+2;
+        }*/
+
+
+
+        //Checkear el retorno de las preguntas
 
         return ans;
     }

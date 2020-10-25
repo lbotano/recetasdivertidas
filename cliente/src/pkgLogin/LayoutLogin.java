@@ -9,52 +9,50 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import pkgConexion.Conexion;
-import pkgRecetasDivertidas.Alerta;
-import pkgRecetasDivertidas.RecetasDivertidas;
+import pkgInicio.RecetasDivertidas;
+import pkgAplicacion.Alerta;
+import pkgAplicacion.Applicacion;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
 public class LayoutLogin extends BorderPane {
 
-    public Button btnLogin;
-    public Button btnRegister;
-    public TextField tbUsername;
-    public TextField tbPassword;
-    private Label lblUsername;
-    private Label lblPassword;
-    public Register register;
+    private TextField tbUsername;
+    private TextField tbPassword;
+    private Register register;
+    private boolean admin = false;
 
-    public LayoutLogin(){
+    public LayoutLogin() {
         this.setTop(addGridPane());
         this.setBottom(addHBox());
     }
 
-    private GridPane addGridPane(){
+    private GridPane addGridPane() {
 
         GridPane grid = new GridPane();
-        grid.setPadding(new Insets(10,10,10,10));
+        grid.setPadding(new Insets(10, 10, 10, 10));
         grid.setVgap(8);
         grid.setHgap(10);
 
 
         //Username setup
-        lblUsername = new Label("Usuario:");
-        grid.add(lblUsername,0,0);
+        Label lblUsername = new Label("Usuario:");
+        grid.add(lblUsername, 0, 0);
 
         tbUsername = new TextField();
-        tbUsername.setPrefSize(180,10);
+        tbUsername.setPrefSize(180, 10);
         tbUsername.setPromptText("Escriba su usuario aqui");
-        grid.add(tbUsername,1,0);
+        grid.add(tbUsername, 1, 0);
 
         //Password setup
-        lblPassword = new Label("Contraseña:");
-        grid.add(lblPassword,0,1);
+        Label lblPassword = new Label("Contraseña:");
+        grid.add(lblPassword, 0, 1);
 
         tbPassword = new TextField();
-        tbPassword.setPrefSize(180,10);
+        tbPassword.setPrefSize(180, 10);
         tbPassword.setPromptText("Escriba su contraseña aqui");
-        grid.add(tbPassword,1,1);
+        grid.add(tbPassword, 1, 1);
 
         return grid;
     }
@@ -65,24 +63,33 @@ public class LayoutLogin extends BorderPane {
         hbox.setSpacing(10);
 
         //Button setup
-        btnLogin = new Button();
+        Button btnLogin = new Button();
         btnLogin.setText("Entrar");
-        btnLogin.setPrefSize(120,10);
+        btnLogin.setPrefSize(120, 10);
         btnLogin.setOnAction(e -> {
             try {
-                checkEntries(tbUsername,tbPassword);
+                if (consLogin(tbUsername.getText(), tbPassword.getText())) {
+                    Alerta alerta = new Alerta(Alert.AlertType.CONFIRMATION, "Bienvenidx de nuevo!",
+                            "Identidad confimada con exito");
+                    alerta.showAndWait();
+
+                    //Basicamente lo que esto dice es "Mostra el inicio de la app(si es o no admin) y oculta el login"
+                    RecetasDivertidas recetasDivertidas = new RecetasDivertidas(admin);
+                    recetasDivertidas.show();
+                    Applicacion.hide();
+                }
             } catch (IOException ioException) {
                 ioException.printStackTrace();
             }
         });
 
-        btnRegister = new Button();
+        Button btnRegister = new Button();
         btnRegister.setText("Registrarse");
-        btnRegister.setPrefSize(120,10);
+        btnRegister.setPrefSize(120, 10);
         btnRegister.setOnAction(e -> {
             try {
                 //Sacar el NOT de aca o poner un NOT para probar el registro
-                if(Conexion.isSvResponse()) {
+                if (!Conexion.isSvResponse()) {
                     register = new Register();
                     register.show();
                 }
@@ -91,22 +98,14 @@ public class LayoutLogin extends BorderPane {
             }
         });
 
-        hbox.getChildren().addAll(btnLogin,btnRegister);
+        hbox.getChildren().addAll(btnLogin, btnRegister);
 
         return hbox;
     }
 
-    private void checkEntries(TextField tbU, TextField tbP) throws IOException {
-        //Si la consulta es true entonces pasa a la siguiente stage
-        if(consLogin(tbU.getText(),tbP.getText())){
-            Alerta alerta = new Alerta(Alert.AlertType.CONFIRMATION,"Bienvenidx de nuevo!","Identidad confimada con exito");
-            alerta.showAndWait();
-            //Aca iria la proxima stage, si tuviera una..
-        }
-    }
-
     private boolean consLogin(String Usr, String Pwd) throws IOException {
         ArrayList<String> login = new ArrayList<>();
+        Alerta alert;
 
         login.add("LOGIN");
         login.add(Usr);
@@ -114,17 +113,29 @@ public class LayoutLogin extends BorderPane {
 
         ArrayList<String> ans = Conexion.sendMessage(login);
 
-        if (ans.size() != 0){
-            if(ans.get(0).equals("LOGINFAIL") || ans.get(0).equals("MESSAGEERROR")) {
-                Alerta alert = new Alerta(Alert.AlertType.ERROR,"Hubo un problema con el servidor",ans.get(1));
-                alert.showAndWait();
-                return false;
-            }
-        }else{
+        if (ans.size() == 0) {
             return false;
         }
 
-        return true;
+        switch (ans.get(0)) {
+            case "LOGINFAIL":
+                alert = new Alerta(Alert.AlertType.ERROR, "Error al logearse", ans.get(1));
+                alert.showAndWait();
+
+                return false;
+            case "MESSAGEERROR":
+                alert = new Alerta(Alert.AlertType.ERROR, "Error al logearse",
+                        "Hubo un problema al enviar la peticion");
+                alert.showAndWait();
+
+                return false;
+            case "LOGINOK":
+                admin = ans.get(1).equals("true");
+
+                return true;
+            default:
+                return false;
+        }
     }
 
 }

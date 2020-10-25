@@ -1,10 +1,7 @@
 package pkgConexion;
 
 import javafx.scene.control.Alert;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import pkgRecetasDivertidas.Alerta;
-import pkgRecetasDivertidas.RecetasDivertidas;
+import pkgAplicacion.Alerta;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
