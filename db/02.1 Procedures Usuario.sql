@@ -261,7 +261,7 @@ BEGIN
 	) promedioCalificacion ON rID = prID;
     
     -- Seleccionar ingredientes
-	SELECT i.iID, i.iNombre, ir.cantidad, ir.unidadCantidad
+	SELECT i.iID, i.iNombre, ir.unidadCantidad, ir.cantidad
 	FROM
 		Ingrediente i,
 		IngredienteReceta ir,

@@ -17,29 +17,53 @@ public class ThreadAdmin extends ThreadClient{
 		super(c, s);
 	}
 	
-	//private static final String BORRARCATING = "";
-	//private static final String BORRARCATREC = "";
-	private static final String BORRARUSUARIO = "{call spBaneoUsuario(?)}";
-	//private static final String BORRARREC = "";
+	private static final String BORRARCATING = "{call spBorrarCategoriaIngrediente(?)}}";
+	private static final String BORRARCATREC = "{call spBorrarCategoriaReceta(?)}";
+	private static final String BANEARUSUARIO = "{call spBaneoUsuario(?)}";
+	private static final String BORRARREC = "{call spAdminBorrarReceta(?)}";
 	private static final String SUBIRCATING = "{call spAgregarCategoriaIngrediente(?)}";
 	private static final String SUBIRCATREC = "{call spAgregarCategoriaReceta(?)}"; 
 	private static final String SUBIRING = "{call spAgregarIngrediente(?,?)}";
 	
 	private void borrarCatIng() {
-		
+		try {
+			stmt = conn.prepareCall(BORRARCATING);
+			//id de la categoria de ingrediente
+			stmt.setInt(1, Integer.parseInt(message.get(1)));
+			stmt.execute();
+			answer.add("BORRARCATINGOK");
+		} catch (SQLException e) {
+			exceptionHandler(e, "BORRARCATINGFAIL");
+		}
 	}
 	
 	private void borrarCatRec() {
-		
+		try {
+			stmt = conn.prepareCall(BORRARCATREC);
+			//id de la categoria de receta
+			stmt.setInt(1, Integer.parseInt(message.get(1)));
+			stmt.execute();
+			answer.add("BORRARCATRECOK");
+		} catch (SQLException e) {
+			exceptionHandler(e, "BORRARCATRECFAIL");
+		}		
 	}
 	
 	private void borrarRec(){
-		
+		try {
+			stmt = conn.prepareCall(BORRARREC);
+			//id de la receta
+			stmt.setInt(1, Integer.parseInt(message.get(1)));
+			stmt.execute();
+			answer.add("BORRARRECOK");
+		} catch (SQLException e) {
+			exceptionHandler(e, "BORRARRECFAIL");
+		}			
 	}
 	
-	private void borrarUsuario() {
+	private void banearUsuario() {
 		try {
-			stmt = conn.prepareCall(BORRARUSUARIO);
+			stmt = conn.prepareCall(BANEARUSUARIO);
 			stmt.setString(1, message.get(1));			
 			stmt.execute();
 			answer.add("BORRARRECOK");
@@ -117,8 +141,8 @@ public class ThreadAdmin extends ThreadClient{
 				case "BORRARREC":
 					borrarRec();
 					break;
-				case "BORRARUSUARIO":
-					borrarUsuario();
+				case "BANEARUSUARIO":
+					banearUsuario();
 					break;
 				case "SUBIRCATING"://
 		        	if(sv.esSubirCatValido()) { 

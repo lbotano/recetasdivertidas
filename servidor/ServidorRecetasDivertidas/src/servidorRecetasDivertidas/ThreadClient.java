@@ -5,6 +5,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.sql.CallableStatement;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
@@ -28,6 +29,8 @@ public class ThreadClient implements Runnable{
 	protected ArrayList<String> message;
 	//objeto para llamar a store procedures
 	protected CallableStatement stmt;
+	//objeto para hacer consultas simples a la bd 
+	protected PreparedStatement pstmt;
 	//objeto para guardar la conexion a la base de datos
 	protected Connection conn;
 	//objetos para pasar mensajes
@@ -38,14 +41,14 @@ public class ThreadClient implements Runnable{
 	
 	//llamadas a SPs
 	//private static final String CONSRECETASCAT = "";
-	private static final String CONSRECETAING = "{callspBuscarRecetaPorIngr(?,?)}";
+	private static final String CONSRECETAING = "{call spBuscarRecetaPorIngr(?,?)}";
 	//private static final String CONSRECETATEXT = "";
 	private static final String CALIFICAR = "{call spCalificarReceta(?,?,?)}";
 	private static final String DATOSRECETA = "{call spGetDatosReceta(?)}";
-	//private static final String LISTARCATREC = "";
-	//private static final String LISTARCATING = "";
+	private static final String LISTARCATREC = "SELECT * FROM categoriadereceta;";
+	private static final String LISTARCATING = "SELECT * FROM categoriadeingrediente;";
 	private static final String LOGIN = "{call spInicioSesion(?,?,?,?)}";
-	//private static final String PREGUNTASSEG = "";
+	private static final String PREGUNTASSEG = "SELECT * FROM preguntasseguridad;";
 	private static final String RECETASDEUSUARIO = "{call spGetRecetasUsuario(?)}";
 	private static final String REGISTRO = "{call spRegistroUsuario(?,?,?,?,?,?,?,?,?)}";
 	private static final String SUBIRRECETA = "{call spSubirReceta(?,?,?,?,?,?,?}";
@@ -142,14 +145,55 @@ public class ThreadClient implements Runnable{
 			 * 3. Categorías de la receta
 			 * 4. Categorías de sus ingredientes
 			 * 5. Multimedia* 
+			 * 
+			 * el 1 y 2 tienen el mismo esquema
+			 * el 3, 4 y 5 tienen el mismo esquema
+			 * 
 			 */
+
 			ResultSet rs = stmt.getResultSet();
-			do {
-				while(rs.next()) {
-					
+			// Se toman los datos basicos de la receta junto con el de los ingredientes
+			for (int i = 0; i < 2; i++) {
+				while(rs.next()){
+					//rID, id de la receta / id del ingrediente
+					answer.add(String.valueOf(rs.getInt(1)));
+					//rNombre, nombre de la receta /iNombre nombre del ingrediente
+					answer.add(rs.getString(2));
+					//rDescripcion / unidad del ingrediente
+					answer.add(rs.getString(3));
+					//promedioCalificacion / cantidad del ingrediente
+					answer.add(String.valueOf(rs.getInt(4)));
 				}
+				//Toma el proximo resultset, si no hay (o es un update) entonces error
+				if(!stmt.getMoreResults()) {
+					throw new SQLException("Error en la consulta", "45000");
+				}
+			}
+			answer.add("CATEGORIASRECETA");
+			// Se toman los datos de las categorias de recetas, categorias de ingredientes y multimedia
+			for (int i = 0; i < 3; i++) {				
+				while(rs.next()) {
+					//cId, id de la categoria (receta / ingrediente) / mID, id de multimedia
+					answer.add(String.valueOf(rs.getInt(1)));
+					//nombre / link
+					answer.add(rs.getString(2));
+				}
+				if(!stmt.getMoreResults()) {
+					throw new SQLException("Error en la consulta", "45000");
+				}
+				if(i == 1) {
+					answer.add("CATEGORIASING");
+				}else {
+					answer.add("MULTIMEDIA");
+				}
+			}
+
+			rs.close();
+			while(stmt.getMoreResults()) {
+				rs = stmt.getResultSet();
+				
 				rs.close();
-			}while(stmt.getMoreResults());
+			}
 			
 		}catch (SQLException e) {
 			exceptionHandler(e, "DATOSRECETAFAIL");
@@ -157,11 +201,36 @@ public class ThreadClient implements Runnable{
 	}
 	
 	private void listarCatIng() {
+		try {
+			pstmt = conn.prepareStatement(LISTARCATING);
+			ResultSet rs = pstmt.executeQuery();
+			answer.add("LISTACATING");
+			while(rs.next()) {
+				//id de la categoria
+				answer.add(String.valueOf(rs.getInt(1)));
+				//nombre de la categoria
+				answer.add(rs.getString(2));
+			}
+		} catch (SQLException e) {
+			exceptionHandler(e, "LISTARCATINGFAIL");
+		}
 		
 	}
 	
 	private void listarCatRec() {
-		
+		try {
+			pstmt = conn.prepareStatement(LISTARCATREC);
+			ResultSet rs = pstmt.executeQuery();
+			answer.add("LISTACATREC");
+			while(rs.next()) {
+				//id de la categoria
+				answer.add(String.valueOf(rs.getInt(1)));
+				//nombre de la categoria
+				answer.add(rs.getString(2));
+			}
+		} catch (SQLException e) {
+			exceptionHandler(e, "LISTARCATRECFAIL");
+		}		
 	}
 	
 	private void login() {
@@ -198,7 +267,19 @@ public class ThreadClient implements Runnable{
 	}	
 	
 	private void preguntasSeg() {
-		
+		try {
+			pstmt = conn.prepareStatement(PREGUNTASSEG);
+			ResultSet rs = pstmt.executeQuery();
+			answer.add("PREGUNTASSEG");
+			while(rs.next()) {
+				//id de la pregunta
+				answer.add(String.valueOf(rs.getInt(1)));
+				//preugnta
+				answer.add(rs.getString(2));
+			}
+		} catch (SQLException e) {
+			exceptionHandler(e, "PREGUNTASSEGFAIL");
+		}
 	}
 	
 	private void recetaUsuario() {
