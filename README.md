@@ -21,3 +21,11 @@ Puede pedir que te loguees en Github para comprobar tus permisos.
 `cliente`: Proyecto Java del cliente de Recetas Divertidas.
 `db`: Scripts de la base de datos (MySQL)
 `servidor`: Proyecto Java del servidor de Recetas Divertidas.
+
+## Cómo importar un proyecto Maven
+
+### En Intellij IDEA
+
+* `Open or import` al inicio o `File -> Open project` cuando ya está abierto otro proyecto.
+* Seleccionamos la carpeta del proyecto, ésta tiene que tener un archivo llamado `pom.xml` dentro.
+* Para correr el programa hacemos click derecho en la clase principal y le damos a `Run`, después de esto podés usar `Shift + F10` cuando quieras volver a ejecutarlo.
