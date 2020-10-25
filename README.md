@@ -1,4 +1,4 @@
-# recetasdivertidas
+# recetasdivertidas 
 
 ## Guía básica de git para los pi'
 
