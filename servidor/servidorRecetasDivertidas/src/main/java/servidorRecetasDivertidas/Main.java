@@ -20,15 +20,13 @@ public class Main {
 			public void run() {
 				try (ServerSocket ss = new ServerSocket(6969)) {
 					System.out.println("Admin server running ");
-					var pool = Executors.newFixedThreadPool(10);	
+					var pool = Executors.newFixedThreadPool(10);
 					while(true) {
 						pool.execute(new ThreadAdmin(cpds , ss.accept()));
 					}
 				} catch (IOException e) {
-				}
-				
+				}	
 			}
-			
 		});
 		
 		ServerAdmin.setPriority(Thread.MAX_PRIORITY);
@@ -38,15 +36,13 @@ public class Main {
 			public void run() {
 				try (ServerSocket ss = new ServerSocket(7070)) {
 					System.out.println("Client server running ");
-					var pool = Executors.newFixedThreadPool(50);	
+					var pool = Executors.newFixedThreadPool(50);
 					while(true) {
 						pool.execute(new ThreadClient(cpds , ss.accept()));
 					}
 				} catch (IOException e) {
 				}
-				
 			}
-			
 		});
 		
 		ServerAdmin.start();
@@ -55,13 +51,11 @@ public class Main {
 		/*
 		try (ServerSocket listener = new ServerSocket(6969)) {
 			System.out.println("Server running...");
-			var pool = Executors.newFixedThreadPool(50);			
+			var pool = Executors.newFixedThreadPool(50);
 			while (true) {
 				pool.execute(new ThreadAdmin(cpds ,listener.accept()));
 				
 			} 
 		}*/
 	}
-	
-
 }
