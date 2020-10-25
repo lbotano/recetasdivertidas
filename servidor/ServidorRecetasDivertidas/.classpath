@@ -6,22 +6,22 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/Tusar/eclipse-workspace/jpTestingSockets/c3p0-0.9.5.5.jar">
+	<classpathentry kind="lib" path="c3p0-0.9.5.5.jar">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/Tusar/eclipse-workspace/jpTestingSockets/mchange-commons-java-0.2.19.jar">
+	<classpathentry kind="lib" path="mchange-commons-java-0.2.19.jar">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/Tusar/eclipse-workspace/jpTestingSockets/mysql-connector-java-8.0.21.jar">
+	<classpathentry kind="lib" path="mysql-connector-java-8.0.21.jar">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/Tusar/eclipse-workspace/ServidorRecetasDivertidas/gson-2.8.6.jar">
+	<classpathentry kind="lib" path="gson-2.8.6.jar">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>
