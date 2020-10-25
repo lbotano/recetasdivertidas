@@ -40,6 +40,7 @@ public class ThreadClient implements Runnable{
 
 	
 	//llamadas a SPs
+	private static final String BORRARREC = "{call spUsuarioBorrarReceta(?,?)}";
 	//private static final String CONSRECETASCAT = "";
 	private static final String CONSRECETAING = "{call spBuscarRecetaPorIngr(?,?)}";
 	//private static final String CONSRECETATEXT = "";
@@ -71,6 +72,20 @@ public class ThreadClient implements Runnable{
     		answer.add(e.getMessage());
 		}else {
 			answer.add(DefaultSQLErrorMsg);
+		}
+	}
+	
+	private void borrarReceta() {
+		try {
+			stmt = conn.prepareCall(BORRARREC);
+			//id de la receta
+			stmt.setInt(1, Integer.parseInt(message.get(1)));
+			//nickname del usuario
+			stmt.setString(2, message.get(2));
+			stmt.execute();
+			answer.add("BORRARRECOK");
+		} catch (SQLException e) {
+			exceptionHandler(e, "BORRARRECFAIL");
 		}
 	}
 	
@@ -377,57 +392,60 @@ public class ThreadClient implements Runnable{
 	protected void opcionesCliente(String peticion) {
 		//segun la peticion, ejecuta cierto metodo
         switch(peticion) {
-        case "CALIFICAR"://
-        	if(sv.esCalificarValido()) {
-        		calificar();
-        	}else {
-        		answer.add("FORMATERROR");
-        	}
-        	break;
-        case "CONSRECETASCAT": 
-        	consRecetasCat();
-        	break;
-        case "CONSRECETASING":
-        	consRecetasIng();
-        	break;
-        case "CONSRECETASTEXT":
-        	consRecetasText();
-        	break;
-        case "DATOSRECETA":
-        	datosReceta();
-        	break;
-        case "LISTARCATING":
-        	listarCatIng();
-        	break;
-        case "LISTARCATREC":
-        	listarCatRec();
-        	break;
-        case "LOGIN":
-        	login();
-        	break;
-        case "PREGUNTASSEG":
-        	preguntasSeg();
-        	break;
-        case "RECETASDEUSUARIO":
-        	recetaUsuario();
-        	break;
-        case "REGISTRO":   //       	
-        	if(sv.esResgistroValido()) {     		
-        		registro();     
-        	}else {
-        		answer.add("FORMATERROR");
-        	}
-    		break;
-        case "SUBIRRECETA"://  	
-        	if(sv.esSubirRecetaValido()) { 
-        		subirReceta();    
-        	}else {
-        		answer.add("FORMATERROR");
-        	}
-        	break;
-    	default:
-    		//se manda esta respuesta si la peticion es invalida
-    		answer.add("MESSAGEERROR");
+	        case "BORRARREC":
+	        	borrarReceta();
+	        	break;
+	        case "CALIFICAR"://
+	        	if(sv.esCalificarValido()) {
+	        		calificar();
+	        	}else {
+	        		answer.add("FORMATERROR");
+	        	}
+	        	break;
+	        case "CONSRECETASCAT": 
+	        	consRecetasCat();
+	        	break;
+	        case "CONSRECETASING":
+	        	consRecetasIng();
+	        	break;
+	        case "CONSRECETASTEXT":
+	        	consRecetasText();
+	        	break;
+	        case "DATOSRECETA":
+	        	datosReceta();
+	        	break;
+	        case "LISTARCATING":
+	        	listarCatIng();
+	        	break;
+	        case "LISTARCATREC":
+	        	listarCatRec();
+	        	break;
+	        case "LOGIN":
+	        	login();
+	        	break;
+	        case "PREGUNTASSEG":
+	        	preguntasSeg();
+	        	break;
+	        case "RECETASDEUSUARIO":
+	        	recetaUsuario();
+	        	break;
+	        case "REGISTRO":   //       	
+	        	if(sv.esResgistroValido()) {     		
+	        		registro();     
+	        	}else {
+	        		answer.add("FORMATERROR");
+	        	}
+	    		break;
+	        case "SUBIRRECETA"://  	
+	        	if(sv.esSubirRecetaValido()) { 
+	        		subirReceta();    
+	        	}else {
+	        		answer.add("FORMATERROR");
+	        	}
+	        	break;
+	    	default:
+	    		//se manda esta respuesta si la peticion es invalida
+	    		answer.add("MESSAGEERROR");
         }
 	}
 	
