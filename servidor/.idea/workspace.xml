@@ -20,7 +20,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="55413662-2c55-497b-b3ff-a20f9a740df5" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../db/02.1 Procedures Usuario.sql" beforeDir="false" afterPath="$PROJECT_DIR$/../db/02.1 Procedures Usuario.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../db/02.2 Procedures Admin.sql" beforeDir="false" afterPath="$PROJECT_DIR$/../db/02.2 Procedures Admin.sql" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -68,5 +68,6 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
 </project>

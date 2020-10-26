@@ -122,7 +122,7 @@ DELIMITER ;
 DROP PROCEDURE IF EXISTS spAdminBorrarReceta;
 DELIMITER //
 CREATE PROCEDURE spAdminBorrarReceta (
-	IN idReceta int, -- ID de la receta que el usuario quiere borrar
+	IN idReceta int -- ID de la receta que el usuario quiere borrar
 )
 BEGIN
 	DECLARE EXIT HANDLER FOR SQLEXCEPTION
