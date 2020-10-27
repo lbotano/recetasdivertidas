@@ -1,4 +1,6 @@
 package io.github.recetasDivertidas.pkgBusquedaCategoria;
 
-public class BusquedaCategoriaLayout {
+import javafx.scene.layout.GridPane;
+
+public class BusquedaCategoriaLayout extends GridPane {
 }
