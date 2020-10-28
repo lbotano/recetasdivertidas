@@ -374,16 +374,11 @@ END//
 DELIMITER ;
 
 -- Buscar recetas (por ingredientes)
--- Obtiene una lista de ingredientes (como string)
---  Formato del string: (ingrediente), (ingrediente), ...
--- Obtiene la página donde de la búsqueda
--- Devuelve las ids de las recetas que se pueden preparar
--- con esos ingrdientes
 DROP PROCEDURE IF EXISTS spBuscarRecetasPorIngr;
 DELIMITER //
 CREATE PROCEDURE spBuscarRecetasPorIngr (
 	IN ingredientes JSON, -- JSON de un array de ingredientes (tienen que ser en string) Ej: ["1","4","3"]
-    IN pagina int
+    IN pagina int -- Página de la búsqueda (0, 1, 2, etc)
 )
 BEGIN
     SET @pagina = pagina;
@@ -408,6 +403,47 @@ BEGIN
 			WHERE
 				r.rID = ir.rID AND
 				i.iID = ir.iID
+			GROUP BY r.rID
+			HAVING
+				coincidencias > 0
+		) resultadosConOrden
+		ORDER BY coincidencias DESC
+        LIMIT ?, ?';
+    EXECUTE stmt USING @pagina, @paginaHasta;
+    
+END//
+DELIMITER ;
+
+-- Buscar recetas (por categorías de receta)
+DROP PROCEDURE IF EXISTS spBuscarRecetasPorCatReceta;
+DELIMITER //
+CREATE PROCEDURE spBuscarRecetasPorCatReceta (
+	IN categorias JSON, -- JSON de un array de categorías (tienen que ser en string) Ej: ["1","4","3"]
+    IN pagina int -- Página de la búsqueda (0, 1, 2, 3, etc)
+)
+BEGIN
+    SET @pagina = pagina;
+    SET @paginaHasta = pagina + 10;
+    SET @categorias = categorias;
+    
+    PREPARE stmt FROM 'SELECT
+			rID,
+			rAutor,
+			rNombre,
+			coincidencias
+		FROM (
+			SELECT
+				r.rID,
+				r.rAutor,
+				r.rNombre,
+				SUM(JSON_LENGTH(JSON_SEARCH(@categorias, \'all\', CONVERT(c.cID, char)))) AS coincidencias
+			FROM
+				Receta r,
+				CategoriaDeReceta c,
+				RelCatReceta rc
+			WHERE
+				r.rID = rc.rID AND
+				c.cID = rc.cID
 			GROUP BY r.rID
 			HAVING
 				coincidencias > 0
