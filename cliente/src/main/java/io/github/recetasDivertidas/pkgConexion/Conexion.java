@@ -14,12 +14,14 @@ public final class Conexion {
     public static ObjectOutputStream output;
     public static ObjectInputStream input;
     public static boolean svResponse;
+    private final static String HOST = "127.0.0.1";
+    private final static int PORT = 7070;
 
     public static ArrayList<String> sendMessage(ArrayList<String> message) throws IOException {
         ArrayList<String> answer = new ArrayList<>();
 
         try {
-            socket = new Socket("127.0.0.1", 7070);
+            socket = new Socket(HOST, PORT);
             output = new ObjectOutputStream(socket.getOutputStream());
             input = new ObjectInputStream(socket.getInputStream());
 
@@ -38,7 +40,7 @@ public final class Conexion {
 
     public static boolean isSvResponse() {
         try {
-            socket = new Socket("127.0.0.1", 7070);
+            socket = new Socket(HOST, PORT);
 
             svResponse = true;
             socket.close();
@@ -50,7 +52,7 @@ public final class Conexion {
 
     public static void probarConexion(){
         try {
-            socket = new Socket("127.0.0.1", 7070);
+            socket = new Socket(HOST, PORT);
 
             svResponse = true;
             socket.close();

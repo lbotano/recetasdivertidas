@@ -11,7 +11,7 @@ import javafx.scene.layout.HBox;
 import io.github.recetasDivertidas.pkgConexion.Conexion;
 import io.github.recetasDivertidas.pkgInicio.RecetasDivertidas;
 import io.github.recetasDivertidas.pkgAplicacion.Alerta;
-import io.github.recetasDivertidas.pkgAplicacion.Applicacion;
+import io.github.recetasDivertidas.pkgAplicacion.Aplicacion;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -76,7 +76,7 @@ public class LayoutLogin extends BorderPane {
                     //Basicamente lo que esto dice es "Mostra el inicio de la app(si es o no admin) y oculta el login"
                     RecetasDivertidas recetasDivertidas = new RecetasDivertidas(admin);
                     recetasDivertidas.show();
-                    Applicacion.hide();
+                    Aplicacion.hide();
                 }
             } catch (IOException ioException) {
                 ioException.printStackTrace();

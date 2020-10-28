@@ -9,7 +9,7 @@ import io.github.recetasDivertidas.pkgConexion.Conexion;
 import io.github.recetasDivertidas.pkgRecetasDivertidas.RecetasDivertidas;
 import io.github.recetasDivertidas.pkgLogin.LoginLayout;
 
-public final class Applicacion extends Application {
+public final class Aplicacion extends Application {
 
     //Stage significa la ventana
     //Scene es el grupo de contenido de la ventana
@@ -24,13 +24,13 @@ public final class Applicacion extends Application {
     public void start(Stage stage) throws Exception {
         window = stage;
         window.setScene(Login);
-        window = new RecetasDivertidas(false);
+        //window = new RecetasDivertidas(false);
         window.getIcons().add(new Image(getClass().getResourceAsStream("/logo_chiquito.png")));
         window.setTitle("Recetas Divertidas");
-        window.setResizable(true);
+        window.setResizable(false);
 
         //Si queres probar el cliente sin conexion metele un ! aca y en LayoutLogin
-        if(!Conexion.isSvResponse()){
+        if(Conexion.isSvResponse()){
             window.show();
         }else{
             Alerta alerta = new Alerta(Alert.AlertType.ERROR, "No se ha podido conectar con el servidor",

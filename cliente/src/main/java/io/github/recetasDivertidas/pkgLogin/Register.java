@@ -22,7 +22,7 @@ public class Register extends Stage {
     private TextField[] inputRegistro;
     private PasswordField pwdRegistro;
     private ComboBox<String> genero;
-    private ComboBox<String> preguntaSeguridad;
+    private ComboBox<PreguntaSeguridad> preguntaSeguridad;
 
     public Register() throws IOException {
         super();
@@ -33,7 +33,7 @@ public class Register extends Stage {
 
         Scene scnRegister = new Scene(vbox, 300, 300);
         setScene(scnRegister);
-        getIcons().add(new Image(getClass().getResourceAsStream("/res/logo_chiquito.png")));
+        getIcons().add(new Image(getClass().getResourceAsStream("/logo_chiquito.png")));
         setTitle("Registrate!");
         this.initModality(Modality.APPLICATION_MODAL);
         this.setHeight(588);
@@ -114,7 +114,7 @@ public class Register extends Stage {
             }
         }
 
-        Image img = new Image(getClass().getResourceAsStream("/res/atention.png"));
+        Image img = new Image(getClass().getResourceAsStream("/atention.png"));
         ImageView[] imageViews = new ImageView[tooltip.length];
 
         //Aca instanciamos el array de imageview, que aunque muestren la misma imagen, si no lo haces asi se re bugea
@@ -161,8 +161,12 @@ public class Register extends Stage {
         genero.setPrefSize(250,10);
 
         preguntaSeguridad = new ComboBox<>();
-        ArrayList<String> resPreguntas = getPreguntasSeguridad();
-        preguntaSeguridad.getItems().addAll(resPreguntas);
+        if (Conexion.isSvResponse()) {
+            ArrayList<PreguntaSeguridad> resPreguntas = getPreguntasSeguridad();
+            preguntaSeguridad.getItems().addAll(resPreguntas);
+        }else{
+            Alerta alerta = new Alerta(Alert.AlertType.ERROR, "Hubo un error","Fallo de conexion con el servidor");
+        }
         preguntaSeguridad.setPromptText("Elija una pregunta de seguridad");
         preguntaSeguridad.setPrefSize(250,10);
 
@@ -236,8 +240,13 @@ public class Register extends Stage {
                         alerta = new Alerta(Alert.AlertType.ERROR, "Hubo un error en la comunicacion con el server", ans.get(1));
                         alerta.showAndWait();
                     }
+                    case "FORMATERROR" -> {
+                        alerta = new Alerta(Alert.AlertType.ERROR, "Error en el formato", "Consulte a su tecnico de cabecera");
+                        System.out.println(ans.get(0));
+                        alerta.showAndWait();
+                    }
                     default -> {
-                        alerta = new Alerta(Alert.AlertType.ERROR, "This is akward", "Esto no deberia haber sucedido");
+                        alerta = new Alerta(Alert.AlertType.ERROR, "Esto es vergonzoso", "Esto no deberia haber sucedido");
                         alerta.showAndWait();
                     }
                 }
@@ -255,7 +264,7 @@ public class Register extends Stage {
         ArrayList<String> itemList = new ArrayList<>();
 
         itemList.add(inputRegistro[0].getText());
-        itemList.add(preguntaSeguridad.getValue());
+        itemList.add(String.valueOf(preguntaSeguridad.getValue().getId()));
         itemList.add(inputRegistro[1].getText());
         itemList.add(inputRegistro[2].getText());
         itemList.add(inputRegistro[3].getText());
@@ -348,51 +357,23 @@ public class Register extends Stage {
         return pat.matcher(email).matches();
     }
 
-    private ArrayList<String> getPreguntasSeguridad() throws IOException {
+    private ArrayList<PreguntaSeguridad> getPreguntasSeguridad() throws IOException {
         //Se crea el arraylist y se le añade el mensaje que se manda
         ArrayList<String> message = new ArrayList<>();
         message.add("PREGUNTASSEG");
         //Espera a que le manden una respuesta
         ArrayList<String> ans = Conexion.sendMessage(message);
         //Se crea el arraylist que contiene las preguntas de seguridad
-        /*if (ans.size() == 0) {
+        ArrayList<PreguntaSeguridad> preguntas = new ArrayList<>();
 
-        }else{
-            switch (ans.get(0)) {
-                case "LOGINFAIL":
-                    alert = new Alerta(Alert.AlertType.ERROR, "Error al logearse", ans.get(1));
-                    alert.showAndWait();
-
-                    return false;
-                case "MESSAGEERROR":
-                    alert = new Alerta(Alert.AlertType.ERROR, "Error al logearse",
-                            "Hubo un problema al enviar la peticion");
-                    alert.showAndWait();
-
-                    return false;
-                case "LOGINOK":
-                    admin = ans.get(1).equals("true");
-
-                    return true;
-                default:
-                    return false;
-            }
-        }
-        ArrayList<String> preguntas = new ArrayList<>();
-
-        int i = 0;
+        int i= 0;
         while(i < ans.size()){
-            //El primer elemento de "ans" es el ID de la pregunta, y el segundo es la pregunta
-            //i = 0 entonces añade i=1 y despues i= 2 y se añade i=3 y despues i=4 y se añade i=5
-            //
-            preguntas.add(ans.get(i+1));
+            preguntas.add(new PreguntaSeguridad(Integer.parseInt(ans.get(i)), ans.get(i+1)));
             i = i+2;
-        }*/
-
-
+        }
 
         //Checkear el retorno de las preguntas
 
-        return ans;
+        return preguntas;
     }
 }

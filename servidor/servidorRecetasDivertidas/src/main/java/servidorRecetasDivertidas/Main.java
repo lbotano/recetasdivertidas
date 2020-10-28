@@ -27,7 +27,7 @@ public class Main {
 	public static void main(String[] args) throws Exception {
 		cpds.setDriverClass( "com.mysql.jdbc.Driver" );           
 		cpds.setJdbcUrl( "jdbc:mysql://localhost:3306/RecetasDivertidasDB?serverTimezone=UTC" );
-		cpds.setUser("recetasdivertidas");        
+		cpds.setUser("root");
 		cpds.setPassword("camilo200");  
 		
 		Thread ServerAdmin = new Thread(new Runnable(){

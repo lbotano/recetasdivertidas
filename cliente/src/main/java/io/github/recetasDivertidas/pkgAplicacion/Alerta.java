@@ -16,8 +16,8 @@ public class Alerta extends Alert {
 
         screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         switch (alertType){
-            case CONFIRMATION -> img = new Image(getClass().getResourceAsStream("/res/ok.png"));
-            case ERROR -> img = new Image(getClass().getResourceAsStream("/res/error.png"));
+            case CONFIRMATION -> img = new Image(getClass().getResourceAsStream("/ok.png"));
+            case ERROR -> img = new Image(getClass().getResourceAsStream("/error.png"));
         }
 
         //Aca se usa el mensaje de error proporcionado con el servidor
@@ -30,6 +30,6 @@ public class Alerta extends Alert {
         this.setContentText(content);
         this.setX(screenSize.getWidth()/2.5);
         this.setY(screenSize.getHeight()/4);
-        this.initOwner(Applicacion.window.getScene().getWindow());
+        this.initOwner(Aplicacion.window.getScene().getWindow());
     }
 }
