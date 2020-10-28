@@ -379,32 +379,43 @@ DELIMITER ;
 -- Obtiene la página donde de la búsqueda
 -- Devuelve las ids de las recetas que se pueden preparar
 -- con esos ingrdientes
-DROP PROCEDURE IF EXISTS spBuscarRecetaPorIngr;
+DROP PROCEDURE IF EXISTS spBuscarRecetasPorIngr;
 DELIMITER //
-CREATE PROCEDURE spBuscarRecetaPorIngr (
-	IN ingredientes JSON,
+CREATE PROCEDURE spBuscarRecetasPorIngr (
+	IN ingredientes JSON, -- JSON de un array de ingredientes (tienen que ser en string) Ej: ["1","4","3"]
     IN pagina int
 )
 BEGIN
-	-- DROP TEMPORARY TABLE IF EXISTS IngredientesBusqueda;
-	-- SET @sql = CONCAT('CREATE TEMPORARY TABLE IngredientesBusqueda AS
-	SET @sql = CONCAT('
-    SELECT r.rID
-    FROM
-		Receta r,
-        Ingrediente i,
-        IngredienteReceta ir
-	WHERE
-		r.rID = ir.rID AND
-        i.iID = ir.iID AND
-        i.iNombre IN (', ingredientes, ')
-	LIMIT 10
-    OFFSET ', pagina, '
-    ORDER BY r.rID DESC;');
+    SET @pagina = pagina;
+    SET @paginaHasta = pagina + 10;
+    SET @ingredientes = ingredientes;
     
-    PREPARE stmt FROM @sql;
-    EXECUTE stmt;
-    DEALLOCATE PREPARE stmt;
+    PREPARE stmt FROM 'SELECT
+			rID,
+			rAutor,
+			rNombre,
+			coincidencias
+		FROM (
+			SELECT
+				r.rID,
+				r.rAutor,
+				r.rNombre,
+				SUM(JSON_LENGTH(JSON_SEARCH(@ingredientes, \'all\', CONVERT(i.iID, char)))) AS coincidencias
+			FROM
+				Receta r,
+				Ingrediente i,
+				IngredienteReceta ir
+			WHERE
+				r.rID = ir.rID AND
+				i.iID = ir.iID
+			GROUP BY r.rID
+			HAVING
+				coincidencias > 0
+		) resultadosConOrden
+		ORDER BY coincidencias DESC
+        LIMIT ?, ?';
+    EXECUTE stmt USING @pagina, @paginaHasta;
+    
 END//
 DELIMITER ;
 
