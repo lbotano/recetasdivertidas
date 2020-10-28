@@ -6,8 +6,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import io.github.recetasDivertidas.pkgConexion.Conexion;
-import io.github.recetasDivertidas.pkgInicio.RecetasDivertidas;
-import io.github.recetasDivertidas.pkgLogin.LayoutLogin;
+import io.github.recetasDivertidas.pkgRecetasDivertidas.RecetasDivertidas;
+import io.github.recetasDivertidas.pkgLogin.LoginLayout;
 
 public final class Applicacion extends Application {
 
@@ -18,7 +18,7 @@ public final class Applicacion extends Application {
     //Los nodos serian las "cosas" que podes poner, como los botones, textboxes,etc
     public static Stage window = new Stage();
     public static Scene Login;
-    public LayoutLogin layoLg;
+    public LoginLayout layoLg;
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -49,7 +49,7 @@ public final class Applicacion extends Application {
     @Override
     public void init() throws Exception {
         super.init();
-        layoLg = new LayoutLogin();
+        layoLg = new LoginLayout();
         Login = new Scene(layoLg);
     }
 
