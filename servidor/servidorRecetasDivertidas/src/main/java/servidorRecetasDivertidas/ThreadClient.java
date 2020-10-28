@@ -36,7 +36,7 @@ public class ThreadClient implements Runnable{
 	//objetos para pasar mensajes
 	protected ObjectOutputStream output;
 	protected ObjectInputStream input;
-	protected StringValidator stringValidator;
+	protected ArrayListStringValidator stringValidator;
 
 	
 	//llamadas a SPs
@@ -286,7 +286,7 @@ public class ThreadClient implements Runnable{
 				answer.add(String.valueOf(stmt.getBoolean(4)));
 			}else {
 				answer.add("LOGINFAIL");
-				answer.add("cagada");
+				answer.add("Error en la consulta");
 			}
 		} catch (SQLException e) {	
 			exceptionHandler(e, "LOGINFAIL");	
@@ -504,7 +504,7 @@ public class ThreadClient implements Runnable{
 	        this.answer = new ArrayList<String>();	        
 	        //recibe el mensaje del cliente
 			this.message = (ArrayList<String>) this.input.readObject();
-			stringValidator = new StringValidator(message);
+			stringValidator = new ArrayListStringValidator(message);
 			if(stringValidator.elementArrayListBlank(message)) {
 				answer.add("ELEMENTBLANK");
 			}else {
@@ -519,6 +519,7 @@ public class ThreadClient implements Runnable{
 		}catch (Exception e){
         	System.out.println();
         	System.out.println("Client error: " + e.getMessage() + " in socket: " + socket);
+        	
 		}finally {
 	        try {
 	        	this.output.close();
