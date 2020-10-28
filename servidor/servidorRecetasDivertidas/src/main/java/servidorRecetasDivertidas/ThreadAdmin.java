@@ -127,8 +127,8 @@ public class ThreadAdmin extends ThreadClient{
 	        this.answer = new ArrayList<String>();	        
 	        //recibe el mensaje del cliente
 			this.message = (ArrayList<String>) input.readObject();
-			sv = new StringValidator(message);		
-			if(sv.elementArrayListBlank(message)) {
+			stringValidator = new StringValidator(message);		
+			if(stringValidator.elementArrayListBlank(message)) {
 				answer.add("ELEMENTBLANK");
 			}else {
 				switch(message.get(0)) {
@@ -145,21 +145,21 @@ public class ThreadAdmin extends ThreadClient{
 					banearUsuario();
 					break;
 				case "SUBIRCATING"://
-		        	if(sv.esSubirCatValido()) { 
+		        	if(stringValidator.esSubirCatValido()) { 
 						subirCatRecIng(true);
 		        	}else {
 		        		answer.add("FORMATERROR");
 		        	}
 					break;
 				case "SUBIRCATREC"://		        	
-					if(sv.esSubirCatValido()) { 
+					if(stringValidator.esSubirCatValido()) { 
 						subirCatRecIng(false);
 		        	}else {
 		        		answer.add("FORMATERROR");
 		        	}
 					break;
 				case "SUBIRING"://
-					if(sv.esSubirIngValido()) { 
+					if(stringValidator.esSubirIngValido()) { 
 						subirIng();
 		        	}else {
 		        		answer.add("FORMATERROR");

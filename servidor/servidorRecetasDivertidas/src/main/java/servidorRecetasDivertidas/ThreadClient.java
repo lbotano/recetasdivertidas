@@ -36,15 +36,16 @@ public class ThreadClient implements Runnable{
 	//objetos para pasar mensajes
 	protected ObjectOutputStream output;
 	protected ObjectInputStream input;
-	protected StringValidator sv;
+	protected StringValidator stringValidator;
 
 	
 	//llamadas a SPs
 	private static final String BORRARREC = "{call spUsuarioBorrarReceta(?,?)}";
+	private static final String CALIFICAR = "{call spCalificarReceta(?,?,?)}";
+	private static final String CAMBIARCONTRA = "{}";
 	//private static final String CONSRECETASCAT = "";
 	private static final String CONSRECETAING = "{call spBuscarRecetaPorIngr(?,?)}";
 	//private static final String CONSRECETATEXT = "";
-	private static final String CALIFICAR = "{call spCalificarReceta(?,?,?)}";
 	private static final String DATOSRECETA = "{call spGetDatosReceta(?)}";
 	private static final String LISTARCATREC = "SELECT * FROM categoriadereceta;";
 	private static final String LISTARCATING = "SELECT * FROM categoriadeingrediente;";
@@ -53,6 +54,8 @@ public class ThreadClient implements Runnable{
 	private static final String RECETASDEUSUARIO = "{call spGetRecetasUsuario(?)}";
 	private static final String REGISTRO = "{call spRegistroUsuario(?,?,?,?,?,?,?,?,?)}";
 	private static final String SUBIRRECETA = "{call spSubirReceta(?,?,?,?,?,?,?}";
+	private static final String USUPREGSEG = "SELECT * FROM preguntasseguridad WHERE id in "
+											+"(SELECT uPreguntaSeguridad WHERE uNickname = ?)";
 	private static final String DefaultSQLErrorMsg = "Error en la base de datos";
 	
 	public ThreadClient(ComboPooledDataSource c, Socket s) {
@@ -103,6 +106,15 @@ public class ThreadClient implements Runnable{
 			answer.add("CALIFICAOK");
 		} catch (SQLException e) {
 			exceptionHandler(e, "CALIFICARFAIL");
+		}
+	}
+
+	private void cambiarContra() {
+		try {
+			stmt = conn.prepareCall(CAMBIARCONTRA);
+			
+		}catch(SQLException e) {
+			exceptionHandler(e, "CAMBIARCONTRAFAIL");
 		}
 	}
 	
@@ -389,6 +401,27 @@ public class ThreadClient implements Runnable{
 		}
 	}
 	
+	private void usuPregSeg() {
+		try {
+			pstmt = conn.prepareStatement(USUPREGSEG);
+			//pone de parametro el nickname que le paso el cliente
+			pstmt.setString(1, message.get(1));
+			ResultSet rs = pstmt.executeQuery();
+			//si no hubo ningun error ejecutando el query, entonces pone este mensaje
+			answer.add("RESPUSUPREGSEG");
+			if(rs.next()) {
+				//id de la pregunta
+				answer.add(String.valueOf(rs.getInt(1)));
+				//pregunta del usuario
+				answer.add(rs.getString(2));
+			}else {
+				throw new SQLException("Error en la consulta", "45000");
+			}
+		}catch(SQLException e) {
+			exceptionHandler(e, "RESPUSUPREGSEGFAIL");
+		}
+	}
+	
 	protected void opcionesCliente(String peticion) {
 		//segun la peticion, ejecuta cierto metodo
         switch(peticion) {
@@ -396,10 +429,17 @@ public class ThreadClient implements Runnable{
 	        	borrarReceta();
 	        	break;
 	        case "CALIFICAR"://
-	        	if(sv.esCalificarValido()) {
+	        	if(stringValidator.esCalificarValido()) {
 	        		calificar();
 	        	}else {
 	        		answer.add("FORMATERROR");
+	        	}
+	        	break;
+	        case "CAMBIARCONTRA": //
+	        	if(stringValidator.esCambiarContraValido()) {
+	        		cambiarContra();
+	        	}else {
+	        		answer.add("FORMATERROR");	        		
 	        	}
 	        	break;
 	        case "CONSRECETASCAT": 
@@ -430,18 +470,21 @@ public class ThreadClient implements Runnable{
 	        	recetaUsuario();
 	        	break;
 	        case "REGISTRO":   //       	
-	        	if(sv.esResgistroValido()) {     		
+	        	if(stringValidator.esResgistroValido()) {     		
 	        		registro();     
 	        	}else {
 	        		answer.add("FORMATERROR");
 	        	}
 	    		break;
 	        case "SUBIRRECETA"://  	
-	        	if(sv.esSubirRecetaValido()) { 
+	        	if(stringValidator.esSubirRecetaValido()) { 
 	        		subirReceta();    
 	        	}else {
 	        		answer.add("FORMATERROR");
 	        	}
+	        	break;
+	        case "USUPREGSEG":
+	        	usuPregSeg();
 	        	break;
 	    	default:
 	    		//se manda esta respuesta si la peticion es invalida
@@ -461,8 +504,8 @@ public class ThreadClient implements Runnable{
 	        this.answer = new ArrayList<String>();	        
 	        //recibe el mensaje del cliente
 			this.message = (ArrayList<String>) this.input.readObject();
-			sv = new StringValidator(message);
-			if(sv.elementArrayListBlank(message)) {
+			stringValidator = new StringValidator(message);
+			if(stringValidator.elementArrayListBlank(message)) {
 				answer.add("ELEMENTBLANK");
 			}else {
 				//switch de opcioens del cliente
