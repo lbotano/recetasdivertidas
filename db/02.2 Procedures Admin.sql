@@ -1,3 +1,5 @@
+USE RecetasDivertidasDB;
+
 -- Añadir categoría de receta (Solo para admin)
 DROP PROCEDURE IF EXISTS spAgregarCategoriaReceta;
 DELIMITER //

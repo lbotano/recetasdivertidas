@@ -39,7 +39,7 @@ BEGIN
 		VALUES 
 			(nickname,
 			preguntaSeguridad,
-			respuestaSeguridad,
+			UPPER(respuestaSeguridad),
 			nombre,
 			apellido,
 			contrasenia,
@@ -124,14 +124,14 @@ BEGIN
     
     DECLARE exit handler for sqlexception
 	BEGIN
-		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Error inesperado.';
         ROLLBACK;
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Error inesperado.';
 	END;
     
     DECLARE exit handler for sqlwarning
 	BEGIN
-		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Error inesperado.';
         ROLLBACK;
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Error inesperado.';
 	END;
     
     SET autocommit=0;
@@ -261,7 +261,7 @@ BEGIN
 	) promedioCalificacion ON rID = prID;
     
     -- Seleccionar ingredientes
-	SELECT i.iID, i.iNombre, ir.unidadCantidad, ir.cantidad
+	SELECT i.iID, i.iNombre, ir.cantidad, ir.unidadCantidad
 	FROM
 		Ingrediente i,
 		IngredienteReceta ir,
@@ -353,6 +353,26 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS spCambiarContrasena;
+DELIMITER //
+CREATE PROCEDURE spCambiarContrasena (
+	nickUsuario varchar(32),
+    respuesta varchar(64),
+    nuevaContrasenia varchar(50)
+)
+BEGIN
+	UPDATE Usuario
+    SET uContrasenia = nuevaContrasenia
+    WHERE
+		uNickname = nickUsuario AND
+        uRespuestaSeguridad = UPPER(respuesta);
+	
+    IF ROW_COUNT() = 0 THEN
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = "Respuesta de seguridad incorrecta";
+    END IF;
+END//
+DELIMITER ;
+
 -- Buscar recetas (por ingredientes)
 -- Obtiene una lista de ingredientes (como string)
 --  Formato del string: (ingrediente), (ingrediente), ...
@@ -362,7 +382,7 @@ DELIMITER ;
 DROP PROCEDURE IF EXISTS spBuscarRecetaPorIngr;
 DELIMITER //
 CREATE PROCEDURE spBuscarRecetaPorIngr (
-	IN ingredientes varchar(512),
+	IN ingredientes JSON,
     IN pagina int
 )
 BEGIN

@@ -46,6 +46,12 @@ CALL spRegistroUsuario (
     false,
     @resultado);
     
+-- Cambiar contraseñas
+CALL spCambiarContrasena(
+	"lbotano",
+    "Morita",
+    "lautaro200");
+    
 -- Añadir categorías de recetas
 CALL spAgregarCategoriaReceta("Almuerzo");
 CALL spAgregarCategoriaReceta("Postre");
