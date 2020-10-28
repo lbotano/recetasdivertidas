@@ -82,11 +82,7 @@ public class StringValidator {
 		boolean uGenero = vNum(alValidar.get(7), 1, 1);
 		boolean uMail = vMail(alValidar.get(8));
 		
-		if (nickname && preguntaSeg && respuestaSeg && uApellido && uNombre && uContra && uGenero && uMail) {
-			return true;
-		}
-		
-		return false;
+		return (nickname && preguntaSeg && respuestaSeg && uApellido && uNombre && uContra && uGenero && uMail);
 	}
 	
 	public boolean esCalificarValido() {
@@ -98,11 +94,20 @@ public class StringValidator {
 		boolean nickname = vDato(alValidar.get(2), 1, 32);
 		boolean calificacion = vNum(alValidar.get(3), 1, 2);
 		//idReceta, nickname y calificacion
-		if(idReceta && nickname && calificacion) {
-			return true;
-		}
-		return false;
+		return (idReceta && nickname && calificacion);
 
+	}
+	
+	public boolean esCambiarContraValido() {
+		if(alValidar.size() != 5) {
+			return false;
+		}
+		boolean nickname = vDato(alValidar.get(1), 3, 32);
+		boolean contraNueva = vDato(alValidar.get(6), 8, 50);
+		boolean idPregunta = vNum(alValidar.get(2), 1, 2);
+		boolean respuesta = vDato(alValidar.get(3), 1, 64);
+		
+		return (nickname && contraNueva && idPregunta && respuesta);
 	}
 	
 	//Admin
