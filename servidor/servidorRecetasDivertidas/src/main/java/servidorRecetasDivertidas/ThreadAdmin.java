@@ -1,15 +1,14 @@
 package servidorRecetasDivertidas;
 
+import com.google.gson.Gson;
+import com.mchange.v2.c3p0.ComboPooledDataSource;
+import jsonClasess.Categoria;
+
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.sql.SQLException;
 import java.util.ArrayList;
-
-import com.google.gson.Gson;
-import com.mchange.v2.c3p0.ComboPooledDataSource;
-
-import jsonClasess.Categoria;
 
 public class ThreadAdmin extends ThreadClient{
 

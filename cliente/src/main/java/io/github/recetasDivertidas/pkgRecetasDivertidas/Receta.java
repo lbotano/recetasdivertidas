@@ -8,5 +8,4 @@ public class Receta {
     private String calificacion;
     private ArrayList<String> ingredientes;
     private ArrayList<String> categoria;
-    private 
 }

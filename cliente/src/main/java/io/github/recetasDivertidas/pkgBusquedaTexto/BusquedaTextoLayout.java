@@ -40,10 +40,6 @@ public class BusquedaTextoLayout extends GridPane {
 
     }
 
-    private void addStuff(){
-
-    }
-
 
 
 }

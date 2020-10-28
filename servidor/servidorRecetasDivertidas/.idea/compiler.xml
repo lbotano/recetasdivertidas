@@ -8,6 +8,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="servidorRecetasDivertidas" />
         <module name="RecetasDivertidasServidor" />
+        <module name="ServidorRecetasDivertidas" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>

@@ -115,32 +115,26 @@ public class RecetasDivertidas extends Stage{
 
                 case 1 ->{
                     btn[i].setText("Buscar por Ingrediente");
-                    img[i] = new Image(getClass().getResourceAsStream("/busqueda_ingrediente.png"));
                     btn[i].setOnAction(e -> cambiarPestania(pestanias.BUSQUEDAINGREDIENTES) );
                 }
                 case 2 ->{
                     btn[i].setText("Buscar por Texto");
-                    img[i] = new Image(getClass().getResourceAsStream("/busqueda_texto.png"));
                     btn[i].setOnAction(e -> cambiarPestania(pestanias.BUSQUEDATEXTO));
                 }
                 case 3 ->{
                     btn[i].setText("Buscar por Categoria");
-                    img[i] = new Image(getClass().getResourceAsStream("/busqueda_categoria.png"));
                     btn[i].setOnAction(e -> cambiarPestania(pestanias.BUSQUEDACATEGORIA));
                 }
                 case 4 ->{
                     btn[i].setText("Mis Recetas");
-                    img[i] = new Image(getClass().getResourceAsStream("/mis_recetas.png"));
                     btn[i].setOnAction(e -> cambiarPestania(pestanias.MISRECETAS));
                 }
                 case 5 ->{
                     btn[i].setText("Subir Receta");
-                    img[i] = new Image(getClass().getResourceAsStream("/subir.jpg"));
                     btn[i].setOnAction(e -> cambiarPestania(pestanias.SUBIRRECETA));
                 }
                 case 6 ->{
                     btn[i].setText("Admin");
-                    img[i] = new Image(getClass().getResourceAsStream("/admin.png"));
                     btn[i].setOnAction(e -> cambiarPestania(pestanias.ADMIN));
                 }
             }
