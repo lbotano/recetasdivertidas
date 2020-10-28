@@ -455,6 +455,52 @@ BEGIN
 END//
 DELIMITER ;
 
+-- Buscar recetas (por categorías de ingredientes)
+DROP PROCEDURE IF EXISTS spBuscarRecetasPorCatIngr;
+DELIMITER //
+CREATE PROCEDURE spBuscarRecetasPorCatIngr (
+	IN categorias JSON, -- JSON de un array de categorías (tienen que ser en string) Ej: ["1","4","3"]
+    IN pagina int -- Página de la búsqueda (0, 1, 2, 3, etc)
+)
+BEGIN
+    SET @pagina = pagina;
+    SET @paginaHasta = pagina + 10;
+    SET @categorias = categorias;
+    
+    PREPARE stmt FROM 'SELECT
+		rID,
+		rAutor,
+		rNombre,
+		COUNT(coincidencias)
+	FROM (
+		SELECT
+			r.rID,
+			r.rAutor,
+			r.rNombre,
+			JSON_SEARCH(@categorias, \'all\', CONVERT(c.cID, char)) AS coincidencias
+		FROM
+			Receta r,
+			IngredienteReceta ir,
+			Ingrediente i,
+			RelCatIngred ic,
+			CategoriaDeIngrediente c
+		WHERE
+			r.rID = ir.rID AND
+			ir.iID = i.iID AND
+			i.iID = ic.iID AND
+			ic.cID = c.cID
+		GROUP BY r.rID, coincidencias
+		HAVING
+			COUNT(coincidencias) > 0
+	) resultadosConOrden
+	GROUP BY rID
+	ORDER BY coincidencias DESC
+	LIMIT ?, ?;';
+    EXECUTE stmt USING @pagina, @paginaHasta;
+    
+END//
+DELIMITER ;
+
 -- Borrar receta (como usuario, sólo se puede borrar la receta de uno mismo)
 DROP PROCEDURE IF EXISTS spUsuarioBorrarReceta;
 DELIMITER //
