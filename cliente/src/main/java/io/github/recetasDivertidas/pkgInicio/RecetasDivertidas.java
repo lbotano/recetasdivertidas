@@ -18,6 +18,7 @@ public class RecetasDivertidas extends Stage{
     public static boolean admin;
     private int btnI;
     public BorderPane borderPane;
+    public static String username;
     public enum pestanias
     {
         INICIO,
@@ -30,9 +31,10 @@ public class RecetasDivertidas extends Stage{
     }
     private pestanias current;
 
-    public RecetasDivertidas(boolean admin){
+    public RecetasDivertidas(boolean admin, String username){
         super();
         RecetasDivertidas.admin = admin;
+        RecetasDivertidas.username = username;
 
         borderPane = new BorderPane();
         borderPane.setLeft(sidePane());

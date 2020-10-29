@@ -53,7 +53,7 @@ public class ThreadClient implements Runnable{
 	private static final String LOGIN = "{call spInicioSesion(?,?,?,?)}";
 	private static final String PREGUNTASSEG = "SELECT * FROM preguntasseguridad;";
 	private static final String RECETASDEUSUARIO = "{call spGetRecetasUsuario(?)}";
-	private static final String REGISTRO = "{call spRegistroUsuario(?,?,?,?,?,?,?,?,?)}";
+	private static final String REGISTRO = "{call spRegistroUsuario(?,?,?,?,?,?,?,?,?,?)}";
 	private static final String SUBIRRECETA = "{call spSubirReceta(?,?,?,?,?,?,?}";
 	private static final String USUPREGSEG = "SELECT * FROM preguntasseguridad WHERE id in "
 											+"(SELECT uPreguntaSeguridad WHERE uNickname = ?)";
@@ -381,9 +381,9 @@ public class ThreadClient implements Runnable{
     			}else {
             		stmt.setString(i, message.get(i));            				
     			}
-    	
 			}
-    		stmt.registerOutParameter(9, Types.BOOLEAN);
+    		stmt.setBoolean(9,false);
+    		stmt.registerOutParameter(10, Types.BOOLEAN);
     		System.out.println("Sending REGISTER message to db for socket: " + socket);
     		stmt.execute();
     		answer.add("REGISTEROK");

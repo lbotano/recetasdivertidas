@@ -72,7 +72,7 @@ public class ArrayListStringValidator {
 	}
 	
 	public boolean esResgistroValido() {
-		if(alValidar.size() != 8) {
+		if(alValidar.size() != 9) {
 			return false;
 		}
 		

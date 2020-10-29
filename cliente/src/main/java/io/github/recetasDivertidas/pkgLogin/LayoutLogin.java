@@ -74,7 +74,7 @@ public class LayoutLogin extends BorderPane {
                     alerta.showAndWait();
 
                     //Basicamente lo que esto dice es "Mostra el inicio de la app(si es o no admin) y oculta el login"
-                    RecetasDivertidas recetasDivertidas = new RecetasDivertidas(admin);
+                    RecetasDivertidas recetasDivertidas = new RecetasDivertidas(admin,tbUsername.getText());
                     recetasDivertidas.show();
                     Aplicacion.hide();
                 }

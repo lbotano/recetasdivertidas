@@ -216,6 +216,7 @@ public class Register extends Stage {
         if(consRegister()){
             Alerta alerta = new Alerta(Alert.AlertType.CONFIRMATION,"Bienvenidx a Recetas Divertidas","Datos registrados con exito!");
             alerta.showAndWait();
+            this.close();
         }
     }
 
@@ -269,8 +270,17 @@ public class Register extends Stage {
         itemList.add(inputRegistro[2].getText());
         itemList.add(inputRegistro[3].getText());
         itemList.add(pwdRegistro.getText());
-        itemList.add(inputRegistro[4].getText());
         itemList.add(getGenero());
+        itemList.add(inputRegistro[4].getText());
+
+        System.out.println(inputRegistro[0].getText());
+        System.out.println(String.valueOf(preguntaSeguridad.getValue().getId()));
+        System.out.println(inputRegistro[1].getText());
+        System.out.println(inputRegistro[2].getText());
+        System.out.println(inputRegistro[3].getText());
+        System.out.println(pwdRegistro.getText());
+        System.out.println(getGenero());
+        System.out.println(inputRegistro[4].getText());
 
         return itemList;
     }
