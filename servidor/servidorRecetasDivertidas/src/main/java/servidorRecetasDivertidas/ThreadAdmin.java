@@ -126,7 +126,7 @@ public class ThreadAdmin extends ThreadClient{
 	        this.answer = new ArrayList<String>();	        
 	        //recibe el mensaje del cliente
 			this.message = (ArrayList<String>) input.readObject();
-			stringValidator = new StringValidator(message);		
+			stringValidator = new ArrayListStringValidator(message);		
 			if(stringValidator.elementArrayListBlank(message)) {
 				answer.add("ELEMENTBLANK");
 			}else {

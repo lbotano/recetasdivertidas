@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.regex.Pattern;
 
 
-public class StringValidator {
+public class ArrayListStringValidator {
 	private ArrayList<String> alValidar;
 	//cualquier caracter menos saltos de linea y puede aparecer un minimo y maximo de veces
 	private final String patternDato = ".{%d,%d}";
@@ -17,7 +17,10 @@ public class StringValidator {
 								"A-Z]{2,7}$";
 	private final String patternURL = "\\b(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]";
 
-	public StringValidator(ArrayList<String> a) {
+			
+	
+	
+	public ArrayListStringValidator(ArrayList<String> a) {
 		alValidar = a;
 	}
 	//Cliente
@@ -135,7 +138,7 @@ public class StringValidator {
 	}
 	//General
 	//-----------------------------------
-	
+
 	public boolean vMail(String s) {
 		return Pattern.matches(patternMail, s);
 	}
@@ -148,7 +151,6 @@ public class StringValidator {
 	public boolean vURL(String s){
 		return Pattern.matches(patternURL, s);
 	}
-	
 	public boolean elementArrayListBlank(ArrayList<String> al) {
 		int i = 1;
 		boolean blank = false;
