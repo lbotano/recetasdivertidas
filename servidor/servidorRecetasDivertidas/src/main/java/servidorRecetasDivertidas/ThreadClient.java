@@ -40,12 +40,13 @@ public class ThreadClient implements Runnable{
 
 	
 	//llamadas a SPs
-	private static final String BORRARREC = "{call spUsuarioBorrarReceta(?,?)}";
+	private static final String BORRARRECUSU = "{call spUsuarioBorrarReceta(?,?)}";
 	private static final String CALIFICAR = "{call spCalificarReceta(?,?,?)}";
-	private static final String CAMBIARCONTRA = "{}";
-	//private static final String CONSRECETASCAT = "";
-	private static final String CONSRECETAING = "{call spBuscarRecetaPorIngr(?,?)}";
-	//private static final String CONSRECETATEXT = "";
+	private static final String CAMBIARCONTRA = "{call spCambiarContrasena(?,?,?)}";
+	private static final String CONSRECETASCATING = "{call spBuscarRecetasPorCatIngr(?,?)}";
+	private static final String CONSRECETASCATREC = "{call spBuscarRecetasPorCatReceta(?,?)}";
+	private static final String CONSRECETAING = "{call spBuscarRecetaPorIngr(?,?)}";	
+	private static final String CONSRECETATEXT = "{}";
 	private static final String DATOSRECETA = "{call spGetDatosReceta(?)}";
 	private static final String LISTARCATREC = "SELECT * FROM categoriadereceta;";
 	private static final String LISTARCATING = "SELECT * FROM categoriadeingrediente;";
@@ -78,9 +79,9 @@ public class ThreadClient implements Runnable{
 		}
 	}
 	
-	private void borrarReceta() {
+	private void borrarRecetaUsu() {
 		try {
-			stmt = conn.prepareCall(BORRARREC);
+			stmt = conn.prepareCall(BORRARRECUSU);
 			//id de la receta
 			stmt.setInt(1, Integer.parseInt(message.get(1)));
 			//nickname del usuario
@@ -112,14 +113,51 @@ public class ThreadClient implements Runnable{
 	private void cambiarContra() {
 		try {
 			stmt = conn.prepareCall(CAMBIARCONTRA);
-			
+			//1: nickname; 2: contra nueva; 3: respuesta de la pregunta de seguridad
+			for (int i = 1; i <= 3; i++) {
+				stmt.setString(i, message.get(i));
+			}
+			stmt.execute();
+			answer.add("CAMBIARCONTRAOK");
 		}catch(SQLException e) {
 			exceptionHandler(e, "CAMBIARCONTRAFAIL");
 		}
 	}
 	
-	private void consRecetasCat() {
-		
+	private void DatosConsultaRecetas(ResultSet rs) throws SQLException {
+		while(rs.next()) {
+			//id de la receta
+			answer.add(Integer.toString(rs.getInt(1)));
+			//autor de la receta
+			answer.add(rs.getString(2));
+			//nombre de la receta
+			answer.add(rs.getString(3));
+		}
+		rs.close();
+	}
+	//true: buscar por categorias de recetas
+	//false: buscar por categorias de ingredientes
+	private void consRecetasCatRecIng(boolean recoing) {
+		try {
+			if(recoing) {
+				stmt = conn.prepareCall(CONSRECETASCATREC);				
+			}else {
+				stmt = conn.prepareCall(CONSRECETASCATING);				
+				
+			}
+			ArrayList<String> categorias = new ArrayList<String>();
+			for (int i = 2; i < message.size(); i++) {
+				categorias.add(message.get(i));
+			}
+			stmt.setString(1, new Gson().toJson(categorias));
+			//numero de pagina
+			stmt.setInt(2,Integer.parseInt(message.get(1)));
+			stmt.execute();
+			answer.add("RESPCONSULTA");
+			DatosConsultaRecetas(stmt.getResultSet());
+		}catch(SQLException e) {
+			exceptionHandler(e, "RESPOCONSULTAFAIL");
+		}
 	}
 	
 	private void consRecetasIng() {
@@ -138,14 +176,9 @@ public class ThreadClient implements Runnable{
 			stmt.setInt(2, Integer.parseInt(message.get(1)));
 			stmt.execute();			
 			answer.add("RESPCONSULTA");
-			ResultSet rs = stmt.getResultSet();
-			while(rs.next()) {
-				//id de la receta
-				answer.add(Integer.toString(rs.getInt(1)));
-				//nombre de la receta
-				answer.add(rs.getString(2));
-			}
-			rs.close();
+			
+			DatosConsultaRecetas(stmt.getResultSet());
+			
 		}catch (SQLException e) {
 			exceptionHandler(e, "RESPOCONSULTAFAIL");
 		}
@@ -425,8 +458,8 @@ public class ThreadClient implements Runnable{
 	protected void opcionesCliente(String peticion) {
 		//segun la peticion, ejecuta cierto metodo
         switch(peticion) {
-	        case "BORRARREC":
-	        	borrarReceta();
+	        case "BORRARRECUSU":
+	        	borrarRecetaUsu();
 	        	break;
 	        case "CALIFICAR"://
 	        	if(stringValidator.esCalificarValido()) {
@@ -442,8 +475,11 @@ public class ThreadClient implements Runnable{
 	        		answer.add("FORMATERROR");	        		
 	        	}
 	        	break;
-	        case "CONSRECETASCAT": 
-	        	consRecetasCat();
+	        case "CONSRECETASCATING": 
+	        	consRecetasCatRecIng(false);
+	        	break;
+	        case "CONSRECETASCATREC":
+	        	consRecetasCatRecIng(true);
 	        	break;
 	        case "CONSRECETASING":
 	        	consRecetasIng();
