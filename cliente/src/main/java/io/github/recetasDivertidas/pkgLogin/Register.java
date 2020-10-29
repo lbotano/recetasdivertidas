@@ -79,19 +79,19 @@ public class Register extends Stage {
         tooltip[1].setText(
                 """
                 Su respuesta de seguridad debe ser
-                de 4 a 64 caracteres de largo
+                de maximo 50 caracteres de largo
                 """
         );
         tooltip[2].setText(
                 """
-                Escriba su nombre como figura
-                en el documento
+                Su nombre no puede exceder los 50
+                caracteres
                 """
         );
         tooltip[3].setText(
                 """
-                Escriba su apellido como figura
-                en el documento
+                Su apelllido no puede exceder los 50
+                caracteres
                 """
         );
         tooltip[4].setText(
@@ -270,9 +270,27 @@ public class Register extends Stage {
         itemList.add(inputRegistro[3].getText());
         itemList.add(pwdRegistro.getText());
         itemList.add(inputRegistro[4].getText());
-        itemList.add(genero.getValue());
+        itemList.add(getGenero());
 
         return itemList;
+    }
+
+    private String getGenero(){
+        String res = "";
+
+        switch (genero.getValue()){
+            case "Masculino" -> {
+                res = "0";
+            }
+            case "Femenino" ->{
+                res = "1";
+            }
+            case "Otro" ->{
+                res = "2";
+            }
+        }
+
+        return res;
     }
 
     private boolean corroborarDatos(){
@@ -292,7 +310,7 @@ public class Register extends Stage {
 
                     break;
                 case 1:
-                    if (!(inputRegistro[i].getText().length() <= 50 && inputRegistro[i].getText().length() >= 8 )){
+                    if (!(inputRegistro[i].getText().length() <= 64 && inputRegistro[i].getText().length() >= 1 )){
                         inputRegistro[i].setStyle("-fx-control-inner-background: #FFCCCC");
                         datosok = false;
                     }else {
@@ -301,16 +319,8 @@ public class Register extends Stage {
 
                     break;
                 case 2:
-                    if (!(inputRegistro[i].getText().length() <= 64 && inputRegistro[i].getText().length() >= 4 )){
-                        inputRegistro[i].setStyle("-fx-control-inner-background: #FFCCCC");
-                        datosok = false;
-                    }else {
-                        inputRegistro[i].setStyle("-fx-control-inner-background: #CCFFCC");
-                    }
-
-                    break;
                 case 3:
-                    if (!(inputRegistro[i].getText().length() <= 100 && inputRegistro[i].getText().length() >= 1 )){
+                    if (!(inputRegistro[i].getText().length() <= 50 && inputRegistro[i].getText().length() >= 1 )){
                         inputRegistro[i].setStyle("-fx-control-inner-background: #FFCCCC");
                         datosok = false;
                     }else {
@@ -366,13 +376,25 @@ public class Register extends Stage {
         //Se crea el arraylist que contiene las preguntas de seguridad
         ArrayList<PreguntaSeguridad> preguntas = new ArrayList<>();
 
-        int i= 0;
-        while(i < ans.size()){
-            preguntas.add(new PreguntaSeguridad(Integer.parseInt(ans.get(i)), ans.get(i+1)));
-            i = i+2;
+        switch(ans.get(0)){
+            case "PREGUNTASSEG" ->{
+                int i= 1;
+                while(i < ans.size()){
+                    preguntas.add(new PreguntaSeguridad(Integer.parseInt(ans.get(i)), ans.get(i+1)));
+                    i = i+2;
+                }
+            }
+            case "MESSAGEERROR" ->{
+                Alerta alerta = new Alerta(Alert.AlertType.ERROR, "Error en el mensaje",
+                        "Hubo un problema al comunicarse con el servidor");
+                alerta.showAndWait();
+            }
+            case "PREGUNTASSEGFAIL" -> {
+                Alerta alerta = new Alerta(Alert.AlertType.ERROR, "Error con al obtener preguntas de seguridad", ans.get(1));
+                System.out.println(ans.get(0));
+                alerta.showAndWait();
+            }
         }
-
-        //Checkear el retorno de las preguntas
 
         return preguntas;
     }

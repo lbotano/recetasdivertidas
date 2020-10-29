@@ -16,4 +16,9 @@ public class PreguntaSeguridad {
     public String getPregunta() {
         return pregunta;
     }
+
+    @Override
+    public String toString() {
+        return pregunta;
+    }
 }
