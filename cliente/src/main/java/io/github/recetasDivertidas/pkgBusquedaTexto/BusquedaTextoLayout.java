@@ -6,19 +6,31 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 
-public class BusquedaTextoLayout extends GridPane {
+public class BusquedaTextoLayout extends BorderPane {
     private VBox resultado;
+    private int pagActual = 0;
+    private TextField txtBusqueda;
 
     public BusquedaTextoLayout(){
         super();
 
+        this.setTop(getGridPane());
+        this.setCenter(getScrollPane());
+
+    }
+
+    private GridPane getGridPane(){
+        GridPane gridPane = new GridPane();
         Label lblExplain = new Label();
-        TextField txtBusqueda = new TextField();
+        txtBusqueda = new TextField();
         resultado = new VBox();
 
         lblExplain.setText("Aqui puedes buscar recetas escribiendo!!");
@@ -29,15 +41,39 @@ public class BusquedaTextoLayout extends GridPane {
         Button btnBuscar = new Button("Buscar");
         btnBuscar.setOnAction(e -> BusquedaTextoFuncionalidad.buscarReceta(resultado));
 
-        this.setPadding(new Insets(10, 10, 10, 10));
-        this.setVgap(10);
-        this.setHgap(10);
+        gridPane.setPadding(new Insets(10, 10, 10, 10));
+        gridPane.setVgap(10);
+        gridPane.setHgap(10);
 
-        this.add(lblExplain,0,0);
-        this.add(txtBusqueda,0,1);
-        this.add(btnBuscar,1,1);
-        this.add(resultado,0,2);
+        gridPane.add(lblExplain,0,0);
+        gridPane.add(txtBusqueda,0,1);
+        gridPane.add(btnBuscar,1,1);
 
+        return gridPane;
+    }
+
+    private ScrollPane getScrollPane(){
+        ScrollPane scrollPane = new ScrollPane();
+
+        scrollPane.setContent(resultado);
+        scrollPane.setFitToHeight(true);
+        scrollPane.setFitToWidth(true);
+
+        return scrollPane;
+    }
+
+    private HBox getHbox(){
+        HBox hbox = new HBox();
+        Button btnNextPage = new Button("->");
+        Button btnPrevPage = new Button("->");
+
+        //Toy desarrollando esto
+        btnNextPage.setOnAction(e -> BusquedaTextoFuncionalidad.obtenerRecetas(pagActual + 1, txtBusqueda.getText()));
+        btnPrevPage.setOnAction(e -> BusquedaTextoFuncionalidad.obtenerRecetas(pagActual - 1, txtBusqueda.getText()));
+
+        hbox.getChildren().addAll(btnPrevPage,btnNextPage);
+
+        return hbox;
     }
 
 

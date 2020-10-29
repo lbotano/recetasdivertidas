@@ -1,5 +1,6 @@
 package io.github.recetasDivertidas.pkgBusquedaTexto;
 
+import io.github.recetasDivertidas.pkgRecetasDivertidas.Receta;
 import io.github.recetasDivertidas.pkgRecetasDivertidas.RecetasDivertidas;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -8,6 +9,8 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
+
+import java.util.ArrayList;
 
 public final class BusquedaTextoFuncionalidad{
 
@@ -31,6 +34,8 @@ public final class BusquedaTextoFuncionalidad{
 
       grid.setStyle("-fx-background-color: "+ RecetasDivertidas.background);
 
+      ArrayList<Receta> recetas = new ArrayList<>();
+
       //Username setup
       Label lblTitulo = new Label("Titulo");
       lblTitulo.setFont(new Font("Arial", 16));
@@ -48,4 +53,6 @@ public final class BusquedaTextoFuncionalidad{
    }
 
 
+   public static void obtenerRecetas(int i, String consulta) {
+   }
 }

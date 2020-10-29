@@ -23,6 +23,7 @@ public class RecetasDivertidas extends Stage{
     public BorderPane root;
     public final static String background = "#FFFFFF";
     public final static String hovered = "#F1F1F1";
+    public static String username;
     public enum pestanias
     {
         INICIO,
@@ -35,9 +36,10 @@ public class RecetasDivertidas extends Stage{
     }
     private pestanias current;
 
-    public RecetasDivertidas(boolean admin){
+    public RecetasDivertidas(boolean admin, String username){
         super();
         RecetasDivertidas.admin = admin;
+        RecetasDivertidas.username = username;
 
         root = new BorderPane();
         root.setTop(sidePane());
@@ -45,15 +47,8 @@ public class RecetasDivertidas extends Stage{
         Scene scene = new Scene(root,800,600);
         this.setScene(scene);
         this.current = pestanias.INICIO;
-
-        /*if (admin){
-            this.setWidth(1380);
-            this.setHeight(795);
-        }else{
-            this.setWidth(1380);
-            this.setHeight(687);
-        }*/
-
+        this.setTitle("Recetas Divertidas");
+        this.getIcons().add(new Image(getClass().getResourceAsStream("/logo_chiquito.png")));
 
     }
 

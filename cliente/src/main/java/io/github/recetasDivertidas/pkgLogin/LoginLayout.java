@@ -1,10 +1,7 @@
 package io.github.recetasDivertidas.pkgLogin;
 
 import javafx.geometry.Insets;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -19,7 +16,7 @@ import java.util.ArrayList;
 public class LoginLayout extends BorderPane {
 
     private TextField tbUsername;
-    private TextField tbPassword;
+    private PasswordField tbPassword;
     private Register register;
     private boolean admin = false;
 
@@ -49,7 +46,7 @@ public class LoginLayout extends BorderPane {
         Label lblPassword = new Label("Contraseña:");
         grid.add(lblPassword, 0, 1);
 
-        tbPassword = new TextField();
+        tbPassword = new PasswordField();
         tbPassword.setPrefSize(180, 10);
         tbPassword.setPromptText("Escriba su contraseña aqui");
         grid.add(tbPassword, 1, 1);
@@ -74,7 +71,7 @@ public class LoginLayout extends BorderPane {
                     alerta.showAndWait();
 
                     //Basicamente lo que esto dice es "Mostra el inicio de la app(si es o no admin) y oculta el login"
-                    RecetasDivertidas recetasDivertidas = new RecetasDivertidas(admin);
+                    RecetasDivertidas recetasDivertidas = new RecetasDivertidas(admin, tbPassword.getText());
                     recetasDivertidas.show();
                     Aplicacion.hide();
                 }
