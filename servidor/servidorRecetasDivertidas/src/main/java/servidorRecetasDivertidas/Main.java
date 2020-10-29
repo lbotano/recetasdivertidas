@@ -33,21 +33,39 @@ public class Main {
 	}
 
 	public static void main(String[] args) throws Exception {
-		cpds.setDriverClass( "com.mysql.jdbc.Driver" );           
-		cpds.setJdbcUrl( "jdbc:mysql://localhost:3306/RecetasDivertidasDB?serverTimezone=UTC" );
-		cpds.setUser("root");
-		cpds.setPassword("camilo200");  
-		
-		Thread ServerAdmin = new Thread(new Runnable(){
-			@Override
-			public void run() {
-				try (ServerSocket ss = new ServerSocket(6969)) {
-					System.out.println("Admin server running ");
-					
-					var pool = Executors.newFixedThreadPool(10);
-					while(true) {
-						if(isStopping()) {
-							break;
+		String pathConfig = "src/main/java/servidorRecetasDivertidas/config.conf";
+		File configFile = new File (pathConfig);
+		//true: no existia el archivo y se creo correctamente
+		//false: existe el archivo
+		if(configFile.createNewFile()) {
+			FileWriter writer = new FileWriter(pathConfig);
+			writer.write("IP: localhost\r\n" + 
+						"Admin-port:\r\n" + 
+						"Client-port:\r\n" + 
+						"Mysql-user:\r\n" + 
+						"Mysql-pass:");
+			writer.close();
+			System.out.println("New configuration file created");
+		}else {
+			try {
+				cpds.setDriverClass( "com.mysql.jdbc.Driver" );     
+				if(getDataFromConfig(pathConfig)) {
+					Thread ServerAdmin = new Thread(new Runnable(){
+						@Override
+						public void run() {
+							try (ServerSocket ss = new ServerSocket(adminPort)) {
+								System.out.println("Admin server running ");
+								
+								var pool = Executors.newFixedThreadPool(10);
+								while(true) {
+									if(isStopping()) {
+										break;
+									}
+									pool.execute(new ThreadAdmin(cpds , ss.accept()));
+								}
+							} catch (IOException e) {
+								System.out.println("Failed to initiate admin server");
+							}	
 						}
 					});
 					
