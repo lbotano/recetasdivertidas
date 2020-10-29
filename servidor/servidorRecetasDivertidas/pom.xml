@@ -17,6 +17,7 @@
 			    <version>3.8.0</version>
 			    <configuration>
 			        <release>14</release>
+                    <encoding>UTF-8</encoding>
 			    </configuration>
 			</plugin>
 			
@@ -33,6 +34,14 @@
 					</archive>
 				</configuration>
 			</plugin>
+
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.2.0</version>
+                <configuration>
+                    <encoding>UTF-8</encoding>
+                </configuration>
+            </plugin>
 		</plugins>
 	</build>
 	
@@ -66,4 +75,8 @@
             <version>8.0.22</version>
         </dependency>
     </dependencies>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
 </project>

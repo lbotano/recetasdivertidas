@@ -169,8 +169,8 @@ public class ThreadClient implements Runnable{
 			 * Resultsets:
 			 * 1. Datos basicos receta
 			 * 2. Ingredientes de la receta
-			 * 3. Categorías de la receta
-			 * 4. Categorías de sus ingredientes
+			 * 3. CategorÃ­as de la receta
+			 * 4. CategorÃ­as de sus ingredientes
 			 * 5. Multimedia* 
 			 * 
 			 * el 1 y 2 tienen el mismo esquema
@@ -265,7 +265,7 @@ public class ThreadClient implements Runnable{
 			//establece q codigo sql va a ejecutar
 			stmt = conn.prepareCall(LOGIN);
 			/*setea los parametros a partir del mensaje del cliente
-			 * 1: nickname 2: contraseña 3: resultado 4: esAdmin
+			 * 1: nickname 2: contraseÃ±a 3: resultado 4: esAdmin
 			 * 3 y 4 son parametros de salida
 			 */			
 			stmt.setString(1, message.get(1));
