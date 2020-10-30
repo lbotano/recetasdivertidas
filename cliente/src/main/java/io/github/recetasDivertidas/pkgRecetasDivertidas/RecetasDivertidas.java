@@ -3,15 +3,11 @@ package io.github.recetasDivertidas.pkgRecetasDivertidas;
 import io.github.recetasDivertidas.pkgBusquedaTexto.BusquedaTextoLayout;
 import javafx.event.Event;
 import javafx.event.EventHandler;
-import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import io.github.recetasDivertidas.pkgBusquedaIngredientes.BusquedaIngredientesLayout;
@@ -19,10 +15,9 @@ import io.github.recetasDivertidas.pkgBusquedaIngredientes.BusquedaIngredientesL
 public class RecetasDivertidas extends Stage{
 
     public static boolean admin;
-    private int btnI;
     public BorderPane root;
-    public final static String background = "#FFFFFF";
-    public final static String hovered = "#F1F1F1";
+    public final static String BACKGROUND = "#FFFFFF";
+    public final static String HOVERED = "#F1F1F1";
     public static String username;
     public enum pestanias
     {
@@ -55,6 +50,7 @@ public class RecetasDivertidas extends Stage{
         HBox hbox = new HBox();
         //vbox.setFillWidth(true);
 
+        int btnI;
         if(admin){
             btnI = 7;
         }else {
@@ -108,15 +104,15 @@ public class RecetasDivertidas extends Stage{
             imageViews[i].setFitWidth(100);
 
             int finalI = i;
-            btn[i].setOnMouseEntered((EventHandler<Event>) event -> btn[finalI].setStyle("-fx-background-color: " + hovered));
-            btn[i].setOnMouseExited((EventHandler<Event>) event -> btn[finalI].setStyle("-fx-background-color: " + background));
+            btn[i].setOnMouseEntered((EventHandler<Event>) event -> btn[finalI].setStyle("-fx-background-color: " + HOVERED));
+            btn[i].setOnMouseExited((EventHandler<Event>) event -> btn[finalI].setStyle("-fx-background-color: " + BACKGROUND));
             //btn[i].setGraphic(imageViews[i]);
-            btn[i].setStyle("-fx-background-color: " + background);
+            btn[i].setStyle("-fx-background-color: " + BACKGROUND);
             hbox.getChildren().add(btn[i]);
         }
 
-        hbox.setStyle("-fx-background-color: "+ background );
-        root.setStyle("-fx-background-color: " + background);
+        hbox.setStyle("-fx-background-color: "+ BACKGROUND);
+        root.setStyle("-fx-background-color: " + BACKGROUND);
         //Estoy enojado
         return hbox;
     }
