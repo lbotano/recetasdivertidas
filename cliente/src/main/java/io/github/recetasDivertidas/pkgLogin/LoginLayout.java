@@ -32,7 +32,6 @@ public class LoginLayout extends BorderPane {
         grid.setVgap(8);
         grid.setHgap(10);
 
-
         //Username setup
         Label lblUsername = new Label("Usuario:");
         grid.add(lblUsername, 0, 0);

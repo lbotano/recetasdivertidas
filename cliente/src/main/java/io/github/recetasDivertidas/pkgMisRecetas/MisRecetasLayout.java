@@ -1,4 +1,6 @@
 package io.github.recetasDivertidas.pkgMisRecetas;
 
-public class MisRecetasLayout {
+import javafx.scene.layout.BorderPane;
+
+public class MisRecetasLayout extends BorderPane {
 }

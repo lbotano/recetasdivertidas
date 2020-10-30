@@ -1,6 +1,10 @@
 package io.github.recetasDivertidas.pkgRecetasDivertidas;
 
+import io.github.recetasDivertidas.pkgAdmin.AdminLayout;
+import io.github.recetasDivertidas.pkgBusquedaCategoria.BusquedaCategoriaLayout;
 import io.github.recetasDivertidas.pkgBusquedaTexto.BusquedaTextoLayout;
+import io.github.recetasDivertidas.pkgMisRecetas.MisRecetasLayout;
+import io.github.recetasDivertidas.pkgSubir.SubirLayout;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -37,7 +41,7 @@ public class RecetasDivertidas extends Stage{
         RecetasDivertidas.username = username;
 
         root = new BorderPane();
-        root.setTop(sidePane());
+        root.setTop(topPane());
         Scene scene = new Scene(root,800,600);
         this.setScene(scene);
         this.current = pestanias.INICIO;
@@ -46,7 +50,7 @@ public class RecetasDivertidas extends Stage{
 
     }
 
-    private HBox sidePane(){
+    private HBox topPane(){
         HBox hbox = new HBox();
         //vbox.setFillWidth(true);
 
@@ -133,7 +137,7 @@ public class RecetasDivertidas extends Stage{
             }
             case BUSQUEDACATEGORIA -> {
                 if(!current.equals(pestanias.BUSQUEDACATEGORIA)) {
-                    this.root.setCenter(new BusquedaIngredientesLayout());
+                    this.root.setCenter(new BusquedaCategoriaLayout());
                     current = pestanias.BUSQUEDACATEGORIA;
                 }
             }
@@ -145,19 +149,19 @@ public class RecetasDivertidas extends Stage{
             }
             case SUBIRRECETA -> {
                 if(!current.equals(pestanias.SUBIRRECETA)) {
-                    this.root.setCenter(new BusquedaIngredientesLayout());
+                    this.root.setCenter(new SubirLayout());
                     current = pestanias.SUBIRRECETA;
                 }
             }
             case MISRECETAS -> {
                 if(!current.equals(pestanias.MISRECETAS)) {
-                    this.root.setCenter(new BusquedaIngredientesLayout());
+                    this.root.setCenter(new MisRecetasLayout());
                     current = pestanias.MISRECETAS;
                 }
             }
             case ADMIN -> {
                 if(!current.equals(pestanias.ADMIN)) {
-                    this.root.setCenter(new BusquedaIngredientesLayout());
+                    this.root.setCenter(new AdminLayout());
                     current = pestanias.ADMIN;
                 }
             }
