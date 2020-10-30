@@ -1,8 +1,5 @@
 package io.github.recetasDivertidas.pkgBusquedaTexto;
 
-import io.github.recetasDivertidas.pkgRecetasDivertidas.RecetasDivertidas;
-import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -14,8 +11,10 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 
+import java.io.IOException;
+
 public class BusquedaTextoLayout extends BorderPane {
-    private VBox resultado;
+    private VBox vbox;
     private int pagActual = 0;
     private TextField txtBusqueda;
 
@@ -35,15 +34,21 @@ public class BusquedaTextoLayout extends BorderPane {
         GridPane gridPane = new GridPane();
         Label lblExplain = new Label();
         txtBusqueda = new TextField();
-        resultado = new VBox();
+        vbox = new VBox();
 
-        lblExplain.setText("Aqui puedes buscar recetas escribiendo!!");
+        lblExplain.setText("Encuentra recetas escribiendo aqui");
         lblExplain.setFont(new Font("Arial", 16));
 
         txtBusqueda.setPromptText("Escribeme");
 
         Button btnBuscar = new Button("Buscar");
-        btnBuscar.setOnAction(e -> BusquedaTextoFuncionalidad.buscarReceta(resultado));
+        btnBuscar.setOnAction(e -> {
+            try {
+                BusquedaTextoFuncionalidad.obtenerRecetas(vbox,pagActual,txtBusqueda.getText());
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
+        });
 
         gridPane.setPadding(new Insets(10, 10, 10, 10));
         gridPane.setVgap(10);
@@ -59,7 +64,7 @@ public class BusquedaTextoLayout extends BorderPane {
     private ScrollPane getScrollPane(){
         ScrollPane scrollPane = new ScrollPane();
 
-        scrollPane.setContent(resultado);
+        scrollPane.setContent(vbox);
         scrollPane.setFitToHeight(true);
         scrollPane.setFitToWidth(true);
 
@@ -72,8 +77,23 @@ public class BusquedaTextoLayout extends BorderPane {
         Button btnPrevPage = new Button("<-");
 
         //Toy desarrollando esto
-        btnNextPage.setOnAction(e -> BusquedaTextoFuncionalidad.obtenerRecetas(pagActual + 1, txtBusqueda.getText()));
-        btnPrevPage.setOnAction(e -> BusquedaTextoFuncionalidad.obtenerRecetas(pagActual - 1, txtBusqueda.getText()));
+        btnNextPage.setOnAction(e -> {
+            try {
+                BusquedaTextoFuncionalidad.obtenerRecetas(vbox,pagActual + 1, txtBusqueda.getText());
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
+        });
+        btnPrevPage.setOnAction(e -> {
+            if (pagActual != 0) {
+                try {
+                    BusquedaTextoFuncionalidad.obtenerRecetas(vbox,pagActual - 1, txtBusqueda.getText());
+                    pagActual--;
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
+            }
+        });
 
         hbox.getChildren().addAll(btnPrevPage,btnNextPage);
 

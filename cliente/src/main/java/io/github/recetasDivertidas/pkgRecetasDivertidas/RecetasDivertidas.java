@@ -43,43 +43,12 @@ public class RecetasDivertidas extends Stage{
 
         root = new BorderPane();
         root.setTop(sidePane());
-        root.setCenter(addGridPane());
         Scene scene = new Scene(root,800,600);
         this.setScene(scene);
         this.current = pestanias.INICIO;
         this.setTitle("Recetas Divertidas");
         this.getIcons().add(new Image(getClass().getResourceAsStream("/logo_chiquito.png")));
 
-    }
-
-    private GridPane addGridPane() {
-
-        GridPane grid = new GridPane();
-        grid.setPadding(new Insets(10, 10, 10, 10));
-        grid.setVgap(8);
-        grid.setHgap(10);
-
-
-        //Username setup
-        Label lblUsername = new Label("Usuario:");
-        grid.add(lblUsername, 0, 0);
-
-        TextField tbUsername = new TextField();
-        tbUsername.setPrefSize(180, 10);
-        tbUsername.setPromptText("Escriba su usuario aqui");
-        grid.add(tbUsername, 1, 0);
-
-        //Password setup
-        Label lblPassword = new Label("Contraseña:");
-        grid.add(lblPassword, 0, 1);
-
-        TextField tbPassword = new TextField();
-        tbPassword.setPrefSize(180, 10);
-        tbPassword.setPromptText("Escriba su contraseña aqui");
-        grid.add(tbPassword, 1, 1);
-
-
-        return grid;
     }
 
     private HBox sidePane(){
