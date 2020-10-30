@@ -20,10 +20,15 @@ public final class BusquedaTextoFuncionalidad{
    }
 
    public static void buscarReceta(VBox resultado){
-      resultado.getChildren().add(addReceta());
+      resultado.getChildren().addAll(addReceta());
    }
 
-   private static GridPane addReceta(){
+   /*Esto podes ignorarlo, tipo, es codigo hecho para probar como se ve cuando agregas una receta, lo que se deberia
+     hacer es obtener el arraylist<string> que te manda el servidor y añadirlos a un layout separados por id
+     cada layout es una receta, si apretas el layout se abre la pestaña con la info, y eso es otro mensaje que se manda
+   * */
+   private static ArrayList<GridPane> addReceta(){
+      ArrayList<GridPane> recetas = new ArrayList<>();
       GridPane grid = new GridPane();
       //grid.setPadding(new Insets(10, 10, 10, 10));
       grid.setVgap(0);
@@ -34,7 +39,6 @@ public final class BusquedaTextoFuncionalidad{
 
       grid.setStyle("-fx-background-color: "+ RecetasDivertidas.background);
 
-      ArrayList<Receta> recetas = new ArrayList<>();
 
       //Username setup
       Label lblTitulo = new Label("Titulo");
@@ -49,7 +53,7 @@ public final class BusquedaTextoFuncionalidad{
       lblIngredientes.setFont(new Font("Arial", 11));
       grid.add(lblIngredientes, 0, 2);
 
-      return grid;
+      return recetas;
    }
 
 

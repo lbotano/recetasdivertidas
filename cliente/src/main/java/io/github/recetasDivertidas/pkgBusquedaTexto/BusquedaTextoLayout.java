@@ -19,11 +19,15 @@ public class BusquedaTextoLayout extends BorderPane {
     private int pagActual = 0;
     private TextField txtBusqueda;
 
+    /*Aca se maneja como se ve la pestaña de busqueda de texto y se intenta que todo lo que es funcionalidad
+      se maneje en BusquedaTextoFuncionalidad, por ende los eventos se manejan desde ahi
+     */
     public BusquedaTextoLayout(){
         super();
 
         this.setTop(getGridPane());
         this.setCenter(getScrollPane());
+        this.setBottom(getHbox());
 
     }
 
@@ -65,7 +69,7 @@ public class BusquedaTextoLayout extends BorderPane {
     private HBox getHbox(){
         HBox hbox = new HBox();
         Button btnNextPage = new Button("->");
-        Button btnPrevPage = new Button("->");
+        Button btnPrevPage = new Button("<-");
 
         //Toy desarrollando esto
         btnNextPage.setOnAction(e -> BusquedaTextoFuncionalidad.obtenerRecetas(pagActual + 1, txtBusqueda.getText()));
