@@ -48,6 +48,7 @@ public class ThreadClient implements Runnable{
 	private static final String CONSRECETAING = "{call spBuscarRecetaPorIngr(?,?)}";	
 	private static final String CONSRECETATEXT = "{}";
 	private static final String DATOSRECETA = "{call spGetDatosReceta(?)}";
+	private static final String INGREDIENTES = "SELECT * FROM ingrediente;";
 	private static final String LISTARCATREC = "SELECT * FROM categoriadereceta;";
 	private static final String LISTARCATING = "SELECT * FROM categoriadeingrediente;";
 	private static final String LOGIN = "{call spInicioSesion(?,?,?,?)}";
@@ -257,6 +258,23 @@ public class ThreadClient implements Runnable{
 			
 		}catch (SQLException e) {
 			exceptionHandler(e, "DATOSRECETAFAIL");
+		}
+	}
+
+	private void ingredientes() {
+		try {
+			pstmt = conn.prepareStatement(INGREDIENTES);
+			ResultSet rs = pstmt.executeQuery();
+			answer.add("INGREDIENTESOK");
+			while(rs.next()) {
+				//id del ingrediente
+				answer.add(String.valueOf(rs.getInt(1)));
+				//nombre del ingrediente
+				answer.add(rs.getString(2));
+			}
+			
+		}catch(SQLException e) {
+			exceptionHandler(e, "INGREDIENTESFAIL");
 		}
 	}
 	
@@ -489,6 +507,9 @@ public class ThreadClient implements Runnable{
 	        	break;
 	        case "DATOSRECETA":
 	        	datosReceta();
+	        	break;
+	        case "INGREDIENTES":
+	        	ingredientes();
 	        	break;
 	        case "LISTARCATING":
 	        	listarCatIng();
