@@ -498,6 +498,24 @@ BEGIN
 END//
 DELIMITER ;
 
+-- Buscar recetas por texto
+DROP PROCEDURE IF EXISTS spBuscarRecetasPorTexto;
+DELIMITER //
+CREATE PROCEDURE spBuscarRecetasPorTexto (
+	texto TEXT -- El texto a buscar
+)
+BEGIN
+	DECLARE patron text;
+    SELECT CONCAT('%', texto, '%') INTO patron;
+    
+	SELECT * FROM Receta
+    WHERE
+		rNombre LIKE patron OR
+        rDescripcion LIKE patron OR
+        rInstrucciones LIKE patron;
+END//
+DELIMITER ;
+
 -- Borrar receta (como usuario, sólo se puede borrar la receta de uno mismo)
 DROP PROCEDURE IF EXISTS spUsuarioBorrarReceta;
 DELIMITER //
