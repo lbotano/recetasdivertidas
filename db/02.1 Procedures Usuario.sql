@@ -388,8 +388,7 @@ BEGIN
     PREPARE stmt FROM 'SELECT
 			rID,
 			rAutor,
-			rNombre,
-			coincidencias
+			rNombre
 		FROM (
 			SELECT
 				r.rID,
@@ -429,8 +428,7 @@ BEGIN
     PREPARE stmt FROM 'SELECT
 			rID,
 			rAutor,
-			rNombre,
-			coincidencias
+			rNombre
 		FROM (
 			SELECT
 				r.rID,
@@ -470,8 +468,7 @@ BEGIN
     PREPARE stmt FROM 'SELECT
 		rID,
 		rAutor,
-		rNombre,
-		COUNT(coincidencias)
+		rNombre
 	FROM (
 		SELECT
 			r.rID,
@@ -494,7 +491,7 @@ BEGIN
 			COUNT(coincidencias) > 0
 	) resultadosConOrden
 	GROUP BY rID
-	ORDER BY coincidencias DESC
+	ORDER BY COUNT(coincidencias) DESC
 	LIMIT ?, ?;';
     EXECUTE stmt USING @pagina, @paginaHasta;
     
