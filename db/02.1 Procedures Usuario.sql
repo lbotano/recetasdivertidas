@@ -388,8 +388,7 @@ BEGIN
     PREPARE stmt FROM 'SELECT
 			rID,
 			rAutor,
-			rNombre,
-			coincidencias
+			rNombre
 		FROM (
 			SELECT
 				r.rID,
@@ -429,8 +428,7 @@ BEGIN
     PREPARE stmt FROM 'SELECT
 			rID,
 			rAutor,
-			rNombre,
-			coincidencias
+			rNombre
 		FROM (
 			SELECT
 				r.rID,
@@ -470,8 +468,7 @@ BEGIN
     PREPARE stmt FROM 'SELECT
 		rID,
 		rAutor,
-		rNombre,
-		COUNT(coincidencias)
+		rNombre
 	FROM (
 		SELECT
 			r.rID,
@@ -494,10 +491,28 @@ BEGIN
 			COUNT(coincidencias) > 0
 	) resultadosConOrden
 	GROUP BY rID
-	ORDER BY coincidencias DESC
+	ORDER BY COUNT(coincidencias) DESC
 	LIMIT ?, ?;';
     EXECUTE stmt USING @pagina, @paginaHasta;
     
+END//
+DELIMITER ;
+
+-- Buscar recetas por texto
+DROP PROCEDURE IF EXISTS spBuscarRecetasPorTexto;
+DELIMITER //
+CREATE PROCEDURE spBuscarRecetasPorTexto (
+	texto TEXT -- El texto a buscar
+)
+BEGIN
+	DECLARE patron text;
+    SELECT CONCAT('%', texto, '%') INTO patron;
+    
+	SELECT * FROM Receta
+    WHERE
+		rNombre LIKE patron OR
+        rDescripcion LIKE patron OR
+        rInstrucciones LIKE patron;
 END//
 DELIMITER ;
 
