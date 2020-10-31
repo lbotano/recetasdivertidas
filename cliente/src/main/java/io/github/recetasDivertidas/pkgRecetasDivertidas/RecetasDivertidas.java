@@ -16,6 +16,8 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import io.github.recetasDivertidas.pkgBusquedaIngredientes.BusquedaIngredientesLayout;
 
+import java.io.IOException;
+
 public class RecetasDivertidas extends Stage{
 
     public static boolean admin;
@@ -70,36 +72,79 @@ public class RecetasDivertidas extends Stage{
         for (int i = 0; i < btnI; i++) {
             btn[i] = new Button();
 
+
             switch (i) {
                 case 0 ->{
                     btn[i].setText("Inicio");
                     img[i] = new Image(getClass().getResourceAsStream("/inicio.png"));
-                    btn[i].setOnAction(e -> cambiarPestania(pestanias.INICIO));
+                    btn[i].setOnAction(e -> {
+                        try {
+                            cambiarPestania(pestanias.INICIO);
+                        } catch (IOException ioException) {
+                            ioException.printStackTrace();
+                        }
+                    });
                 }
 
                 case 1 ->{
                     btn[i].setText("Buscar por Ingrediente");
-                    btn[i].setOnAction(e -> cambiarPestania(pestanias.BUSQUEDAINGREDIENTES) );
+                    btn[i].setOnAction(e -> {
+                        try {
+                            cambiarPestania(pestanias.BUSQUEDAINGREDIENTES);
+                        } catch (IOException ioException) {
+                            ioException.printStackTrace();
+                        }
+                    });
                 }
                 case 2 ->{
                     btn[i].setText("Buscar por Texto");
-                    btn[i].setOnAction(e -> cambiarPestania(pestanias.BUSQUEDATEXTO));
+                    btn[i].setOnAction(e -> {
+                        try {
+                            cambiarPestania(pestanias.BUSQUEDATEXTO);
+                        } catch (IOException ioException) {
+                            ioException.printStackTrace();
+                        }
+                    });
                 }
                 case 3 ->{
                     btn[i].setText("Buscar por Categoria");
-                    btn[i].setOnAction(e -> cambiarPestania(pestanias.BUSQUEDACATEGORIA));
+                    btn[i].setOnAction(e -> {
+                        try {
+                            cambiarPestania(pestanias.BUSQUEDACATEGORIA);
+                        } catch (IOException ioException) {
+                            ioException.printStackTrace();
+                        }
+                    });
                 }
                 case 4 ->{
                     btn[i].setText("Mis Recetas");
-                    btn[i].setOnAction(e -> cambiarPestania(pestanias.MISRECETAS));
+                    btn[i].setOnAction(e -> {
+                        try {
+                            cambiarPestania(pestanias.MISRECETAS);
+                        } catch (IOException ioException) {
+                            ioException.printStackTrace();
+                        }
+                    });
                 }
                 case 5 ->{
                     btn[i].setText("Subir Receta");
-                    btn[i].setOnAction(e -> cambiarPestania(pestanias.SUBIRRECETA));
+                    btn[i].setOnAction(e -> {
+                        try {
+                            cambiarPestania(pestanias.SUBIRRECETA);
+                        } catch (IOException ioException) {
+                            ioException.printStackTrace();
+                        }
+                    });
                 }
                 case 6 ->{
                     btn[i].setText("Admin");
-                    btn[i].setOnAction(e -> cambiarPestania(pestanias.ADMIN));
+                    btn[i].setOnAction(e -> {
+                        try {
+                            cambiarPestania(pestanias.ADMIN);
+                        } catch (IOException ioException) {
+                            ioException.printStackTrace();
+                        }
+                    });
                 }
             }
 
@@ -121,7 +166,7 @@ public class RecetasDivertidas extends Stage{
         return hbox;
     }
 
-    private void cambiarPestania(pestanias pestania){
+    private void cambiarPestania(pestanias pestania) throws IOException {
         switch (pestania){
             case INICIO -> {
                 if(!current.equals(pestanias.INICIO)) {

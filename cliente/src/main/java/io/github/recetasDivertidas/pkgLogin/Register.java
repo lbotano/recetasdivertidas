@@ -228,7 +228,6 @@ public class Register extends Stage {
 
         if (corroborarDatos()){
             message.addAll(getItems());
-
             ArrayList<String> ans = Conexion.sendMessage(message);
             if(ans.size() != 0) {
                 switch (ans.get(0)) {
@@ -272,15 +271,6 @@ public class Register extends Stage {
         itemList.add(pwdRegistro.getText());
         itemList.add(getGenero());
         itemList.add(inputRegistro[4].getText());
-
-        System.out.println(inputRegistro[0].getText());
-        System.out.println(String.valueOf(preguntaSeguridad.getValue().getId()));
-        System.out.println(inputRegistro[1].getText());
-        System.out.println(inputRegistro[2].getText());
-        System.out.println(inputRegistro[3].getText());
-        System.out.println(pwdRegistro.getText());
-        System.out.println(getGenero());
-        System.out.println(inputRegistro[4].getText());
 
         return itemList;
     }
@@ -388,10 +378,10 @@ public class Register extends Stage {
 
         switch(ans.get(0)){
             case "PREGUNTASSEG" ->{
-                int i= 1;
+                int i = 1;
                 while(i < ans.size()){
                     preguntas.add(new PreguntaSeguridad(Integer.parseInt(ans.get(i)), ans.get(i+1)));
-                    i = i+2;
+                    i += 2;
                 }
             }
             case "MESSAGEERROR" ->{

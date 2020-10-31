@@ -1,5 +1,7 @@
 package io.github.recetasDivertidas.pkgSubir;
 
+import io.github.recetasDivertidas.pkgConexion.Conexion;
+import io.github.recetasDivertidas.pkgRecetasDivertidas.Categoria;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -7,9 +9,11 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
 import org.controlsfx.control.CheckComboBox;
 
+import java.io.IOException;
+
 public class SubirLayout extends GridPane {
 
-    public SubirLayout(){
+    public SubirLayout() throws IOException {
         this.setPadding(new Insets(10, 10, 10, 10));
         this.setVgap(8);
         this.setHgap(10);
@@ -38,11 +42,11 @@ public class SubirLayout extends GridPane {
         tbInstrucciones.setOpaqueInsets(new Insets(100,100,10,10));
         this.add(tbInstrucciones,0,4,2,1);
 
-        CheckComboBox<String> cmbCategoriaReceta = new CheckComboBox<>();
-        cmbCategoriaReceta.getItems().add("SI");
-        cmbCategoriaReceta.getItems().add("NO");
-        cmbCategoriaReceta.getItems().add("JAMAS!");
-        this.add(cmbCategoriaReceta,1,2);
+        CheckComboBox<Categoria> cmbCategoriaReceta = new CheckComboBox<>();
+        if (Conexion.isSvResponse()) {
+            cmbCategoriaReceta.getItems().addAll(SubirFuncionalidad.getCategoriasReceta());
+        }
+        this.add(cmbCategoriaReceta,1,2,2,1);
 
         CheckComboBox cmbCategoriaIngrediente = new CheckComboBox();
 
