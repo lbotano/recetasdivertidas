@@ -372,15 +372,17 @@ public class Register extends Stage {
         ArrayList<String> message = new ArrayList<>();
         message.add("PREGUNTASSEG");
         //Espera a que le manden una respuesta
-        ArrayList<String> ans = Conexion.sendMessage(message);
+        ArrayList<String> answer = Conexion.sendMessage(message);
         //Se crea el arraylist que contiene las preguntas de seguridad
         ArrayList<PreguntaSeguridad> preguntas = new ArrayList<>();
+        
+        if (answer.size() < 1) throw new IOException();
 
-        switch(ans.get(0)){
+        switch(answer.get(0)){
             case "PREGUNTASSEG" ->{
                 int i = 1;
-                while(i < ans.size()){
-                    preguntas.add(new PreguntaSeguridad(Integer.parseInt(ans.get(i)), ans.get(i+1)));
+                while(i < answer.size()){
+                    preguntas.add(new PreguntaSeguridad(Integer.parseInt(answer.get(i)), answer.get(i+1)));
                     i += 2;
                 }
             }
@@ -390,8 +392,8 @@ public class Register extends Stage {
                 alerta.showAndWait();
             }
             case "PREGUNTASSEGFAIL" -> {
-                Alerta alerta = new Alerta(Alert.AlertType.ERROR, "Error al obtener preguntas de seguridad.", ans.get(1));
-                System.out.println(ans.get(0));
+                Alerta alerta = new Alerta(Alert.AlertType.ERROR, "Error al obtener preguntas de seguridad.", answer.get(1));
+                System.out.println(answer.get(0));
                 alerta.showAndWait();
             }
             case "ELEMENTBLANK" ->{
