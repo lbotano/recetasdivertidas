@@ -1,10 +1,10 @@
 package io.github.recetasDivertidas.pkgRecetasDivertidas;
 
-public class Categoria {
-    private int id;
-    private String nombre;
+public class CategoriaIngrediente {
+    private final int id;
+    private final String nombre;
 
-    public Categoria(int id, String nombre){
+    public CategoriaIngrediente(int id, String nombre){
         this.id = id;
         this.nombre = nombre;
     }
@@ -21,4 +21,5 @@ public class Categoria {
     public String getNombre() {
         return nombre;
     }
+
 }

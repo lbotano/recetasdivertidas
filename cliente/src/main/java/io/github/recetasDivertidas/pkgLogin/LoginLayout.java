@@ -114,24 +114,39 @@ public class LoginLayout extends BorderPane {
         }
 
         switch (ans.get(0)) {
-            case "LOGINFAIL":
+            case "LOGINFAIL" -> {
                 alert = new Alerta(Alert.AlertType.ERROR, "Error al logearse", ans.get(1));
                 alert.showAndWait();
 
                 return false;
-            case "MESSAGEERROR":
+            }
+            case "MESSAGEERROR" -> {
                 alert = new Alerta(Alert.AlertType.ERROR, "Error al logearse",
                         "Hubo un problema al enviar la peticion");
                 alert.showAndWait();
 
                 return false;
-            case "LOGINOK":
+            }
+            case "LOGINOK" -> {
                 admin = ans.get(1).equals("true");
 
                 return true;
-            default:
+            }
+            case "ELEMENTBLANK" ->{
+                Alerta alerta = new Alerta(Alert.AlertType.ERROR, "Error en el mensaje",
+                        "El mensaje contenia espacios en blanco");
+                alerta.showAndWait();
+            }
+            case "FORMATERROR" ->{
+                Alerta alerta = new Alerta(Alert.AlertType.ERROR, "Error en el mensaje",
+                        "Hubo un problema en el formato del mensaje");
+                alerta.showAndWait();
+            }
+            default -> {
                 return false;
+            }
         }
+        return false;
     }
 
 }

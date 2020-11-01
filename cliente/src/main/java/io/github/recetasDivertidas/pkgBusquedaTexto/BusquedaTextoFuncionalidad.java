@@ -66,32 +66,6 @@ public final class BusquedaTextoFuncionalidad{
 
 
       resultado.getChildren().addAll(recetas);
-
-
-
-      /*GridPane grid = new GridPane();
-      //grid.setPadding(new Insets(10, 10, 10, 10));
-      grid.setVgap(0);
-      grid.setHgap(0);
-      grid.setOnMouseClicked((EventHandler<Event>) event -> BusquedaTextoFuncionalidad.openReceta(0));
-      grid.setOnMouseEntered((EventHandler<Event>) event -> grid.setStyle("-fx-background-color: "+ RecetasDivertidas.hovered));
-      grid.setOnMouseExited((EventHandler<Event>) event -> grid.setStyle("-fx-background-color: "+ RecetasDivertidas.background));
-
-      grid.setStyle("-fx-background-color: "+ RecetasDivertidas.background);
-
-
-      //Username setup
-      Label lblTitulo = new Label("Titulo");
-      lblTitulo.setFont(new Font("Arial", 16));
-      grid.add(lblTitulo, 0, 0);
-
-      Label lblDescripcion = new Label("Descripcion");
-      lblDescripcion.setFont(new Font("Arial", 11));
-      grid.add(lblDescripcion, 0, 1);
-
-      Label lblIngredientes = new Label("Ingredientes");
-      lblIngredientes.setFont(new Font("Arial", 11));
-      grid.add(lblIngredientes, 0, 2);*/
    }
 
 

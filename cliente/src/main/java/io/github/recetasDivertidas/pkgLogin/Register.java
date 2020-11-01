@@ -166,6 +166,7 @@ public class Register extends Stage {
             preguntaSeguridad.getItems().addAll(resPreguntas);
         }else{
             Alerta alerta = new Alerta(Alert.AlertType.ERROR, "Hubo un error","Fallo de conexion con el servidor");
+            alerta.showAndWait();
         }
         preguntaSeguridad.setPromptText("Elija una pregunta de seguridad");
         preguntaSeguridad.setPrefSize(250,10);
@@ -245,6 +246,11 @@ public class Register extends Stage {
                         System.out.println(ans.get(0));
                         alerta.showAndWait();
                     }
+                    case "ELEMENTBLANK" ->{
+                        alerta = new Alerta(Alert.AlertType.ERROR, "Error en el mensaje",
+                                "El mensaje contenia espacios en blanco");
+                        alerta.showAndWait();
+                    }
                     default -> {
                         alerta = new Alerta(Alert.AlertType.ERROR, "Esto es vergonzoso", "Esto no deberia haber sucedido");
                         alerta.showAndWait();
@@ -279,15 +285,9 @@ public class Register extends Stage {
         String res = "";
 
         switch (genero.getValue()){
-            case "Masculino" -> {
-                res = "0";
-            }
-            case "Femenino" ->{
-                res = "1";
-            }
-            case "Otro" ->{
-                res = "2";
-            }
+            case "Masculino" -> res = "0";
+            case "Femenino" -> res = "1";
+            case "Otro" -> res = "2";
         }
 
         return res;
@@ -392,6 +392,16 @@ public class Register extends Stage {
             case "PREGUNTASSEGFAIL" -> {
                 Alerta alerta = new Alerta(Alert.AlertType.ERROR, "Error con al obtener preguntas de seguridad", ans.get(1));
                 System.out.println(ans.get(0));
+                alerta.showAndWait();
+            }
+            case "ELEMENTBLANK" ->{
+                Alerta alerta = new Alerta(Alert.AlertType.ERROR, "Error en el mensaje",
+                        "El mensaje contenia espacios en blanco");
+                alerta.showAndWait();
+            }
+            case "FORMATERROR" ->{
+                Alerta alerta = new Alerta(Alert.AlertType.ERROR, "Error en el mensaje",
+                        "Hubo un problema en el formato del mensaje");
                 alerta.showAndWait();
             }
         }
