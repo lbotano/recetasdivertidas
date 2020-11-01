@@ -385,23 +385,23 @@ public class Register extends Stage {
                 }
             }
             case "MESSAGEERROR" ->{
-                Alerta alerta = new Alerta(Alert.AlertType.ERROR, "Error en el mensaje",
-                        "Hubo un problema al comunicarse con el servidor");
+                Alerta alerta = new Alerta(Alert.AlertType.ERROR, "Error en el mensaje.",
+                        "Hubo un problema al comunicarse con el servidor.");
                 alerta.showAndWait();
             }
             case "PREGUNTASSEGFAIL" -> {
-                Alerta alerta = new Alerta(Alert.AlertType.ERROR, "Error con al obtener preguntas de seguridad", ans.get(1));
+                Alerta alerta = new Alerta(Alert.AlertType.ERROR, "Error al obtener preguntas de seguridad.", ans.get(1));
                 System.out.println(ans.get(0));
                 alerta.showAndWait();
             }
             case "ELEMENTBLANK" ->{
-                Alerta alerta = new Alerta(Alert.AlertType.ERROR, "Error en el mensaje",
-                        "El mensaje contenia espacios en blanco");
+                Alerta alerta = new Alerta(Alert.AlertType.ERROR, "Error en el mensaje.",
+                        "El mensaje contenía espacios en blanco.");
                 alerta.showAndWait();
             }
             case "FORMATERROR" ->{
-                Alerta alerta = new Alerta(Alert.AlertType.ERROR, "Error en el mensaje",
-                        "Hubo un problema en el formato del mensaje");
+                Alerta alerta = new Alerta(Alert.AlertType.ERROR, "Error en el mensaje.",
+                        "Hubo un problema en el formato del mensaje.");
                 alerta.showAndWait();
             }
         }

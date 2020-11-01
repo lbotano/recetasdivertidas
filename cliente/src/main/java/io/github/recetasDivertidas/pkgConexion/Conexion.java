@@ -20,6 +20,10 @@ public final class Conexion {
     public static ArrayList<String> sendMessage(ArrayList<String> message) throws IOException {
         ArrayList<String> answer = new ArrayList<>();
 
+        for(String s: message) {
+            System.out.println("Send: " + s);
+        }
+
         try {
             socket = new Socket(HOST, PORT);
             output = new ObjectOutputStream(socket.getOutputStream());
@@ -30,8 +34,8 @@ public final class Conexion {
 
             socket.close();
         } catch (Exception e) {
-            Alerta alert = new Alerta(Alert.AlertType.ERROR, "Se ha detectado un problema con el servidor",
-                    "Upsi! Estamos teniendo problemas en nuestros servidores!!!");
+            Alerta alert = new Alerta(Alert.AlertType.ERROR, "Se ha detectado un problema con el servidor.",
+                    "¡Upsi! ¡Estamos teniendo problemas en nuestros servidores!");
             alert.showAndWait();
         }
 
@@ -58,8 +62,8 @@ public final class Conexion {
             socket.close();
         } catch(Exception e){
             svResponse = false;
-            Alerta alert = new Alerta(Alert.AlertType.ERROR,"Se ha detectado un problema con el servidor",
-                    "No se ha detectado conexion con el servidor");
+            Alerta alert = new Alerta(Alert.AlertType.ERROR,"Se ha detectado un problema con el servidor.",
+                    "No se ha detectado ninguna conexión con el servidor.");
 
             alert.showAndWait();
         }

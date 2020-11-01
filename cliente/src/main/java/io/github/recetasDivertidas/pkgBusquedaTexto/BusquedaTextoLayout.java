@@ -39,7 +39,7 @@ public class BusquedaTextoLayout extends BorderPane {
         lblExplain.setText("Encuentra recetas escribiendo aqui");
         lblExplain.setFont(new Font("Arial", 16));
 
-        txtBusqueda.setPromptText("Escribeme");
+        txtBusqueda.setPromptText("Escríbeme");
 
         Button btnBuscar = new Button("Buscar");
         btnBuscar.setOnAction(e -> {
@@ -73,7 +73,7 @@ public class BusquedaTextoLayout extends BorderPane {
 
     private HBox getHbox(){
         HBox hbox = new HBox();
-        Button btnNextPage = new Button("->");
+        Button btnNextPage = new Button("->"); // TODO: Poner conitos UwU
         Button btnPrevPage = new Button("<-");
 
         //Toy desarrollando esto
