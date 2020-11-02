@@ -42,11 +42,11 @@ public class Login {
     @FXML
     public void registrarse() {
         if (Conexion.isSvResponse()) {
-            try {
-                Stage stageRegistro = new Stage();
-                // Evitar que la ventana se abra más de una vez
-                stageRegistro.initModality(Modality.APPLICATION_MODAL);
+            Stage stageRegistro = new Stage();
+            // Evitar que la ventana se abra más de una vez
+            stageRegistro.initModality(Modality.APPLICATION_MODAL);
 
+            try {
                 Pane rootRegistro = FXMLLoader.load(getClass().getResource("/fxml/registro.fxml"));
 
                 Scene escenaRegistro = new Scene(rootRegistro);
@@ -54,10 +54,7 @@ public class Login {
                 stageRegistro.setScene(escenaRegistro);
                 stageRegistro.show();
             } catch (IOException e) {
-                new Alerta(Alert.AlertType.ERROR,
-                        "Error inesperado",
-                        "Hubo un error inesperado.").show();
-                System.out.println("Hubo un error al cargar /fxml/registro.fxml");
+                e.printStackTrace();
             }
         }
     }

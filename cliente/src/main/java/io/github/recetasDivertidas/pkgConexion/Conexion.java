@@ -18,26 +18,25 @@ public final class Conexion {
     private final static int PORT = 7070;
 
     public static ArrayList<String> sendMessage(ArrayList<String> message) throws IOException {
-        ArrayList<String> answer = new ArrayList<>();
+        ArrayList<String> answer;
 
         for(String s: message) {
             System.out.println("Send: " + s);
         }
 
+        socket = new Socket(HOST, PORT);
+        output = new ObjectOutputStream(socket.getOutputStream());
+        socket.setSoTimeout(5000);
+        input = new ObjectInputStream(socket.getInputStream());
+
+        output.writeObject(message);
         try {
-            socket = new Socket(HOST, PORT);
-            output = new ObjectOutputStream(socket.getOutputStream());
-            input = new ObjectInputStream(socket.getInputStream());
-
-            output.writeObject(message);
             answer = (ArrayList<String>) input.readObject();
-
-            socket.close();
-        } catch (Exception e) {
-            Alerta alert = new Alerta(Alert.AlertType.ERROR, "Se ha detectado un problema con el servidor.",
-                    "¡Upsi! ¡Estamos teniendo problemas en nuestros servidores!");
-            alert.showAndWait();
+        } catch (ClassNotFoundException e) {
+            throw new IOException();
         }
+
+        socket.close();
 
         return answer;
     }
@@ -45,27 +44,11 @@ public final class Conexion {
     public static boolean isSvResponse() {
         try {
             socket = new Socket(HOST, PORT);
-
             svResponse = true;
             socket.close();
         } catch(Exception e){
             svResponse = false;
         }
         return svResponse;
-    }
-
-    public static void probarConexion(){
-        try {
-            socket = new Socket(HOST, PORT);
-
-            svResponse = true;
-            socket.close();
-        } catch(Exception e){
-            svResponse = false;
-            Alerta alert = new Alerta(Alert.AlertType.ERROR,"Se ha detectado un problema con el servidor.",
-                    "No se ha detectado ninguna conexión con el servidor.");
-
-            alert.showAndWait();
-        }
     }
 }
