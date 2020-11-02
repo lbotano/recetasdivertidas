@@ -37,11 +37,11 @@ public class Main {
 		// Iniciar el server
 
 		try {
-			ThreadServer admin = new ThreadServer("Admin", cpds, archivoConfig.getPuertoAdmin(), 5);
+			ThreadServer admin = new ThreadServer(true, cpds, archivoConfig.getPuertoAdmin(), 5);
 			Thread ServerAdmin = new Thread(admin);
 			ServerAdmin.setPriority(Thread.MAX_PRIORITY -1);
 			
-			ThreadServer client = new ThreadServer("Client", cpds, archivoConfig.getPuertoCliente(), 10);
+			ThreadServer client = new ThreadServer(false, cpds, archivoConfig.getPuertoCliente(), 10);
 			Thread ServerClient = new Thread(client);
 			
 			ServerAdmin.start();

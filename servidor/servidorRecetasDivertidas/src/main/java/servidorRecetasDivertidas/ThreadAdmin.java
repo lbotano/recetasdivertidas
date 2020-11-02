@@ -118,11 +118,11 @@ public class ThreadAdmin extends ThreadClient{
 	public void run() {
 
 		try {
-			System.out.println("Connected with admin" + this.socket);
+			System.out.println("Admin: Connected with admin" + this.socket);
 			//inicializacion de los atributos
 			this.conn = cpds.getConnection();		    
-	        this.output = new ObjectOutputStream(this.socket.getOutputStream());
-	        this.input = new ObjectInputStream(this.socket.getInputStream());
+	        ObjectOutputStream output = new ObjectOutputStream(this.socket.getOutputStream());
+	        ObjectInputStream input = new ObjectInputStream(this.socket.getInputStream());
 	        this.answer = new ArrayList<String>();	        
 	        //recibe el mensaje del cliente
 			this.message = (ArrayList<String>) input.readObject();
@@ -178,17 +178,19 @@ public class ThreadAdmin extends ThreadClient{
         	System.out.println();
         	System.out.println("Admin error: " + e.getMessage() + " in socket: " + socket);
 		}finally {
-	        try {
-	        	this.output.close();
-	        	this.input.close();
-	        	this.conn.close();
-	            this.socket.close();
-	        } catch (Exception e) {
-	        	System.out.println();
-	        	System.out.println("Admin error: " + e.getMessage() + " in socket: " + socket);
-	        }
-	        System.out.println("Closed: " + socket );
-	        System.out.println();
+
+			try {
+				this.conn.close();
+			} catch (SQLException e) {
+				System.out.println("Admin error: " + e.getMessage() + " in socket: " + socket);
+			}
+			try {
+				this.socket.close();
+			} catch (Exception e) {
+				System.out.println("Admin error: " + e.getMessage() + " in socket: " + socket);
+			}
+			System.out.println("Closed: " + socket );
+			System.out.println();
 		}
 	}
 

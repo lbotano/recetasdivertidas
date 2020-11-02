@@ -33,9 +33,6 @@ public class ThreadClient implements Runnable{
 	protected PreparedStatement pstmt;
 	//objeto para guardar la conexion a la base de datos
 	protected Connection conn;
-	//objetos para pasar mensajes
-	protected ObjectOutputStream output;
-	protected ObjectInputStream input;
 	protected ArrayListStringValidator stringValidator;
 
 	
@@ -403,13 +400,16 @@ public class ThreadClient implements Runnable{
 			}
     		stmt.setBoolean(9,false);
     		stmt.registerOutParameter(10, Types.BOOLEAN);
-    		System.out.println("Sending REGISTER message to db for socket: " + socket);
     		stmt.execute();
     		answer.add("REGISTEROK");
 		} catch (SQLException e) {
 			exceptionHandler(e, "REGISTERFAIL");
 		}
 		 
+	}
+
+	private void servidorVive(){
+		answer.add("SERVIDORESTAVIVO");
 	}
 	
 	private void subirReceta() {
@@ -534,6 +534,9 @@ public class ThreadClient implements Runnable{
 	        		answer.add("FORMATERROR");
 	        	}
 	    		break;
+			case "SERVIDORVIVE":
+				servidorVive();
+				break;
 	        case "SUBIRRECETA"://  	
 	        	if(stringValidator.esSubirRecetaValido()) { 
 	        		subirReceta();    
@@ -554,14 +557,15 @@ public class ThreadClient implements Runnable{
 	@Override
 	public void run() {
 		try {	
-			System.out.println("Connected with client" + this.socket);
+			System.out.println("Client: Connected with client" + this.socket);
 			//inicializacion de los atributos
-			this.conn = cpds.getConnection();		    
-	        this.output = new ObjectOutputStream(this.socket.getOutputStream());
-	        this.input = new ObjectInputStream(this.socket.getInputStream());
-	        this.answer = new ArrayList<String>();	        
+			this.conn = cpds.getConnection();
+			this.answer = new ArrayList<String>();
+			ObjectOutputStream output = new ObjectOutputStream(this.socket.getOutputStream());
+	        ObjectInputStream input = new ObjectInputStream(this.socket.getInputStream());
 	        //recibe el mensaje del cliente
-			this.message = (ArrayList<String>) this.input.readObject();
+			this.message = (ArrayList<String>) input.readObject();
+			System.out.println("Recived " + message.get(0) + " from socket: " + this.socket);
 			stringValidator = new ArrayListStringValidator(message);
 			if(stringValidator.elementArrayListBlank(message)) {
 				answer.add("ELEMENTBLANK");
@@ -575,17 +579,17 @@ public class ThreadClient implements Runnable{
 			answer.clear();
 			
 		}catch (Exception e){
-        	System.out.println();
         	System.out.println("Client error: " + e.getMessage() + " in socket: " + socket);
-        	System.out.println();
 		}finally {
-	        try {
-	        	this.output.close();
-	        	this.input.close();
-	        	this.conn.close();
-	            this.socket.close();
+
+			try {
+				this.conn.close();
+			} catch (SQLException e) {
+				System.out.println("Client error: " + e.getMessage() + " in socket: " + socket);
+			}
+			try {
+	        	this.socket.close();
 	        } catch (Exception e) {
-	        	System.out.println();
 	        	System.out.println("Client error: " + e.getMessage() + " in socket: " + socket);
 	        }
 	        System.out.println("Closed: " + socket );

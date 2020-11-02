@@ -10,17 +10,25 @@ import java.util.concurrent.TimeUnit;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
 import servidorRecetasDivertidas.ThreadAdmin;
+import servidorRecetasDivertidas.ThreadClient;
 
 public class ThreadServer implements Runnable{
 	private String name;
+	private boolean type;
 	private int port;
 	private ExecutorService pool;
 	private int sizeThreadPool;
 	private ComboPooledDataSource cpds;
 	private ServerSocket ss;
-	
-	public ThreadServer(String sname, ComboPooledDataSource combo, int port, int sizePool) {
-		this.name = sname;
+
+	//typeServer true = admin  false = client
+	public ThreadServer(boolean typeServer, ComboPooledDataSource combo, int port, int sizePool) {
+		this.type = typeServer;
+		if(type){
+			this.name = "Admin";
+		}else{
+			this.name = "Client";
+		}
 		this.cpds = combo;
 		this.port = port;
 		this.sizeThreadPool = sizePool;
@@ -35,7 +43,11 @@ public class ThreadServer implements Runnable{
 			pool = Executors.newFixedThreadPool(sizeThreadPool);
 			while(true) {						
 				try {
-					pool.execute(new ThreadAdmin(cpds , ss.accept()));
+					if(type){
+						pool.execute(new ThreadAdmin(cpds , ss.accept()));
+					}else{
+						pool.execute(new ThreadClient(cpds , ss.accept()));
+					}
 				}catch(SocketException se) {
 					System.out.println(name + ": Server stopped");
 					break;

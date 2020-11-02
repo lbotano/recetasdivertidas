@@ -8,10 +8,11 @@ import java.util.ArrayList;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
 public class ThreadConsole implements Runnable {
-	private ThreadServer refServerAdmin, refServerClient;
+	private ThreadServer refServerAdmin;
+	private ThreadServer refServerClient;
 	private ComboPooledDataSource cpds;
 	private boolean exit = false;
-	private String commands = "stop; start; exit; newAdmin(<nickname>);";
+	private final String commands = "stop; start; exit; newAdmin(<nickname>);";
 	
 	public ThreadConsole(ComboPooledDataSource c, ThreadServer refAdmin, ThreadServer refClient) {
 		this.refServerAdmin = refAdmin;
