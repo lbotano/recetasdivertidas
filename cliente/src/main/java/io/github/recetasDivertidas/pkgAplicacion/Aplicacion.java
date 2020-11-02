@@ -24,10 +24,8 @@ public final class Aplicacion extends Application {
     public void start(Stage stage) throws Exception {
         window = stage;
         window.setScene(loginScene);
-        // window = new RecetasDivertidas(false);
         window.getIcons().add(new Image(getClass().getResourceAsStream("/logo_chiquito.png")));
         window.setTitle("Recetas Divertidas");
-        //window.setResizable(false);
 
         // Si queres probar el cliente sin conexion metele un ! aca y en LayoutLogin
         if (Conexion.isSvResponse()) {

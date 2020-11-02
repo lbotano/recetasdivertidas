@@ -1,5 +1,6 @@
 package io.github.recetasDivertidas.pkgLogin;
 
+import io.github.recetasDivertidas.pkgRecetasDivertidas.PreguntaSeguridad;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ComboBox;

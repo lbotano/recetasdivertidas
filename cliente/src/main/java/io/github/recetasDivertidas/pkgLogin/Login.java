@@ -9,6 +9,7 @@ import io.github.recetasDivertidas.pkgRecetasDivertidas.RecetasDivertidas;
 import io.github.recetasDivertidas.pkgAplicacion.Alerta;
 import io.github.recetasDivertidas.pkgAplicacion.Aplicacion;
 import javafx.scene.layout.Pane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -40,16 +41,24 @@ public class Login {
 
     @FXML
     public void registrarse() {
-        try {
-            if (Conexion.isSvResponse()) {
-                Stage registro = new Stage();
-                Pane rootRegistro = (Pane) FXMLLoader.load(getClass().getResource("/fxml/registro.fxml"));
+        if (Conexion.isSvResponse()) {
+            try {
+                Stage stageRegistro = new Stage();
+                // Evitar que la ventana se abra más de una vez
+                stageRegistro.initModality(Modality.APPLICATION_MODAL);
+
+                Pane rootRegistro = FXMLLoader.load(getClass().getResource("/fxml/registro.fxml"));
+
                 Scene escenaRegistro = new Scene(rootRegistro);
-                registro.setScene(escenaRegistro);
-                registro.show();
+
+                stageRegistro.setScene(escenaRegistro);
+                stageRegistro.show();
+            } catch (IOException e) {
+                new Alerta(Alert.AlertType.ERROR,
+                        "Error inesperado",
+                        "Hubo un error inesperado.").show();
+                System.out.println("Hubo un error al cargar /fxml/registro.fxml");
             }
-        } catch (IOException ioException) {
-            ioException.printStackTrace();
         }
     }
 
