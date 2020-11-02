@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.collections.FXCollections?>
+<?import javafx.geometry.Insets?>
+
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.util.Duration?>
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="io.github.recetasDivertidas.pkgLogin.Register"
+      prefWidth="300"
+      spacing="10">
+    <padding>
+        <Insets topRightBottomLeft="10"/>
+    </padding>
+
+    <Label text="Nombre de usuario:"/>
+    <TextField fx:id="txtUsuario" promptText="Nombre de usuario:">
+        <tooltip>
+            <Tooltip text="Su nombre de usuario debe ser de 3 a 32 caracteres de largo.">
+                <showDelay><Duration millis="0"/></showDelay>
+                <hideDelay><Duration millis="0"/></hideDelay>
+                <graphic><ImageView><Image url="/atention.png"/></ImageView></graphic>
+            </Tooltip>
+        </tooltip>
+    </TextField>
+
+    <Label text="Contraseña"/>
+    <PasswordField fx:id="txtContrasena" promptText="Contraseña">
+        <tooltip>
+            <Tooltip text="Su contraseña debe tener entre 8 y 50 caracteres.">
+                <showDelay><Duration millis="0"/></showDelay>
+                <hideDelay><Duration millis="0"/></hideDelay>
+                <graphic><ImageView><Image url="/atention.png"/></ImageView></graphic>
+            </Tooltip>
+        </tooltip>
+    </PasswordField>
+
+    <Label text="Mail:"/>
+    <TextField fx:id="txtMail" promptText="Mail">
+        <tooltip>
+            <Tooltip text="Asegúrese de escribir una dirección de mail real.">
+                <showDelay><Duration millis="0"/></showDelay>
+                <hideDelay><Duration millis="0"/></hideDelay>
+                <graphic><ImageView><Image url="/atention.png"/></ImageView></graphic>
+            </Tooltip>
+        </tooltip>
+    </TextField>
+
+    <Label text="Nombre de pila:"/>
+    <TextField fx:id="txtNombre" promptText="Nombre de pila">
+        <tooltip>
+            <Tooltip text="Su nombre no puede exceder los 50 caracteres.">
+                <showDelay><Duration millis="0"/></showDelay>
+                <hideDelay><Duration millis="0"/></hideDelay>
+                <graphic><ImageView><Image url="/atention.png"/></ImageView></graphic>
+            </Tooltip>
+        </tooltip>
+    </TextField>
+
+    <Label text="Apellido"/>
+    <TextField fx:id="txtApellido" promptText="Apellido">
+        <tooltip>
+            <Tooltip text="Su apellido no puede exceder los 50 caracteres.">
+                <showDelay><Duration millis="0"/></showDelay>
+                <hideDelay><Duration millis="0"/></hideDelay>
+                <graphic><ImageView><Image url="/atention.png"/></ImageView></graphic>
+            </Tooltip>
+        </tooltip>
+    </TextField>
+
+    <Label text="Género:"/>
+    <ComboBox fx:id="cbGenero" promptText="Seleccione uno" maxWidth="Infinity">
+        <items>
+            <FXCollections fx:factory="observableArrayList">
+                <String fx:value="Masculino"/>
+                <String fx:value="Femenino"/>
+                <String fx:value="Otro"/>
+            </FXCollections>
+        </items>
+    </ComboBox>
+
+    <Label text="Pregunta de seguridad:"/>
+    <ComboBox fx:id="cbPregunta" promptText="Seleccione una" maxWidth="Infinity"/>
+
+    <Label text="Respuesta de seguridad:"/>
+    <TextField fx:id="txtRespuesta">
+        <tooltip>
+            <Tooltip text="Su respuesta de seguridad debe ser de maximo 50 caracteres de largo.">
+                <showDelay><Duration millis="0"/></showDelay>
+                <hideDelay><Duration millis="0"/></hideDelay>
+                <graphic><ImageView><Image url="/atention.png"/></ImageView></graphic>
+            </Tooltip>
+        </tooltip>
+    </TextField>
+
+    <Button fx:id="btnRegistrarse" text="Registrarme" maxWidth="Infinity" onAction="#registrarse"/>
+</VBox>

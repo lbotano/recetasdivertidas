@@ -1,8 +1,8 @@
-package io.github.recetasDivertidas.pkgLogin;
+package io.github.recetasDivertidas.pkgRecetasDivertidas;
 
 public class PreguntaSeguridad {
-    private int id;
-    private String pregunta;
+    private final int id;
+    private final String pregunta;
 
     public PreguntaSeguridad(int id, String pregunta){
         this.id = id;
