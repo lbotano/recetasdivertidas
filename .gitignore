@@ -1,3 +1,6 @@
+# Archivos .attach_pid
+.attach_pid*
+
 # Compiled class file
 *.class
 
