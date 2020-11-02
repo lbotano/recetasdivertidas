@@ -6,6 +6,11 @@ import io.github.recetasDivertidas.pkgRecetasDivertidas.CategoriaIngrediente;
 import io.github.recetasDivertidas.pkgRecetasDivertidas.CategoriaReceta;
 import io.github.recetasDivertidas.pkgRecetasDivertidas.Ingrediente;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -52,6 +57,48 @@ public final class SubirFuncionalidad {
         }
 
         return categoriaRecetas;
+    }
+
+    public static void addIngrediente(VBox vbox) throws IOException {
+        HBox hbox = new HBox();
+
+        ComboBox<CategoriaIngrediente> cmbCategoriaIngrediente = new ComboBox<>();
+        cmbCategoriaIngrediente.setPromptText("Que tipo de ingrediente es?");
+        if (Conexion.isSvResponse()) {
+            cmbCategoriaIngrediente.getItems().addAll(SubirFuncionalidad.getCategoriasIngrediente());
+        }
+
+        ComboBox<Ingrediente> cmbIngrediente = new ComboBox<>();
+        cmbIngrediente.setPromptText("Que ingrediente es?");
+        if (Conexion.isSvResponse()) {
+            cmbIngrediente.getItems().addAll(SubirFuncionalidad.getIngredientes());
+        }
+
+        Button btnMas = new Button("+");
+        Button btnMenos = new Button("-");
+        btnMas.setOnAction(e -> {
+            try {
+                addIngrediente(vbox);
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
+        });
+
+        hbox.getChildren().addAll(cmbCategoriaIngrediente,cmbIngrediente,btnMas,btnMenos);
+        vbox.getChildren().add(hbox);
+
+        btnMenos.setOnAction(e -> removeIngrediente(vbox,hbox));
+
+        System.out.println("Añadido un elemento");
+        System.out.println("Ahora hay " + vbox.getChildren().size() + " elementos");
+    }
+
+    public static void removeIngrediente(VBox vbox, HBox hBox){
+        if (vbox.getChildren().size() > 1) {
+            vbox.getChildren().remove(hBox);
+            System.out.println("Quitado un elemento");
+            System.out.println("Ahora hay " + vbox.getChildren().size() + " elementos");
+        }
     }
 
     public static ArrayList<Ingrediente> getIngredientes() throws IOException {

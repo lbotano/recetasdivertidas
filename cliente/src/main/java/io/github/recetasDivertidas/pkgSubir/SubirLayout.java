@@ -9,6 +9,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import org.controlsfx.control.CheckComboBox;
 
@@ -23,8 +24,12 @@ public class SubirLayout extends BorderPane {
         ScrollPane scrollPane = new ScrollPane();
         scrollPane.setContent(getGridpane());
 
+        Button btnSubirReceta = new Button("Subir Receta");
+        btnSubirReceta.setOnAction(e -> SubirFuncionalidad.subirReceta());
+
         this.setTop(lblTitulo);
         this.setCenter(scrollPane);
+        this.setBottom(btnSubirReceta);
     }
 
     private GridPane getGridpane() throws IOException {
@@ -64,36 +69,12 @@ public class SubirLayout extends BorderPane {
         gridPane.add(tbInstrucciones,0,3,3,1);
 
         //Tengo que meter esto en un ScrollPane y añadir un boton de "+" y otro de "-" para añadir y sacar ingredientes
-        HBox hboxIng = getHbox();
-        gridPane.add(hboxIng,0,4,1,1);
-
-
-        Button btnSubirReceta = new Button("Subir Receta");
-        btnSubirReceta.setOnAction(e -> SubirFuncionalidad.subirReceta());
-
-        gridPane.add(btnSubirReceta,0,5,1,1);
+        VBox vboxIngredientes = new VBox();
+        SubirFuncionalidad.addIngrediente(vboxIngredientes);
+        gridPane.add(vboxIngredientes,0,5,1,1);
 
 
         return gridPane;
     }
 
-    private HBox getHbox() throws IOException {
-        HBox hbox = new HBox();
-
-        ComboBox<CategoriaIngrediente> cmbCategoriaIngrediente = new ComboBox<>();
-        cmbCategoriaIngrediente.setPromptText("Que tipo de ingrediente es?");
-        if (Conexion.isSvResponse()) {
-            cmbCategoriaIngrediente.getItems().addAll(SubirFuncionalidad.getCategoriasIngrediente());
-        }
-
-        ComboBox<Ingrediente> cmbIngrediente = new ComboBox<>();
-        cmbIngrediente.setPromptText("Que ingrediente es?");
-        if (Conexion.isSvResponse()) {
-            cmbIngrediente.getItems().addAll(SubirFuncionalidad.getIngredientes());
-        }
-
-        hbox.getChildren().addAll(cmbCategoriaIngrediente,cmbIngrediente);
-
-        return hbox;
-    }
 }

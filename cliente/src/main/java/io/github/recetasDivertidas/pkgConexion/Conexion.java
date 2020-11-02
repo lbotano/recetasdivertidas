@@ -53,19 +53,4 @@ public final class Conexion {
         }
         return svResponse;
     }
-
-    public static void probarConexion(){
-        try {
-            socket = new Socket(HOST, PORT);
-
-            svResponse = true;
-            socket.close();
-        } catch(Exception e){
-            svResponse = false;
-            Alerta alert = new Alerta(Alert.AlertType.ERROR,"Se ha detectado un problema con el servidor.",
-                    "No se ha detectado ninguna conexión con el servidor.");
-
-            alert.showAndWait();
-        }
-    }
 }
