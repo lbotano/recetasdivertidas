@@ -21,7 +21,7 @@ import jsonClasess.Multimedia;
 
 public class ThreadClient implements Runnable{
 	//referencia al objeto que maneja las conexiones a la base de datos
-	protected static ComboPooledDataSource cpds;
+	protected ComboPooledDataSource cpds;
 	//objeto que maneja el enlace con el cliente
 	protected Socket socket;
 	//objetos que guardan los mensajes que se transmiten
@@ -61,7 +61,7 @@ public class ThreadClient implements Runnable{
 	private static final String DefaultSQLErrorMsg = "Error en la base de datos";
 	
 	public ThreadClient(ComboPooledDataSource c, Socket s) {
-		ThreadClient.cpds = c;
+		this.cpds = c;
 		this.socket = s;
 	}
 	/*
@@ -370,6 +370,7 @@ public class ThreadClient implements Runnable{
 			ResultSet resultadoSP = stmt.getResultSet();
 			//next = false: resultset vacio
 			//next = true: resultset con datos, mueve el cursor a la fila 1.
+			
 			if(resultadoSP.next()) {
 
 				answer.add("RECETASDEUSUARIOOK");
@@ -576,7 +577,7 @@ public class ThreadClient implements Runnable{
 		}catch (Exception e){
         	System.out.println();
         	System.out.println("Client error: " + e.getMessage() + " in socket: " + socket);
-        	
+        	System.out.println();
 		}finally {
 	        try {
 	        	this.output.close();
