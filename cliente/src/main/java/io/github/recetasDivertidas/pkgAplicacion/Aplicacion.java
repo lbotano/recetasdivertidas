@@ -1,12 +1,12 @@
 package io.github.recetasDivertidas.pkgAplicacion;
 
 import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import io.github.recetasDivertidas.pkgConexion.Conexion;
-import io.github.recetasDivertidas.pkgRecetasDivertidas.RecetasDivertidas;
 import io.github.recetasDivertidas.pkgLogin.LoginLayout;
 
 public final class Aplicacion extends Application {
@@ -27,7 +27,7 @@ public final class Aplicacion extends Application {
         // window = new RecetasDivertidas(false);
         window.getIcons().add(new Image(getClass().getResourceAsStream("/logo_chiquito.png")));
         window.setTitle("Recetas Divertidas");
-        window.setResizable(false);
+        //window.setResizable(false);
 
         // Si queres probar el cliente sin conexion metele un ! aca y en LayoutLogin
         if(Conexion.isSvResponse()){
@@ -50,7 +50,7 @@ public final class Aplicacion extends Application {
     public void init() throws Exception {
         super.init();
         layoLg = new LoginLayout();
-        Login = new Scene(layoLg);
+        Login = new Scene(FXMLLoader.load(getClass().getResource("/fxml/login.fxml")));
     }
 
     @Override
