@@ -58,8 +58,8 @@ public final class BusquedaTextoFuncionalidad{
             System.out.println(ans.get(i));
          }
       }else{
-         Alerta alerta = new Alerta(Alert.AlertType.ERROR, "Error al conectarse con el servidor",
-                 "Hubo un problema al intentar buscar");
+         Alerta alerta = new Alerta(Alert.AlertType.ERROR, "Error al conectarse con el servidor.",
+                 "Hubo un problema al intentar buscar.");
          alerta.showAndWait();
       }
 
