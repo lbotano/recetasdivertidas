@@ -10,12 +10,10 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import org.controlsfx.control.CheckComboBox?>
-<?import org.controlsfx.control.SearchableComboBox?>
 
 
 <BorderPane fx:id="borderpane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="577.0" prefWidth="760.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
@@ -55,30 +53,8 @@
                   <CheckComboBox fx:id="cmbCategoriaReceta" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="167.0" title="" GridPane.columnIndex="2" GridPane.hgrow="ALWAYS" />
                   <TextArea fx:id="txtDescripcion" prefHeight="85.0" prefWidth="657.0" promptText="Descripcion de la receta" GridPane.columnSpan="3" GridPane.rowIndex="1" />
                   <TextArea fx:id="txtInstrucciones" prefHeight="205.0" prefWidth="694.0" promptText="Instrucciones de la receta" GridPane.columnSpan="3" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.vgrow="ALWAYS" />
-                  <VBox fx:id="vboxIngredientes" prefHeight="200.0" prefWidth="100.0" GridPane.columnSpan="2" GridPane.rowIndex="3">
-                     <children>
-                        <HBox prefHeight="28.0" prefWidth="295.0">
-                           <children>
-                              <SearchableComboBox fx:id="cmbCategoriaIngrediente" prefHeight="28.0" prefWidth="141.0" promptText="¿Que tipo de ingrediente es?" HBox.hgrow="ALWAYS" />
-                              <SearchableComboBox fx:id="cmbIngrediente" prefHeight="28.0" prefWidth="141.0" promptText="¿Que ingrediente es?" HBox.hgrow="ALWAYS" />
-                              <TextField fx:id="txtCantidad" prefHeight="31.0" prefWidth="47.0" promptText="Cant." />
-                              <Button fx:id="btnRemoveIngrediente" mnemonicParsing="false" prefHeight="28.0" prefWidth="34.0" text="-" />
-                              <Button fx:id="btnAddIngrediente" mnemonicParsing="false" prefHeight="28.0" prefWidth="34.0" text="+" />
-                           </children>
-                        </HBox>
-                     </children>
-                  </VBox>
-                  <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="2" GridPane.rowIndex="3">
-                     <children>
-                        <HBox prefHeight="100.0" prefWidth="200.0">
-                           <children>
-                              <TextField fx:id="txtImageUrl" prefHeight="28.0" prefWidth="144.0" promptText="Añade una imagen" HBox.hgrow="ALWAYS" />
-                              <Button fx:id="btnRemoveImage" mnemonicParsing="false" prefHeight="28.0" prefWidth="34.0" text="-" />
-                              <Button fx:id="btnAddImage" mnemonicParsing="false" prefHeight="28.0" prefWidth="34.0" text="+" />
-                           </children>
-                        </HBox>
-                     </children>
-                  </VBox>
+                  <VBox fx:id="vboxIngredientes" prefHeight="200.0" prefWidth="100.0" GridPane.columnSpan="2" GridPane.rowIndex="3" />
+                  <VBox fx:id="vboxImagen" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="2" GridPane.rowIndex="3" />
                </children>
             </GridPane>
          </content>
