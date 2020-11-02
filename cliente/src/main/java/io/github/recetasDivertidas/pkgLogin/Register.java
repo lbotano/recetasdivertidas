@@ -1,15 +1,13 @@
 package io.github.recetasDivertidas.pkgLogin;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
+import javafx.scene.control.TextField;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Button;
+import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 import io.github.recetasDivertidas.pkgConexion.Conexion;
 import io.github.recetasDivertidas.pkgAplicacion.Alerta;
-import javafx.util.Duration;
-
-import javax.tools.Tool;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
@@ -37,9 +35,6 @@ public class Register{
         textfields.add(txtApellido);
         textfields.add(txtRespuesta);
 
-        // Pone los tooltips
-        ponerTooltips();
-
         // Poner las respuestas de seguridad en el ComboBox correspondiente
         if (Conexion.isSvResponse()) {
             try {
@@ -56,25 +51,6 @@ public class Register{
                     "Hubo un error",
                     "Fallo de conexión con el servidor.");
             alerta.showAndWait();
-        }
-    }
-
-    // Por alguna estúpida razón, no me deja poner tooltips con FXML :C
-    private void ponerTooltips() {
-        txtUsuario.setTooltip(new Tooltip("Su nombre de usuario debe ser de 3 a 32 caracteres de largo."));
-        txtContrasena.setTooltip(new Tooltip("Su contraseña debe tener entre 8 y 50 caracteres."));
-        txtMail.setTooltip(new Tooltip("Asegúrese de escribir una dirección de mail real."));
-        txtNombre.setTooltip(new Tooltip("Su nombre no puede exceder los 50 caracteres."));
-        txtApellido.setTooltip(new Tooltip("Su apellido no puede exceder los 50 caracteres."));
-        txtRespuesta.setTooltip(new Tooltip("Su respuesta de seguridad debe ser de maximo 50 caracteres de largo."));
-
-
-        // Poner imágenes en los tooltips
-        ImageView iconoTooltip = new ImageView(new Image(getClass().getResourceAsStream("/atention.png")));
-        for (TextField tf : textfields) {
-            tf.getTooltip().setGraphic(iconoTooltip);
-            tf.getTooltip().setShowDelay(Duration.ZERO);
-            tf.getTooltip().setHideDelay(Duration.ZERO);
         }
     }
 
