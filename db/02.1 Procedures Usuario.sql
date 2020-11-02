@@ -571,3 +571,22 @@ BEGIN
     SET autocommit = 1;
 END//
 DELIMITER ;
+
+DROP PROCEDURE IF EXISTS spSeleccionarIngredientes;
+DELIMITER //
+CREATE PROCEDURE spSeleccionarIngredientes()
+BEGIN
+	SELECT
+		i.iID,
+        i.INombre,
+        c.cID,
+        c.cNombre
+    FROM
+		Ingrediente i,
+		RelCatIngred ic,
+        CategoriaDeIngrediente c
+	WHERE
+        i.iID = ic.iID AND
+        ic.cID = c.cID;
+END//
+DELIMITER ;

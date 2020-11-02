@@ -48,16 +48,16 @@ public class ThreadClient implements Runnable{
 	private static final String CONSRECETAING = "{call spBuscarRecetaPorIngr(?,?)}";	
 	private static final String CONSRECETATEXT = "{}";
 	private static final String DATOSRECETA = "{call spGetDatosReceta(?)}";
-	private static final String INGREDIENTES = "SELECT * FROM ingrediente;";
-	private static final String LISTARCATREC = "SELECT * FROM categoriadereceta;";
-	private static final String LISTARCATING = "SELECT * FROM categoriadeingrediente;";
+	private static final String INGREDIENTES = "SELECT * FROM Ingrediente;";
+	private static final String LISTARCATREC = "SELECT * FROM CategoriaDeReceta;";
+	private static final String LISTARCATING = "SELECT * FROM CategoriaDeIngrediente;";
 	private static final String LOGIN = "{call spInicioSesion(?,?,?,?)}";
-	private static final String PREGUNTASSEG = "SELECT * FROM preguntasseguridad;";
+	private static final String PREGUNTASSEG = "SELECT * FROM PreguntasSeguridad;";
 	private static final String RECETASDEUSUARIO = "{call spGetRecetasUsuario(?)}";
 	private static final String REGISTRO = "{call spRegistroUsuario(?,?,?,?,?,?,?,?,?,?)}";
 	private static final String SUBIRRECETA = "{call spSubirReceta(?,?,?,?,?,?,?}";
-	private static final String USUPREGSEG = "SELECT * FROM preguntasseguridad WHERE id in "
-											+"(SELECT uPreguntaSeguridad WHERE uNickname = ?)";
+	private static final String USUPREGSEG = "SELECT * FROM PreguntasSeguridad WHERE id in "
+											+"(SELECT uPreguntaSeguridad WHERE uNickname = ? FROM PreguntasSeguridad)";
 	private static final String DefaultSQLErrorMsg = "Error en la base de datos";
 	
 	public ThreadClient(ComboPooledDataSource c, Socket s) {

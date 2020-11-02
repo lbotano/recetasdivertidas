@@ -106,7 +106,7 @@ public final class SubirFuncionalidad {
         ArrayList<CategoriaIngrediente> categoriaIngredientes = new ArrayList<>();
 
         switch(ans.get(0)){
-            case "LISTACATING" ->{
+            case "LISTACATING" -> {
                 int i= 1;
                 while(i < ans.size()){
                     categoriaIngredientes.add(new CategoriaIngrediente(Integer.parseInt(ans.get(i)),ans.get(i+1)));
@@ -118,17 +118,17 @@ public final class SubirFuncionalidad {
                 System.out.println(ans.get(0));
                 alerta.showAndWait();
             }
-            case "MESSAGEERROR" ->{
+            case "MESSAGEERROR" -> {
                 Alerta alerta = new Alerta(Alert.AlertType.ERROR, "Error en el mensaje",
                         "Hubo un problema al comunicarse con el servidor");
                 alerta.showAndWait();
             }
-            case "ELEMENTBLANK" ->{
+            case "ELEMENTBLANK" -> {
                 Alerta alerta = new Alerta(Alert.AlertType.ERROR, "Error en el mensaje",
                         "El mensaje contenia espacios en blanco");
                 alerta.showAndWait();
             }
-            case "FORMATERROR" ->{
+            case "FORMATERROR" -> {
                 Alerta alerta = new Alerta(Alert.AlertType.ERROR, "Error en el mensaje",
                         "Hubo un problema en el formato del mensaje");
                 alerta.showAndWait();
