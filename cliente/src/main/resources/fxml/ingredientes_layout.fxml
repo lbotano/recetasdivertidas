@@ -6,11 +6,11 @@
 <?import org.controlsfx.control.SearchableComboBox?>
 
 <HBox prefHeight="28.0" prefWidth="409.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
-   <children>
-      <SearchableComboBox fx:id="cmbCategoriaIngrediente" prefHeight="28.0" prefWidth="141.0" promptText="¿Que tipo de ingrediente es?" HBox.hgrow="ALWAYS" />
-      <SearchableComboBox fx:id="cmbIngrediente" prefHeight="28.0" prefWidth="141.0" promptText="¿Que ingrediente es?" HBox.hgrow="ALWAYS" />
-      <TextField fx:id="txtCantidad" prefHeight="31.0" prefWidth="47.0" promptText="Cant." />
-      <Button fx:id="btnRemoveIngrediente" mnemonicParsing="false" prefHeight="28.0" prefWidth="34.0" text="-" />
-      <Button fx:id="btnAddIngrediente" mnemonicParsing="false" prefHeight="28.0" prefWidth="34.0" text="+" />
-   </children>
+   <SearchableComboBox fx:id="cmbCategoriaIngrediente" prefHeight="28.0" prefWidth="141.0"
+                       promptText="¿Que tipo de ingrediente es?" HBox.hgrow="ALWAYS"/>
+   <SearchableComboBox fx:id="cmbIngrediente" prefHeight="28.0" prefWidth="141.0" promptText="¿Que ingrediente es?"
+                       HBox.hgrow="ALWAYS"/>
+   <TextField fx:id="txtCantidad" prefHeight="31.0" prefWidth="47.0" promptText="Cant."/>
+   <Button fx:id="btnRemoveIngrediente" mnemonicParsing="false" prefHeight="28.0" prefWidth="34.0" text="-"/>
+   <Button fx:id="btnAddIngrediente" mnemonicParsing="false" prefHeight="28.0" prefWidth="34.0" text="+"/>
 </HBox>
