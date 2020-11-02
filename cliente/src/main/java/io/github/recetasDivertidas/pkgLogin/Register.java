@@ -1,280 +1,164 @@
 package io.github.recetasDivertidas.pkgLogin;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.geometry.Insets;
-import javafx.scene.Scene;
+import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.VBox;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 import io.github.recetasDivertidas.pkgConexion.Conexion;
 import io.github.recetasDivertidas.pkgAplicacion.Alerta;
+import javafx.util.Duration;
 
+import javax.tools.Tool;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
 
-public class Register extends Stage {
-    private TextField[] inputRegistro;
-    private PasswordField pwdRegistro;
-    private ComboBox<String> genero;
-    private ComboBox<PreguntaSeguridad> preguntaSeguridad;
+public class Register{
+    ArrayList<TextField> textfields = new ArrayList<>();
 
-    public Register() throws IOException {
-        super();
+    @FXML TextField txtUsuario;
+    @FXML TextField txtContrasena;
+    @FXML TextField txtMail;
+    @FXML TextField txtNombre;
+    @FXML TextField txtApellido;
+    @FXML ComboBox<String> cbGenero;
+    @FXML ComboBox<PreguntaSeguridad> cbPregunta;
+    @FXML TextField txtRespuesta;
+    @FXML public Button btnRegistrarse;
 
-        VBox vbox = getLayout();
-        vbox.setPadding(new Insets(12, 12, 12, 12));
-        vbox.setSpacing(10);
+    @FXML
+    private void initialize() {
+        // Array con los textbos para poder hacer bucles después
+        textfields.add(txtUsuario);
+        textfields.add(txtContrasena);
+        textfields.add(txtMail);
+        textfields.add(txtNombre);
+        textfields.add(txtApellido);
+        textfields.add(txtRespuesta);
 
-        Scene scnRegister = new Scene(vbox, 300, 300);
-        setScene(scnRegister);
-        getIcons().add(new Image(getClass().getResourceAsStream("/logo_chiquito.png")));
-        setTitle("Regístrate");
-        this.initModality(Modality.APPLICATION_MODAL);
-        this.setHeight(600);
-        this.setWidth(290);
-        setResizable(false);
-    }
+        // Pone los tooltips
+        ponerTooltips();
 
-    private VBox getLayout() throws IOException {
-        VBox vbox = new VBox(8);
-        //---------------------------------------PasswordField Section BEGIN--------------------------------------------
-        pwdRegistro = new PasswordField();
-        pwdRegistro.setPromptText("Escriba su contraseña aquí");
-        //---------------------------------------PasswordField Section END--------------------------------------------
-
-        //---------------------------------------TextField Section BEGIN------------------------------------------------
-        inputRegistro = new TextField[5];
-
-        for (int i = 0; i < inputRegistro.length ; i++){
-            inputRegistro[i] = new TextField();
-        }
-        inputRegistro[0].setPromptText("Escriba su nombre de usuario aquí");
-        inputRegistro[1].setPromptText("Escriba su respuesta de seguridad aquí");
-        inputRegistro[2].setPromptText("Escriba su nombre de pila aquí");
-        inputRegistro[3].setPromptText("Escriba su apellido aquí");
-        inputRegistro[4].setPromptText("Escriba su mail aquí");
-        //---------------------------------------TextField Section END--------------------------------------------------
-
-        //---------------------------------------Tooltip Section BEGIN--------------------------------------------------
-        Tooltip[] tooltip = new Tooltip[6];
-
-        for (int i = 0; i < tooltip.length; i++) {
-            tooltip[i] = new Tooltip();
-        }
-
-        tooltip[0].setText(
-                """
-                Su nombre de usuario debe ser
-                de 3 a 32 caracteres de largo
-                """
-        );
-        tooltip[1].setText(
-                """
-                Su respuesta de seguridad debe ser
-                de maximo 50 caracteres de largo
-                """
-        );
-        tooltip[2].setText(
-                """
-                Su nombre no puede exceder los 50
-                caracteres
-                """
-        );
-        tooltip[3].setText(
-                """
-                Su apelllido no puede exceder los 50
-                caracteres
-                """
-        );
-        tooltip[4].setText(
-                """
-                Asegurese de escribir una
-                direccion de mail real
-                """
-        );
-        tooltip[5].setText(
-                """
-                Su contraseña debe ser de 
-                8 a 50 caracteres de largo
-                """
-        );
-        for (int i = 0; i < tooltip.length ; i++) {
-            if (i < inputRegistro.length) {
-                inputRegistro[i].setTooltip(tooltip[i]);
-            } else {
-                pwdRegistro.setTooltip(tooltip[i]);
-            }
-        }
-
-        Image img = new Image(getClass().getResourceAsStream("/atention.png"));
-        ImageView[] imageViews = new ImageView[tooltip.length];
-
-        // Acá instanciamos el array de ImageViews, que aunque muestren la misma imagen, si no lo hacés así se re buguea
-        for (int i = 0; i < imageViews.length; i++) {
-            imageViews[i] = new ImageView(img);
-            imageViews[i].setFitHeight(30);
-            imageViews[i].setFitWidth(30);
-        }
-
-        for (int i = 0; i < tooltip.length ; i++){
-           tooltip[i].setGraphic(imageViews[i]);
-           tooltip[i].setShowDelay(Duration.ZERO);
-        }
-        //---------------------------------------Tooltip Section END----------------------------------------------------
-
-        //---------------------------------------Label Section BEGIN----------------------------------------------------
-        Label[] lblRegistro = new Label[8];
-
-        for (int i = 0; i < lblRegistro.length ; i++){
-            lblRegistro[i] = new Label();
-            lblRegistro[i].setPrefHeight(10);
-        }
-        //Se les dan nombre a los labels despues de instanciarlos
-        lblRegistro[0].setText("Nombre de usuario");
-        lblRegistro[1].setText("Pregunta de seguridad");
-        lblRegistro[2].setText("Respuesta de seguridad");
-        lblRegistro[3].setText("Nombre de pila");
-        lblRegistro[4].setText("Apellido");
-        lblRegistro[5].setText("Contraseña");
-        lblRegistro[6].setText("Mail");
-        lblRegistro[7].setText("Genero");
-
-        //---------------------------------------Label Section END------------------------------------------------------
-
-        //---------------------------------------ComboBox Section BEGIN-------------------------------------------------
-        ObservableList<String> options =
-            FXCollections.observableArrayList(
-                    "Masculino",
-                    "Femenino",
-                    "Otro"
-            );
-        genero = new ComboBox<>(options);
-        genero.setPromptText("Género");
-        genero.setPrefSize(250,10);
-
-        preguntaSeguridad = new ComboBox<>();
+        // Poner las respuestas de seguridad en el ComboBox correspondiente
         if (Conexion.isSvResponse()) {
-            ArrayList<PreguntaSeguridad> resPreguntas = getPreguntasSeguridad();
-            preguntaSeguridad.getItems().addAll(resPreguntas);
-        }else{
-            Alerta alerta = new Alerta(Alert.AlertType.ERROR, "Hubo un error","Fallo de conexion con el servidor");
-            alerta.showAndWait();
-        }
-        preguntaSeguridad.setPromptText("Elija una pregunta de seguridad");
-        preguntaSeguridad.setPrefSize(250,10);
-
-        //---------------------------------------ComboBox Section END---------------------------------------------------
-
-        //---------------------------------------Añadir al VBox Section BEGIN-------------------------------------------
-        int i = 0;
-        int j = 0;
-
-        do{
-            vbox.getChildren().add(lblRegistro[i]);
-            if(i == 1){
-                vbox.getChildren().add(preguntaSeguridad);
-                i++;
-                vbox.getChildren().add(lblRegistro[i]);
-            }
-            if (i == 5){
-                vbox.getChildren().add(pwdRegistro);
-                i++;
-                vbox.getChildren().add(lblRegistro[i]);
-            }
-            if(j < inputRegistro.length) {
-                vbox.getChildren().add(inputRegistro[j]);
-                j++;
-            }
-            i++;
-        }while(i < lblRegistro.length);
-        vbox.getChildren().add(genero);
-
-        Button btnRegister = new Button("Registrarme");
-        btnRegister.setPrefSize(250,10);
-        btnRegister.setOnAction(e -> {
             try {
-                register();
-            } catch (IOException ioException) {
-                ioException.printStackTrace();
+                ArrayList<PreguntaSeguridad> resPreguntas = getPreguntasSeguridad();
+                cbPregunta.getItems().addAll(resPreguntas);
+            } catch (IOException e) {
+                Alerta alerta = new Alerta(Alert.AlertType.ERROR,
+                        "Hubo un error",
+                        "Fallo de conexión con el servidor.");
+                alerta.showAndWait();
             }
-        });
-
-        vbox.getChildren().add(btnRegister);
-        //---------------------------------------Añadir al VBox Section END---------------------------------------------
-
-        return vbox;
-    }
-
-    private void register() throws IOException {
-        if(consRegister()){
-            Alerta alerta = new Alerta(Alert.AlertType.CONFIRMATION,"Bienvenidx a Recetas Divertidas","Datos registrados con exito!");
+        } else {
+            Alerta alerta = new Alerta(Alert.AlertType.ERROR,
+                    "Hubo un error",
+                    "Fallo de conexión con el servidor.");
             alerta.showAndWait();
-            this.close();
         }
     }
 
-    private boolean consRegister() throws IOException {
-        ArrayList<String> message = new ArrayList<>();
-        message.add("REGISTRO");
-        boolean consRes = false;
+    // Por alguna estúpida razón, no me deja poner tooltips con FXML :C
+    private void ponerTooltips() {
+        txtUsuario.setTooltip(new Tooltip("Su nombre de usuario debe ser de 3 a 32 caracteres de largo."));
+        txtContrasena.setTooltip(new Tooltip("Su contraseña debe tener entre 8 y 50 caracteres."));
+        txtMail.setTooltip(new Tooltip("Asegúrese de escribir una dirección de mail real."));
+        txtNombre.setTooltip(new Tooltip("Su nombre no puede exceder los 50 caracteres."));
+        txtApellido.setTooltip(new Tooltip("Su apellido no puede exceder los 50 caracteres."));
+        txtRespuesta.setTooltip(new Tooltip("Su respuesta de seguridad debe ser de maximo 50 caracteres de largo."));
+
+
+        // Poner imágenes en los tooltips
+        ImageView iconoTooltip = new ImageView(new Image(getClass().getResourceAsStream("/atention.png")));
+        for (TextField tf : textfields) {
+            tf.getTooltip().setGraphic(iconoTooltip);
+            tf.getTooltip().setShowDelay(Duration.ZERO);
+            tf.getTooltip().setHideDelay(Duration.ZERO);
+        }
+    }
+
+    @FXML
+    private void registrarse() {
+        // Trimea todos los inputs
+        for (TextField tf : textfields) {
+            tf.setText(tf.getText().trim());
+        }
+
+        // Trata de registrarse
+        if(consRegister()){
+            Alerta alerta = new Alerta(Alert.AlertType.CONFIRMATION,
+                    "Bienvenidx a Recetas Divertidas","¡Datos registrados con exito!");
+            alerta.showAndWait();
+            Stage stage = (Stage) btnRegistrarse.getScene().getWindow();
+            stage.close();
+        }
+    }
+
+    private boolean consRegister() {
         Alerta alerta;
 
+        ArrayList<String> message = new ArrayList<>();
+        message.add("REGISTRO");
+
         if (corroborarDatos()){
-            message.addAll(getItems());
-            ArrayList<String> ans = Conexion.sendMessage(message);
-            if(ans.size() != 0) {
-                switch (ans.get(0)) {
-                    case "REGISTEROK" -> consRes = true;
-                    case "REGISTERFAIL" -> {
-                        alerta = new Alerta(Alert.AlertType.ERROR, "Error al registrarse", ans.get(1));
-                        alerta.showAndWait();
-                    }
-                    case "MESSAGEERROR" -> {
-                        alerta = new Alerta(Alert.AlertType.ERROR, "Hubo un error en la comunicacion con el server", ans.get(1));
-                        alerta.showAndWait();
-                    }
-                    case "FORMATERROR" -> {
-                        alerta = new Alerta(Alert.AlertType.ERROR, "Error en el formato", "Consulte a su tecnico de cabecera");
-                        System.out.println(ans.get(0));
-                        alerta.showAndWait();
-                    }
-                    case "ELEMENTBLANK" ->{
-                        alerta = new Alerta(Alert.AlertType.ERROR, "Error en el mensaje",
-                                "El mensaje contenia espacios en blanco");
-                        alerta.showAndWait();
-                    }
-                    default -> {
-                        alerta = new Alerta(Alert.AlertType.ERROR, "Esto es vergonzoso", "Esto no deberia haber sucedido");
-                        alerta.showAndWait();
+            message.addAll(getDatos());
+            try {
+                ArrayList<String> ans;
+                ans = Conexion.sendMessage(message);
+                if(ans.size() != 0) {
+                    switch (ans.get(0)) {
+                        case "REGISTEROK" -> { return true; }
+                        case "REGISTERFAIL" -> {
+                            alerta = new Alerta(Alert.AlertType.ERROR, "Error al registrarse", ans.get(1));
+                            alerta.showAndWait();
+                        }
+                        case "MESSAGEERROR" -> {
+                            alerta = new Alerta(Alert.AlertType.ERROR, "Hubo un error en la comunicación con el server", ans.get(1));
+                            alerta.showAndWait();
+                        }
+                        case "FORMATERROR" -> {
+                            alerta = new Alerta(Alert.AlertType.ERROR, "Error en el formato", "Consulte a su técnico de cabecera");
+                            System.out.println(ans.get(0));
+                            alerta.showAndWait();
+                        }
+                        case "ELEMENTBLANK" ->{
+                            alerta = new Alerta(Alert.AlertType.ERROR, "Error en el mensaje",
+                                    "El mensaje contenia espacios en blanco");
+                            alerta.showAndWait();
+                        }
+                        default -> {
+                            alerta = new Alerta(Alert.AlertType.ERROR, "Esto es vergonzoso", "Esto no debería haber sucedido");
+                            alerta.showAndWait();
+                        }
                     }
                 }
+            } catch (IOException e) {
+                alerta = new Alerta(Alert.AlertType.ERROR,
+                        "Error fatal", "Hubo un error al conectarse con el servidor.");
+                alerta.showAndWait();
             }
-        }else{
+        } else {
             Alerta alert = new Alerta(Alert.AlertType.ERROR, "Datos erroneos",
-                    "Corrobore que haya completado bien el formulario");
+                    "Corrobora que hayas completado bien el formulario");
             alert.showAndWait();
         }
 
-        return consRes;
+        return false;
     }
 
-    private ArrayList<String> getItems(){
+    // Devuelve todos los datos de registro para el mensaje al servidor
+    private ArrayList<String> getDatos(){
         ArrayList<String> itemList = new ArrayList<>();
 
-        itemList.add(inputRegistro[0].getText());
-        itemList.add(String.valueOf(preguntaSeguridad.getValue().getId()));
-        itemList.add(inputRegistro[1].getText());
-        itemList.add(inputRegistro[2].getText());
-        itemList.add(inputRegistro[3].getText());
-        itemList.add(pwdRegistro.getText());
+        itemList.add(txtUsuario.getText());
+        itemList.add(String.valueOf(cbPregunta.getValue().getId()));
+        itemList.add(txtRespuesta.getText());
+        itemList.add(txtNombre.getText());
+        itemList.add(txtApellido.getText());
+        itemList.add(txtContrasena.getText());
         itemList.add(getGenero());
-        itemList.add(inputRegistro[4].getText());
+        itemList.add(txtMail.getText());
 
         return itemList;
     }
@@ -282,7 +166,7 @@ public class Register extends Stage {
     private String getGenero(){
         String res = "";
 
-        switch (genero.getValue()){
+        switch (cbGenero.getValue()){
             case "Masculino" -> res = "0";
             case "Femenino" -> res = "1";
             case "Otro" -> res = "2";
@@ -292,64 +176,68 @@ public class Register extends Stage {
     }
 
     private boolean corroborarDatos(){
-        boolean datosok = true;
+        boolean datosOk = true;
 
-        for (int i = 0; i < inputRegistro.length; i++)
-        {
-            switch (i)
-            {
-                case 0:
-                    if (!(inputRegistro[i].getText().trim().length() <= 32 && inputRegistro[i].getText().trim().length() >= 3 )){
-                        inputRegistro[i].setStyle("-fx-control-inner-background: #FFCCCC");
-                        datosok = false;
-                    }else {
-                        inputRegistro[i].setStyle("-fx-control-inner-background: #CCFFCC");
-                    }
-
-                    break;
-                case 1:
-                    if (!(inputRegistro[i].getText().length() <= 64 && inputRegistro[i].getText().length() >= 1 )){
-                        inputRegistro[i].setStyle("-fx-control-inner-background: #FFCCCC");
-                        datosok = false;
-                    }else {
-                        inputRegistro[i].setStyle("-fx-control-inner-background: #CCFFCC");
-                    }
-
-                    break;
-                case 2:
-                case 3:
-                    if (!(inputRegistro[i].getText().length() <= 50 && inputRegistro[i].getText().length() >= 1 )){
-                        inputRegistro[i].setStyle("-fx-control-inner-background: #FFCCCC");
-                        datosok = false;
-                    }else {
-                        inputRegistro[i].setStyle("-fx-control-inner-background: #CCFFCC");
-                    }
-
-                    break;
-                case 4:
-                    if (!validarMail(inputRegistro[i].getText())){
-                        inputRegistro[i].setStyle("-fx-control-inner-background: #FFCCCC");
-                        datosok = false;
-                    }else {
-                        inputRegistro[i].setStyle("-fx-control-inner-background: #CCFFCC");
-                    }
-
-                    break;
-            }
+        String STYLE_BUENO = "-fx-control-inner-background: #CCFFCC";
+        String STYLE_MALO = "-fx-control-inner-background: #FFCCCC";
+        if (txtUsuario.getText().length() > 32 || txtUsuario.getText().length() < 3) {
+            txtUsuario.setStyle(STYLE_MALO);
+            datosOk = false;
+        } else {
+            txtUsuario.setStyle(STYLE_BUENO);
         }
 
-        if(!(pwdRegistro.getText().length() >= 8)){
-            pwdRegistro.setStyle("-fx-control-inner-background: #FFCCCC");
-            datosok = false;
-        }else {
-            pwdRegistro.setStyle("-fx-control-inner-background: #CCFFCC");
+        if (txtContrasena.getText().length() > 50 || txtContrasena.getText().length() < 8) {
+            txtContrasena.setStyle(STYLE_MALO);
+            datosOk = false;
+        } else {
+            txtUsuario.setStyle(STYLE_BUENO);
         }
 
-        if(genero.getValue() == null || preguntaSeguridad.getValue() == null ){
-            datosok = false;
+        if (!validarMail(txtMail.getText())) {
+            txtMail.setStyle(STYLE_MALO);
+            datosOk = false;
+        } else {
+            txtMail.setStyle(STYLE_BUENO);
         }
 
-        return datosok;
+        if (txtNombre.getText().length() > 50 || txtNombre.getText().length() < 1) {
+            txtNombre.setStyle(STYLE_MALO);
+            datosOk = false;
+        } else {
+            txtNombre.setStyle(STYLE_BUENO);
+        }
+
+        if (txtApellido.getText().length() > 50 || txtApellido.getText().length() < 1) {
+            txtApellido.setStyle(STYLE_MALO);
+            datosOk = false;
+        } else {
+            txtApellido.setStyle(STYLE_BUENO);
+        }
+
+        if (txtRespuesta.getText().length() > 50 || txtRespuesta.getText().length() < 1) {
+            txtRespuesta.setStyle(STYLE_MALO);
+            datosOk = false;
+        } else {
+            txtRespuesta.setStyle(STYLE_BUENO);
+        }
+
+        // Verifica que el usuario haya seleccionado algo en los comboboxes
+        if (cbGenero.getValue() == null) {
+            cbGenero.setStyle(STYLE_MALO);
+            datosOk = false;
+        } else {
+            cbGenero.setStyle(STYLE_BUENO);
+        }
+
+        if (cbPregunta.getValue() == null) {
+            cbGenero.setStyle(STYLE_MALO);
+            datosOk = false;
+        } else {
+            cbGenero.setStyle(STYLE_BUENO);
+        }
+
+        return datosOk;
     }
 
     public boolean validarMail(String email)

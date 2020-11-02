@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.collections.FXCollections?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="io.github.recetasDivertidas.pkgLogin.Register"
+      prefWidth="300"
+      spacing="10">
+    <padding>
+        <Insets topRightBottomLeft="10"/>
+    </padding>
+
+    <Label text="Nombre de usuario:"/>
+    <TextField fx:id="txtUsuario" promptText="Nombre de usuario:"/>
+
+    <Label text="Contraseña"/>
+    <PasswordField fx:id="txtContrasena" promptText="Contraseña"/>
+
+    <Label text="Mail:"/>
+    <TextField fx:id="txtMail" promptText="Mail"/>
+
+    <Label text="Nombre de pila:"/>
+    <TextField fx:id="txtNombre" promptText="Nombre de pila"/>
+
+    <Label text="Apellido"/>
+    <TextField fx:id="txtApellido" promptText="Apellido"/>
+
+    <Label text="Género:"/>
+    <ComboBox fx:id="cbGenero" promptText="Seleccione uno" maxWidth="Infinity">
+        <items>
+            <FXCollections fx:factory="observableArrayList">
+                <String fx:value="Masculino"/>
+                <String fx:value="Femenino"/>
+                <String fx:value="Otro"/>
+            </FXCollections>
+        </items>
+    </ComboBox>
+
+    <Label text="Pregunta de seguridad:"/>
+    <ComboBox fx:id="cbPregunta" promptText="Seleccione una" maxWidth="Infinity"/>
+
+    <Label text="Respuesta de seguridad:"/>
+    <TextField fx:id="txtRespuesta"/>
+
+    <Button fx:id="btnRegistrarse" text="Registrarme" maxWidth="Infinity" onAction="#registrarse"/>
+</VBox>
