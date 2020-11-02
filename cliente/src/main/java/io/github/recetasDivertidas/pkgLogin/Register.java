@@ -34,9 +34,9 @@ public class Register extends Stage {
         Scene scnRegister = new Scene(vbox, 300, 300);
         setScene(scnRegister);
         getIcons().add(new Image(getClass().getResourceAsStream("/logo_chiquito.png")));
-        setTitle("Registrate!");
+        setTitle("Regístrate");
         this.initModality(Modality.APPLICATION_MODAL);
-        this.setHeight(588);
+        this.setHeight(600);
         this.setWidth(290);
         setResizable(false);
     }
@@ -45,8 +45,7 @@ public class Register extends Stage {
         VBox vbox = new VBox(8);
         //---------------------------------------PasswordField Section BEGIN--------------------------------------------
         pwdRegistro = new PasswordField();
-        pwdRegistro.setPrefSize(250,10);
-        pwdRegistro.setPromptText("Escriba su contraseña aqui");
+        pwdRegistro.setPromptText("Escriba su contraseña aquí");
         //---------------------------------------PasswordField Section END--------------------------------------------
 
         //---------------------------------------TextField Section BEGIN------------------------------------------------
@@ -54,13 +53,12 @@ public class Register extends Stage {
 
         for (int i = 0; i < inputRegistro.length ; i++){
             inputRegistro[i] = new TextField();
-            inputRegistro[i].setPrefSize(250,10);
         }
-        inputRegistro[0].setPromptText("Escriba su nombre de usuario aqui");
-        inputRegistro[1].setPromptText("Escriba su respuesta de seguridad aqui");
-        inputRegistro[2].setPromptText("Escriba su nombre de pila aqui");
-        inputRegistro[3].setPromptText("Escriba su apellido aqui");
-        inputRegistro[4].setPromptText("Escriba su mail aqui");
+        inputRegistro[0].setPromptText("Escriba su nombre de usuario aquí");
+        inputRegistro[1].setPromptText("Escriba su respuesta de seguridad aquí");
+        inputRegistro[2].setPromptText("Escriba su nombre de pila aquí");
+        inputRegistro[3].setPromptText("Escriba su apellido aquí");
+        inputRegistro[4].setPromptText("Escriba su mail aquí");
         //---------------------------------------TextField Section END--------------------------------------------------
 
         //---------------------------------------Tooltip Section BEGIN--------------------------------------------------
@@ -106,10 +104,10 @@ public class Register extends Stage {
                 8 a 50 caracteres de largo
                 """
         );
-        for(int i = 0; i < tooltip.length ; i++){
-            if(i < inputRegistro.length){
+        for (int i = 0; i < tooltip.length ; i++) {
+            if (i < inputRegistro.length) {
                 inputRegistro[i].setTooltip(tooltip[i]);
-            }else{
+            } else {
                 pwdRegistro.setTooltip(tooltip[i]);
             }
         }
@@ -117,7 +115,7 @@ public class Register extends Stage {
         Image img = new Image(getClass().getResourceAsStream("/atention.png"));
         ImageView[] imageViews = new ImageView[tooltip.length];
 
-        //Aca instanciamos el array de imageview, que aunque muestren la misma imagen, si no lo haces asi se re bugea
+        // Acá instanciamos el array de ImageViews, que aunque muestren la misma imagen, si no lo hacés así se re buguea
         for (int i = 0; i < imageViews.length; i++) {
             imageViews[i] = new ImageView(img);
             imageViews[i].setFitHeight(30);
@@ -135,10 +133,10 @@ public class Register extends Stage {
 
         for (int i = 0; i < lblRegistro.length ; i++){
             lblRegistro[i] = new Label();
-            lblRegistro[i].setPrefSize(140,10);
+            lblRegistro[i].setPrefHeight(10);
         }
         //Se les dan nombre a los labels despues de instanciarlos
-        lblRegistro[0].setText("Nombre de Usuario");
+        lblRegistro[0].setText("Nombre de usuario");
         lblRegistro[1].setText("Pregunta de seguridad");
         lblRegistro[2].setText("Respuesta de seguridad");
         lblRegistro[3].setText("Nombre de pila");
@@ -151,11 +149,11 @@ public class Register extends Stage {
 
         //---------------------------------------ComboBox Section BEGIN-------------------------------------------------
         ObservableList<String> options =
-                FXCollections.observableArrayList(
-                        "Masculino",
-                        "Femenino",
-                        "Otro"
-                );
+            FXCollections.observableArrayList(
+                    "Masculino",
+                    "Femenino",
+                    "Otro"
+            );
         genero = new ComboBox<>(options);
         genero.setPromptText("Género");
         genero.setPrefSize(250,10);
@@ -362,8 +360,7 @@ public class Register extends Stage {
                 "A-Z]{2,7}$";
 
         Pattern pat = Pattern.compile(emailRegex);
-        if (email == null)
-            return false;
+        if (email == null) return false;
         return pat.matcher(email).matches();
     }
 
