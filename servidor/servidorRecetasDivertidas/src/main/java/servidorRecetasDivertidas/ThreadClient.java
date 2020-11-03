@@ -45,7 +45,7 @@ public class ThreadClient implements Runnable{
 	private static final String CONSRECETAING = "{call spBuscarRecetaPorIngr(?,?)}";	
 	private static final String CONSRECETATEXT = "{}";
 	private static final String DATOSRECETA = "{call spGetDatosReceta(?)}";
-	private static final String INGREDIENTES = "SELECT * FROM Ingrediente;";
+	private static final String INGREDIENTES = "{call spSeleccionarIngredientes()}";
 	private static final String LISTARCATREC = "SELECT * FROM CategoriaDeReceta;";
 	private static final String LISTARCATING = "SELECT * FROM CategoriaDeIngrediente;";
 	private static final String LOGIN = "{call spInicioSesion(?,?,?,?)}";
@@ -270,14 +270,27 @@ public class ThreadClient implements Runnable{
 
 	private void ingredientes() {
 		try {
-			pstmt = conn.prepareStatement(INGREDIENTES);
-			ResultSet rs = pstmt.executeQuery();
+			stmt = conn.prepareCall(INGREDIENTES);
+			ResultSet rs = stmt.executeQuery();
 			answer.add("INGREDIENTESOK");
+			int lastIdIng = -1, idIng;
 			while(rs.next()) {
-				//id del ingrediente
-				answer.add(String.valueOf(rs.getInt(1)));
-				//nombre del ingrediente
-				answer.add(rs.getString(2));
+				idIng =	rs.getInt(1);
+				/*Si el id del ingrediente no es igual al id del ingrediente anterior, entonces es un ingrediente distinto
+				Por lo tanto se agrega al mensaje los datos del nuevo ingrediente.
+				 */
+				if (idIng != lastIdIng) {
+					lastIdIng = idIng;
+					answer.add("NEXTING");
+					//id del ingrediente
+					answer.add(String.valueOf(idIng));
+					//nombre del ingrediente
+					answer.add(rs.getString(2));
+				}
+				//id de categoria
+				answer.add(String.valueOf(rs.getInt(3)));
+				//nombre de categoria
+				answer.add(rs.getString(4));
 			}
 			
 		}catch(SQLException e) {
