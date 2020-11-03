@@ -37,21 +37,16 @@ public class Register{
         textfields.add(txtRespuesta);
 
         // Poner las respuestas de seguridad en el ComboBox correspondiente
-        if (Conexion.isSvResponse()) {
-            try {
-                ArrayList<PreguntaSeguridad> resPreguntas = getPreguntasSeguridad();
-                cbPregunta.getItems().addAll(resPreguntas);
-            } catch (IOException e) {
-                Alerta alerta = new Alerta(Alert.AlertType.ERROR,
-                        "Hubo un error",
-                        "Fallo de conexión con el servidor.");
-                alerta.showAndWait();
-            }
-        } else {
+        try {
+            ArrayList<PreguntaSeguridad> resPreguntas = getPreguntasSeguridad();
+            cbPregunta.getItems().addAll(resPreguntas);
+        } catch (IOException e) {
             Alerta alerta = new Alerta(Alert.AlertType.ERROR,
                     "Hubo un error",
                     "Fallo de conexión con el servidor.");
             alerta.showAndWait();
+            Stage stage = (Stage) cbPregunta.getScene().getWindow();
+            stage.close();
         }
     }
 
