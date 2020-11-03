@@ -68,13 +68,18 @@ public class ThreadClient implements Runnable{
 	 * entonces le manda el 'DefaultSQLErrorMsg'
 	 */
 	
-	protected void exceptionHandler(SQLException e, String failMsg) {
+	protected void sqlExceptionHandler(SQLException e, String failMsg) {
 		answer.add(failMsg);
 		if(e.getSQLState().contentEquals("45000")) {
     		answer.add(e.getMessage());
 		}else {
 			answer.add(DefaultSQLErrorMsg);
 		}
+	}
+
+	protected void intExceptionHandler(NumberFormatException e, String failMsg){
+		answer.add(failMsg);
+		answer.add("Ingrese un numero valido");
 	}
 	
 	private void borrarRecetaUsu() {
@@ -87,8 +92,11 @@ public class ThreadClient implements Runnable{
 			stmt.execute();
 			answer.add("BORRARRECOK");
 		} catch (SQLException e) {
-			exceptionHandler(e, "BORRARRECFAIL");
+			sqlExceptionHandler(e, "BORRARRECFAIL");
+		} catch(NumberFormatException e){
+			intExceptionHandler(e, "BORRARRECFAIL");
 		}
+
 	}
 	
 	private void calificar() {
@@ -104,7 +112,7 @@ public class ThreadClient implements Runnable{
 			//si sql no tira ningun error, significa que se pudo calificar correctamente
 			answer.add("CALIFICAOK");
 		} catch (SQLException e) {
-			exceptionHandler(e, "CALIFICARFAIL");
+			sqlExceptionHandler(e, "CALIFICARFAIL");
 		}
 	}
 
@@ -118,7 +126,7 @@ public class ThreadClient implements Runnable{
 			stmt.execute();
 			answer.add("CAMBIARCONTRAOK");
 		}catch(SQLException e) {
-			exceptionHandler(e, "CAMBIARCONTRAFAIL");
+			sqlExceptionHandler(e, "CAMBIARCONTRAFAIL");
 		}
 	}
 	
@@ -154,7 +162,7 @@ public class ThreadClient implements Runnable{
 			answer.add("RESPCONSULTA");
 			DatosConsultaRecetas(stmt.getResultSet());
 		}catch(SQLException e) {
-			exceptionHandler(e, "RESPOCONSULTAFAIL");
+			sqlExceptionHandler(e, "RESPOCONSULTAFAIL");
 		}
 	}
 	
@@ -178,7 +186,9 @@ public class ThreadClient implements Runnable{
 			DatosConsultaRecetas(stmt.getResultSet());
 			
 		}catch (SQLException e) {
-			exceptionHandler(e, "RESPOCONSULTAFAIL");
+			sqlExceptionHandler(e, "RESPOCONSULTAFAIL");
+		} catch(NumberFormatException e){
+			intExceptionHandler(e, "RESPOCONSULTAFAIL");
 		}
 		
 	}
@@ -254,7 +264,7 @@ public class ThreadClient implements Runnable{
 			}
 			
 		}catch (SQLException e) {
-			exceptionHandler(e, "DATOSRECETAFAIL");
+			sqlExceptionHandler(e, "DATOSRECETAFAIL");
 		}
 	}
 
@@ -271,7 +281,7 @@ public class ThreadClient implements Runnable{
 			}
 			
 		}catch(SQLException e) {
-			exceptionHandler(e, "INGREDIENTESFAIL");
+			sqlExceptionHandler(e, "INGREDIENTESFAIL");
 		}
 	}
 	
@@ -287,7 +297,7 @@ public class ThreadClient implements Runnable{
 				answer.add(rs.getString(2));
 			}
 		} catch (SQLException e) {
-			exceptionHandler(e, "LISTARCATINGFAIL");
+			sqlExceptionHandler(e, "LISTARCATINGFAIL");
 		}
 		
 	}
@@ -304,7 +314,7 @@ public class ThreadClient implements Runnable{
 				answer.add(rs.getString(2));
 			}
 		} catch (SQLException e) {
-			exceptionHandler(e, "LISTARCATRECFAIL");
+			sqlExceptionHandler(e, "LISTARCATRECFAIL");
 		}		
 	}
 	
@@ -337,7 +347,7 @@ public class ThreadClient implements Runnable{
 				answer.add("Error en la consulta");
 			}
 		} catch (SQLException e) {	
-			exceptionHandler(e, "LOGINFAIL");	
+			sqlExceptionHandler(e, "LOGINFAIL");	
 		}		
 	}	
 	
@@ -353,7 +363,7 @@ public class ThreadClient implements Runnable{
 				answer.add(rs.getString(2));
 			}
 		} catch (SQLException e) {
-			exceptionHandler(e, "PREGUNTASSEGFAIL");
+			sqlExceptionHandler(e, "PREGUNTASSEGFAIL");
 		}
 	}
 	
@@ -383,7 +393,7 @@ public class ThreadClient implements Runnable{
 			}
 		
 		}catch (SQLException e) {
-			exceptionHandler(e, "RECETASDEUSUARIOFAIL");	
+			sqlExceptionHandler(e, "RECETASDEUSUARIOFAIL");	
 		}
 	}
 	
@@ -403,7 +413,9 @@ public class ThreadClient implements Runnable{
     		stmt.execute();
     		answer.add("REGISTEROK");
 		} catch (SQLException e) {
-			exceptionHandler(e, "REGISTERFAIL");
+			sqlExceptionHandler(e, "REGISTERFAIL");
+		} catch(NumberFormatException e){
+			intExceptionHandler(e, "REGISTERFAIL");
 		}
 		 
 	}
@@ -449,7 +461,9 @@ public class ThreadClient implements Runnable{
 			stmt.execute();
 			answer.add("SUBIRRECETAOK");
 		}catch(SQLException e) {
-			exceptionHandler(e, "SUBIRRECETAFAIL");
+			sqlExceptionHandler(e, "SUBIRRECETAFAIL");
+		} catch(NumberFormatException e){
+			intExceptionHandler(e, "SUBIRRECETAFAIL");
 		}
 	}
 	
@@ -470,7 +484,7 @@ public class ThreadClient implements Runnable{
 				throw new SQLException("Error en la consulta", "45000");
 			}
 		}catch(SQLException e) {
-			exceptionHandler(e, "RESPUSUPREGSEGFAIL");
+			sqlExceptionHandler(e, "RESPUSUPREGSEGFAIL");
 		}
 	}
 	

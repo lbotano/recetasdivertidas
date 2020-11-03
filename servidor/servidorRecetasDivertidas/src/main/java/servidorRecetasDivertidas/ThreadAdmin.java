@@ -32,7 +32,9 @@ public class ThreadAdmin extends ThreadClient{
 			stmt.execute();
 			answer.add("BORRARCATINGOK");
 		} catch (SQLException e) {
-			exceptionHandler(e, "BORRARCATINGFAIL");
+			sqlExceptionHandler(e, "BORRARCATINGFAIL");
+		} catch(NumberFormatException e){
+			intExceptionHandler(e, "BORRARCATINGFAIL");
 		}
 	}
 	
@@ -44,8 +46,10 @@ public class ThreadAdmin extends ThreadClient{
 			stmt.execute();
 			answer.add("BORRARCATRECOK");
 		} catch (SQLException e) {
-			exceptionHandler(e, "BORRARCATRECFAIL");
-		}		
+			sqlExceptionHandler(e, "BORRARCATRECFAIL");
+		}catch(NumberFormatException e){
+			intExceptionHandler(e, "BORRARCATRECFAIL");
+		}
 	}
 	
 	private void borrarRec(){
@@ -56,8 +60,10 @@ public class ThreadAdmin extends ThreadClient{
 			stmt.execute();
 			answer.add("BORRARRECOK");
 		} catch (SQLException e) {
-			exceptionHandler(e, "BORRARRECFAIL");
-		}			
+			sqlExceptionHandler(e, "BORRARRECFAIL");
+		} catch(NumberFormatException e){
+			intExceptionHandler(e, "BORRARRECFAIL");
+		}
 	}
 	
 	private void banearUsuario() {
@@ -67,7 +73,7 @@ public class ThreadAdmin extends ThreadClient{
 			stmt.execute();
 			answer.add("BORRARRECOK");
 		}catch(SQLException e) {
-			exceptionHandler(e, "BORRARUSUFAIL");
+			sqlExceptionHandler(e, "BORRARUSUFAIL");
 		}
 	}
 	
@@ -89,7 +95,7 @@ public class ThreadAdmin extends ThreadClient{
 			stmt.execute();
 			answer.add(ok);
 		} catch (SQLException e) {
-			exceptionHandler(e,fail);
+			sqlExceptionHandler(e,fail);
 		}
 	}
 	
@@ -109,7 +115,9 @@ public class ThreadAdmin extends ThreadClient{
 			stmt.execute();
 			answer.add("SUBIRINGOK");
 		}catch (SQLException e) {
-			exceptionHandler(e, "SUBIRINGFAIL");
+			sqlExceptionHandler(e, "SUBIRINGFAIL");
+		}catch(NumberFormatException e){
+			intExceptionHandler(e, "SUBIRINGFAIL");
 		}
 	}
 	
