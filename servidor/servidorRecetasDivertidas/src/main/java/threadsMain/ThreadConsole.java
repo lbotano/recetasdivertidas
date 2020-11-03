@@ -3,6 +3,10 @@ package threadsMain;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
@@ -11,8 +15,9 @@ public class ThreadConsole implements Runnable {
 	private ThreadServer refServerAdmin;
 	private ThreadServer refServerClient;
 	private ComboPooledDataSource cpds;
+	private Connection con;
 	private boolean exit = false;
-	private final String commands = "stop; start; exit; newAdmin(<nickname>);";
+	private final String commands = "stop; start; exit; newAdmin <nickname>;";
 	
 	public ThreadConsole(ComboPooledDataSource c, ThreadServer refAdmin, ThreadServer refClient) {
 		this.refServerAdmin = refAdmin;
@@ -32,26 +37,41 @@ public class ThreadConsole implements Runnable {
 					refServerClient.shutDownThreadPool(20);
 					exit = true;
 				}else if(input.contains("newAdmin")) {
-					System.out.println("Not implemented yet!");
-					/*
+
 					ArrayList<String> parameters = inputParameters(input);
 					if(parameters.size() == 2) {
 						//crear un nuevo admin
-						Connection con;
 						try {
 							con = cpds.getConnection();
-							
-							System.out.println("");
+							CallableStatement stmt = con.prepareCall("call spDarAdmin(?)");
+							stmt.setString(1,parameters.get(1));
+							stmt.execute();
+							System.out.println("Console: Added new admin!");
 						} catch (SQLException e) {
-							System.out.println("Could not excute command: " + e.getMessage());
+							String errMes = "Console: Could not excute db request: ";
+							if(e.getSQLState().contentEquals("45000")){
+								errMes += e.getMessage();
+							}else{
+								errMes += " an error ocurred in db";
+							}
+							System.out.println(errMes);
+
+						}finally {
+							try {
+								con.close();
+							} catch (SQLException throwables) {
+								System.out.println("Console: rror while trying to close connection for console");
+							}
 						}
-					}*/
+					}else{
+						System.out.println("Console: The number of parameters is not valid!");
+					}
 				}else {
-					System.out.println(input + " is not a valid command! try: " + commands);							
+					System.out.println("Console: " +input + " is not a valid command! try: " + commands);
 				}						
 			}
 		} catch (IOException e) {
-			System.out.println("Failed to read console input! ");
+			System.out.println("Console: Failed to read console input! ");
 		}
 	}
 	
