@@ -48,7 +48,7 @@ public final class Conexion {
 
         try {
             ArrayList<String> msgIn = Conexion.sendMessage(msgOut);
-            if (msgOut.get(0).equals("SERVIDORESTAVIVO")) return true;
+            if (msgIn.get(0).equals("SERVIDORESTAVIVO")) return true;
         } catch (IOException e) {
             return false;
         }
