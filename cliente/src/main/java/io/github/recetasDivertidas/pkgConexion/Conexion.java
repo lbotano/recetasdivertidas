@@ -8,6 +8,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.List;
 
 public final class Conexion {
     public static Socket socket;
@@ -17,7 +18,7 @@ public final class Conexion {
     private final static String HOST = "127.0.0.1";
     private final static int PORT = 7070;
 
-    public static ArrayList<String> sendMessage(ArrayList<String> message) throws IOException {
+    public static ArrayList<String> sendMessage(List<String> message) throws IOException {
         ArrayList<String> answer;
 
         for(String s: message) {
@@ -42,13 +43,16 @@ public final class Conexion {
     }
 
     public static boolean isSvResponse() {
+        ArrayList<String> msgOut = new ArrayList<>();
+        msgOut.add("SERVIDORVIVE");
+
         try {
-            socket = new Socket(HOST, PORT);
-            svResponse = true;
-            socket.close();
-        } catch(Exception e){
-            svResponse = false;
+            ArrayList<String> msg = Conexion.sendMessage(msgOut);
+            if (msg.get(0).equals("SERVIDORESTAVIVO")) return true;
+        } catch (IOException e) {
+            return false;
         }
-        return svResponse;
+
+        return false;
     }
 }
