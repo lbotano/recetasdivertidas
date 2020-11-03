@@ -5,9 +5,6 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
 import threadsMain.ThreadConsole;
 import threadsMain.ThreadServer;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-
 public class Main {
 	
 	private static ComboPooledDataSource cpds = new ComboPooledDataSource();	
@@ -36,15 +33,20 @@ public class Main {
 		cpds.setUser(archivoConfig.getUsuarioMysql());
 		cpds.setPassword(archivoConfig.getPassMysql());
 		cpds.setDriverClass( "com.mysql.cj.jdbc.Driver" );
-		cpds.setTestConnectionOnCheckout(true);
+		cpds.setMinPoolSize(2);
+		cpds.setMaxPoolSize(4);
+		cpds.setPreferredTestQuery("SELECT 1");
+		cpds.setAcquireRetryAttempts(2);
+		cpds.setAcquireRetryDelay(500);
+
 		// Iniciar el server
 
 		try {
-			ThreadServer admin = new ThreadServer(true, cpds, archivoConfig.getPuertoAdmin(), 5);
+			ThreadServer admin = new ThreadServer(true, cpds, archivoConfig.getPuertoAdmin(), 3);
 			Thread ServerAdmin = new Thread(admin);
 			ServerAdmin.setPriority(Thread.MAX_PRIORITY -1);
 			
-			ThreadServer client = new ThreadServer(false, cpds, archivoConfig.getPuertoCliente(), 10);
+			ThreadServer client = new ThreadServer(false, cpds, archivoConfig.getPuertoCliente(), 3);
 			Thread ServerClient = new Thread(client);
 			
 			ServerAdmin.start();
