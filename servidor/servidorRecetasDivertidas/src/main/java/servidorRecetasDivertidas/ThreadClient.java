@@ -587,6 +587,7 @@ public class ThreadClient implements Runnable{
 			System.out.println("Client: Connected with client" + this.socket);
 			//inicializacion de los atributos
 			this.conn = cpds.getConnection();
+			System.out.println("consegui conexion");
 			this.answer = new ArrayList<String>();
 			ObjectOutputStream output = new ObjectOutputStream(this.socket.getOutputStream());
 	        ObjectInputStream input = new ObjectInputStream(this.socket.getInputStream());
@@ -610,7 +611,9 @@ public class ThreadClient implements Runnable{
 		}finally {
 
 			try {
-				this.conn.close();
+				if(conn != null){
+					this.conn.close();
+				}
 			} catch (SQLException e) {
 				System.out.println("Client error: " + e.getMessage() + " in socket: " + socket);
 			}
