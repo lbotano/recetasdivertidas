@@ -590,3 +590,37 @@ BEGIN
         ic.cID = c.cID;
 END//
 DELIMITER ;
+
+DROP FUNCTION IF EXISTS fnGetCalificacionReceta;
+DELIMITER //
+CREATE FUNCTION fnGetCalificacionReceta(
+	idReceta int
+) RETURNS int READS SQL DATA
+BEGIN
+	DECLARE resultado int;
+    SELECT COUNT(r.rID)
+    FROM Receta r, Calificacion c
+    WHERE
+		r.rID = c.rID AND
+        r.rID = idReceta
+	INTO resultado;
+    
+    RETURN resultado;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS spSeleccionarTopRecetas;
+DELIMITER //
+CREATE PROCEDURE spSeleccionarTopRecetas(
+	pagina int
+)
+BEGIN
+	DECLARE paginaSiguiente int;
+    SELECT pagina + 10 INTO paginaSiguiente;
+    
+	SELECT *
+    FROM Receta
+    ORDER BY fnGetCalificacionReceta(rID) DESC
+    LIMIT pagina, paginaSiguiente;
+END//
+DELIMITER ;
