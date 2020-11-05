@@ -15,11 +15,12 @@ public class ThreadAdmin extends ThreadClient{
 	public ThreadAdmin(ComboPooledDataSource c, Socket s) {
 		super(c, s);
 	}
-	
+
+	private static final String BANEARUSUARIO = "{call spBaneoUsuario(?)}";
 	private static final String BORRARCATING = "{call spBorrarCategoriaIngrediente(?)}}";
 	private static final String BORRARCATREC = "{call spBorrarCategoriaReceta(?)}";
-	private static final String BANEARUSUARIO = "{call spBaneoUsuario(?)}";
 	private static final String BORRARREC = "{call spAdminBorrarReceta(?)}";
+	private static final String BORRARING = "{}";
 	private static final String SUBIRCATING = "{call spAgregarCategoriaIngrediente(?)}";
 	private static final String SUBIRCATREC = "{call spAgregarCategoriaReceta(?)}"; 
 	private static final String SUBIRING = "{call spAgregarIngrediente(?,?)}";
@@ -65,13 +66,17 @@ public class ThreadAdmin extends ThreadClient{
 			intExceptionHandler(e, "BORRARRECFAIL");
 		}
 	}
+
+	private void borrarIng(){
+
+	}
 	
 	private void banearUsuario() {
 		try {
 			stmt = conn.prepareCall(BANEARUSUARIO);
 			stmt.setString(1, message.get(1));			
 			stmt.execute();
-			answer.add("BORRARRECOK");
+			answer.add("BANEARUSUOK");
 		}catch(SQLException e) {
 			sqlExceptionHandler(e, "BORRARUSUFAIL");
 		}
@@ -147,6 +152,9 @@ public class ThreadAdmin extends ThreadClient{
 					break;
 				case "BORRARREC":
 					borrarRec();
+					break;
+				case "BORRARING":
+					borrarIng();
 					break;
 				case "BANEARUSUARIO":
 					banearUsuario();

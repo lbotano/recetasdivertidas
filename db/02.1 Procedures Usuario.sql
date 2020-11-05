@@ -252,13 +252,9 @@ CREATE PROCEDURE spGetDatosReceta (
 )
 BEGIN
 	-- Obtener los datos de la receta
-    SELECT *
+    SELECT *, fnGetCalificacionReceta(rID), fnGetCalificacionesReceta(rID)
     FROM Receta
-    -- WHERE rID = prID
-    INNER JOIN
-    (
-		SELECT IFNULL(AVG(calificacion), 0) FROM Calificacion WHERE rID = prID
-	) promedioCalificacion ON rID = prID;
+    WHERE rID = prID;
     
     -- Seleccionar ingredientes
 	SELECT i.iID, i.iNombre, ir.cantidad, ir.unidadCantidad
@@ -388,12 +384,16 @@ BEGIN
     PREPARE stmt FROM 'SELECT
 			rID,
 			rAutor,
-			rNombre
+			rNombre,
+            rDescripcion,
+            fnGetCalificacionReceta(rID),
+            fnGetCalificacionesReceta(rID)
 		FROM (
 			SELECT
 				r.rID,
 				r.rAutor,
 				r.rNombre,
+                r.rDescripcion
 				SUM(JSON_LENGTH(JSON_SEARCH(@ingredientes, \'all\', CONVERT(i.iID, char)))) AS coincidencias
 			FROM
 				Receta r,
@@ -428,12 +428,16 @@ BEGIN
     PREPARE stmt FROM 'SELECT
 			rID,
 			rAutor,
-			rNombre
+			rNombre,
+            rDescripcion,
+            fnGetCalificacionReceta(rID),
+            fnGetCalificacionesReceta(rID)
 		FROM (
 			SELECT
 				r.rID,
 				r.rAutor,
 				r.rNombre,
+                r.rDescripcion
 				SUM(JSON_LENGTH(JSON_SEARCH(@categorias, \'all\', CONVERT(c.cID, char)))) AS coincidencias
 			FROM
 				Receta r,
@@ -468,12 +472,16 @@ BEGIN
     PREPARE stmt FROM 'SELECT
 		rID,
 		rAutor,
-		rNombre
+		rNombre,
+        rDescripcion
+        fnGetCalificacionReceta(rID),
+        fnGetCalificacionesReceta(rID)
 	FROM (
 		SELECT
 			r.rID,
 			r.rAutor,
 			r.rNombre,
+            r.rDescripcion
 			JSON_SEARCH(@categorias, \'all\', CONVERT(c.cID, char)) AS coincidencias
 		FROM
 			Receta r,
@@ -502,17 +510,28 @@ DELIMITER ;
 DROP PROCEDURE IF EXISTS spBuscarRecetasPorTexto;
 DELIMITER //
 CREATE PROCEDURE spBuscarRecetasPorTexto (
-	texto TEXT -- El texto a buscar
+	texto TEXT, -- El texto a buscar
+    pagina int
 )
 BEGIN
 	DECLARE patron text;
+    DECLARE siguientePagina int;
     SELECT CONCAT('%', texto, '%') INTO patron;
+    SELECT pagina + 10 INTO siguientePagina;
     
-	SELECT * FROM Receta
+	SELECT
+		rID,
+        rAutor,
+        rNombre,
+        rDescripcion,
+		fnGetCalificacionReceta(rID),
+        fnGetCalificacionesReceta(rID)
+	FROM Receta
     WHERE
 		rNombre LIKE patron OR
         rDescripcion LIKE patron OR
-        rInstrucciones LIKE patron;
+        rInstrucciones LIKE patron
+	LIMIT pagina, siguientePagina;
 END//
 DELIMITER ;
 
@@ -588,5 +607,60 @@ BEGIN
 	WHERE
         i.iID = ic.iID AND
         ic.cID = c.cID;
+END//
+DELIMITER ;
+
+DROP FUNCTION IF EXISTS fnGetCalificacionReceta;
+DELIMITER //
+CREATE FUNCTION fnGetCalificacionReceta( -- Obtiene la calificación promedio de la receta
+	idReceta int
+) RETURNS int
+READS SQL DATA
+BEGIN
+	DECLARE resultado int;
+    SELECT AVG(c.calificacion)
+    FROM Receta r, Calificacion c
+    WHERE
+		r.rID = c.rID AND
+        r.rID = idReceta
+	GROUP BY r.rID
+	INTO resultado;
+    
+    RETURN resultado;
+END//
+DELIMITER ;
+
+DROP FUNCTION IF EXISTS fnGetCalificacionesReceta;
+DELIMITER //
+CREATE FUNCTION fnGetCalificacionesReceta( -- Obtiene la cantidad de calificaciones que tuvo una receta
+	idReceta int
+) RETURNS int
+READS SQL DATA
+BEGIN
+	DECLARE resultado int;
+    SELECT COUNT(r.rID)
+    FROM Receta r, Calificacion c
+    WHERE
+		r.rID = c.rID AND
+        r.rID = idReceta
+	INTO resultado;
+    
+    RETURN resultado;
+END//;
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS spSeleccionarTopRecetas;
+DELIMITER //
+CREATE PROCEDURE spSeleccionarTopRecetas(
+	pagina int
+)
+BEGIN
+	DECLARE paginaSiguiente int;
+    SELECT pagina + 10 INTO paginaSiguiente;
+    
+	SELECT *
+    FROM Receta
+    ORDER BY fnGetCalificacionReceta(rID) DESC, fnGetCalificacionesReceta(rID) DESC
+    LIMIT pagina, paginaSiguiente;
 END//
 DELIMITER ;
