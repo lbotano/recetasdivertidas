@@ -252,13 +252,9 @@ CREATE PROCEDURE spGetDatosReceta (
 )
 BEGIN
 	-- Obtener los datos de la receta
-    SELECT *
+    SELECT *, fnGetCalificacionReceta(rID), fnGetCalificacionesReceta(rID)
     FROM Receta
-    -- WHERE rID = prID
-    INNER JOIN
-    (
-		SELECT IFNULL(AVG(calificacion), 0) FROM Calificacion WHERE rID = prID
-	) promedioCalificacion ON rID = prID;
+    WHERE rID = prID;
     
     -- Seleccionar ingredientes
 	SELECT i.iID, i.iNombre, ir.cantidad, ir.unidadCantidad
