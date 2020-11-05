@@ -37,6 +37,10 @@ public final class Conexion {
             throw new IOException();
         }
 
+        for(String s: answer) {
+            System.out.println("Received: " + s);
+        }
+
         socket.close();
 
         return answer;

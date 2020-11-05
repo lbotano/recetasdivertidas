@@ -1,33 +1,23 @@
 package io.github.recetasDivertidas.pkgRecetasDivertidas;
-
-import io.github.recetasDivertidas.pkgAdmin.AdminLayout;
-import io.github.recetasDivertidas.pkgBusquedaCategoria.BusquedaCategoriaLayout;
-import io.github.recetasDivertidas.pkgBusquedaTexto.BusquedaTextoLayout;
-import io.github.recetasDivertidas.pkgMisRecetas.MisRecetasLayout;
-import io.github.recetasDivertidas.pkgSubir.SubirLayout;
-import javafx.event.Event;
-import javafx.event.EventHandler;
-import javafx.scene.Scene;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.stage.Stage;
-import io.github.recetasDivertidas.pkgBusquedaIngredientes.BusquedaIngredientesLayout;
+import javafx.scene.layout.Pane;
 
 import java.io.IOException;
 
-public class RecetasDivertidas extends Stage{
-
+public class RecetasDivertidas{
     public static boolean admin;
-    public BorderPane root;
     public final static String BACKGROUND = "#FFFFFF";
     public final static String HOVERED = "#F1F1F1";
     public static String username;
-    public enum pestanias
+    public BorderPane borderPane;
+
+    private enum pestanias
     {
         INICIO,
+        PERFIL,
         BUSQUEDAINGREDIENTES,
         BUSQUEDACATEGORIA,
         BUSQUEDATEXTO,
@@ -36,177 +26,150 @@ public class RecetasDivertidas extends Stage{
         ADMIN
     }
     private pestanias current;
+    @FXML Button btnInicio;
+    @FXML Button btnPerfil;
+    @FXML Button btnBuscarIng;
+    @FXML Button btnBuscarCat;
+    @FXML Button btnBuscarTexto;
+    @FXML Button btnSubirReceta;
+    @FXML Button btnAdmin;
+    private Pane center;
 
-    public RecetasDivertidas(boolean admin, String username){
+    @FXML
+    private void initialize(){
+
+        current = pestanias.INICIO;
+
+        btnInicio.setOnAction(e -> {
+            try {
+                cambiarPestania(pestanias.INICIO);
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
+        });
+        btnInicio.setOnMouseEntered(e -> btnInicio.setStyle("-fx-background-color:" + HOVERED +";"));
+        btnInicio.setOnMouseExited(e -> btnInicio.setStyle("-fx-background-color:" + BACKGROUND +";"));
+
+        btnPerfil.setOnAction(e -> {
+            try {
+                cambiarPestania(pestanias.PERFIL);
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
+        });
+        btnPerfil.setOnMouseEntered(e -> btnPerfil.setStyle("-fx-background-color:" + HOVERED +";"));
+        btnPerfil.setOnMouseExited(e -> btnPerfil.setStyle("-fx-background-color:" + BACKGROUND +";"));
+
+        btnBuscarIng.setOnAction(e -> {
+            try {
+                cambiarPestania(pestanias.BUSQUEDAINGREDIENTES);
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
+        });
+        btnBuscarIng.setOnMouseEntered(e -> btnBuscarIng.setStyle("-fx-background-color:" + HOVERED +";"));
+        btnBuscarIng.setOnMouseExited(e -> btnBuscarIng.setStyle("-fx-background-color:" + BACKGROUND +";"));
+
+        btnBuscarTexto.setOnAction(e -> {
+            try {
+                cambiarPestania(pestanias.BUSQUEDATEXTO);
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
+        });
+        btnBuscarTexto.setOnMouseEntered(e -> btnBuscarTexto.setStyle("-fx-background-color:" + HOVERED +";"));
+        btnBuscarTexto.setOnMouseExited(e -> btnBuscarTexto.setStyle("-fx-background-color:" + BACKGROUND +";"));
+
+        btnBuscarCat.setOnAction(e -> {
+            try {
+                cambiarPestania(pestanias.BUSQUEDACATEGORIA);
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
+        });
+        btnBuscarCat.setOnMouseEntered(e -> btnBuscarCat.setStyle("-fx-background-color:" + HOVERED +";"));
+        btnBuscarCat.setOnMouseExited(e -> btnBuscarCat.setStyle("-fx-background-color:" + BACKGROUND +";"));
+
+        btnSubirReceta.setOnAction(e -> {
+            try {
+                cambiarPestania(pestanias.SUBIRRECETA);
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
+        });
+        btnSubirReceta.setOnMouseEntered(e -> btnSubirReceta.setStyle("-fx-background-color:" + HOVERED +";"));
+        btnSubirReceta.setOnMouseExited(e -> btnSubirReceta.setStyle("-fx-background-color:" + BACKGROUND +";"));
+
+        btnAdmin.setOnAction(e -> {
+            try {
+                cambiarPestania(pestanias.ADMIN);
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
+        });
+        btnAdmin.setOnMouseEntered(e -> btnAdmin.setStyle("-fx-background-color:" + HOVERED +";"));
+        btnAdmin.setOnMouseExited(e -> btnAdmin.setStyle("-fx-background-color:" + BACKGROUND +";"));
+
+    }
+
+    /*public RecetasDivertidas(boolean admin, String username){
         super();
         RecetasDivertidas.admin = admin;
         RecetasDivertidas.username = username;
 
         root = new BorderPane();
-        root.setTop(topPane());
         Scene scene = new Scene(root,800,600);
         this.setScene(scene);
         this.current = pestanias.INICIO;
         this.setTitle("Recetas Divertidas");
         this.getIcons().add(new Image(getClass().getResourceAsStream("/logo_chiquito.png")));
 
-    }
+    }*/
 
-    private HBox topPane(){
-        HBox hbox = new HBox();
-        //vbox.setFillWidth(true);
-
-        int btnI;
-        if(admin){
-            btnI = 7;
-        }else {
-            btnI = 6;
-        }
-
-        Button[] btn = new Button[btnI];
-        Image[] img = new Image[btnI];
-        ImageView[] imageViews = new ImageView[btnI];
-
-        //Este for setea los botones de la izquierda y les dice como verse y que hacer
-
-        for (int i = 0; i < btnI; i++) {
-            btn[i] = new Button();
-
-
-            switch (i) {
-                case 0 ->{
-                    btn[i].setText("Inicio");
-                    img[i] = new Image(getClass().getResourceAsStream("/inicio.png"));
-                    btn[i].setOnAction(e -> {
-                        try {
-                            cambiarPestania(pestanias.INICIO);
-                        } catch (IOException ioException) {
-                            ioException.printStackTrace();
-                        }
-                    });
-                }
-
-                case 1 ->{
-                    btn[i].setText("Buscar por Ingrediente");
-                    btn[i].setOnAction(e -> {
-                        try {
-                            cambiarPestania(pestanias.BUSQUEDAINGREDIENTES);
-                        } catch (IOException ioException) {
-                            ioException.printStackTrace();
-                        }
-                    });
-                }
-                case 2 ->{
-                    btn[i].setText("Buscar por Texto");
-                    btn[i].setOnAction(e -> {
-                        try {
-                            cambiarPestania(pestanias.BUSQUEDATEXTO);
-                        } catch (IOException ioException) {
-                            ioException.printStackTrace();
-                        }
-                    });
-                }
-                case 3 ->{
-                    btn[i].setText("Buscar por Categoria");
-                    btn[i].setOnAction(e -> {
-                        try {
-                            cambiarPestania(pestanias.BUSQUEDACATEGORIA);
-                        } catch (IOException ioException) {
-                            ioException.printStackTrace();
-                        }
-                    });
-                }
-                case 4 ->{
-                    btn[i].setText("Mis Recetas");
-                    btn[i].setOnAction(e -> {
-                        try {
-                            cambiarPestania(pestanias.MISRECETAS);
-                        } catch (IOException ioException) {
-                            ioException.printStackTrace();
-                        }
-                    });
-                }
-                case 5 ->{
-                    btn[i].setText("Subir Receta");
-                    btn[i].setOnAction(e -> {
-                        try {
-                            cambiarPestania(pestanias.SUBIRRECETA);
-                        } catch (IOException ioException) {
-                            ioException.printStackTrace();
-                        }
-                    });
-                }
-                case 6 ->{
-                    btn[i].setText("Admin");
-                    btn[i].setOnAction(e -> {
-                        try {
-                            cambiarPestania(pestanias.ADMIN);
-                        } catch (IOException ioException) {
-                            ioException.printStackTrace();
-                        }
-                    });
-                }
-            }
-
-            imageViews[i] = new ImageView(img[i]);
-            imageViews[i].setFitHeight(100);
-            imageViews[i].setFitWidth(100);
-
-            int finalI = i;
-            btn[i].setOnMouseEntered((EventHandler<Event>) event -> btn[finalI].setStyle("-fx-background-color: " + HOVERED));
-            btn[i].setOnMouseExited((EventHandler<Event>) event -> btn[finalI].setStyle("-fx-background-color: " + BACKGROUND));
-            //btn[i].setGraphic(imageViews[i]);
-            btn[i].setStyle("-fx-background-color: " + BACKGROUND);
-            hbox.getChildren().add(btn[i]);
-        }
-
-        hbox.setStyle("-fx-background-color: "+ BACKGROUND);
-        root.setStyle("-fx-background-color: " + BACKGROUND);
-        //Estoy enojado
-        return hbox;
-    }
-
+    @FXML
     private void cambiarPestania(pestanias pestania) throws IOException {
         switch (pestania){
             case INICIO -> {
                 if(!current.equals(pestanias.INICIO)) {
-                    this.root.setCenter(new BusquedaIngredientesLayout());
+                    this.borderPane.setCenter(FXMLLoader.load(getClass().getResource("/fxml/inicio.fxml")));
                     current = pestanias.INICIO;
+                }
+            }
+            case PERFIL -> {
+                if(!current.equals(pestanias.PERFIL)) {
+                    this.borderPane.setCenter(FXMLLoader.load(getClass().getResource("/fxml/perfil.fxml")));
+                    current = pestanias.MISRECETAS;
                 }
             }
             case BUSQUEDAINGREDIENTES -> {
                 if(!current.equals(pestanias.BUSQUEDAINGREDIENTES)) {
-                    this.root.setCenter(new BusquedaIngredientesLayout());
+                    this.borderPane.setCenter(FXMLLoader.load(getClass().getResource("/fxml/busqueda_ingredientes.fxml")));
                     current = pestanias.BUSQUEDAINGREDIENTES;
                 }
             }
             case BUSQUEDACATEGORIA -> {
                 if(!current.equals(pestanias.BUSQUEDACATEGORIA)) {
-                    this.root.setCenter(new BusquedaCategoriaLayout());
+                    this.borderPane.setCenter(FXMLLoader.load(getClass().getResource("/fxml/busqueda_categorias.fxml")));
                     current = pestanias.BUSQUEDACATEGORIA;
                 }
             }
             case BUSQUEDATEXTO -> {
                 if(!current.equals(pestanias.BUSQUEDATEXTO)) {
-                    this.root.setCenter(new BusquedaTextoLayout());
+                    center = FXMLLoader.load(getClass().getResource("/fxml/busqueda_texto.fxml"));
+
+                    this.borderPane.setCenter(center);
                     current = pestanias.BUSQUEDATEXTO;
                 }
             }
             case SUBIRRECETA -> {
                 if(!current.equals(pestanias.SUBIRRECETA)) {
-                    this.root.setCenter(new SubirLayout());
+                    this.borderPane.setCenter(FXMLLoader.load(getClass().getResource("/fxml/subir_receta.fxml")));
                     current = pestanias.SUBIRRECETA;
-                }
-            }
-            case MISRECETAS -> {
-                if(!current.equals(pestanias.MISRECETAS)) {
-                    this.root.setCenter(new MisRecetasLayout());
-                    current = pestanias.MISRECETAS;
                 }
             }
             case ADMIN -> {
                 if(!current.equals(pestanias.ADMIN)) {
-                    this.root.setCenter(new AdminLayout());
+                    this.borderPane.setCenter(FXMLLoader.load(getClass().getResource("/fxml/admin.fxml")));
                     current = pestanias.ADMIN;
                 }
             }

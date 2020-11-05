@@ -27,7 +27,6 @@ public final class Aplicacion extends Application {
         window.getIcons().add(new Image(getClass().getResourceAsStream("/logo_chiquito.png")));
         window.setTitle("Recetas Divertidas");
 
-        // Si queres probar el cliente sin conexion metele un ! aca y en LayoutLogin
         if (Conexion.isSvResponse()) {
             window.show();
         } else {

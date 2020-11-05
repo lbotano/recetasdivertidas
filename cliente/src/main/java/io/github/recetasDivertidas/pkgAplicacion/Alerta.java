@@ -24,6 +24,7 @@ public class Alerta extends Alert {
         screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         imgView = new ImageView(img);
         imgView.setSmooth(false);
+
         this.setTitle("Recetas divertidas");
         this.setHeaderText(header);
         this.setGraphic(imgView);

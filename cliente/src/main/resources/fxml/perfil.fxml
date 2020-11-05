@@ -10,44 +10,37 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <center>
-      <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
-        <tabs>
-          <Tab fx:id="tabMisRecetas" text="Mis Recetas">
-               <content>
-                  <ScrollPane fx:id="scrollpane" prefHeight="200.0" prefWidth="200.0" />
-               </content>
-            </Tab>
-          <Tab text="Cambiar Contraseña">
-               <content>
-                  <BorderPane prefHeight="200.0" prefWidth="200.0">
-                     <bottom>
-                        <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="143.0" text="Cambiar Contraseña" />
-                     </bottom>
-                     <center>
-                        <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
-                           <children>
-                              <Label maxWidth="1.7976931348623157E308" text="Escriba su nueva contraseña">
-                                 <font>
-                                    <Font size="18.0" />
-                                 </font>
-                              </Label>
-                              <TextField />
-                              <Label maxWidth="1.7976931348623157E308" text="Pregunta de seguridad">
-                                 <font>
-                                    <Font size="18.0" />
-                                 </font>
-                              </Label>
-                              <TextField />
-                           </children>
-                        </VBox>
-                     </center>
-                  </BorderPane>
-               </content>
-            </Tab>
-        </tabs>
-      </TabPane>
+       <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+           <Tab fx:id="tabMisRecetas" text="Mis Recetas">
+               <ScrollPane fx:id="scrollpane"/>
+           </Tab>
+           <Tab text="Cambiar Contraseña">
+               <BorderPane prefHeight="200.0" prefWidth="200.0">
+                   <bottom>
+                       <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="143.0"
+                               text="Cambiar Contraseña"/>
+                   </bottom>
+                   <center>
+                       <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+                           <Label text="Escriba su nueva contraseña">
+                               <font>
+                                   <Font size="18.0"/>
+                               </font>
+                           </Label>
+                           <TextField/>
+                           <Label text="Pregunta de seguridad">
+                               <font>
+                                   <Font size="18.0"/>
+                               </font>
+                           </Label>
+                           <TextField/>
+                       </VBox>
+                   </center>
+               </BorderPane>
+           </Tab>
+       </TabPane>
    </center>
    <top>
       <Label text="Usuario">

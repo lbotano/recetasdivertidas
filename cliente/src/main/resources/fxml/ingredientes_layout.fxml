@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import org.controlsfx.control.SearchableComboBox?>
 
-<HBox prefHeight="28.0" prefWidth="409.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<HBox xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <SearchableComboBox fx:id="cmbCategoriaIngrediente" prefHeight="28.0" prefWidth="141.0"
                        promptText="¿Que tipo de ingrediente es?" HBox.hgrow="ALWAYS"/>
    <SearchableComboBox fx:id="cmbIngrediente" prefHeight="28.0" prefWidth="141.0" promptText="¿Que ingrediente es?"

@@ -6,35 +6,26 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="borderpane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="538.0" prefWidth="714.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane fx:id="borderPane" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="io.github.recetasDivertidas.pkgBusquedaTexto.BusquedaTexto">
    <top>
-      <GridPane fx:id="gridpane" BorderPane.alignment="CENTER">
-        <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-        </columnConstraints>
-        <rowConstraints>
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-        </rowConstraints>
-         <children>
-            <Label fx:id="lblBuscaTexto" text="Escribe lo que desees buscar">
-               <font>
+       <GridPane BorderPane.alignment="CENTER">
+           <Label fx:id="lblBuscaTexto" text="Escribe lo que desees buscar">
+              <font>
                   <Font size="16.0" />
-               </font>
-            </Label>
-            <TextField fx:id="txtBuscar" GridPane.rowIndex="1" />
-            <Button fx:id="btnBuscar" mnemonicParsing="false" text="Buscar" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-         </children>
-      </GridPane>
+              </font>
+           </Label>
+           <TextField fx:id="txtBuscar" GridPane.rowIndex="1" prefWidth="300" />
+           <Button fx:id="btnBuscar" mnemonicParsing="false" onAction="#buscarRecetas" text="Buscar" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+       </GridPane>
    </top>
    <center>
-      <ScrollPane fx:id="scrollpane" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0" />
+       <ScrollPane fx:id="scrollPane" maxWidth="Infinity">
+           <VBox fx:id="vbox" maxHeight="Infinity" maxWidth="Infinity" />
+       </ScrollPane>
    </center>
    <bottom>
       <ButtonBar fx:id="btnBar" nodeOrientation="RIGHT_TO_LEFT" prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">

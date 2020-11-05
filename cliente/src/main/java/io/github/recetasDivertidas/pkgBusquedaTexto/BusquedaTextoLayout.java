@@ -18,7 +18,7 @@ public class BusquedaTextoLayout extends BorderPane {
     private int pagActual = 0;
     private TextField txtBusqueda;
 
-    /*Aca se maneja como se ve la pestaña de busqueda de texto y se intenta que todo lo que es funcionalidad
+    /*Aca se maneja como se ve la pestaña de busqueda de texto y se intenta que t.odo lo que es funcionalidad
       se maneje en BusquedaTextoFuncionalidad, por ende los eventos se manejan desde ahi
      */
     public BusquedaTextoLayout(){
@@ -73,7 +73,7 @@ public class BusquedaTextoLayout extends BorderPane {
 
     private HBox getHbox(){
         HBox hbox = new HBox();
-        Button btnNextPage = new Button("->"); // TODO: Poner conitos UwU
+        Button btnNextPage = new Button("->"); // TODO: Poner iconitos UwU
         Button btnPrevPage = new Button("<-");
 
         //Toy desarrollando esto

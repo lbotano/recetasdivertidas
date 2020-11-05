@@ -100,7 +100,7 @@ public class Register{
                             alerta.showAndWait();
                         }
                         default -> {
-                            alerta = new Alerta(Alert.AlertType.ERROR, "Esto es vergonzoso", "Esto no debería haber sucedido");
+                            alerta = new Alerta(Alert.AlertType.ERROR, "Error desconocido", "Esto no debería haber sucedido");
                             alerta.showAndWait();
                         }
                     }

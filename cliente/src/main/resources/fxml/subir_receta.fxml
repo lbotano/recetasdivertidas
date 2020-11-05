@@ -16,7 +16,7 @@
 <?import org.controlsfx.control.CheckComboBox?>
 
 
-<BorderPane fx:id="borderpane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="577.0" prefWidth="760.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane fx:id="borderpane" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <top>
       <Label fx:id="lblTop" prefHeight="27.0" prefWidth="216.0" text="Sube una nueva receta aqui">
          <font>
@@ -25,43 +25,36 @@
       </Label>
    </top>
    <center>
-      <ScrollPane fx:id="scrollpane" fitToWidth="true" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-         <content>
-            <GridPane fx:id="gridpane" hgap="8.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="443.0" prefWidth="721.0" vgap="8.0">
-               <columnConstraints>
-                  <ColumnConstraints hgrow="ALWAYS" maxWidth="301.0" minWidth="10.0" prefWidth="295.0" />
-                  <ColumnConstraints hgrow="ALWAYS" maxWidth="378.0" minWidth="0.0" prefWidth="167.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="445.0" minWidth="0.0" prefWidth="278.0" />
-               </columnConstraints>
-               <rowConstraints>
-                  <RowConstraints maxHeight="171.0" minHeight="0.0" prefHeight="55.0" vgrow="SOMETIMES" />
-                  <RowConstraints maxHeight="350.0" minHeight="10.0" prefHeight="59.0" vgrow="SOMETIMES" />
-                  <RowConstraints maxHeight="452.0" minHeight="10.0" prefHeight="205.0" vgrow="SOMETIMES" />
-                  <RowConstraints maxHeight="452.0" minHeight="10.0" prefHeight="100.0" vgrow="SOMETIMES" />
-               </rowConstraints>
-               <children>
-                  <TextField fx:id="txtTitulo" prefHeight="27.0" prefWidth="297.0" promptText="Titulo de la receta">
-                     <tooltip>
-                        <Tooltip text="Empty Tooltip" />
-                     </tooltip>
-                  </TextField>
-                  <Label fx:id="lblTipoComida" prefHeight="27.0" prefWidth="153.0" text="¿Qué tipo de comida es?" GridPane.columnIndex="1">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                  </Label>
-                  <CheckComboBox fx:id="cmbCategoriaReceta" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="167.0" title="" GridPane.columnIndex="2" GridPane.hgrow="ALWAYS" />
-                  <TextArea fx:id="txtDescripcion" prefHeight="85.0" prefWidth="657.0" promptText="Descripcion de la receta" GridPane.columnSpan="3" GridPane.rowIndex="1" />
-                  <TextArea fx:id="txtInstrucciones" prefHeight="205.0" prefWidth="694.0" promptText="Instrucciones de la receta" GridPane.columnSpan="3" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.vgrow="ALWAYS" />
-                  <VBox fx:id="vboxIngredientes" prefHeight="200.0" prefWidth="100.0" GridPane.columnSpan="2" GridPane.rowIndex="3" />
-                  <VBox fx:id="vboxImagen" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-               </children>
-            </GridPane>
-         </content>
+      <ScrollPane fx:id="scrollpane" fitToWidth="true" prefHeight="200.0" prefWidth="200.0"
+                  BorderPane.alignment="CENTER">
+         <GridPane fx:id="gridpane" hgap="8.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" vgap="8.0">
+            <TextField fx:id="txtTitulo" prefHeight="27.0" prefWidth="297.0" promptText="Titulo de la receta">
+               <tooltip>
+                  <Tooltip text="Empty Tooltip"/>
+               </tooltip>
+            </TextField>
+            <Label fx:id="lblTipoComida" text="¿Qué tipo de comida es?" prefWidth="260" GridPane.hgrow="ALWAYS" GridPane.columnIndex="1">
+               <font>
+                  <Font size="14.0"/>
+               </font>
+            </Label>
+            <CheckComboBox fx:id="cmbCategoriaReceta" GridPane.columnIndex="2" GridPane.hgrow="ALWAYS"/>
+            <TextArea fx:id="txtDescripcion" prefHeight="80.0" prefWidth="650.0"
+                      promptText="Descripcion de la receta" GridPane.columnSpan="3" GridPane.rowIndex="1"/>
+            <TextArea fx:id="txtInstrucciones" prefHeight="205.0" prefWidth="694.0"
+                      promptText="Instrucciones de la receta" GridPane.columnSpan="3" GridPane.hgrow="ALWAYS"
+                      GridPane.rowIndex="2" GridPane.vgrow="ALWAYS"/>
+            <VBox fx:id="vboxIngredientes" GridPane.rowIndex="3">
+               <fx:include source="ingredientes_layout.fxml"/>
+            </VBox>
+            <VBox fx:id="vboxImagen" GridPane.rowIndex="3" GridPane.columnIndex="1">
+               <fx:include source="imagen_layout.fxml"/>
+            </VBox>
+         </GridPane>
       </ScrollPane>
    </center>
    <bottom>
-      <ButtonBar fx:id="btnBar" maxWidth="1.7976931348623157E308" prefHeight="37.0" prefWidth="577.0" BorderPane.alignment="CENTER">
+      <ButtonBar fx:id="btnBar" maxWidth="Infinity" BorderPane.alignment="CENTER">
         <buttons>
           <Button fx:id="btnSubirReceta" mnemonicParsing="false" text="Subir Receta" />
         </buttons>

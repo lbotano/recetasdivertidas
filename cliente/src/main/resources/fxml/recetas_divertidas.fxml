@@ -11,44 +11,51 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="698.0" prefWidth="714.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="Infinity"
+            maxWidth="Infinity"
+            prefHeight="700.0"
+            prefWidth="700.0"
+            fx:id="borderPane"
+            fx:controller="io.github.recetasDivertidas.pkgRecetasDivertidas.RecetasDivertidas"
+            xmlns="http://javafx.com/javafx/11.0.1"
+            xmlns:fx="http://javafx.com/fxml/1">
    <top>
-      <HBox prefHeight="32.0" prefWidth="806.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
-         <children>
-            <Button maxHeight="1.7976931348623157E308" mnemonicParsing="false" style="-fx-background-color: white;" text="Inicio" HBox.hgrow="ALWAYS" />
-            <Button maxHeight="1.7976931348623157E308" mnemonicParsing="false" style="-fx-background-color: white;" text="Perfil" />
-            <Button maxHeight="1.7976931348623157E308" mnemonicParsing="false" style="-fx-background-color: white;" text="Buscar por Ingrediente" />
-            <Button maxHeight="1.7976931348623157E308" mnemonicParsing="false" style="-fx-background-color: white;" text="Buscar por Categoria" />
-            <Button maxHeight="1.7976931348623157E308" mnemonicParsing="false" style="-fx-background-color: white;" text="Buscar por texto" />
-            <Button maxHeight="1.7976931348623157E308" mnemonicParsing="false" style="-fx-background-color: white;" text="Subir Receta" />
-            <Button maxHeight="1.7976931348623157E308" mnemonicParsing="false" style="-fx-background-color: white;" text="Admin" />
-         </children>
-      </HBox>
+       <HBox prefHeight="32.0" prefWidth="806.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
+           <Button maxHeight="Infinity" fx:id="btnInicio" style="-fx-background-color: white;" text="Inicio" HBox.hgrow="ALWAYS"/>
+           <Button maxHeight="Infinity" fx:id="btnPerfil" style="-fx-background-color: white;" text="Perfil"/>
+           <Button maxHeight="Infinity" fx:id="btnBuscarIng" style="-fx-background-color: white;" text="Buscar por Ingrediente"/>
+           <Button maxHeight="Infinity" fx:id="btnBuscarCat" style="-fx-background-color: white;" text="Buscar por Categoria"/>
+           <Button maxHeight="Infinity" fx:id="btnBuscarTexto" style="-fx-background-color: white;" text="Buscar por texto"/>
+           <Button maxHeight="Infinity" fx:id="btnSubirReceta" style="-fx-background-color: white;" text="Subir Receta"/>
+           <Button maxHeight="Infinity" fx:id="btnAdmin" style="-fx-background-color: white;" text="Admin"/>
+       </HBox>
    </top>
    <center>
-      <ScrollPane fitToWidth="true" prefHeight="583.0" prefWidth="578.0" BorderPane.alignment="CENTER">
-         <content>
-            <GridPane hgap="8.0" maxWidth="1.7976931348623157E308" prefHeight="192.0" prefWidth="712.0" vgap="8.0">
-              <columnConstraints>
-                <ColumnConstraints hgrow="ALWAYS" maxWidth="398.0" minWidth="10.0" prefWidth="351.0" />
-                <ColumnConstraints hgrow="ALWAYS" maxWidth="616.0" minWidth="10.0" prefWidth="444.0" />
-              </columnConstraints>
-              <rowConstraints>
-                <RowConstraints maxHeight="185.0" minHeight="0.0" prefHeight="36.0" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="460.0" minHeight="10.0" prefHeight="41.0" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="122.0" vgrow="SOMETIMES" />
-              </rowConstraints>
-               <children>
-                  <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="51.0" prefWidth="305.0" text="Bienvenido a Recetas Divertidas" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
-                     <font>
-                        <Font size="17.0" />
-                     </font>
-                  </Label>
-                  <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="22.0" prefWidth="351.0" text="Echale un vistazo a las 10 mejores recetas del dia" GridPane.rowIndex="1" />
-                  <VBox maxWidth="1.7976931348623157E308" prefHeight="107.0" prefWidth="712.0" GridPane.columnSpan="2147483647" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" />
-               </children>
-            </GridPane>
-         </content>
-      </ScrollPane>
+       <ScrollPane fitToWidth="true" prefHeight="583.0" prefWidth="578.0" BorderPane.alignment="CENTER">
+           <GridPane hgap="8.0" maxWidth="1.7976931348623157E308" prefHeight="192.0" prefWidth="712.0" vgap="8.0">
+               <columnConstraints>
+                   <ColumnConstraints hgrow="ALWAYS" maxWidth="398.0" minWidth="10.0" prefWidth="351.0"/>
+                   <ColumnConstraints hgrow="ALWAYS" maxWidth="616.0" minWidth="10.0" prefWidth="444.0"/>
+               </columnConstraints>
+               <rowConstraints>
+                   <RowConstraints maxHeight="185.0" minHeight="0.0" prefHeight="36.0" vgrow="SOMETIMES"/>
+                   <RowConstraints maxHeight="460.0" minHeight="10.0" prefHeight="41.0" vgrow="SOMETIMES"/>
+                   <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="122.0"
+                                   vgrow="SOMETIMES"/>
+               </rowConstraints>
+               <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="51.0"
+                      prefWidth="305.0" text="Bienvenido a Recetas Divertidas" GridPane.hgrow="ALWAYS"
+                      GridPane.vgrow="ALWAYS">
+                   <font>
+                       <Font size="17.0"/>
+                   </font>
+               </Label>
+               <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="22.0"
+                      prefWidth="351.0" text="Echale un vistazo a las 10 mejores recetas del dia"
+                      GridPane.rowIndex="1"/>
+               <VBox maxWidth="1.7976931348623157E308" prefHeight="107.0" prefWidth="712.0"
+                     GridPane.columnSpan="2147483647" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2"/>
+           </GridPane>
+       </ScrollPane>
    </center>
 </BorderPane>
