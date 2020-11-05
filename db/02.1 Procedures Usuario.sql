@@ -384,12 +384,16 @@ BEGIN
     PREPARE stmt FROM 'SELECT
 			rID,
 			rAutor,
-			rNombre
+			rNombre,
+            rDescripcion,
+            fnGetCalificacionReceta(rID),
+            fnGetCalificacionesReceta(rID)
 		FROM (
 			SELECT
 				r.rID,
 				r.rAutor,
 				r.rNombre,
+                r.rDescripcion
 				SUM(JSON_LENGTH(JSON_SEARCH(@ingredientes, \'all\', CONVERT(i.iID, char)))) AS coincidencias
 			FROM
 				Receta r,
@@ -424,12 +428,16 @@ BEGIN
     PREPARE stmt FROM 'SELECT
 			rID,
 			rAutor,
-			rNombre
+			rNombre,
+            rDescripcion,
+            fnGetCalificacionReceta(rID),
+            fnGetCalificacionesReceta(rID)
 		FROM (
 			SELECT
 				r.rID,
 				r.rAutor,
 				r.rNombre,
+                r.rDescripcion
 				SUM(JSON_LENGTH(JSON_SEARCH(@categorias, \'all\', CONVERT(c.cID, char)))) AS coincidencias
 			FROM
 				Receta r,
@@ -464,12 +472,16 @@ BEGIN
     PREPARE stmt FROM 'SELECT
 		rID,
 		rAutor,
-		rNombre
+		rNombre,
+        rDescripcion
+        fnGetCalificacionReceta(rID),
+        fnGetCalificacionesReceta(rID)
 	FROM (
 		SELECT
 			r.rID,
 			r.rAutor,
 			r.rNombre,
+            r.rDescripcion
 			JSON_SEARCH(@categorias, \'all\', CONVERT(c.cID, char)) AS coincidencias
 		FROM
 			Receta r,
@@ -504,7 +516,14 @@ BEGIN
 	DECLARE patron text;
     SELECT CONCAT('%', texto, '%') INTO patron;
     
-	SELECT * FROM Receta
+	SELECT
+		rID,
+        rAutor,
+        rNombre,
+        rDescripcion,
+		fnGetCalificacionReceta(rID),
+        fnGetCalificacionesReceta(rID)
+	FROM Receta
     WHERE
 		rNombre LIKE patron OR
         rDescripcion LIKE patron OR
