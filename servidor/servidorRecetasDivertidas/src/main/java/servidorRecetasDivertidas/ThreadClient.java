@@ -43,7 +43,7 @@ public class ThreadClient implements Runnable{
 	private static final String CONSRECETASCATING = "{call spBuscarRecetasPorCatIngr(?,?)}";
 	private static final String CONSRECETASCATREC = "{call spBuscarRecetasPorCatReceta(?,?)}";
 	private static final String CONSRECETAING = "{call spBuscarRecetaPorIngr(?,?)}";
-	private static final String CONSRECETATEXT = "{}";
+	private static final String CONSRECETATEXT = "{call spBuscarRecetasPorTexto(?,?)}";
 	private static final String CONSTOPRECETAS = "{call spSeleccionarTopRecetas(?)}";
 	private static final String DATOSRECETA = "{call spGetDatosReceta(?)}";
 	private static final String INGREDIENTES = "{call spSeleccionarIngredientes()}";
@@ -135,15 +135,25 @@ public class ThreadClient implements Runnable{
 	por categoria de recetas y por texto
 	 */
 	private void DatosConsultaRecetas(ResultSet rs) throws SQLException {
-		while(rs.next()) {
-			//id de la receta
-			answer.add(Integer.toString(rs.getInt(1)));
-			//autor de la receta
-			answer.add(rs.getString(2));
-			//nombre de la receta
-			answer.add(rs.getString(3));
+		if(rs != null){
+			while(rs.next()) {
+				//id de la receta
+				answer.add(Integer.toString(rs.getInt(1)));
+				//autor de la receta
+				answer.add(rs.getString(2));
+				//nombre de la receta
+				answer.add(rs.getString(3));
+				//descripcion de la receta
+				answer.add(rs.getString(4));
+				//calificacion
+				answer.add(String.valueOf(rs.getInt(5)));
+				//cantidad de calificaciones
+				answer.add(String.valueOf(rs.getInt(6)));
+			}
+			rs.close();
+		}else{
+			throw new SQLException("Error en la consulta", "45000");
 		}
-		rs.close();
 	}
 	//true: buscar por categorias de recetas
 	//false: buscar por categorias de ingredientes
@@ -202,7 +212,20 @@ public class ThreadClient implements Runnable{
 	}
 	
 	private void consRecetaText() {
-		
+		try {
+			stmt = conn.prepareCall(CONSRECETATEXT);
+			//num pag
+			stmt.setInt(2, Integer.parseInt(message.get(1)));
+			//texto
+			stmt.setString(1, message.get(2));
+			stmt.execute();
+			answer.add("RESPCONSULTA");
+
+			DatosConsultaRecetas(stmt.getResultSet());
+
+		} catch (SQLException e) {
+			sqlExceptionHandler(e, "RESPOCONSULTAFAIL");
+		}
 	}
 
 	private void consTopRecetas(){
