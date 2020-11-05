@@ -510,11 +510,14 @@ DELIMITER ;
 DROP PROCEDURE IF EXISTS spBuscarRecetasPorTexto;
 DELIMITER //
 CREATE PROCEDURE spBuscarRecetasPorTexto (
-	texto TEXT -- El texto a buscar
+	texto TEXT, -- El texto a buscar
+    pagina int
 )
 BEGIN
 	DECLARE patron text;
+    DECLARE siguientePagina int;
     SELECT CONCAT('%', texto, '%') INTO patron;
+    SELECT pagina + 10 INTO siguientePagina;
     
 	SELECT
 		rID,
@@ -527,7 +530,8 @@ BEGIN
     WHERE
 		rNombre LIKE patron OR
         rDescripcion LIKE patron OR
-        rInstrucciones LIKE patron;
+        rInstrucciones LIKE patron
+	LIMIT pagina, siguientePagina;
 END//
 DELIMITER ;
 
