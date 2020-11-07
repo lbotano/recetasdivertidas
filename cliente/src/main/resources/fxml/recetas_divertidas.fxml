@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
@@ -11,23 +12,53 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
+<?import java.net.URL?>
 <BorderPane maxHeight="Infinity"
             maxWidth="Infinity"
             prefHeight="700.0"
             prefWidth="700.0"
-            fx:id="borderPane"
+            fx:id="bpanePrincipal"
             fx:controller="io.github.recetasDivertidas.pkgRecetasDivertidas.RecetasDivertidas"
+            stylesheets="/css/main.css"
             xmlns="http://javafx.com/javafx/11.0.1"
             xmlns:fx="http://javafx.com/fxml/1">
    <top>
-       <HBox prefHeight="32.0" prefWidth="806.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
-           <Button maxHeight="Infinity" fx:id="btnInicio" style="-fx-background-color: white;" text="Inicio" HBox.hgrow="ALWAYS"/>
-           <Button maxHeight="Infinity" fx:id="btnPerfil" style="-fx-background-color: white;" text="Perfil"/>
-           <Button maxHeight="Infinity" fx:id="btnBuscarIng" style="-fx-background-color: white;" text="Buscar por Ingrediente"/>
-           <Button maxHeight="Infinity" fx:id="btnBuscarCat" style="-fx-background-color: white;" text="Buscar por Categoria"/>
-           <Button maxHeight="Infinity" fx:id="btnBuscarTexto" style="-fx-background-color: white;" text="Buscar por texto"/>
-           <Button maxHeight="Infinity" fx:id="btnSubirReceta" style="-fx-background-color: white;" text="Subir Receta"/>
-           <Button maxHeight="Infinity" fx:id="btnAdmin" style="-fx-background-color: white;" text="Admin"/>
+       <HBox prefHeight="32.0" prefWidth="806.0" BorderPane.alignment="CENTER">
+           <Button maxHeight="Infinity"
+                   fx:id="btnInicio"
+                   styleClass="btnPestana"
+                   onAction="#cambiarPestana"
+                   text="Inicio" HBox.hgrow="ALWAYS"/>
+           <Button maxHeight="Infinity"
+                   fx:id="btnPerfil"
+                   styleClass="btnPestana"
+                   onAction="#cambiarPestana"
+                   text="Perfil"/>
+           <Button maxHeight="Infinity"
+                   fx:id="btnBusquedaIng"
+                   styleClass="btnPestana"
+                   onAction="#cambiarPestana"
+                   text="Buscar por ingrediente"/>
+           <Button maxHeight="Infinity"
+                   fx:id="btnBusquedaCat"
+                   styleClass="btnPestana"
+                   onAction="#cambiarPestana"
+                   text="Buscar por categoría"/>
+           <Button maxHeight="Infinity"
+                   fx:id="btnBusquedaTexto"
+                   styleClass="btnPestana"
+                   onAction="#cambiarPestana"
+                   text="Buscar por texto"/>
+           <Button maxHeight="Infinity"
+                   fx:id="btnSubirReceta"
+                   styleClass="btnPestana"
+                   onAction="#cambiarPestana"
+                   text="Subir receta"/>
+           <Button maxHeight="Infinity"
+                   fx:id="btnAdmin"
+                   styleClass="btnPestana"
+                   onAction="#cambiarPestana"
+                   text="Admin"/>
        </HBox>
    </top>
    <center>

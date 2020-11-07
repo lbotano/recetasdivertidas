@@ -1,0 +1,8 @@
+.btnPestana {
+    -fx-background-color: #ffffff;
+    -fx-cursor: hand;
+}
+
+.btnPestana:hover {
+    -fx-background-color: #f1f1f1;
+}

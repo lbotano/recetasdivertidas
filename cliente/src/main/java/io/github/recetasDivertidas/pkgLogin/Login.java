@@ -31,19 +31,16 @@ public class Login {
                 alerta.showAndWait();
 
                 // "Mostrá el inicio de la app (si es o no admin) y ocultá el login"
-                RecetasDivertidas.admin = admin;
+                RecetasDivertidas.logueadoComoAdmin = admin;
                 RecetasDivertidas.username = username;
 
                 Stage recetasdivertidas = new Stage();
                 Pane rootRecetasDivertidas = FXMLLoader.load(getClass().getResource("/fxml/recetas_divertidas.fxml"));
                 Scene scene = new Scene(rootRecetasDivertidas);
 
-
                 recetasdivertidas.setScene(scene);
                 recetasdivertidas.show();
 
-                /*RecetasDivertidas recetasDivertidas = new RecetasDivertidas(admin, txtContrasena.getText());
-                recetasDivertidas.show();*/
                 Aplicacion.hide();
             }
         } catch (IOException ioException) {
