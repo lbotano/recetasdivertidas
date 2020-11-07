@@ -42,7 +42,7 @@ public class ThreadClient implements Runnable{
 	private static final String CAMBIARCONTRA = "{call spCambiarContrasena(?,?,?)}";
 	private static final String CONSRECETASCATING = "{call spBuscarRecetasPorCatIngr(?,?)}";
 	private static final String CONSRECETASCATREC = "{call spBuscarRecetasPorCatReceta(?,?)}";
-	private static final String CONSRECETAING = "{call spBuscarRecetaPorIngr(?,?)}";
+	private static final String CONSRECETAING = "{call spBuscarRecetasPorIngr(?,?)}";
 	private static final String CONSRECETATEXT = "{call spBuscarRecetasPorTexto(?,?)}";
 	private static final String CONSTOPRECETAS = "{call spSeleccionarTopRecetas(?)}";
 	private static final String DATOSRECETA = "{call spGetDatosReceta(?)}";
@@ -54,8 +54,8 @@ public class ThreadClient implements Runnable{
 	private static final String RECETASDEUSUARIO = "{call spGetRecetasUsuario(?)}";
 	private static final String REGISTRO = "{call spRegistroUsuario(?,?,?,?,?,?,?,?,?,?)}";
 	private static final String SUBIRRECETA = "{call spSubirReceta(?,?,?,?,?,?,?}";
-	private static final String USUPREGSEG = "SELECT * FROM PreguntasSeguridad WHERE id in "
-											+"(SELECT uPreguntaSeguridad WHERE uNickname = ? FROM PreguntasSeguridad)";
+	private static final String USUPREGSEG = "SELECT * FROM PreguntasSeguridad WHERE id in" +
+											" (SELECT uPreguntaSeguridad FROM usuario  WHERE uNickname = ?)";
 	private static final String DefaultSQLErrorMsg = "Error en la base de datos";
 	
 	public ThreadClient(ComboPooledDataSource c, Socket s) {
@@ -106,9 +106,12 @@ public class ThreadClient implements Runnable{
 			//define que utiliza el sp de calificar
 			stmt = conn.prepareCall(CALIFICAR);
 			//establece los parametros segun lo que haya enviado el cliente
+			//nickanem
 			stmt.setString(1, message.get(1));
-			stmt.setString(2, message.get(2));
-			stmt.setString(3, message.get(3));
+			//id receta
+			stmt.setInt(2, Integer.parseInt(message.get(2)));
+			//calificacion
+			stmt.setInt(3, Integer.parseInt(message.get(3)));
 			//ejecuta el sp
 			stmt.execute();
 			//si sql no tira ningun error, significa que se pudo calificar correctamente
@@ -121,7 +124,7 @@ public class ThreadClient implements Runnable{
 	private void cambiarContra() {
 		try {
 			stmt = conn.prepareCall(CAMBIARCONTRA);
-			//1: nickname; 2: contra nueva; 3: respuesta de la pregunta de seguridad
+			//1: nickname; 2: respuesta de la pregunta de seguridad; 3: contra nueva;
 			for (int i = 1; i <= 3; i++) {
 				stmt.setString(i, message.get(i));
 			}
@@ -173,6 +176,7 @@ public class ThreadClient implements Runnable{
 			for (int i = 2; i < message.size(); i++) {
 				categorias.add(message.get(i));
 			}
+			System.out.println(new Gson().toJson(categorias));
 			stmt.setString(1, new Gson().toJson(categorias));
 			//numero de pagina
 			stmt.setInt(2,Integer.parseInt(message.get(1)));
@@ -188,14 +192,15 @@ public class ThreadClient implements Runnable{
 	private void consRecetaIng() {
 		try {
 			stmt = conn.prepareCall(CONSRECETAING);
-			ArrayList<IdIngrediente> ingredientes = new ArrayList<IdIngrediente>();
-			int i = 2;
+			ArrayList<String> ingredientes = new ArrayList<String>();
+
 			//llena el arraylist con los id de ingredientes
-			while(i < message.size()) {
-				ingredientes.add(new IdIngrediente(Integer.parseInt(message.get(i))));
-				i++;
+			for (int i = 2; i < message.size(); i++) {
+				ingredientes.add(message.get(i));
 			}
 			//pone el json en el primer parametro del sp
+
+			System.out.println(new Gson().toJson(ingredientes));
 			stmt.setString(1, new Gson().toJson(ingredientes));
 			//numero de pagina
 			stmt.setInt(2, Integer.parseInt(message.get(1)));
@@ -278,6 +283,7 @@ public class ThreadClient implements Runnable{
 			 */
 
 			ResultSet rs = stmt.getResultSet();
+
 			//1. (rID, rAutor, rNombre, rDescripcion, rInstrucciones, promedioCalificacion, cantidadCalificaciones
 			while (rs.next()){
 				//rID
@@ -559,8 +565,9 @@ public class ThreadClient implements Runnable{
 			pstmt.setString(1, message.get(1));
 			ResultSet rs = pstmt.executeQuery();
 			//si no hubo ningun error ejecutando el query, entonces pone este mensaje
-			answer.add("RESPUSUPREGSEG");
 			if(rs.next()) {
+
+				answer.add("RESPUSUPREGSEG");
 				//id de la pregunta
 				answer.add(String.valueOf(rs.getInt(1)));
 				//pregunta del usuario
@@ -662,7 +669,6 @@ public class ThreadClient implements Runnable{
 			System.out.println("Client: Connected with client" + this.socket);
 			//inicializacion de los atributos
 			this.conn = cpds.getConnection();
-			System.out.println("consegui conexion");
 			this.answer = new ArrayList<String>();
 			ObjectOutputStream output = new ObjectOutputStream(this.socket.getOutputStream());
 	        ObjectInputStream input = new ObjectInputStream(this.socket.getInputStream());
