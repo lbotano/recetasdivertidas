@@ -45,6 +45,18 @@ CALL spRegistroUsuario (
     "jorgelina@jorgelinaventiladores.cl",
     false,
     @resultado);
+
+CALL spRegistroUsuario (
+	"ryukyz",
+	1,
+	"Galo",
+	"Camilo",
+	"Laruffa",
+	"camilo200",
+	0,
+	"camiloreal@gmail.com",
+    true,
+	@resultado);
     
 -- Cambiar contraseñas
 CALL spCambiarContrasena(
