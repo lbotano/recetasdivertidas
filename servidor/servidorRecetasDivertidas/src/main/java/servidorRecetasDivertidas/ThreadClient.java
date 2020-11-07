@@ -75,6 +75,7 @@ public class ThreadClient implements Runnable{
     		answer.add(e.getMessage());
 		}else {
 			answer.add(DefaultSQLErrorMsg);
+			e.printStackTrace();
 		}
 	}
 

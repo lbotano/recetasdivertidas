@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="borderPane" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="io.github.recetasDivertidas.pkgBusquedaTexto.BusquedaTexto">
+<BorderPane fx:id="borderPane" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="io.github.recetasDivertidas.pkgBusquedas.BusquedaTexto">
    <top>
        <GridPane BorderPane.alignment="CENTER">
            <Label fx:id="lblBuscaTexto" text="Escribe lo que desees buscar">

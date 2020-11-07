@@ -5,13 +5,12 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 <?import org.controlsfx.control.CheckComboBox?>
 
-<BorderPane fx:id="borderpane" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<?import javafx.scene.layout.VBox?>
+<BorderPane fx:id="borderpane" fx:controller="io.github.recetasDivertidas.pkgBusquedas.BusquedaCategoria" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <top>
       <GridPane fx:id="gridpane" BorderPane.alignment="CENTER">
             <Label fx:id="lblBuscaCat" text="Busca recetas eligiendo categorias">
@@ -19,12 +18,14 @@
                   <Font size="16.0" />
                </font>
             </Label>
-            <Button fx:id="btnBuscar" mnemonicParsing="false" text="Buscar" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <Button fx:id="btnBuscar" onAction="#buscar" text="Buscar" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <CheckComboBox fx:id="chkcmbCategorias" maxWidth="Infinity" GridPane.rowIndex="1" />
       </GridPane>
    </top>
    <center>
-      <ScrollPane fx:id="scrollpane" maxWidth="Infinity"/>
+      <ScrollPane fx:id="scrollpane" maxWidth="Infinity">
+          <VBox fx:id="vbox"/>
+      </ScrollPane>
    </center>
    <bottom>
       <ButtonBar fx:id="btnBar" nodeOrientation="RIGHT_TO_LEFT" BorderPane.alignment="CENTER">

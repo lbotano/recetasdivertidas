@@ -112,20 +112,6 @@ public class RecetasDivertidas{
 
     }
 
-    /*public RecetasDivertidas(boolean admin, String username){
-        super();
-        RecetasDivertidas.admin = admin;
-        RecetasDivertidas.username = username;
-
-        root = new BorderPane();
-        Scene scene = new Scene(root,800,600);
-        this.setScene(scene);
-        this.current = pestanias.INICIO;
-        this.setTitle("Recetas Divertidas");
-        this.getIcons().add(new Image(getClass().getResourceAsStream("/logo_chiquito.png")));
-
-    }*/
-
     @FXML
     private void cambiarPestania(pestanias pestania) throws IOException {
         switch (pestania){

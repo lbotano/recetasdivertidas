@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="io.github.recetasDivertidas.pkgRecetasDivertidas.RecetaController"
+            prefHeight="400.0" prefWidth="600.0">
+    <top>
+        <HBox>
+            <Label fx:id="titulo"/>
+            <Label fx:id="calificacion"/>
+        </HBox>
+    </top>
+    <center>
+        <VBox>
+            <Label fx:id="descripcion"/>
+            <Label fx:id="instrucciones"/>
+            <Label fx:id="ingredientes"/>
+        </VBox>
+    </center>
+
+</BorderPane>
