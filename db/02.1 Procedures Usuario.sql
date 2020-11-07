@@ -393,7 +393,7 @@ BEGIN
 				r.rID,
 				r.rAutor,
 				r.rNombre,
-                r.rDescripcion
+                r.rDescripcion,
 				SUM(JSON_LENGTH(JSON_SEARCH(@ingredientes, \'all\', CONVERT(i.iID, char)))) AS coincidencias
 			FROM
 				Receta r,
@@ -412,6 +412,7 @@ BEGIN
     
 END//
 DELIMITER ;
+
 
 -- Buscar recetas (por categorías de receta)
 DROP PROCEDURE IF EXISTS spBuscarRecetasPorCatReceta;
@@ -437,7 +438,7 @@ BEGIN
 				r.rID,
 				r.rAutor,
 				r.rNombre,
-                r.rDescripcion
+                r.rDescripcion,
 				SUM(JSON_LENGTH(JSON_SEARCH(@categorias, \'all\', CONVERT(c.cID, char)))) AS coincidencias
 			FROM
 				Receta r,
@@ -481,7 +482,7 @@ BEGIN
 			r.rID,
 			r.rAutor,
 			r.rNombre,
-            r.rDescripcion
+            r.rDescripcion,
 			JSON_SEARCH(@categorias, \'all\', CONVERT(c.cID, char)) AS coincidencias
 		FROM
 			Receta r,
