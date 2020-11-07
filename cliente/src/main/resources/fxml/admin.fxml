@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import org.controlsfx.control.CheckComboBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.geometry.Insets?>
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="io.github.recetasDivertidas.pkgAdmin.Admin">
+    <center>
+        <ScrollPane fitToWidth="true">
+            <padding>
+                <Insets topRightBottomLeft="10"/>
+            </padding>
+            <VBox spacing="10" maxWidth="Infinity">
+                <Label text="Borrar una categoria de ingrediente">
+                    <font>
+                        <Font size="14.0"/>
+                    </font>
+                </Label>
+                <HBox spacing="5">
+                    <ComboBox promptText="Borrar Categoria Ingrediente" maxWidth="Infinity" fx:id="cmbBorrarCatIngrediente" HBox.hgrow="ALWAYS"/>
+                    <Button fx:id="btnBorrarCatIngrediente" text="Borrar Categoria Ingrediente" minWidth="170"/>
+                </HBox>
+                <Label text="Borrar un ingrediente">
+                    <font>
+                        <Font size="14.0"/>
+                    </font>
+                </Label>
+                <HBox spacing="5">
+                    <ComboBox promptText="Borrar Ingrediente" maxWidth="Infinity" fx:id="cmbBorrarIngrediente" HBox.hgrow="ALWAYS"/>
+                    <Button fx:id="btnBorrarIngrediente" text="Borrar Categoria Ingrediente" minWidth="170"/>
+                </HBox>
+                <Label text="Borrar una categiria de receta">
+                    <font>
+                        <Font size="14.0"/>
+                    </font>
+                </Label>
+                <HBox spacing="5">
+                    <ComboBox promptText="Borrar Categoria Receta" maxWidth="Infinity" fx:id="cmbBorrarCatReceta" HBox.hgrow="ALWAYS"/>
+                    <Button fx:id="btnBorrarCatReceta" text="Borrar Categoria Receta" minWidth="170"/>
+                </HBox>
+                <Label text="Banear usuario">
+                    <font>
+                        <Font size="14.0"/>
+                    </font>
+                </Label>
+                <HBox spacing="5">
+                    <TextField fx:id="txtBanearUsuario" promptText="Nombre del usuario" HBox.hgrow="ALWAYS"/>
+                    <Button fx:id="btnBanearUsuario" text="Banear Usuario" minWidth="170"/>
+                </HBox>
+                <Label text="Subir una categoria de ingrediente">
+                    <font>
+                        <Font size="14.0"/>
+                    </font>
+                </Label>
+                <HBox spacing="5">
+                    <TextField fx:id="txtSubirCatIng" promptText="Nombre de la categoria de ingrediente" HBox.hgrow="ALWAYS"/>
+                    <Button fx:id="btnSubirCatIng" text="Subir Categoria Ingrediente" minWidth="170"/>
+                </HBox>
+                <Label text="Subir un ingrediente">
+                    <font>
+                        <Font size="14.0"/>
+                    </font>
+                </Label>
+                <HBox spacing="5">
+                    <CheckComboBox fx:id="chkcmbCategoriasIngrediente" HBox.hgrow="ALWAYS"/>
+                    <TextField fx:id="txtSubirIng" promptText="Nombre del ingrediente" HBox.hgrow="ALWAYS"/>
+                    <Button fx:id="btnSubirIng" text="Subir Ingrediente" minWidth="170"/>
+                </HBox>
+                <Label text="Subir una categoria de receta">
+                    <font>
+                        <Font size="14.0"/>
+                    </font>
+                </Label>
+                <HBox spacing="5">
+                    <TextField fx:id="txtSubirCatRec" promptText="Nombre de la categoria de receta" HBox.hgrow="ALWAYS"/>
+                    <Button fx:id="btnSubirCatRec" text="Subir Categoria Receta" minWidth="170"/>
+                </HBox>
+            </VBox>
+        </ScrollPane>
+    </center>
+</BorderPane>

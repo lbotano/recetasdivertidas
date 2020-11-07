@@ -6,11 +6,20 @@
 
 
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.VBox?>
 <BorderPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
-               fx:controller="io.github.recetasDivertidas.pkgInicio.Inicio">
-    <Label text="HOLA ESTAS EN EL INICIO XDDDDD">
-        <font>
-          <Font size="19.0"/>
-        </font>
-    </Label>
+            fx:controller="io.github.recetasDivertidas.pkgInicio.Inicio">
+    <top>
+        <Label text="¡Aqui estan las 10 mejores recetas para que te chupes los dedos!">
+            <font>
+                <Font size="18.0"/>
+            </font>
+        </Label>
+    </top>
+    <center>
+        <ScrollPane>
+            <VBox fx:id="vbox" />
+        </ScrollPane>
+    </center>
 </BorderPane>

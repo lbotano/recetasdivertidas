@@ -8,6 +8,7 @@ import io.github.recetasDivertidas.pkgConexion.Conexion;
 import io.github.recetasDivertidas.pkgRecetasDivertidas.RecetasDivertidas;
 import io.github.recetasDivertidas.pkgAplicacion.Alerta;
 import io.github.recetasDivertidas.pkgAplicacion.Aplicacion;
+import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -37,6 +38,9 @@ public class Login {
                 Stage recetasdivertidas = new Stage();
                 Pane rootRecetasDivertidas = FXMLLoader.load(getClass().getResource("/fxml/recetas_divertidas.fxml"));
                 Scene scene = new Scene(rootRecetasDivertidas);
+
+                recetasdivertidas.setTitle("Recetas Divertidas");
+                recetasdivertidas.getIcons().add(new Image(getClass().getResourceAsStream("/logo_chiquito.png")));
 
                 recetasdivertidas.setScene(scene);
                 recetasdivertidas.show();
