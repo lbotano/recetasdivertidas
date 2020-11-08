@@ -17,7 +17,7 @@
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="io.github.recetasDivertidas.pkgBusquedas.BusquedaTexto">
     <padding>
-        <Insets topRightBottomLeft="10"
+        <Insets topRightBottomLeft="10"/>
     </padding>
    <top>
        <VBox>
@@ -41,7 +41,7 @@
        </ScrollPane>
    </center>
    <bottom>
-      <ButtonBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+      <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
         <buttons>
             <Button fx:id="btnPrevPag" text="◀" onAction="#nextPag"/>
             <Button fx:id="btnNextPag" text="▶" onAction="#prevPag"/>
