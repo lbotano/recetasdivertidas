@@ -142,7 +142,10 @@ public class ThreadClient implements Runnable{
 	 */
 	private void DatosConsultaRecetas(ResultSet rs) throws SQLException {
 		if(rs != null){
-			answer.add("RESPCONSULTA");
+			/*este indice sirve para contar cuantos registros tiene el resultset
+			Si next devuelve fasle, entonces no hay resultados de busqueda
+			 */
+			int index = 0;
 			while(rs.next()) {
 				//id de la receta
 				answer.add(Integer.toString(rs.getInt(1)));
@@ -156,8 +159,14 @@ public class ThreadClient implements Runnable{
 				answer.add(String.valueOf(rs.getInt(5)));
 				//cantidad de calificaciones
 				answer.add(String.valueOf(rs.getInt(6)));
+				index++;
 			}
 			rs.close();
+			if(index == 0){
+				throw new SQLException("No hay resultados para la busqueda", "45000");
+			}else{
+				answer.add(0,"RESPCONSULTA");
+			}
 		}else{
 			throw new SQLException("Error en la consulta", "45000");
 		}
@@ -179,7 +188,6 @@ public class ThreadClient implements Runnable{
 			for (int i = 2; i < message.size(); i++) {
 				categorias.add(message.get(i));
 			}
-			System.out.println(new Gson().toJson(categorias));
 			stmt.setString(1, new Gson().toJson(categorias));
 			//numero de pagina
 			stmt.setInt(2,Integer.parseInt(message.get(1)));

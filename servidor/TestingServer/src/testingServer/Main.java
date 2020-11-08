@@ -15,7 +15,7 @@ public class Main {
             ObjectInputStream input = new ObjectInputStream(socket.getInputStream());
             MensajesDeCliente msgHandler = new MensajesDeCliente(input, output);
 
-            msgHandler.datosReceta(1);
+            msgHandler.consRecetasCatIng(0, new int[]{1,2,3});
             try{
                 msgHandler.enviarMensaje();
             }catch (IOException e){
