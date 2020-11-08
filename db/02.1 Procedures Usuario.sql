@@ -275,7 +275,7 @@ CREATE PROCEDURE spGetRecetasUsuario (
 )
 BEGIN
 	SELECT *, fnGetCalificacionReceta(rID), fnGetCalificacionesReceta(rID)
-	FROM Receta WHERE uNickname = @uNickname;
+	FROM Receta WHERE rAutor = uNickname;
 END//
 DELIMITER ;
 
