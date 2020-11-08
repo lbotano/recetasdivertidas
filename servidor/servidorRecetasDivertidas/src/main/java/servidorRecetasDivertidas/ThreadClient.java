@@ -140,6 +140,7 @@ public class ThreadClient implements Runnable{
 	 */
 	private void DatosConsultaRecetas(ResultSet rs) throws SQLException {
 		if(rs != null){
+			answer.add("RESPCONSULTA");
 			while(rs.next()) {
 				//id de la receta
 				answer.add(Integer.toString(rs.getInt(1)));
@@ -181,8 +182,7 @@ public class ThreadClient implements Runnable{
 			//numero de pagina
 			stmt.setInt(2,Integer.parseInt(message.get(1)));
 			stmt.execute();
-			answer.add("RESPCONSULTA");
-			//
+
 			DatosConsultaRecetas(stmt.getResultSet());
 		}catch(SQLException e) {
 			sqlExceptionHandler(e, "RESPOCONSULTAFAIL");
@@ -204,8 +204,7 @@ public class ThreadClient implements Runnable{
 			stmt.setString(1, new Gson().toJson(ingredientes));
 			//numero de pagina
 			stmt.setInt(2, Integer.parseInt(message.get(1)));
-			stmt.execute();			
-			answer.add("RESPCONSULTA");
+			stmt.execute();
 			
 			DatosConsultaRecetas(stmt.getResultSet());
 			
@@ -225,12 +224,13 @@ public class ThreadClient implements Runnable{
 			//texto
 			stmt.setString(1, message.get(2));
 			stmt.execute();
-			answer.add("RESPCONSULTA");
 
 			DatosConsultaRecetas(stmt.getResultSet());
 
 		} catch (SQLException e) {
 			sqlExceptionHandler(e, "RESPOCONSULTAFAIL");
+		} catch (NumberFormatException e){
+			intExceptionHandler(e, "CONSTOPRECETASFAIL");
 		}
 	}
 
@@ -239,20 +239,9 @@ public class ThreadClient implements Runnable{
 			stmt = conn.prepareCall(CONSTOPRECETAS);
 			stmt.setInt(1,Integer.parseInt(message.get(1)));
 			stmt.execute();
-			ResultSet rs = stmt.getResultSet();
-			if(rs != null){
-				answer.add("CONSTOPRECETASOK");
-				while (rs.next()) {
-					//rID
-					answer.add(String.valueOf(rs.getInt(1)));
-					//rAutor, rNombre, rDescripcion, rInstrucciones
-					for (int i = 2; i <= 5; i++){
-						answer.add(rs.getString(i));
-					}
-				}
-			}else{
-				throw new SQLException("Error en la consulta", "45000");
-			}
+
+			DatosConsultaRecetas(stmt.getResultSet());
+
 		} catch (SQLException e) {
 			sqlExceptionHandler(e, "CONSTOPRECETASFAIL");
 		} catch (NumberFormatException e){

@@ -14,7 +14,7 @@ public class Main {
             ObjectInputStream input = new ObjectInputStream(socket.getInputStream());
             MensajesDeCliente msgHandler = new MensajesDeCliente(input, output);
 
-            msgHandler.usuPregSeg("lbotano");
+            msgHandler.consTopRecetas(0);
             try{
                 msgHandler.enviarMensaje();
             }catch (IOException e){
