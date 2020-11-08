@@ -44,9 +44,10 @@ public class BusquedaTexto {
                 switch (ans.get(0)) {
                     case "RESPCONSULTA" -> {
                         try {
+                            // Convierte los strings de la consulta en objetos Receta
                             recetas = Receta.getRecetasConsultaBusquedas(ans);
+                            // Muestra las recetas
                             for (Receta r : recetas) {
-                                System.out.println("Nombre: " + r.getTitulo());
                                 FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/resultado_busqueda.fxml"));
                                 GridPane paneReceta = fxmlLoader.load();
                                 ResultadoBusqueda controllerResultadoBusqueda = (ResultadoBusqueda) fxmlLoader.getController();
