@@ -5,6 +5,9 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
 import threadsMain.ThreadConsole;
 import threadsMain.ThreadServer;
 
+import java.sql.Connection;
+import java.sql.SQLException;
+
 public class Main {
 	
 	private static ComboPooledDataSource cpds = new ComboPooledDataSource();	
@@ -40,8 +43,14 @@ public class Main {
 		cpds.setAcquireRetryDelay(500);
 
 		// Iniciar el server
-
+        Connection c = null;
 		try {
+            System.out.println("Testing database connection...");
+
+            c = cpds.getConnection();
+            c.close();
+            System.out.println("Database OK");
+
 			ThreadServer admin = new ThreadServer(true, cpds, archivoConfig.getPuertoAdmin(), 3);
 			Thread ServerAdmin = new Thread(admin);
 			ServerAdmin.setPriority(Thread.MAX_PRIORITY -1);
@@ -58,8 +67,17 @@ public class Main {
 			ServerConsole.start();
 
 		}catch(Exception e) {
-			System.out.println("Could not start server");
-			System.out.println(e.getMessage());
-		}
+			System.out.println("Could not start server: " + e.getMessage());
+			e.printStackTrace();
+		}finally {
+		    try{
+                if(c != null){
+                    c.close();
+                }
+            }catch(SQLException e){
+                System.out.println("Error while trying to close testeing connection");
+            }
+        }
+
 	}
 }
