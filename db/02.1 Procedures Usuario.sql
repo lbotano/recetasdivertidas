@@ -515,7 +515,7 @@ BEGIN
 		rID,
 		rAutor,
 		rNombre,
-        rDescripcion
+        rDescripcion,
         fnGetCalificacionReceta(rID),
         fnGetCalificacionesReceta(rID)
 	FROM (
