@@ -20,13 +20,6 @@ public class RecetasDivertidas{
     private Hashtable<String, BorderPane> pestanas = new Hashtable<>();
 
     @FXML BorderPane bpanePrincipal;
-    @FXML Button btnInicio;
-    @FXML Button btnPerfil;
-    @FXML Button btnBusquedaIng;
-    @FXML Button btnBusquedaCat;
-    @FXML Button btnBusquedaTexto;
-    @FXML Button btnSubirReceta;
-    @FXML Button btnAdmin;
 
     private BorderPane nodeInicio;
     private BorderPane nodePerfil;
@@ -34,6 +27,7 @@ public class RecetasDivertidas{
     private BorderPane nodeBusquedaCat;
     private BorderPane nodeBusquedaTexto;
     private BorderPane nodeSubirReceta;
+    private BorderPane nodeAdmin;
 
     public RecetasDivertidas() {
         // Carga todas las pestañas
@@ -44,6 +38,7 @@ public class RecetasDivertidas{
             nodeBusquedaCat = FXMLLoader.load(getClass().getResource("/fxml/busqueda_categorias.fxml"));
             nodeBusquedaTexto = FXMLLoader.load(getClass().getResource("/fxml/busqueda_texto.fxml"));
             nodeSubirReceta = FXMLLoader.load(getClass().getResource("/fxml/subir_receta.fxml"));
+            nodeAdmin = FXMLLoader.load(getClass().getResource("/fxml/admin.fxml"));
 
             // Llena el diccionario de pestañas
             pestanas.put("btnInicio", nodeInicio);
@@ -52,6 +47,7 @@ public class RecetasDivertidas{
             pestanas.put("btnBusquedaCat", nodeBusquedaCat);
             pestanas.put("btnBusquedaTexto", nodeBusquedaTexto);
             pestanas.put("btnSubirReceta", nodeSubirReceta);
+            pestanas.put("btnAdmin", nodeAdmin);
         } catch (IOException e) {
             new Alerta(Alert.AlertType.ERROR, "Error Inesperado", "Ocurrió un error inesperado.");
             e.printStackTrace();

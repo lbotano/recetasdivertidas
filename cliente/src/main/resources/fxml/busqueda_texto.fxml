@@ -10,28 +10,41 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="borderPane" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="io.github.recetasDivertidas.pkgBusquedas.BusquedaTexto">
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.HBox?>
+<BorderPane fx:id="borderPane"
+            xmlns="http://javafx.com/javafx/11.0.1"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="io.github.recetasDivertidas.pkgBusquedas.BusquedaTexto">
+    <padding>
+        <Insets topRightBottomLeft="10"
+    </padding>
    <top>
-       <GridPane BorderPane.alignment="CENTER">
+       <VBox>
            <Label fx:id="lblBuscaTexto" text="Escribe lo que desees buscar">
               <font>
                   <Font size="16.0" />
               </font>
            </Label>
-           <TextField fx:id="txtBuscar" GridPane.rowIndex="1" prefWidth="300" />
-           <Button fx:id="btnBuscar" mnemonicParsing="false" onAction="#buscarRecetas" text="Buscar" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-       </GridPane>
+           <HBox>
+               <TextField fx:id="txtBuscar"
+                          HBox.hgrow="ALWAYS"/>
+               <Button fx:id="btnBuscar"
+                       onAction="#buscarRecetas"
+                       text="Buscar"/>
+           </HBox>
+       </VBox>
    </top>
    <center>
-       <ScrollPane fx:id="scrollPane" maxWidth="Infinity">
-           <VBox fx:id="vbox" maxHeight="Infinity" maxWidth="Infinity" />
+       <ScrollPane maxWidth="Infinity">
+           <VBox fx:id="vboxResultados" maxHeight="Infinity" maxWidth="Infinity" />
        </ScrollPane>
    </center>
    <bottom>
-      <ButtonBar fx:id="btnBar" nodeOrientation="RIGHT_TO_LEFT" prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+      <ButtonBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
         <buttons>
-          <Button fx:id="btnPrevPag" mnemonicParsing="false" text="-&gt;" />
-            <Button fx:id="btnNextPag" mnemonicParsing="false" text="&lt;-" />
+            <Button fx:id="btnPrevPag" text="◀" onAction="#nextPag"/>
+            <Button fx:id="btnNextPag" text="▶" onAction="#prevPag"/>
         </buttons>
       </ButtonBar>
    </bottom>

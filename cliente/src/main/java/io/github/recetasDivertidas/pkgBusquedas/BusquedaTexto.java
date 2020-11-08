@@ -3,6 +3,7 @@ package io.github.recetasDivertidas.pkgBusquedas;
 import io.github.recetasDivertidas.pkgAplicacion.Alerta;
 import io.github.recetasDivertidas.pkgConexion.Conexion;
 import io.github.recetasDivertidas.pkgRecetasDivertidas.Ingrediente;
+import io.github.recetasDivertidas.pkgRecetasDivertidas.RecetasDivertidas;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
@@ -39,34 +40,28 @@ public class BusquedaTexto {
 
         if (Conexion.isSvResponse()){
             ArrayList<String> ans = Conexion.sendMessage(message);
-            switch(ans.get(0)){
-                case "RESPCONSULTA" ->{
-                    recetas = getRecetas(ans);
-                    vbox.getChildren().addAll(recetas);
-                }
-                case "RESPOCONSULTAFAIL" -> {
-                    Alerta alerta = new Alerta(Alert.AlertType.ERROR, "Error al buscar recetas", ans.get(1));
-                    alerta.showAndWait();
-                }
-                case "MESSAGEERROR" ->{
-                    Alerta alerta = new Alerta(Alert.AlertType.ERROR, "Error en el mensaje",
-                            "Hubo un problema al comunicarse con el servidor");
-                    alerta.showAndWait();
-                }
-                case "ELEMENTBLANK" ->{
-                    Alerta alerta = new Alerta(Alert.AlertType.ERROR, "Error en el mensaje",
-                            "El mensaje contenia espacios en blanco");
-                    alerta.showAndWait();
-                }
-                case "FORMATERROR" ->{
-                    Alerta alerta = new Alerta(Alert.AlertType.ERROR, "Error en el mensaje",
-                            "Hubo un problema en el formato del mensaje");
-                    alerta.showAndWait();
+            if (ans.size() > 0) {
+                switch (ans.get(0)) {
+                    case "RESPCONSULTA" -> {
+                        recetas = getRecetas(ans);
+                        if (recetas != null) {
+                            vbox.getChildren().addAll(recetas);
+                        }
+                    }
+                    case "RESPOCONSULTAFAIL" -> {
+                        Alerta alerta = new Alerta(Alert.AlertType.ERROR, "Error: ", ans.get(1));
+                        alerta.showAndWait();
+                    }
+                    case "MESSAGEERROR", "ELEMENTBLANK", "FORMATERROR" -> {
+                        Alerta alerta = new Alerta(Alert.AlertType.ERROR, "Error inesperado",
+                                "Hubo un error inesperado");
+                        alerta.showAndWait();
+                    }
                 }
             }
-        }else{
+        } else {
             Alerta alerta = new Alerta(Alert.AlertType.ERROR, "Error al conectarse con el servidor.",
-                    "Hubo un problema al intentar buscar.");
+                    "Verifique su conexión a internet.");
             alerta.showAndWait();
         }
     }
@@ -81,4 +76,14 @@ public class BusquedaTexto {
         return null;
     }
 
+
+    @FXML
+    private void prevPag() {
+
+    }
+
+    @FXML
+    private void nextPag() {
+
+    }
 }

@@ -1,5 +1,46 @@
 USE RecetasDivertidasDB;
 
+-- Obtiene la calificación promedio de la receta
+DROP FUNCTION IF EXISTS fnGetCalificacionReceta;
+DELIMITER //
+CREATE FUNCTION fnGetCalificacionReceta(
+	idReceta int
+) RETURNS int
+READS SQL DATA
+BEGIN
+	DECLARE resultado int;
+    SELECT AVG(c.calificacion)
+    FROM Receta r, Calificacion c
+    WHERE
+		r.rID = c.rID AND
+        r.rID = idReceta
+	GROUP BY r.rID
+	INTO resultado;
+    
+    RETURN resultado;
+END//
+DELIMITER ;
+
+ -- Obtiene la cantidad de calificaciones que tuvo una receta
+DROP FUNCTION IF EXISTS fnGetCalificacionesReceta;
+DELIMITER //
+CREATE FUNCTION fnGetCalificacionesReceta(
+	idReceta int
+) RETURNS int
+READS SQL DATA
+BEGIN
+	DECLARE resultado int;
+    SELECT COUNT(r.rID)
+    FROM Receta r, Calificacion c
+    WHERE
+		r.rID = c.rID AND
+        r.rID = idReceta
+	INTO resultado;
+    
+    RETURN resultado;
+END//;
+DELIMITER ;
+
 -- Registro de usuarios --
 -- Devuelve un True si el usuario se creó con éxito
 DROP PROCEDURE IF EXISTS spRegistroUsuario;
@@ -233,7 +274,7 @@ CREATE PROCEDURE spGetRecetasUsuario (
 	uNickname varchar(32)
 )
 BEGIN
-	SELECT rID AS nroReceta, rNombre AS Nombre, rDescripcion AS Descripcion 
+	SELECT *, fnGetCalificacionReceta(rID), fnGetCalificacionesReceta(rID)
 	FROM Receta WHERE uNickname = @uNickname;
 END//
 DELIMITER ;
@@ -611,45 +652,6 @@ BEGIN
 END//
 DELIMITER ;
 
-DROP FUNCTION IF EXISTS fnGetCalificacionReceta;
-DELIMITER //
-CREATE FUNCTION fnGetCalificacionReceta( -- Obtiene la calificación promedio de la receta
-	idReceta int
-) RETURNS int
-READS SQL DATA
-BEGIN
-	DECLARE resultado int;
-    SELECT AVG(c.calificacion)
-    FROM Receta r, Calificacion c
-    WHERE
-		r.rID = c.rID AND
-        r.rID = idReceta
-	GROUP BY r.rID
-	INTO resultado;
-    
-    RETURN resultado;
-END//
-DELIMITER ;
-
-DROP FUNCTION IF EXISTS fnGetCalificacionesReceta;
-DELIMITER //
-CREATE FUNCTION fnGetCalificacionesReceta( -- Obtiene la cantidad de calificaciones que tuvo una receta
-	idReceta int
-) RETURNS int
-READS SQL DATA
-BEGIN
-	DECLARE resultado int;
-    SELECT COUNT(r.rID)
-    FROM Receta r, Calificacion c
-    WHERE
-		r.rID = c.rID AND
-        r.rID = idReceta
-	INTO resultado;
-    
-    RETURN resultado;
-END//;
-DELIMITER ;
-
 DROP PROCEDURE IF EXISTS spSeleccionarTopRecetas;
 DELIMITER //
 CREATE PROCEDURE spSeleccionarTopRecetas(
@@ -659,7 +661,13 @@ BEGIN
 	DECLARE paginaSiguiente int;
     SELECT pagina + 10 INTO paginaSiguiente;
     
-	SELECT *
+	SELECT
+		rID,
+		rAutor,
+		rNombre,
+        rDescripcion,
+        fnGetCalificacionReceta(rID),
+        fnGetCalificacionesReceta(rID)
     FROM Receta
     ORDER BY fnGetCalificacionReceta(rID) DESC, fnGetCalificacionesReceta(rID) DESC
     LIMIT pagina, paginaSiguiente;

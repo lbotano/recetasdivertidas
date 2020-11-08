@@ -13,16 +13,30 @@
          <Font size="16.0"/>
       </font>
    </Label>
-   <Label fx:id="lblDescripcion" alignment="TOP_LEFT" maxHeight="Infinity"
-          maxWidth="Infinity" prefHeight="62.0" prefWidth="285.0" text="Descripcion"
-          GridPane.columnSpan="3" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS"/>
-   <Label fx:id="lblAutor" alignment="TOP_LEFT" maxHeight="Infinity" maxWidth="Infinity"
-          text="Autor" textFill="#949494" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS"/>
+   <Label fx:id="lblDescripcion"
+          alignment="TOP_LEFT"
+          prefHeight="62.0"
+          prefWidth="285.0"
+          text="Descripcion"
+          GridPane.columnSpan="3"
+          GridPane.hgrow="ALWAYS"
+          GridPane.rowIndex="1"
+          GridPane.vgrow="ALWAYS"/>
+   <Label fx:id="lblAutor"
+          alignment="TOP_LEFT"
+          text="Autor"
+          textFill="#949494"
+          GridPane.columnIndex="1"
+          GridPane.hgrow="ALWAYS"/>
    <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="2">
-      <Label fx:id="lblCalificacion" alignment="CENTER_RIGHT" contentDisplay="RIGHT"
-             maxWidth="Infinity" prefHeight="25.0" prefWidth="60.0" text="Calificacion"/>
-      <Label fx:id="lblTotalCalificacion" alignment="CENTER_RIGHT" contentDisplay="RIGHT"
-             maxWidth="Infinity" prefHeight="25.0" prefWidth="60.0" text="Calificacion"/>
+      <Label fx:id="lblCalificacion"
+             alignment="CENTER_RIGHT"
+             contentDisplay="RIGHT"
+             text="Calificacion"/>
+      <Label fx:id="lblTotalCalificacion"
+             alignment="CENTER_RIGHT"
+             contentDisplay="RIGHT"
+             text="Calificacion"/>
       <Button text="↑"/>
       <Button text="↓"/>
    </HBox>
