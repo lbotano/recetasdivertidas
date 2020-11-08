@@ -70,6 +70,7 @@ public class ThreadClient implements Runnable{
 	 */
 	
 	protected void sqlExceptionHandler(SQLException e, String failMsg) {
+		answer.clear();
 		answer.add(failMsg);
 		if(e.getSQLState().contentEquals("45000")) {
     		answer.add(e.getMessage());
@@ -80,6 +81,7 @@ public class ThreadClient implements Runnable{
 	}
 
 	protected void intExceptionHandler(NumberFormatException e, String failMsg){
+		answer.clear();
 		answer.add(failMsg);
 		answer.add("Ingrese un numero valido");
 	}
@@ -255,7 +257,6 @@ public class ThreadClient implements Runnable{
 			//pone la id de la receta
 			stmt.setString(1, message.get(1));
 			stmt.execute();
-			answer.add("DATOSRECETAOK");
 			/*El primer resultset se debe tomar despues de llamar a execute()
 			 * Si se llama a getMoreResults() primero, se perderia el primer resultset
 			 * 
@@ -270,9 +271,11 @@ public class ThreadClient implements Runnable{
 			 * el 3, 4 y 5 tienen el mismo esquema
 			 * 
 			 */
-
 			ResultSet rs = stmt.getResultSet();
-
+			/*este indice cuenta los registros que tiene el primer resultset. Si el metodo next() devuelve false
+			entonces no hay datos basicos para la receta, lo que significa que no existe.
+			 */
+			int index = 0;
 			//1. (rID, rAutor, rNombre, rDescripcion, rInstrucciones, promedioCalificacion, cantidadCalificaciones
 			while (rs.next()){
 				//rID
@@ -285,51 +288,64 @@ public class ThreadClient implements Runnable{
 				answer.add(String.valueOf(rs.getInt(6)));
 				//cantidadCalificaciones
 				answer.add(String.valueOf(rs.getInt(7)));
+				index++;
 			}
+			if(index == 0){
+				throw new SQLException("La receta no existe", "45000");
+			}
+			rs.close();
 			//Toma el proximo resultset, si no hay (o es un update) entonces error
-			if(stmt.getMoreResults()){
-				throw new SQLException("Error en la consulta", "45000");
+			if(!stmt.getMoreResults()){
+				throw new SQLException("Error en la consulta: no se encontro datos de los ingredientes de la receta", "45000");
 			}
+			rs = stmt.getResultSet();
 			//2. ingredientes
 			while(rs.next()){
-				//rID, id de la receta /iID id del ingrediente
+				//iID id del ingrediente
 				answer.add(String.valueOf(rs.getInt(1)));
-				//rNombre, nombre de la receta /iNombre nombre del ingrediente
+				//Nombre nombre del ingrediente
 				answer.add(rs.getString(2));
-				//rDescripcion / unidad del ingrediente
-				answer.add(rs.getString(3));
-				//promedioCalificacion / cantidad del ingrediente
-				answer.add(String.valueOf(rs.getInt(4)));
+				//unidad del ingrediente
+				answer.add(rs.getString(4));
+				//cantidad del ingrediente
+				answer.add(String.valueOf(rs.getInt(3)));
 			}
-			//Toma el proximo resultset, si no hay (o es un update) entonces error
-			if(!stmt.getMoreResults()) {
-				throw new SQLException("Error en la consulta", "45000");
-			}
-
+			rs.close();
 			answer.add("CATEGORIASRECETA");
 			// Se toman los datos de las categorias de recetas, categorias de ingredientes y multimedia
-			for (int i = 0; i < 3; i++) {				
+			for (int i = 0; i < 3; i++) {
+				//Toma el proximo resultset, si no hay (o es un update) entonces error
+				if(!stmt.getMoreResults()) {
+					if(i == 0){
+						throw new SQLException("Error en la consulta: no se encontro las categorias de receta", "45000");
+					}else if (i == 1){
+						throw new SQLException("Error en la consulta: no se encontro las categorias de ingredietnes", "45000");
+					}else{
+						throw new SQLException("Error en la consulta: no se encontro la multimedia", "45000");
+					}
+				}
+				rs = stmt.getResultSet();
 				while(rs.next()) {
 					//cId, id de la categoria (receta / ingrediente) / mID, id de multimedia
 					answer.add(String.valueOf(rs.getInt(1)));
 					//nombre / link
 					answer.add(rs.getString(2));
 				}
-				if(!stmt.getMoreResults()) {
-					throw new SQLException("Error en la consulta", "45000");
-				}
+				rs.close();
+
 				/*Indice 0 = CATEGORIASRECETAS
 				INDICE 1 = CATEGORIASING
 				INDICE 2 = MULTIMEDIA
 				 */
-				if(i == 1) {
+				if(i == 0) {
 					answer.add("CATEGORIASING");
-				}else {
+				}else if (i == 1){
 					answer.add("MULTIMEDIA");
 				}
 			}
-			rs.close();
-			
+			//si todo salio bien, pone el mensaje de ok
+			answer.add(0,"DATOSRECETAOK");
+
 		}catch (SQLException e) {
 			sqlExceptionHandler(e, "DATOSRECETAFAIL");
 		}

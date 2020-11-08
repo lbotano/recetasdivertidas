@@ -8,13 +8,14 @@ import java.util.ArrayList;
 
 public class Main {
     public static void main(String[] args) throws Exception {
+
         try (var socket = new Socket("127.0.0.1", 7070)) {
 
             ObjectOutputStream output = new ObjectOutputStream(socket.getOutputStream());
             ObjectInputStream input = new ObjectInputStream(socket.getInputStream());
             MensajesDeCliente msgHandler = new MensajesDeCliente(input, output);
 
-            msgHandler.consTopRecetas(0);
+            msgHandler.datosReceta(1);
             try{
                 msgHandler.enviarMensaje();
             }catch (IOException e){
