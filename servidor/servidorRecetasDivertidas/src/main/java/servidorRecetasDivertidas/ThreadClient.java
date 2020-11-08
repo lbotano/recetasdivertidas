@@ -53,7 +53,7 @@ public class ThreadClient implements Runnable{
 	private static final String PREGUNTASSEG = "SELECT * FROM PreguntasSeguridad;";
 	private static final String RECETASDEUSUARIO = "{call spGetRecetasUsuario(?)}";
 	private static final String REGISTRO = "{call spRegistroUsuario(?,?,?,?,?,?,?,?,?,?)}";
-	private static final String SUBIRRECETA = "{call spSubirReceta(?,?,?,?,?,?,?}";
+	private static final String SUBIRRECETA = "{call spSubirReceta(?,?,?,?,?,?,?)}";
 	private static final String USUPREGSEG = "SELECT * FROM PreguntasSeguridad WHERE id in" +
 											" (SELECT uPreguntaSeguridad FROM usuario  WHERE uNickname = ?)";
 	private static final String DefaultSQLErrorMsg = "Error en la base de datos";
@@ -545,16 +545,24 @@ public class ThreadClient implements Runnable{
 				ing.add(new Ingrediente(Integer.parseInt(message.get(i)) ,Integer.parseInt(message.get(i+1)),message.get(i+2)));
 				i+=3;
 			}
+			System.out.println("1");
+			//suma uno para saltarse el mensaje de CATEGORIASRECETA
+			i++;
 			//agregar categorias de recetas
 			while(!(message.get(i).contentEquals("INICIOMULTIMEDIA"))){
 				catRec.add(new Categoria(Integer.parseInt(message.get(i))));
 				i++;
-			}	
+			}
+			//suma uno para saltarse el mensaje de INICIOMULTIMEDIA
+			i++;
+			System.out.println("2");
 			//agregar multimedia
 			while(i < message.size()){
 				mult.add(new Multimedia(message.get(i)));
 				i++;
 			}
+
+			System.out.println("3");
 			//cuarto elemento el json de ingredientes
 		    stmt.setString(5,new Gson().toJson(ing));
 			//cuarto elemento el json de multimedia
