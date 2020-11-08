@@ -6,7 +6,14 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
-<GridPane fx:id="gridpane" fx:controller="io.github.recetasDivertidas.pkgBusquedas.ResultadoBusqueda" onMouseClicked="#abrirReceta" hgap="8.0" maxHeight="Infinity" maxWidth="Infinity" vgap="8.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<GridPane
+          fx:controller="io.github.recetasDivertidas.pkgBusquedas.ResultadoBusqueda"
+          hgap="8.0"
+          vgap="8.0"
+          maxWidth="Infinity"
+          maxHeight="Infinity"
+          xmlns="http://javafx.com/javafx/11.0.1"
+          xmlns:fx="http://javafx.com/fxml/1">
    <Label fx:id="lblTitulo" alignment="TOP_LEFT" maxHeight="Infinity" maxWidth="Infinity"
           text="Titulo" GridPane.hgrow="ALWAYS">
       <font>
@@ -33,7 +40,7 @@
              alignment="CENTER_RIGHT"
              contentDisplay="RIGHT"
              text="Calificacion"/>
-      <Label fx:id="lblTotalCalificacion"
+      <Label fx:id="lblCantCalificaciones"
              alignment="CENTER_RIGHT"
              contentDisplay="RIGHT"
              text="Calificacion"/>
