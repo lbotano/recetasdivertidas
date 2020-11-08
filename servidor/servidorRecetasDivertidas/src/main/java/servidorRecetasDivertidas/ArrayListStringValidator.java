@@ -92,9 +92,9 @@ public class ArrayListStringValidator {
 		//primero se fija si hay algun elemento nulo
 		if(alValidar.size() != 4) {
 			return false;
-		}		
-		boolean idReceta = vNum(alValidar.get(1), 1, 11);
-		boolean nickname = vDato(alValidar.get(2), 1, 32);
+		}
+		boolean nickname = vDato(alValidar.get(1), 1, 32);
+		boolean idReceta = vNum(alValidar.get(2), 1, 11);
 		boolean calificacion = vNum(alValidar.get(3), 1, 2);
 		//idReceta, nickname y calificacion
 		return (idReceta && nickname && calificacion);
@@ -102,15 +102,14 @@ public class ArrayListStringValidator {
 	}
 	
 	public boolean esCambiarContraValido() {
-		if(alValidar.size() != 5) {
+		if(alValidar.size() != 4) {
 			return false;
 		}
 		boolean nickname = vDato(alValidar.get(1), 3, 32);
-		boolean contraNueva = vDato(alValidar.get(6), 8, 50);
-		boolean idPregunta = vNum(alValidar.get(2), 1, 2);
-		boolean respuesta = vDato(alValidar.get(3), 1, 64);
+		boolean respuesta = vDato(alValidar.get(2), 1, 64);
+		boolean contraNueva = vDato(alValidar.get(3), 8, 50);
 		
-		return (nickname && contraNueva && idPregunta && respuesta);
+		return (nickname && contraNueva && respuesta);
 	}
 	
 	//Admin
