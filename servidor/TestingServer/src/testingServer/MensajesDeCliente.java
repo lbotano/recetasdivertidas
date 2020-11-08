@@ -1,5 +1,7 @@
 package testingServer;
 
+import clasesParaArrayList.Ingrediente;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -121,6 +123,27 @@ public class MensajesDeCliente {
     public void usuPregSeg(String nickname){
         mensaje.add("USUPREGSEG");
         mensaje.add(nickname);
+    }
+
+    public void subirReceta(String nickname, String rNombre, String rDesc, String rInstr, ArrayList<Ingrediente> ing, ArrayList<String> catRec, ArrayList<String> mult){
+        mensaje.add("SUBIRRECETA");
+        mensaje.add(nickname);
+        mensaje.add(rNombre);
+        mensaje.add(rDesc);
+        mensaje.add(rInstr);
+        for(int i = 0;i< ing.size(); i++ ){
+            mensaje.add(String.valueOf(ing.get(i).getiID()));
+            mensaje.add(String.valueOf(ing.get(i).getCantidad()));
+            mensaje.add(ing.get(i).getUnidad());
+        }
+        mensaje.add("CATEGORIASRECETA");
+        for (String s : catRec) {
+            mensaje.add(s);
+        }
+        mensaje.add("INICIOMULTIMEDIA");
+        for (String s : mult) {
+            mensaje.add(s);
+        }
     }
 
     public void limpiarMensaje(){

@@ -53,6 +53,8 @@ public class ArrayListStringValidator {
 			}
 			i+=3;
 		}
+		//Suma uno para saltarse el mensaje CATEGORIASRECETA
+		i++;
 		//validar las categorias de la receta
 		while(!alValidar.get(i).contentEquals("INICIOMULTIMEDIA")) {
 			if(!vNum(alValidar.get(i),1,11)) {
@@ -60,6 +62,8 @@ public class ArrayListStringValidator {
 			}
 			i++;
 		}
+		//suma 1 para saltarse el mensaje iniciomultimedia
+		i++;
 		//validar la multimedia
 		while(i < alValidar.size()) {
 			if(!vURL(alValidar.get(i))) {
