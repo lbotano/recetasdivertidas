@@ -4,6 +4,7 @@ import io.github.recetasDivertidas.pkgRecetasDivertidas.Receta;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
+import org.controlsfx.glyphfont.FontAwesome;
 
 public class ResultadoBusqueda {
     @FXML private Label lblTitulo;

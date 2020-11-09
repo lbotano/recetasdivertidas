@@ -4,6 +4,7 @@
 <?import javafx.scene.layout.*?>
 
 <?import javafx.geometry.Insets?>
+<?import org.controlsfx.glyphfont.Glyph?>
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="io.github.recetasDivertidas.pkgLogin.Login"
@@ -23,7 +24,11 @@
                 text="Entrar"
                 maxWidth="Infinity"
                 HBox.hgrow="ALWAYS"
-                onAction="#login"/>
+                onAction="#login">
+            <graphic>
+                <Glyph fontFamily="FontAwesome" icon="SIGN_IN"/>
+            </graphic>
+        </Button>
         <Button fx:id="btnRegistrarse"
                 text="Registrarse"
                 maxWidth="Infinity"

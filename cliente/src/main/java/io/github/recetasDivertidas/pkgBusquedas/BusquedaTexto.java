@@ -8,7 +8,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
@@ -50,7 +49,7 @@ public class BusquedaTexto {
                             for (Receta r : recetas) {
                                 FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/resultado_busqueda.fxml"));
                                 GridPane paneReceta = fxmlLoader.load();
-                                ResultadoBusqueda controllerResultadoBusqueda = (ResultadoBusqueda) fxmlLoader.getController();
+                                ResultadoBusqueda controllerResultadoBusqueda = fxmlLoader.getController();
                                 controllerResultadoBusqueda.ponerReceta(r);
                                 vboxResultados.getChildren().add(paneReceta);
                             }

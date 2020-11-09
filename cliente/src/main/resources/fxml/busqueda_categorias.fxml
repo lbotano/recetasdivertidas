@@ -10,6 +10,7 @@
 <?import org.controlsfx.control.CheckComboBox?>
 
 <?import javafx.scene.layout.VBox?>
+<?import org.controlsfx.glyphfont.Glyph?>
 <BorderPane fx:id="borderpane" fx:controller="io.github.recetasDivertidas.pkgBusquedas.BusquedaCategoria" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <top>
       <GridPane fx:id="gridpane" BorderPane.alignment="CENTER">
@@ -18,7 +19,11 @@
                   <Font size="16.0" />
                </font>
             </Label>
-            <Button fx:id="btnBuscar" onAction="#buscar" text="Buscar" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <Button fx:id="btnBuscar" onAction="#buscar" text="Buscar" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                <graphic>
+                    <Glyph fontFamily="FontAwesome" icon="SEARCH"/>
+                </graphic>
+            </Button>
             <CheckComboBox fx:id="chkcmbCategorias" maxWidth="Infinity" GridPane.rowIndex="1" />
       </GridPane>
    </top>
@@ -27,12 +32,20 @@
           <VBox fx:id="vbox"/>
       </ScrollPane>
    </center>
-   <bottom>
-      <ButtonBar fx:id="btnBar" nodeOrientation="RIGHT_TO_LEFT" BorderPane.alignment="CENTER">
-        <buttons>
-          <Button fx:id="btnPrevPag" mnemonicParsing="false" text="-&gt;" />
-            <Button fx:id="btnNextPag" mnemonicParsing="false" text="&lt;-" />
-        </buttons>
-      </ButtonBar>
-   </bottom>
+    <bottom>
+        <ButtonBar fx:id="btnBar" nodeOrientation="RIGHT_TO_LEFT" BorderPane.alignment="CENTER">
+            <buttons>
+                <Button fx:id="btnPrevPag">
+                    <graphic>
+                        <Glyph fontFamily="FontAwesome" icon="CHEVRON_LEFT"/>
+                    </graphic>
+                </Button>
+                <Button fx:id="btnNextPag">
+                    <graphic>
+                        <Glyph fontFamily="FontAwesome" icon="CHEVRON_RIGHT"/>
+                    </graphic>
+                </Button>
+            </buttons>
+        </ButtonBar>
+    </bottom>
 </BorderPane>

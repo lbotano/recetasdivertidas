@@ -12,6 +12,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.layout.HBox?>
+<?import org.controlsfx.glyphfont.Glyph?>
 <BorderPane fx:id="borderPane"
             xmlns="http://javafx.com/javafx/11.0.1"
             xmlns:fx="http://javafx.com/fxml/1"
@@ -31,7 +32,11 @@
                           HBox.hgrow="ALWAYS"/>
                <Button fx:id="btnBuscar"
                        onAction="#buscarRecetas"
-                       text="Buscar"/>
+                       text="Buscar">
+                   <graphic>
+                       <Glyph fontFamily="FontAwesome" icon="SEARCH"/>
+                   </graphic>
+               </Button>
            </HBox>
        </VBox>
    </top>
@@ -43,8 +48,16 @@
    <bottom>
       <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
         <buttons>
-            <Button fx:id="btnPrevPag" text="◀" onAction="#nextPag"/>
-            <Button fx:id="btnNextPag" text="▶" onAction="#prevPag"/>
+            <Button fx:id="btnPrevPag" onAction="#nextPag">
+                <graphic>
+                    <Glyph fontFamily="FontAwesome" icon="CHEVRON_LEFT"/>
+                </graphic>
+            </Button>
+            <Button fx:id="btnNextPag" onAction="#prevPag">
+                <graphic>
+                    <Glyph fontFamily="FontAwesome" icon="CHEVRON_RIGHT"/>
+                </graphic>
+            </Button>
         </buttons>
       </ButtonBar>
    </bottom>

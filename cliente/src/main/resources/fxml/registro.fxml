@@ -9,6 +9,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.image.Image?>
 <?import javafx.util.Duration?>
+<?import org.controlsfx.glyphfont.Glyph?>
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="io.github.recetasDivertidas.pkgLogin.Register"
@@ -29,7 +30,11 @@
         </tooltip>
     </TextField>
 
-    <Label text="Contraseña"/>
+    <Label text="Contraseña">
+        <graphic>
+            <Glyph fontFamily="FontAwesome" icon="KEY"/>
+        </graphic>
+    </Label>
     <PasswordField fx:id="txtContrasena" promptText="Contraseña">
         <tooltip>
             <Tooltip text="Su contraseña debe tener entre 8 y 50 caracteres.">
@@ -40,7 +45,11 @@
         </tooltip>
     </PasswordField>
 
-    <Label text="Mail:"/>
+    <Label text="Mail:">
+        <graphic>
+            <Glyph fontFamily="FontAwesome" icon="ENVELOPE"/>
+        </graphic>
+    </Label>
     <TextField fx:id="txtMail" promptText="Mail">
         <tooltip>
             <Tooltip text="Asegúrese de escribir una dirección de mail real.">
@@ -73,7 +82,11 @@
         </tooltip>
     </TextField>
 
-    <Label text="Género:"/>
+    <Label text="Género:">
+        <graphic>
+            <Glyph fontFamily="FontAwesome" icon="VENUS_MARS"/>
+        </graphic>
+    </Label>
     <ComboBox fx:id="cbGenero" promptText="Seleccione uno" maxWidth="Infinity">
         <items>
             <FXCollections fx:factory="observableArrayList">

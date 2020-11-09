@@ -13,6 +13,7 @@
 <?import javafx.scene.text.Font?>
 
 <?import java.net.URL?>
+<?import org.controlsfx.glyphfont.Glyph?>
 <BorderPane maxHeight="Infinity"
             maxWidth="Infinity"
             prefHeight="700.0"
@@ -27,66 +28,64 @@
            <Button maxHeight="Infinity"
                    fx:id="btnInicio"
                    styleClass="btnPestana"
-                   onAction="#cambiarPestana"
-                   text="Inicio" HBox.hgrow="ALWAYS"/>
+                   onAction="#cambiarPestana">
+               <graphic>
+                   <Glyph fontFamily="FontAwesome" icon="HOME"/>
+               </graphic>
+           </Button>
            <Button maxHeight="Infinity"
                    fx:id="btnPerfil"
                    styleClass="btnPestana"
-                   onAction="#cambiarPestana"
-                   text="Perfil"/>
+                   onAction="#cambiarPestana">
+               <graphic>
+                   <Glyph fontFamily="FontAwesome" icon="USER"/>
+               </graphic>
+           </Button>
            <Button maxHeight="Infinity"
                    fx:id="btnBusquedaIng"
                    styleClass="btnPestana"
                    onAction="#cambiarPestana"
-                   text="Buscar por ingrediente"/>
+                   text="Ingrediente">
+               <graphic>
+                   <Glyph fontFamily="FontAwesome" icon="SEARCH"/>
+               </graphic>
+           </Button>
            <Button maxHeight="Infinity"
                    fx:id="btnBusquedaCat"
                    styleClass="btnPestana"
                    onAction="#cambiarPestana"
-                   text="Buscar por categoría"/>
+                   text="Categoría">
+               <graphic>
+                   <Glyph fontFamily="FontAwesome" icon="SEARCH"/>
+               </graphic>
+           </Button>
            <Button maxHeight="Infinity"
                    fx:id="btnBusquedaTexto"
                    styleClass="btnPestana"
                    onAction="#cambiarPestana"
-                   text="Buscar por texto"/>
+                   text="Texto">
+               <graphic>
+                   <Glyph fontFamily="FontAwesome" icon="SEARCH"/>
+               </graphic>
+           </Button>
            <Button maxHeight="Infinity"
                    fx:id="btnSubirReceta"
                    styleClass="btnPestana"
                    onAction="#cambiarPestana"
-                   text="Subir receta"/>
+                   text="Subir receta">
+               <graphic>
+                   <Glyph fontFamily="FontAwesome" icon="PENCIL"/>
+               </graphic>
+           </Button>
            <Button maxHeight="Infinity"
                    fx:id="btnAdmin"
                    styleClass="btnPestana"
                    onAction="#cambiarPestana"
-                   text="Admin"/>
+                   text="Admin">
+               <graphic>
+                   <Glyph fontFamily="FontAwesome" icon="USER_SECRET"/>
+               </graphic>
+           </Button>
        </HBox>
    </top>
-   <center>
-       <ScrollPane fitToWidth="true" prefHeight="583.0" prefWidth="578.0" BorderPane.alignment="CENTER">
-           <GridPane hgap="8.0" maxWidth="1.7976931348623157E308" prefHeight="192.0" prefWidth="712.0" vgap="8.0">
-               <columnConstraints>
-                   <ColumnConstraints hgrow="ALWAYS" maxWidth="398.0" minWidth="10.0" prefWidth="351.0"/>
-                   <ColumnConstraints hgrow="ALWAYS" maxWidth="616.0" minWidth="10.0" prefWidth="444.0"/>
-               </columnConstraints>
-               <rowConstraints>
-                   <RowConstraints maxHeight="185.0" minHeight="0.0" prefHeight="36.0" vgrow="SOMETIMES"/>
-                   <RowConstraints maxHeight="460.0" minHeight="10.0" prefHeight="41.0" vgrow="SOMETIMES"/>
-                   <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="122.0"
-                                   vgrow="SOMETIMES"/>
-               </rowConstraints>
-               <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="51.0"
-                      prefWidth="305.0" text="Bienvenido a Recetas Divertidas" GridPane.hgrow="ALWAYS"
-                      GridPane.vgrow="ALWAYS">
-                   <font>
-                       <Font size="17.0"/>
-                   </font>
-               </Label>
-               <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="22.0"
-                      prefWidth="351.0" text="Echale un vistazo a las 10 mejores recetas del dia"
-                      GridPane.rowIndex="1"/>
-               <VBox maxWidth="1.7976931348623157E308" prefHeight="107.0" prefWidth="712.0"
-                     GridPane.columnSpan="2147483647" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2"/>
-           </GridPane>
-       </ScrollPane>
-   </center>
 </BorderPane>

@@ -11,25 +11,33 @@
 <?import javafx.scene.text.Font?>
 <?import org.controlsfx.control.CheckComboBox?>
 
+<?import org.controlsfx.glyphfont.Glyph?>
 <BorderPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
     <top>
         <GridPane BorderPane.alignment="CENTER">
-        <columnConstraints>
-            <ColumnConstraints hgrow="ALWAYS" minWidth="10.0"/>
-            <ColumnConstraints hgrow="ALWAYS" minWidth="10.0"/>
-        </columnConstraints>
-        <rowConstraints>
-            <RowConstraints minHeight="10.0" vgrow="ALWAYS"/>
-            <RowConstraints minHeight="10.0" vgrow="ALWAYS"/>
-        </rowConstraints>
-        <Label text="Busca recetas eligiendo ingredientes">
-        <font>
-            <Font size="16.0"/>
-        </font>
-        </Label>
-        <Button fx:id="btnBuscar" mnemonicParsing="false" text="Button" GridPane.columnIndex="1"
-        GridPane.rowIndex="1"/>
-        <CheckComboBox fx:id="chkcmbIngredientes" maxWidth="1.7976931348623157E308" GridPane.rowIndex="1"/>
+            <columnConstraints>
+                <ColumnConstraints hgrow="ALWAYS" minWidth="10.0"/>
+                <ColumnConstraints hgrow="ALWAYS" minWidth="10.0"/>
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints minHeight="10.0" vgrow="ALWAYS"/>
+                <RowConstraints minHeight="10.0" vgrow="ALWAYS"/>
+            </rowConstraints>
+            <Label text="Busca recetas eligiendo ingredientes">
+                <font>
+                    <Font size="16.0"/>
+                </font>
+            </Label>
+            <Button fx:id="btnBuscar"
+                    mnemonicParsing="false"
+                    text="Button"
+                    GridPane.columnIndex="1"
+                    GridPane.rowIndex="1">
+                <graphic>
+                    <Glyph fontFamily="FontAwesome" icon="SEARCH"/>
+                </graphic>
+            </Button>
+            <CheckComboBox fx:id="chkcmbIngredientes" maxWidth="1.7976931348623157E308" GridPane.rowIndex="1"/>
         </GridPane>
     </top>
     <center>
@@ -38,8 +46,16 @@
     <bottom>
         <ButtonBar fx:id="btnBar" nodeOrientation="RIGHT_TO_LEFT" prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
             <buttons>
-                <Button fx:id="btnPrevPag" mnemonicParsing="false" text="-&gt;" />
-                <Button fx:id="btnNextPag" mnemonicParsing="false" text="&lt;-" />
+                <Button fx:id="btnPrevPag">
+                    <graphic>
+                        <Glyph fontFamily="FontAwesome" icon="CHEVRON_LEFT"/>
+                    </graphic>
+                </Button>
+                <Button fx:id="btnNextPag">
+                    <graphic>
+                        <Glyph fontFamily="FontAwesome" icon="CHEVRON_RIGHT"/>
+                    </graphic>
+                </Button>
             </buttons>
         </ButtonBar>
     </bottom>
