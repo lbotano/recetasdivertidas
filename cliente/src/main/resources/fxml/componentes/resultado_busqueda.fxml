@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.layout.VBox?>
+<?import org.controlsfx.glyphfont.Glyph?>
+<?import io.github.recetasDivertidas.pkgComponentes.Calificador?>
+
+<HBox xmlns="http://javafx.com/11.0.1"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="io.github.recetasDivertidas.pkgComponentes.ResultadoBusqueda"
+      spacing="15">
+    <VBox HBox.hgrow="ALWAYS">
+        <HBox>
+            <Label fx:id="lblTitulo"
+                   text="Título"
+                   HBox.hgrow="ALWAYS"
+                   maxWidth="Infinity">
+                <font>
+                    <Font size="16.0"/>
+                </font>
+            </Label>
+            <Label fx:id="lblAutor"
+                   text="Autor"
+                   textFill="#949494"
+                   alignment="BASELINE_RIGHT"/>
+        </HBox>
+        <Label fx:id="lblDescripcion"
+             text="Descripcion"/>
+    </VBox>
+    <VBox>
+        <Calificador fx:id="calificador"/>
+        <HBox>
+            <Label text="Calificación: "/>
+            <Label fx:id="lblCalificacion">
+                <graphic>
+                    <Glyph fontFamily="FontAwesome" icon="STAR"/>
+                </graphic>
+            </Label>
+            <Label fx:id="lblCantCalificaciones"/>
+        </HBox>
+    </VBox>
+</HBox>

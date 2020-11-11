@@ -1,13 +1,17 @@
 package io.github.recetasDivertidas.pkgBusquedas;
 
 import io.github.recetasDivertidas.pkgAplicacion.Alerta;
+import io.github.recetasDivertidas.pkgComponentes.ResultadoBusqueda;
 import io.github.recetasDivertidas.pkgConexion.Conexion;
 import io.github.recetasDivertidas.pkgRecetasDivertidas.MensajeServerInvalidoException;
 import io.github.recetasDivertidas.pkgRecetasDivertidas.Receta;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.*;
-import javafx.scene.layout.GridPane;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
@@ -47,8 +51,8 @@ public class BusquedaTexto {
                             recetas = Receta.getRecetasConsultaBusquedas(ans);
                             // Muestra las recetas
                             for (Receta r : recetas) {
-                                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/resultado_busqueda.fxml"));
-                                GridPane paneReceta = fxmlLoader.load();
+                                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/componentes/resultado_busqueda.fxml"));
+                                HBox paneReceta = fxmlLoader.load();
                                 ResultadoBusqueda controllerResultadoBusqueda = fxmlLoader.getController();
                                 controllerResultadoBusqueda.ponerReceta(r);
                                 vboxResultados.getChildren().add(paneReceta);

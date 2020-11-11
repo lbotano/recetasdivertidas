@@ -6,15 +6,13 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.layout.HBox?>
 <?import org.controlsfx.glyphfont.Glyph?>
-<BorderPane fx:id="borderPane"
-            xmlns="http://javafx.com/javafx/11.0.1"
+<BorderPane xmlns="http://javafx.com/javafx/11.0.1"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="io.github.recetasDivertidas.pkgBusquedas.BusquedaTexto">
     <padding>
@@ -42,7 +40,11 @@
    </top>
    <center>
        <ScrollPane maxWidth="Infinity" fitToWidth="true">
-           <VBox fx:id="vboxResultados" maxHeight="Infinity" maxWidth="Infinity" />
+           <VBox fx:id="vboxResultados" maxHeight="Infinity" maxWidth="Infinity" spacing="15">
+               <padding>
+                   <Insets topRightBottomLeft="15"/>
+               </padding>
+           </VBox>
        </ScrollPane>
    </center>
    <bottom>

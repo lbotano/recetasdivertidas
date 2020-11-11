@@ -1,5 +1,10 @@
 package io.github.recetasDivertidas.pkgRecetasDivertidas;
 
+import io.github.recetasDivertidas.pkgAplicacion.Alerta;
+import io.github.recetasDivertidas.pkgConexion.Conexion;
+import javafx.scene.control.Alert;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +26,7 @@ public class Receta {
         this.cantCalificaciones = cantCalificaciones;
     }
 
+    // TODO: Se tendrían que manejar en esta función también los mensajes que se mandan desde el cliente
     public static ArrayList<Receta> getRecetasConsultaBusquedas(List<String> mensajeServidor)
     throws MensajeServerInvalidoException {
         ArrayList<Receta> resultado = new ArrayList<>();
@@ -41,6 +47,54 @@ public class Receta {
             resultado.add(receta);
         }
         return resultado;
+    }
+
+    public boolean calificar(int calificacion) {
+        ArrayList<String> mensajeEnviar = new ArrayList<>();
+        mensajeEnviar.add("CALIFICAR");
+        mensajeEnviar.add(RecetasDivertidas.username);
+        mensajeEnviar.add(String.valueOf(this.id));
+        mensajeEnviar.add(String.valueOf(calificacion));
+
+        try {
+            Conexion.sendMessage(mensajeEnviar);
+            if (Conexion.isSvResponse()) {
+                ArrayList<String> respuesta = Conexion.sendMessage(mensajeEnviar);
+                if (respuesta.get(0).equals("CALIFICAROK")) return true;
+            }
+        } catch (IOException e) {
+            Alerta alerta =
+                    new Alerta(Alert.AlertType.ERROR, "Error inesperado", "Hubo un error inesperado");
+            alerta.showAndWait();
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    // Actualiza el nombre, el autor, la descripción y las calificaciones
+    public void actualizarSimple() {
+        ArrayList<String> mensajeEnviar = new ArrayList<>();
+        mensajeEnviar.add("DATOSRECETA");
+        mensajeEnviar.add(String.valueOf(this.id));
+
+        try {
+            Conexion.sendMessage(mensajeEnviar);
+            if (Conexion.isSvResponse()) {
+                ArrayList<String> respuesta = Conexion.sendMessage(mensajeEnviar);
+                if (respuesta.get(0).equals("DATOSRECETAOK")) {
+                    this.autor = respuesta.get(2);
+                    this.titulo = respuesta.get(3);
+                    this.descripcion = respuesta.get(4);
+                    this.calificacion = Float.parseFloat(respuesta.get(6));
+                    this.cantCalificaciones = Integer.parseInt(respuesta.get(7));
+                }
+            }
+        } catch (IOException e) {
+            Alerta alerta =
+                    new Alerta(Alert.AlertType.ERROR, "Error inesperado", "Hubo un error inesperado");
+            alerta.showAndWait();
+            e.printStackTrace();
+        }
     }
 
     public int getId() {
