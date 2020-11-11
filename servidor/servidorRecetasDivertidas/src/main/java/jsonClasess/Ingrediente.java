@@ -1,17 +1,17 @@
 package jsonClasess;
 
 public class Ingrediente {
-	private int id;
+	private int iID;
 	private int cantidad;
-	private String unidad;
+	private String unidadCantidad;
 	
 	public Ingrediente(int i, int c, String u) {
-		id = i;
+		iID = i;
 		cantidad = c;
-		unidad = u;
+		unidadCantidad = u;
 	}
 	@Override
 	public String toString() {
-		return "id: "+id+", cantidad: " + cantidad + ", unidad: " + unidad;
+		return "id: "+iID+", cantidad: " + cantidad + ", unidad: " + unidadCantidad;
 	}
 }

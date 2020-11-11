@@ -16,20 +16,18 @@ public class Main {
             ObjectOutputStream output = new ObjectOutputStream(socket.getOutputStream());
             ObjectInputStream input = new ObjectInputStream(socket.getInputStream());
             MensajesDeCliente msgHandler = new MensajesDeCliente(input, output);
-            /* probar subir recetas
+
 
             ArrayList<Ingrediente> ingredientes = new ArrayList<Ingrediente>();
             ingredientes.add(new Ingrediente(1,200, "gramos"));
             ingredientes.add(new Ingrediente(2,500, "gramos"));
             ArrayList<String> catRecetas = new ArrayList<String>();
-            catRecetas.add("1");
+            catRecetas.add("1asdasd");
             ArrayList<String> multimedia = new ArrayList<String>();
             multimedia.add("https://www.google.com/");
 
             msgHandler.subirReceta("lbotano", "boquita","grande","pasion",ingredientes,catRecetas,multimedia);
-            */
 
-            msgHandler.consCalifUsuario("lbotano",2);
             try{
                 msgHandler.enviarMensaje();
             }catch (IOException e){
