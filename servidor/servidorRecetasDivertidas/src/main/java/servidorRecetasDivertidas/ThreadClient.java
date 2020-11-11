@@ -3,12 +3,7 @@ package servidorRecetasDivertidas;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.sql.CallableStatement;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Types;
+import java.sql.*;
 import java.util.ArrayList;
 import com.google.gson.*;
 
@@ -40,6 +35,7 @@ public class ThreadClient implements Runnable{
 	private static final String BORRARRECUSU = "{call spUsuarioBorrarReceta(?,?)}";
 	private static final String CALIFICAR = "{call spCalificarReceta(?,?,?)}";
 	private static final String CAMBIARCONTRA = "{call spCambiarContrasena(?,?,?)}";
+	private static final String CONSCALIFUSUARIO = "{call spGetCalificacionPorUsuario(?,?,?)}";
 	private static final String CONSRECETASCATING = "{call spBuscarRecetasPorCatIngr(?,?)}";
 	private static final String CONSRECETASCATREC = "{call spBuscarRecetasPorCatReceta(?,?)}";
 	private static final String CONSRECETAING = "{call spBuscarRecetasPorIngr(?,?)}";
@@ -83,7 +79,7 @@ public class ThreadClient implements Runnable{
 	protected void intExceptionHandler(NumberFormatException e, String failMsg){
 		answer.clear();
 		answer.add(failMsg);
-		answer.add("Ingrese un numero valido");
+		answer.add("Uno de los datos ingresados que debia ser numerico, no lo es");
 	}
 	
 	private void borrarRecetaUsu() {
@@ -136,6 +132,28 @@ public class ThreadClient implements Runnable{
 			sqlExceptionHandler(e, "CAMBIARCONTRAFAIL");
 		}
 	}
+
+	private void consCalifUsuario(){
+		try {
+			stmt = conn.prepareCall(CONSCALIFUSUARIO);
+			//nickname
+			stmt.setString(1,message.get(1));
+			//id receta
+			stmt.setInt(2, Integer.parseInt(message.get(2)));
+			//calificación
+			stmt.registerOutParameter(3, Types.FLOAT);
+			stmt.execute();
+			answer.add("CALIFICACIONUSUARIO");
+			answer.add(String.valueOf(stmt.getFloat(3)));
+
+		} catch (SQLException e) {
+			sqlExceptionHandler(e, "CALIFICACIONUSUARIOFAIL");
+		} catch (NumberFormatException e) {
+			intExceptionHandler(e, "CALIFICACIONUSUARIOFAIL");
+		}
+
+	}
+
 	/*Este metodo se usa para agregar a la respuesta que se va a mandar al cliente los datos de una receta
 	Se hace en un metedo porque la utilizan los 3 tipos de consulta, por categoria de ingrediente,
 	por categoria de recetas y por texto
@@ -621,6 +639,9 @@ public class ThreadClient implements Runnable{
 	        		answer.add("FORMATERROR");	        		
 	        	}
 	        	break;
+			case "CONSCALIFUSUARIO":
+				consCalifUsuario();
+				break;
 	        case "CONSRECETASCATING":
 	        	consRecetasCatRecIng(false);
 	        	break;

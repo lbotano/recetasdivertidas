@@ -37,6 +37,12 @@ public class MensajesDeCliente {
         mensaje.add(contraNueva);
     }
 
+    public void consCalifUsuario(String nickname, int idReceta){
+        mensaje.add("CONSCALIFUSUARIO");
+        mensaje.add(nickname);
+        mensaje.add(String.valueOf(idReceta));
+    }
+
     public void consRecetasCatIng( int numpag, int[] a){
         mensaje.add("CONSRECETASCATING");
         mensaje.add(String.valueOf(numpag));

@@ -16,6 +16,7 @@ public class Main {
             ObjectOutputStream output = new ObjectOutputStream(socket.getOutputStream());
             ObjectInputStream input = new ObjectInputStream(socket.getInputStream());
             MensajesDeCliente msgHandler = new MensajesDeCliente(input, output);
+            /* probar subir recetas
 
             ArrayList<Ingrediente> ingredientes = new ArrayList<Ingrediente>();
             ingredientes.add(new Ingrediente(1,200, "gramos"));
@@ -26,7 +27,9 @@ public class Main {
             multimedia.add("https://www.google.com/");
 
             msgHandler.subirReceta("lbotano", "boquita","grande","pasion",ingredientes,catRecetas,multimedia);
+            */
 
+            msgHandler.consCalifUsuario("lbotano",2);
             try{
                 msgHandler.enviarMensaje();
             }catch (IOException e){
