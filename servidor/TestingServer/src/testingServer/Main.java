@@ -2,34 +2,23 @@ package testingServer;
 
 import clasesParaArrayList.Ingrediente;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
 
 public class Main {
     public static void main(String[] args) throws Exception {
-
-        try (var socket = new Socket("127.0.0.1", 7070)) {
+        try (var socket = new Socket("127.0.0.1", 6969)) {
 
             ObjectOutputStream output = new ObjectOutputStream(socket.getOutputStream());
             ObjectInputStream input = new ObjectInputStream(socket.getInputStream());
-            MensajesDeCliente msgHandler = new MensajesDeCliente(input, output);
+            MensajesDeAdmin msgHandler = new MensajesDeAdmin(input, output);
 
-
-            ArrayList<Ingrediente> ingredientes = new ArrayList<Ingrediente>();
-            ingredientes.add(new Ingrediente(1,200, "gramos"));
-            ingredientes.add(new Ingrediente(2,500, "gramos"));
-            ArrayList<String> catRecetas = new ArrayList<String>();
-            catRecetas.add("1asdasd");
-            ArrayList<String> multimedia = new ArrayList<String>();
-            multimedia.add("https://www.google.com/");
-
-            msgHandler.subirReceta("lbotano", "boquita","grande","pasion",ingredientes,catRecetas,multimedia);
+            msgHandler.subirIngrediente("choclovich", new int[]{});
 
             try{
                 msgHandler.enviarMensaje();
+                System.out.println("Mensaje enviado");
             }catch (IOException e){
                 System.out.println("No se pudo enviar el mensaje: ");
                 e.printStackTrace();
@@ -45,6 +34,10 @@ public class Main {
             }
 
             System.out.println("Exiting...");
+        }catch (Exception e){
+            e.printStackTrace();
         }
+
     }
+
 }

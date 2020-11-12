@@ -7,14 +7,9 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
-public class MensajesDeCliente {
-    private ArrayList<String> mensaje;
-    private ObjectInputStream input;
-    private ObjectOutputStream output;
+public class MensajesDeCliente extends Mensajes{
     MensajesDeCliente(ObjectInputStream i, ObjectOutputStream o){
-        mensaje = new ArrayList<>();
-        input = i;
-        output = o;
+        super(i,o);
     }
 
     public void borrarRecUsu(int idRec, String nickname){
@@ -152,14 +147,17 @@ public class MensajesDeCliente {
         }
     }
 
-    public void limpiarMensaje(){
-        mensaje.clear();
-    }
+/*
+            ArrayList<Ingrediente> ingredientes = new ArrayList<Ingrediente>();
+            ingredientes.add(new Ingrediente(1,200, "gramos"));
+            ingredientes.add(new Ingrediente(2,500, "gramos"));
+            ArrayList<String> catRecetas = new ArrayList<String>();
+            catRecetas.add("1");
+            ArrayList<String> multimedia = new ArrayList<String>();
+            multimedia.add("https://www.google.com/");
 
-    public void enviarMensaje() throws IOException {
-        output.writeObject(mensaje);
-    }
-
+            msgHandler.subirReceta("lbotano", "boquita","grande","pasion",ingredientes,catRecetas,multimedia);
+*/
 
 
 

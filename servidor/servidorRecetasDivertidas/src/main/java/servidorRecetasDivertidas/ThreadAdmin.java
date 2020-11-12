@@ -17,7 +17,7 @@ public class ThreadAdmin extends ThreadClient{
 	}
 
 	private static final String BANEARUSUARIO = "{call spBaneoUsuario(?)}";
-	private static final String BORRARCATING = "{call spBorrarCategoriaIngrediente(?)}}";
+	private static final String BORRARCATING = "{call spBorrarCategoriaIngrediente(?)}";
 	private static final String BORRARCATREC = "{call spBorrarCategoriaReceta(?)}";
 	private static final String BORRARREC = "{call spAdminBorrarReceta(?)}";
 	private static final String BORRARING = "{}";
@@ -139,6 +139,7 @@ public class ThreadAdmin extends ThreadClient{
 	        this.answer = new ArrayList<String>();	        
 	        //recibe el mensaje del cliente
 			this.message = (ArrayList<String>) input.readObject();
+			System.out.println("Recived " + message.get(0) + " from socket: " + this.socket);
 			stringValidator = new ArrayListStringValidator(message);		
 			if(stringValidator.elementArrayListBlank(message)) {
 				answer.add("ELEMENTBLANK");
@@ -148,6 +149,7 @@ public class ThreadAdmin extends ThreadClient{
 					borrarCatIng();
 					break;
 				case "BORRARCATREC":
+					System.out.println(1);
 					borrarCatRec();
 					break;
 				case "BORRARREC":
