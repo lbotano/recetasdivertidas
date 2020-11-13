@@ -141,10 +141,10 @@ public class ThreadClient implements Runnable{
 			//id receta
 			stmt.setInt(2, Integer.parseInt(message.get(2)));
 			//calificación
-			stmt.registerOutParameter(3, Types.FLOAT);
+			stmt.registerOutParameter(3, Types.INTEGER);
 			stmt.execute();
 			answer.add("CALIFICACIONUSUARIO");
-			answer.add(String.valueOf(stmt.getFloat(3)));
+			answer.add(String.valueOf(stmt.getInt(3)));
 
 		} catch (SQLException e) {
 			sqlExceptionHandler(e, "CALIFICACIONUSUARIOFAIL");

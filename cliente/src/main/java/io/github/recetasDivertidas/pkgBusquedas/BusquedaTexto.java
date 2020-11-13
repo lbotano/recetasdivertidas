@@ -18,18 +18,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class BusquedaTexto {
-    @FXML Label lblBuscaTexto;
     @FXML TextField txtBuscar;
     @FXML Button btnBuscar;
     @FXML Button btnNextPag;
     @FXML Button btnPrevPag;
     @FXML VBox vboxResultados;
-    private int current_pag;
-
-    @FXML
-    private void initialize(){
-        current_pag = 0;
-    }
+    private int current_pag = 0;
 
     @FXML
     private void buscarRecetas() throws IOException {

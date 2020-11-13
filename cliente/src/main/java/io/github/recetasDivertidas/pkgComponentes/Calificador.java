@@ -1,5 +1,6 @@
 package io.github.recetasDivertidas.pkgComponentes;
 
+import io.github.recetasDivertidas.pkgRecetasDivertidas.RecetasDivertidas;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
@@ -49,14 +50,16 @@ public class Calificador extends HBox {
         botones.add(btn5);
     }
 
-    // Pone a los botones de las estrellas como si no estuvieran seleccionados
-    public void reiniciarEstrellas() {
-        for (Button b : botones)
-            b.setGraphic(new Glyph("FontAwesome", FontAwesome.Glyph.STAR_ALT));
-    }
-
     private void actualizarEstrellas() {
 
+    }
+
+    // Cambia visualmente la calificación que está puesta
+    public void setCalificacionApariencia(int calificacion) {
+        for (Button b : botones)
+            b.setGraphic(new Glyph("FontAwesome", FontAwesome.Glyph.STAR_ALT));
+        for (int i = 0; i < calificacion; i++)
+            botones.get(i).setGraphic(new Glyph("FontAwesome", FontAwesome.Glyph.STAR));
     }
 
     @FXML
@@ -64,11 +67,6 @@ public class Calificador extends HBox {
         // Cambia la calificacion
         Button btn = (Button) e.getSource();
         calificacionPuesta.set(Integer.parseInt((String)btn.getUserData()));
-
-        // Cambia las estrellitas
-        reiniciarEstrellas();
-        for (int i = 0; i < calificacionPuesta.get(); i++)
-            botones.get(i).setGraphic(new Glyph("FontAwesome", FontAwesome.Glyph.STAR));
 
         // Dispara el evento
         ActionEvent evento = new ActionEvent();

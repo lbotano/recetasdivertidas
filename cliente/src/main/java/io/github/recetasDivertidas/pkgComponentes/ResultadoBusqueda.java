@@ -2,6 +2,7 @@ package io.github.recetasDivertidas.pkgComponentes;
 
 import io.github.recetasDivertidas.pkgConexion.Conexion;
 import io.github.recetasDivertidas.pkgRecetasDivertidas.Receta;
+import io.github.recetasDivertidas.pkgRecetasDivertidas.RecetasDivertidas;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -30,6 +31,8 @@ public class ResultadoBusqueda {
         lblAutor.setText(receta.getAutor());
         lblCalificacion.setText(String.valueOf(receta.getCalificacion()));
         lblCantCalificaciones.setText("(" + String.valueOf(receta.getCantCalificaciones()) + ")");
+
+        calificador.setCalificacionApariencia(receta.getCalificacion(RecetasDivertidas.username));
     }
 
     @FXML
@@ -39,8 +42,7 @@ public class ResultadoBusqueda {
 
     // Se llama cuando el usuario calificó la receta
     private void onCalificar(ActionEvent e) {
-        System.out.println(calificador.getCalificacionPuesta());
-        if (!receta.calificar(calificador.getCalificacionPuesta())) calificador.reiniciarEstrellas();
+        receta.calificar(calificador.getCalificacionPuesta());
         receta.actualizarSimple();
         actualizarDatos();
     }

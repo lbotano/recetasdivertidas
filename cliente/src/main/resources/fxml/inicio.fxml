@@ -8,18 +8,65 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.VBox?>
-<BorderPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
+<?import javafx.geometry.Insets?>
+<?import org.controlsfx.glyphfont.Glyph?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.layout.HBox?>
+<BorderPane xmlns="http://javafx.com/javafx/11.0.1"
+            xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="io.github.recetasDivertidas.pkgInicio.Inicio">
+    <padding>
+        <Insets topRightBottomLeft="10"/>
+    </padding>
     <top>
-        <Label text="¡Aqui estan las 10 mejores recetas para que te chupes los dedos!">
-            <font>
-                <Font size="18.0"/>
-            </font>
-        </Label>
+        <HBox>
+            <padding>
+                <Insets bottom="10"/>
+            </padding>
+            <Label text="¡Aqui están las mejores recetas para que te chupes los dedos!"
+                   HBox.hgrow="ALWAYS"
+                   maxWidth="Infinity">
+                <font>
+                    <Font size="18.0"/>
+                </font>
+            </Label>
+            <Button onAction="#recargar">
+                <graphic>
+                    <Glyph fontFamily="FontAwesome" icon="REFRESH"/>
+                </graphic>
+            </Button>
+        </HBox>
     </top>
     <center>
-        <ScrollPane>
-            <VBox fx:id="vbox" />
+        <ScrollPane fitToWidth="true">
+            <VBox fx:id="vboxResultados"
+                  maxWidth="Infinity"
+                  maxHeight="Infinity"
+                  spacing="15">
+                <padding>
+                    <Insets topRightBottomLeft="15"/>
+                </padding>
+            </VBox>
         </ScrollPane>
     </center>
+    <bottom>
+        <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+            <padding>
+                <Insets topRightBottomLeft="10"/>
+            </padding>
+            <buttons>
+                <Button fx:id="btnPrevPag" onAction="#nextPag">
+                    <graphic>
+                        <Glyph fontFamily="FontAwesome" icon="CHEVRON_LEFT"/>
+                    </graphic>
+                </Button>
+                <Button fx:id="btnNextPag" onAction="#prevPag">
+                    <graphic>
+                        <Glyph fontFamily="FontAwesome" icon="CHEVRON_RIGHT"/>
+                    </graphic>
+                </Button>
+            </buttons>
+        </ButtonBar>
+    </bottom>
 </BorderPane>

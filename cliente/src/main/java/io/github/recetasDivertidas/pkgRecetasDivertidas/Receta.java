@@ -4,7 +4,9 @@ import io.github.recetasDivertidas.pkgAplicacion.Alerta;
 import io.github.recetasDivertidas.pkgConexion.Conexion;
 import javafx.scene.control.Alert;
 
+import javax.imageio.IIOException;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +28,6 @@ public class Receta {
         this.cantCalificaciones = cantCalificaciones;
     }
 
-    // TODO: Se tendrían que manejar en esta función también los mensajes que se mandan desde el cliente
     public static ArrayList<Receta> getRecetasConsultaBusquedas(List<String> mensajeServidor)
     throws MensajeServerInvalidoException {
         ArrayList<Receta> resultado = new ArrayList<>();
@@ -48,6 +49,16 @@ public class Receta {
         }
         return resultado;
     }
+
+    public static ArrayList<Receta> getTopRecetas(int pagina) throws IOException, MensajeServerInvalidoException {
+        ArrayList<String> mensajeEnviar = new ArrayList<>();
+        mensajeEnviar.add("CONSTOPRECETAS");
+        mensajeEnviar.add(String.valueOf(pagina));
+
+        ArrayList<String> mensajeRecibir = Conexion.sendMessage(mensajeEnviar);
+        return Receta.getRecetasConsultaBusquedas(mensajeRecibir);
+    }
+
 
     public boolean calificar(int calificacion) {
         ArrayList<String> mensajeEnviar = new ArrayList<>();
@@ -115,6 +126,35 @@ public class Receta {
 
     public float getCalificacion() {
         return calificacion;
+    }
+
+    public int getCalificacion(String nickname) {
+        ArrayList<String> mensajeEnviar = new ArrayList<>();
+        mensajeEnviar.add("CONSCALIFUSUARIO");
+        mensajeEnviar.add(RecetasDivertidas.username);
+        mensajeEnviar.add(String.valueOf(this.id));
+
+        if (Conexion.isSvResponse()) {
+            try {
+                ArrayList<String> mensajeRecibir = Conexion.sendMessage(mensajeEnviar);
+                if (mensajeRecibir.get(0).equals("CALIFICACIONUSUARIO")) {
+                    return Integer.parseInt(mensajeRecibir.get(1));
+                }
+            } catch(IOException e) {
+                e.printStackTrace();
+                Alerta alerta = new Alerta(Alert.AlertType.ERROR,
+                        "Error inesperado",
+                        "Ocurrión un error inesperado.");
+                alerta.showAndWait();
+            }
+        } else {
+            Alerta alerta = new Alerta(Alert.AlertType.ERROR,
+                    "Error de conexión",
+                    "Hubo un problema al conectarse al servidor");
+            alerta.showAndWait();
+        }
+
+        return 0;
     }
 
     public int getCantCalificaciones() {

@@ -456,7 +456,7 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS spGetCalificacionPorUsuario;
 DELIMITER //
-CREATE PROCEDURE spGetCalificacionPorUsuario(IN nickname varchar(32), IN idReceta int, OUT rCalificacion float)
+CREATE PROCEDURE spGetCalificacionPorUsuario(IN nickname varchar(32), IN idReceta int, OUT rCalificacion int)
 BEGIN
 	SELECT c.calificacion
     FROM Calificacion c
@@ -465,7 +465,6 @@ BEGIN
         c.rID = idReceta
 	INTO rCalificacion;
 END//
-
 DELIMITER ;
 
 -- Buscar recetas (por categorías de receta)
