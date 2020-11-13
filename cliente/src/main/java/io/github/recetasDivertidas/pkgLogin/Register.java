@@ -6,6 +6,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Button;
 import javafx.scene.control.Alert;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import io.github.recetasDivertidas.pkgConexion.Conexion;
 import io.github.recetasDivertidas.pkgAplicacion.Alerta;
@@ -65,6 +67,11 @@ public class Register{
             Stage stage = (Stage) btnRegistrarse.getScene().getWindow();
             stage.close();
         }
+    }
+
+    @FXML
+    private void handleKeyRegister(KeyEvent e) {
+        if (e.getCode().equals(KeyCode.ENTER)) registrarse();
     }
 
     private boolean consRegister() {

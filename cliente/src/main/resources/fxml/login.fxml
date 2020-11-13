@@ -17,7 +17,7 @@
     <Label text="Usuario:"/>
     <TextField fx:id="txtUsuario" promptText="Usuario"/>
     <Label text="Contraseña"/>
-    <PasswordField fx:id="txtContrasena" promptText="Contaseña"/>
+    <PasswordField fx:id="txtContrasena" promptText="Contaseña" onKeyPressed="#handleKeyLogin"/>
     <Region VBox.vgrow="ALWAYS"/>
     <HBox spacing="10">
         <Button fx:id="btnLogin"

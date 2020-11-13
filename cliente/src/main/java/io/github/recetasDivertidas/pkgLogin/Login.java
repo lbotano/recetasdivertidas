@@ -9,6 +9,8 @@ import io.github.recetasDivertidas.pkgRecetasDivertidas.RecetasDivertidas;
 import io.github.recetasDivertidas.pkgAplicacion.Alerta;
 import io.github.recetasDivertidas.pkgAplicacion.Aplicacion;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -24,7 +26,7 @@ public class Login {
     private String username = "";
 
     @FXML
-    public void login() {
+    private void login() {
         try {
             if (consLogin(txtUsuario.getText(), txtContrasena.getText())) {
                 Alerta alerta = new Alerta(Alert.AlertType.CONFIRMATION, "Bienvenidx de nuevo!",
@@ -53,7 +55,7 @@ public class Login {
     }
 
     @FXML
-    public void registrarse() {
+    private void registrarse() {
         if (Conexion.isSvResponse()) {
             Stage stageRegistro = new Stage();
             // Evitar que la ventana se abra más de una vez
@@ -70,6 +72,11 @@ public class Login {
                 e.printStackTrace();
             }
         }
+    }
+
+    @FXML
+    private void handleKeyLogin(KeyEvent e) {
+        if (e.getCode().equals(KeyCode.ENTER)) login();
     }
 
     private boolean consLogin(String Usr, String Pwd) throws IOException {
