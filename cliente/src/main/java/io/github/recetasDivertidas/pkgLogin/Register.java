@@ -11,6 +11,8 @@ import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import io.github.recetasDivertidas.pkgConexion.Conexion;
 import io.github.recetasDivertidas.pkgAplicacion.Alerta;
+import org.controlsfx.glyphfont.FontAwesome;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
