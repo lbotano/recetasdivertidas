@@ -18,8 +18,4 @@ public class CategoriaIngrediente {
         return id;
     }
 
-    public String getNombre() {
-        return nombre;
-    }
-
 }
