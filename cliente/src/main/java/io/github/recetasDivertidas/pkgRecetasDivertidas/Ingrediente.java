@@ -10,6 +10,8 @@ import java.util.ArrayList;
 public class Ingrediente {
     private int id;
     private String nombre;
+    private int cantidad;
+    private String unidad;
     private final ArrayList<CategoriaIngrediente> categorias = new ArrayList<>();
 
     public Ingrediente() {}
@@ -26,6 +28,22 @@ public class Ingrediente {
 
     public int getId() {
         return id;
+    }
+
+    public int getCantidad() {
+        return cantidad;
+    }
+
+    public void setCantidad(int cantidad) {
+        this.cantidad = cantidad;
+    }
+
+    public String getUnidad() {
+        return unidad;
+    }
+
+    public void setUnidad(String unidad) {
+        this.unidad = unidad;
     }
 
     public void anadirCategoria(CategoriaIngrediente categoria) {

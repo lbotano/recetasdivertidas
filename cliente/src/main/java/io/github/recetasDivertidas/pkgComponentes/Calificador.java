@@ -1,6 +1,5 @@
 package io.github.recetasDivertidas.pkgComponentes;
 
-import io.github.recetasDivertidas.pkgRecetasDivertidas.RecetasDivertidas;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
@@ -13,7 +12,6 @@ import javafx.scene.layout.HBox;
 import org.controlsfx.glyphfont.FontAwesome;
 import org.controlsfx.glyphfont.Glyph;
 
-import javax.swing.*;
 import java.io.IOException;
 import java.util.*;
 
@@ -26,7 +24,7 @@ public class Calificador extends HBox {
     @FXML Button btn5;
 
     // Los objetos Property pueden ser usados desde los handlers de los eventos.
-    private IntegerProperty calificacionPuesta = new SimpleIntegerProperty();
+    private final IntegerProperty calificacionPuesta = new SimpleIntegerProperty();
 
     private EventHandler<ActionEvent> handlerOnAction;
 
@@ -73,7 +71,7 @@ public class Calificador extends HBox {
         handlerOnAction.handle(evento);
     }
 
-    public void setOnAction(EventHandler handler) {
+    public void setOnAction(EventHandler<ActionEvent> handler) {
         this.handlerOnAction = handler;
     }
 }
