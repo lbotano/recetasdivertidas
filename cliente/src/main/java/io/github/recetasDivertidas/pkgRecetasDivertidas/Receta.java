@@ -4,9 +4,7 @@ import io.github.recetasDivertidas.pkgAplicacion.Alerta;
 import io.github.recetasDivertidas.pkgConexion.Conexion;
 import javafx.scene.control.Alert;
 
-import javax.imageio.IIOException;
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,8 +16,8 @@ public class Receta {
     private String instrucciones;
     private float calificacion;
     private int cantCalificaciones;
-    private ArrayList<Ingrediente> ingredientes = new ArrayList<>();
-    private ArrayList<CategoriaReceta> categorias = new ArrayList<>();
+    private final ArrayList<Ingrediente> ingredientes = new ArrayList<>();
+    private final ArrayList<CategoriaReceta> categorias = new ArrayList<>();
 
     // Receta para resultado de búsqueda
     public Receta(int id, String autor, String titulo, String descripcion, float calificacion, int cantCalificaciones) {
@@ -67,7 +65,8 @@ public class Receta {
         return calificacion;
     }
 
-    public int getCalificacion(String nickname) {
+    // Devuelve la calificación del usuario logueado
+    public int getCalificacionPropia() {
         ArrayList<String> mensajeEnviar = new ArrayList<>();
         mensajeEnviar.add("CONSCALIFUSUARIO");
         mensajeEnviar.add(RecetasDivertidas.username);
@@ -206,21 +205,18 @@ public class Receta {
             ArrayList<String> mensajeRecibir = Conexion.sendMessage(mensajeEnviar);
             Alerta alerta;
             switch (mensajeRecibir.get(0)) {
-                case "SUBIRRECETAOK" -> {
+                case "SUBIRRECETAOK" ->
                     alerta = new Alerta(Alert.AlertType.CONFIRMATION,
                             "Receta subida",
                             "Su receta se ha subido exitosamente.");
-                }
-                case "SUBIRRECETAFAIL" -> {
+                case "SUBIRRECETAFAIL" ->
                     alerta = new Alerta(Alert.AlertType.ERROR,
                             "Error al subir receta",
                             "Error: " + mensajeRecibir.get(1));
-                }
-                default -> {
+                default ->
                     alerta = new Alerta(Alert.AlertType.ERROR,
                             "Error inesperado",
                             "Hubo un error inesperado");
-                }
             }
             alerta.showAndWait();
         } catch (IOException e) {

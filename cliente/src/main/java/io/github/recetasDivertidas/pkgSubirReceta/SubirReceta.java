@@ -91,7 +91,7 @@ public class SubirReceta {
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/componentes/ingrediente.fxml"));
                 Pane paneIngrediente = loader.load();
-                IngredienteSubir controllerIngrediente = (IngredienteSubir) loader.getController();
+                IngredienteSubir controllerIngrediente = loader.getController();
                 controllerIngrediente.setIngrediente(cmbIngredientes.getValue());
                 vboxIngredientes.getChildren().add(paneIngrediente);
             } catch (IOException e) {
@@ -114,7 +114,7 @@ public class SubirReceta {
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/componentes/categoria.fxml"));
                 Pane paneCategoria = loader.load();
-                CategoriaSubir controllerCategoria = (CategoriaSubir) loader.getController();
+                CategoriaSubir controllerCategoria = loader.getController();
                 controllerCategoria.setCategoria(cmbCategorias.getValue());
                 vboxCategorias.getChildren().add(paneCategoria);
             } catch (IOException e) {

@@ -1,11 +1,7 @@
 package io.github.recetasDivertidas.pkgComponentes;
 
-import io.github.recetasDivertidas.pkgConexion.Conexion;
 import io.github.recetasDivertidas.pkgRecetasDivertidas.Receta;
-import io.github.recetasDivertidas.pkgRecetasDivertidas.RecetasDivertidas;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
@@ -30,14 +26,14 @@ public class ResultadoBusqueda {
         lblDescripcion.setText(receta.getDescripcion());
         lblAutor.setText(receta.getAutor());
         lblCalificacion.setText(String.valueOf(receta.getCalificacion()));
-        lblCantCalificaciones.setText("(" + String.valueOf(receta.getCantCalificaciones()) + ")");
+        lblCantCalificaciones.setText("(" + receta.getCantCalificaciones() + ")");
 
-        calificador.setCalificacionApariencia(receta.getCalificacion(RecetasDivertidas.username));
+        calificador.setCalificacionApariencia(receta.getCalificacionPropia());
     }
 
     @FXML
     private void initialize() {
-        calificador.setOnAction(event -> onCalificar((ActionEvent)event));
+        calificador.setOnAction(this::onCalificar);
     }
 
     // Se llama cuando el usuario calificó la receta
