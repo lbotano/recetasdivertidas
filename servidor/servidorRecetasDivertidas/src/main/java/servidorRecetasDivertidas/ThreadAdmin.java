@@ -68,7 +68,8 @@ public class ThreadAdmin extends ThreadClient{
 	}
 
 	private void borrarIng(){
-
+		answer.add("BORRARINGFAIL");
+		answer.add("No se implemento todavia");
 	}
 	
 	private void banearUsuario() {

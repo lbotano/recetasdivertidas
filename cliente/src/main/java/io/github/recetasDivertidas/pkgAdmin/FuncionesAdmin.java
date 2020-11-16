@@ -198,10 +198,58 @@ public class FuncionesAdmin {
     }
 
     public void borrarIngrediente(ActionEvent actionEvent) {
-        
+        ArrayList<String> respServer;
+        Alerta alerta;
+        try {
+            Ingrediente itemSeleccionado =  (Ingrediente) cmbBorrarIngrediente.getValue();
+
+            if(itemSeleccionado != null){
+                respServer = consBorrarIngrediente(itemSeleccionado.getId());
+                if(respServer != null){
+                    switch (respServer.get(0)) {
+                        case "BORRARINGFAIL" -> {
+                            alerta = new Alerta(Alert.AlertType.ERROR,
+                                    "Errpr inesperado",
+                                    "Hubo un error al tratar de borrar el ingrediente");
+                            alerta.showAndWait();
+                        }
+                        case "BORRARINGOK" -> {
+                            alerta = new Alerta(Alert.AlertType.CONFIRMATION,
+                                    "Todo salio bien!",
+                                    "Se borro correctamente el ingrediente");
+                            alerta.showAndWait();
+                        }
+                        case "MESSAGEERROR" -> {
+                            alerta = new Alerta(Alert.AlertType.ERROR,
+                                    "Error inesperado",
+                                    "El server no reconocio la petición");
+                            alerta.showAndWait();
+                        }
+                        default -> {
+                            alerta = new Alerta(Alert.AlertType.INFORMATION,
+                                    "Error en el server!",
+                                    "Se ha recibido una respuesta erronea por parte del server");
+                            alerta.showAndWait();
+                        }
+                    }
+                    //Actualizar ingredientes
+                    cmbBorrarIngrediente.getItems().clear();
+                    cmbBorrarIngrediente.getItems().addAll(Ingrediente.getIngredientes());
+                }else{
+                    alerta = new Alerta(Alert.AlertType.ERROR,
+                            "No se ha podido conectar con el servidor",
+                            "El server no responde");
+                    alerta.showAndWait();
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            alerta = new Alerta(Alert.AlertType.ERROR,
+                    "Error inesperado",
+                    "Hubo un error al enviar el mensaje");
+            alerta.showAndWait();
+        }
     }
-
-
 
     public void subirCatRec(ActionEvent actionEvent) {
     }

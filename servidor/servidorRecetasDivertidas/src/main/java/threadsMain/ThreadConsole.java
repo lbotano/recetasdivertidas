@@ -17,7 +17,7 @@ public class ThreadConsole implements Runnable {
 	private ComboPooledDataSource cpds;
 	private Connection con;
 	private boolean exit = false;
-	private final String commands = "stop; start; exit; newAdmin <nickname>;";
+	private final String commands = "stop; newAdmin <nickname>;";
 	
 	public ThreadConsole(ComboPooledDataSource c, ThreadServer refAdmin, ThreadServer refClient) {
 		this.refServerAdmin = refAdmin;
