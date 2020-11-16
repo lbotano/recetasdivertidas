@@ -34,7 +34,7 @@
                 </Label>
                 <HBox spacing="5">
                     <ComboBox promptText="Borrar Ingrediente" maxWidth="Infinity" fx:id="cmbBorrarIngrediente" HBox.hgrow="ALWAYS"/>
-                    <Button fx:id="btnBorrarIngrediente" text="Borrar Categoria Ingrediente" minWidth="170"/>
+                    <Button fx:id="btnBorrarIngrediente" text="Borrar Ingrediente" minWidth="170" onAction="#borrarIngrediente"/>
                 </HBox>
                 <Label text="Borrar una categiria de receta">
                     <font>
@@ -43,7 +43,7 @@
                 </Label>
                 <HBox spacing="5">
                     <ComboBox promptText="Borrar Categoria Receta" maxWidth="Infinity" fx:id="cmbBorrarCatReceta" HBox.hgrow="ALWAYS"/>
-                    <Button fx:id="btnBorrarCatReceta" text="Borrar Categoria Receta" minWidth="170"/>
+                    <Button fx:id="btnBorrarCatReceta" text="Borrar Categoria Receta" minWidth="170" onAction="#borrarCatReceta"/>
                 </HBox>
                 <Label text="Banear usuario">
                     <font>
@@ -52,7 +52,7 @@
                 </Label>
                 <HBox spacing="5">
                     <TextField fx:id="txtBanearUsuario" promptText="Nombre del usuario" HBox.hgrow="ALWAYS"/>
-                    <Button fx:id="btnBanearUsuario" text="Banear Usuario" minWidth="170"/>
+                    <Button fx:id="btnBanearUsuario" text="Banear Usuario" minWidth="170" onAction="#banearUsuario"/>
                 </HBox>
                 <Label text="Subir una categoria de ingrediente">
                     <font>
@@ -61,7 +61,7 @@
                 </Label>
                 <HBox spacing="5">
                     <TextField fx:id="txtSubirCatIng" promptText="Nombre de la categoria de ingrediente" HBox.hgrow="ALWAYS"/>
-                    <Button fx:id="btnSubirCatIng" text="Subir Categoria Ingrediente" minWidth="170"/>
+                    <Button fx:id="btnSubirCatIng" text="Subir Categoria Ingrediente" minWidth="170" onAction="#subirCatIng"/>
                 </HBox>
                 <Label text="Subir un ingrediente">
                     <font>
@@ -71,7 +71,7 @@
                 <HBox spacing="5">
                     <CheckComboBox fx:id="chkcmbCategoriasIngrediente" HBox.hgrow="ALWAYS"/>
                     <TextField fx:id="txtSubirIng" promptText="Nombre del ingrediente" HBox.hgrow="ALWAYS"/>
-                    <Button fx:id="btnSubirIng" text="Subir Ingrediente" minWidth="170"/>
+                    <Button fx:id="btnSubirIng" text="Subir Ingrediente" minWidth="170" onAction="#subirIng"/>
                 </HBox>
                 <Label text="Subir una categoria de receta">
                     <font>
@@ -80,7 +80,7 @@
                 </Label>
                 <HBox spacing="5">
                     <TextField fx:id="txtSubirCatRec" promptText="Nombre de la categoria de receta" HBox.hgrow="ALWAYS"/>
-                    <Button fx:id="btnSubirCatRec" text="Subir Categoria Receta" minWidth="170"/>
+                    <Button fx:id="btnSubirCatRec" text="Subir Categoria Receta" minWidth="170" onAction="#subirCatRec"/>
                 </HBox>
             </VBox>
         </ScrollPane>

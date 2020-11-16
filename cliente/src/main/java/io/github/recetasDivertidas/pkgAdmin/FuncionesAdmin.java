@@ -113,58 +113,108 @@ public class FuncionesAdmin {
         }
         return null;
     }
-
-    public void borrarCategoriaIngrediente(ActionEvent actionEvent) {
+    //true: ingrediente
+    //false: receta
+    private void borrarCategoria(boolean ingORec, int idCategoria) throws IOException{
         Alerta alerta;
-        try {
-            CategoriaIngrediente itemSeleccionado =  (CategoriaIngrediente) cmbBorrarCatIngrediente.getValue();
-            if(itemSeleccionado != null){
-                ArrayList<String> respServer = consBorrarCategoriaIngrediente(itemSeleccionado.getId());
-                if(respServer != null){
-                    System.out.println(respServer.get(0));
-                    switch (respServer.get(0)){
-                        case "BORRARCATINGFAIL":
-                            alerta = new Alerta(Alert.AlertType.ERROR,
-                                    "Errpr inesperado",
-                                    "Hubo un error al tratar de borrar la categoria");
-                            alerta.showAndWait();
-                            break;
-                        case "BORRARCATINGOK":
-                            alerta = new Alerta(Alert.AlertType.CONFIRMATION,
-                                    "Todo salio bien!",
-                                    "Se borro correctamente la categoria");
-                            alerta.showAndWait();
-                            break;
-                        case "MESSAGEERROR":
-                            alerta = new Alerta(Alert.AlertType.ERROR,
-                                    "Error inesperado",
-                                    "El server no reconocio la petición");
-                            alerta.showAndWait();
-                            break;
-                        default:
-                            alerta = new Alerta(Alert.AlertType.INFORMATION,
-                                    "Error en el server!",
-                                    "Se ha recibido una respuesta erronea por parte del server");
-                            alerta.showAndWait();
-                    }
-                }else{
+        ArrayList<String> respServer;
+        if(ingORec){
+            respServer = consBorrarCategoriaIngrediente(idCategoria);
+        }else{
+            respServer = consBorrarCategoriaReceta(idCategoria);
+        }
+        if(respServer != null){
+            System.out.println(respServer.get(0));
+            switch (respServer.get(0)) {
+                case "BORRARCATINGFAIL", "BORRARCATRECFAIL" -> {
+                    alerta = new Alerta(Alert.AlertType.ERROR,
+                            "Errpr inesperado",
+                            "Hubo un error al tratar de borrar la categoria");
+                    alerta.showAndWait();
+                }
+                case "BORRARCATINGOK", "BORRARCATRECOK" -> {
+                    alerta = new Alerta(Alert.AlertType.CONFIRMATION,
+                            "Todo salio bien!",
+                            "Se borro correctamente la categoria");
+                    alerta.showAndWait();
+                }
+                case "MESSAGEERROR" -> {
                     alerta = new Alerta(Alert.AlertType.ERROR,
                             "Error inesperado",
-                            "El server no responde");
+                            "El server no reconocio la petición");
+                    alerta.showAndWait();
+                }
+                default -> {
+                    alerta = new Alerta(Alert.AlertType.INFORMATION,
+                            "Error en el server!",
+                            "Se ha recibido una respuesta erronea por parte del server");
                     alerta.showAndWait();
                 }
             }
-            //Actualizar categorias
-            cmbBorrarCatIngrediente.getItems().clear();
-            cmbBorrarCatIngrediente.getItems().addAll(CategoriaIngrediente.getCategorias());
+        }else{
+            alerta = new Alerta(Alert.AlertType.ERROR,
+                    "No se ha podido conectar con el servidor",
+                    "El server no responde");
+            alerta.showAndWait();
+        }
+    }
+
+    public void borrarCategoriaIngrediente(ActionEvent actionEvent) {
+
+        try {
+            CategoriaIngrediente itemSeleccionado =  (CategoriaIngrediente) cmbBorrarCatIngrediente.getValue();
+            if(itemSeleccionado != null){
+                borrarCategoria(true, itemSeleccionado.getId());
+                //Actualizar categorias
+                cmbBorrarCatIngrediente.getItems().clear();
+                cmbBorrarCatIngrediente.getItems().addAll(CategoriaIngrediente.getCategorias());
+            }
         } catch (IOException e) {
             e.printStackTrace();
-            alerta = new Alerta(Alert.AlertType.ERROR,
+            Alert alerta = new Alerta(Alert.AlertType.ERROR,
                     "Error inesperado",
                     "Hubo un error al enviar el mensaje");
             alerta.showAndWait();
         }
     }
+
+    public void borrarCatReceta(ActionEvent actionEvent) {
+
+        try {
+            CategoriaReceta itemSeleccionado =  (CategoriaReceta) cmbBorrarCatReceta.getValue();
+            if(itemSeleccionado != null){
+                borrarCategoria(false, itemSeleccionado.getId());
+                //Actualizar categorias
+                cmbBorrarCatReceta.getItems().clear();
+                cmbBorrarCatReceta.getItems().addAll(CategoriaReceta.getCategorias());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            Alert alerta = new Alerta(Alert.AlertType.ERROR,
+                    "Error inesperado",
+                    "Hubo un error al enviar el mensaje");
+            alerta.showAndWait();
+        }
+    }
+
+    public void borrarIngrediente(ActionEvent actionEvent) {
+        
+    }
+
+
+
+    public void subirCatRec(ActionEvent actionEvent) {
+    }
+
+    public void subirIng(ActionEvent actionEvent) {
+    }
+
+    public void subirCatIng(ActionEvent actionEvent) {
+    }
+
+    public void banearUsuario(ActionEvent actionEvent) {
+    }
+
 
     @FXML
     private void initialize() throws IOException {
@@ -173,6 +223,7 @@ public class FuncionesAdmin {
             cmbBorrarCatIngrediente.getItems().addAll(CategoriaIngrediente.getCategorias());
             cmbBorrarIngrediente.getItems().addAll(Ingrediente.getIngredientes());
             cmbBorrarCatReceta.getItems().addAll(CategoriaReceta.getCategorias());
+            chkcmbCategoriasIngrediente.getItems().addAll(CategoriaIngrediente.getCategorias());
         } catch (IOException e) {
             e.printStackTrace();
             Alerta alerta = new Alerta(Alert.AlertType.ERROR,
