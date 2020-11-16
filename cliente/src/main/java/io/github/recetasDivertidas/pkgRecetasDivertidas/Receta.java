@@ -191,7 +191,7 @@ public class Receta {
             for (Ingrediente i : this.ingredientes) {
                 mensajeEnviar.add(String.valueOf(i.getId()));
                 mensajeEnviar.add(String.valueOf(i.getCantidad()));
-                mensajeEnviar.add(i.getUnidad());
+                mensajeEnviar.add(i.getUnidad() == null || i.getUnidad().equals("") ? "SinUnidad" : i.getUnidad());
             }
 
             mensajeEnviar.add("CATEGORIASRECETA");
