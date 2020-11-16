@@ -3,6 +3,8 @@ package io.github.recetasDivertidas.pkgAdmin;
 import io.github.recetasDivertidas.pkgAplicacion.Alerta;
 import io.github.recetasDivertidas.pkgConexion.Conexion;
 import io.github.recetasDivertidas.pkgRecetasDivertidas.CategoriaIngrediente;
+import io.github.recetasDivertidas.pkgRecetasDivertidas.CategoriaReceta;
+import io.github.recetasDivertidas.pkgRecetasDivertidas.Ingrediente;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -113,17 +115,64 @@ public class FuncionesAdmin {
     }
 
     public void borrarCategoriaIngrediente(ActionEvent actionEvent) {
+        Alerta alerta;
         try {
-            ArrayList<String> respServer = consBorrarCategoriaIngrediente((int) cmbBorrarCatIngrediente.getValue());
+            CategoriaIngrediente itemSeleccionado =  (CategoriaIngrediente) cmbBorrarCatIngrediente.getValue();
+            if(itemSeleccionado != null){
+                ArrayList<String> respServer = consBorrarCategoriaIngrediente(itemSeleccionado.getId());
+                if(respServer != null){
+                    System.out.println(respServer.get(0));
+                    switch (respServer.get(0)){
+                        case "BORRARCATINGFAIL":
+                            alerta = new Alerta(Alert.AlertType.ERROR,
+                                    "Errpr inesperado",
+                                    "Hubo un error al tratar de borrar la categoria");
+                            alerta.showAndWait();
+                            break;
+                        case "BORRARCATINGOK":
+                            alerta = new Alerta(Alert.AlertType.CONFIRMATION,
+                                    "Todo salio bien!",
+                                    "Se borro correctamente la categoria");
+                            alerta.showAndWait();
+                            break;
+                        case "MESSAGEERROR":
+                            alerta = new Alerta(Alert.AlertType.ERROR,
+                                    "Error inesperado",
+                                    "El server no reconocio la petición");
+                            alerta.showAndWait();
+                            break;
+                        default:
+                            alerta = new Alerta(Alert.AlertType.INFORMATION,
+                                    "Error en el server!",
+                                    "Se ha recibido una respuesta erronea por parte del server");
+                            alerta.showAndWait();
+                    }
+                }else{
+                    alerta = new Alerta(Alert.AlertType.ERROR,
+                            "Error inesperado",
+                            "El server no responde");
+                    alerta.showAndWait();
+                }
+            }
+            //Actualizar categorias
+            cmbBorrarCatIngrediente.getItems().clear();
+            cmbBorrarCatIngrediente.getItems().addAll(CategoriaIngrediente.getCategorias());
         } catch (IOException e) {
             e.printStackTrace();
+            alerta = new Alerta(Alert.AlertType.ERROR,
+                    "Error inesperado",
+                    "Hubo un error al enviar el mensaje");
+            alerta.showAndWait();
         }
     }
 
     @FXML
     private void initialize() throws IOException {
         try{
+            //llenar comboboxes
             cmbBorrarCatIngrediente.getItems().addAll(CategoriaIngrediente.getCategorias());
+            cmbBorrarIngrediente.getItems().addAll(Ingrediente.getIngredientes());
+            cmbBorrarCatReceta.getItems().addAll(CategoriaReceta.getCategorias());
         } catch (IOException e) {
             e.printStackTrace();
             Alerta alerta = new Alerta(Alert.AlertType.ERROR,
