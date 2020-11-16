@@ -18,7 +18,10 @@ public class Receta {
     private String instrucciones;
     private float calificacion;
     private int cantCalificaciones;
+    private ArrayList<Ingrediente> ingredientes = new ArrayList<>();
+    private ArrayList<CategoriaReceta> categorias = new ArrayList<>();
 
+    // Receta para resultado de búsqueda
     public Receta(int id, String autor, String titulo, String descripcion, float calificacion, int cantCalificaciones) {
         this.id = id;
         this.autor = autor;
@@ -26,6 +29,75 @@ public class Receta {
         this.descripcion = descripcion;
         this.calificacion = calificacion;
         this.cantCalificaciones = cantCalificaciones;
+    }
+
+    // Receta para subir
+    // TODO: Implementar multimedia
+    public Receta(String autor,
+                  String titulo,
+                  String descripcion,
+                  String instrucciones,
+                  List<Ingrediente> ingredientes,
+                  List<CategoriaReceta> categorias) {
+        this.autor = autor;
+        this.titulo = titulo;
+        this.descripcion = descripcion;
+        this.instrucciones = instrucciones;
+        this.ingredientes.addAll(ingredientes);
+        this.categorias.addAll(categorias);
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getAutor() {
+        return autor;
+    }
+
+    public String getTitulo() {
+        return titulo;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public float getCalificacion() {
+        return calificacion;
+    }
+
+    public int getCalificacion(String nickname) {
+        ArrayList<String> mensajeEnviar = new ArrayList<>();
+        mensajeEnviar.add("CONSCALIFUSUARIO");
+        mensajeEnviar.add(RecetasDivertidas.username);
+        mensajeEnviar.add(String.valueOf(this.id));
+
+        if (Conexion.isSvResponse()) {
+            try {
+                ArrayList<String> mensajeRecibir = Conexion.sendMessage(mensajeEnviar);
+                if (mensajeRecibir.get(0).equals("CALIFICACIONUSUARIO")) {
+                    return Integer.parseInt(mensajeRecibir.get(1));
+                }
+            } catch(IOException e) {
+                e.printStackTrace();
+                Alerta alerta = new Alerta(Alert.AlertType.ERROR,
+                        "Error inesperado",
+                        "Ocurrión un error inesperado.");
+                alerta.showAndWait();
+            }
+        } else {
+            Alerta alerta = new Alerta(Alert.AlertType.ERROR,
+                    "Error de conexión",
+                    "Hubo un problema al conectarse al servidor");
+            alerta.showAndWait();
+        }
+
+        return 0;
+    }
+
+    public int getCantCalificaciones() {
+        return cantCalificaciones;
     }
 
     public static ArrayList<Receta> getRecetasConsultaBusquedas(List<String> mensajeServidor)
@@ -108,56 +180,55 @@ public class Receta {
         }
     }
 
-    public int getId() {
-        return id;
-    }
+    public void subir() {
+        try {
+            ArrayList<String> mensajeEnviar = new ArrayList<>();
+            mensajeEnviar.add("SUBIRRECETA");
+            mensajeEnviar.add(this.autor);
+            mensajeEnviar.add(this.titulo);
+            mensajeEnviar.add(this.descripcion);
+            mensajeEnviar.add(this.instrucciones);
 
-    public String getAutor() {
-        return autor;
-    }
-
-    public String getTitulo() {
-        return titulo;
-    }
-
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public float getCalificacion() {
-        return calificacion;
-    }
-
-    public int getCalificacion(String nickname) {
-        ArrayList<String> mensajeEnviar = new ArrayList<>();
-        mensajeEnviar.add("CONSCALIFUSUARIO");
-        mensajeEnviar.add(RecetasDivertidas.username);
-        mensajeEnviar.add(String.valueOf(this.id));
-
-        if (Conexion.isSvResponse()) {
-            try {
-                ArrayList<String> mensajeRecibir = Conexion.sendMessage(mensajeEnviar);
-                if (mensajeRecibir.get(0).equals("CALIFICACIONUSUARIO")) {
-                    return Integer.parseInt(mensajeRecibir.get(1));
-                }
-            } catch(IOException e) {
-                e.printStackTrace();
-                Alerta alerta = new Alerta(Alert.AlertType.ERROR,
-                        "Error inesperado",
-                        "Ocurrión un error inesperado.");
-                alerta.showAndWait();
+            for (Ingrediente i : this.ingredientes) {
+                mensajeEnviar.add(String.valueOf(i.getId()));
+                mensajeEnviar.add(String.valueOf(i.getCantidad()));
+                mensajeEnviar.add(i.getUnidad());
             }
-        } else {
+
+            mensajeEnviar.add("CATEGORIASRECETA");
+            for (CategoriaReceta c : this.categorias) {
+                mensajeEnviar.add(String.valueOf(c.getId()));
+            }
+
+            mensajeEnviar.add("INICIOMULTIMEDIA");
+            // TODO: Agregar multimedia
+
+            ArrayList<String> mensajeRecibir = Conexion.sendMessage(mensajeEnviar);
+            Alerta alerta;
+            switch (mensajeRecibir.get(0)) {
+                case "SUBIRRECETAOK" -> {
+                    alerta = new Alerta(Alert.AlertType.CONFIRMATION,
+                            "Receta subida",
+                            "Su receta se ha subido exitosamente.");
+                }
+                case "SUBIRRECETAFAIL" -> {
+                    alerta = new Alerta(Alert.AlertType.ERROR,
+                            "Error al subir receta",
+                            "Error: " + mensajeRecibir.get(1));
+                }
+                default -> {
+                    alerta = new Alerta(Alert.AlertType.ERROR,
+                            "Error inesperado",
+                            "Hubo un error inesperado");
+                }
+            }
+            alerta.showAndWait();
+        } catch (IOException e) {
+            e.printStackTrace();
             Alerta alerta = new Alerta(Alert.AlertType.ERROR,
-                    "Error de conexión",
-                    "Hubo un problema al conectarse al servidor");
+                    "Error inesperado",
+                    "Hubo un error inesperado");
             alerta.showAndWait();
         }
-
-        return 0;
-    }
-
-    public int getCantCalificaciones() {
-        return cantCalificaciones;
     }
 }

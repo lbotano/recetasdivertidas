@@ -5,11 +5,15 @@ import io.github.recetasDivertidas.pkgComponentes.CategoriaSubir;
 import io.github.recetasDivertidas.pkgComponentes.IngredienteSubir;
 import io.github.recetasDivertidas.pkgRecetasDivertidas.CategoriaReceta;
 import io.github.recetasDivertidas.pkgRecetasDivertidas.Ingrediente;
+import io.github.recetasDivertidas.pkgRecetasDivertidas.Receta;
+import io.github.recetasDivertidas.pkgRecetasDivertidas.RecetasDivertidas;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
@@ -19,10 +23,14 @@ import java.util.ArrayList;
 public class SubirReceta {
     @FXML private VBox vboxLeft;
     @FXML private VBox vboxRight;
-    @FXML private ComboBox<Ingrediente> cmbIngredientes;
-    @FXML private ComboBox<CategoriaReceta> cmbCategorias;
     @FXML private VBox vboxIngredientes;
     @FXML private VBox vboxCategorias;
+    @FXML private TextField txtTitulo;
+    @FXML private TextArea txaDescripcion;
+    @FXML private TextArea txaInstrucciones;
+
+    @FXML private ComboBox<Ingrediente> cmbIngredientes;
+    @FXML private ComboBox<CategoriaReceta> cmbCategorias;
 
     @FXML
     private void initialize() {
@@ -120,5 +128,17 @@ public class SubirReceta {
 
         // Reinicia el combobox
         cmbCategorias.getSelectionModel().clearSelection();
+    }
+
+    @FXML
+    private void subirReceta() {
+        Receta receta = new Receta(RecetasDivertidas.username,
+                txtTitulo.getText(),
+                txaDescripcion.getText(),
+                txaInstrucciones.getText(),
+                cmbIngredientes.getItems(),
+                cmbCategorias.getItems());
+
+        receta.subir();
     }
 }
