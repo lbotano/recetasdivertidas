@@ -560,7 +560,7 @@ public class ThreadClient implements Runnable{
 			//agregar ingredientes
 			while(!(message.get(i).contentEquals("CATEGORIASRECETA"))){
 				String unidad;
-				if(message.get(i+2) == "SinUnidad"){
+				if(message.get(i+2).contentEquals("SinUnidad")){
 					unidad = "";
 				}else{
 					unidad = message.get(i+2);
