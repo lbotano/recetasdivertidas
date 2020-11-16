@@ -53,7 +53,7 @@ public class ThreadClient implements Runnable{
 	private static final String USUPREGSEG = "SELECT * FROM PreguntasSeguridad WHERE id in" +
 											" (SELECT uPreguntaSeguridad FROM usuario  WHERE uNickname = ?)";
 	private static final String DefaultSQLErrorMsg = "Error en la base de datos";
-	
+
 	public ThreadClient(ComboPooledDataSource c, Socket s) {
 		this.cpds = c;
 		this.socket = s;
@@ -559,7 +559,13 @@ public class ThreadClient implements Runnable{
 			}
 			//agregar ingredientes
 			while(!(message.get(i).contentEquals("CATEGORIASRECETA"))){
-				ing.add(new Ingrediente(Integer.parseInt(message.get(i)) ,Integer.parseInt(message.get(i+1)),message.get(i+2)));
+				String unidad;
+				if(message.get(i+2) == "SinUnidad"){
+					unidad = "";
+				}else{
+					unidad = message.get(i+2);
+				}
+				ing.add(new Ingrediente(Integer.parseInt(message.get(i)) ,Integer.parseInt(message.get(i+1)),unidad));
 				i+=3;
 			}
 			//suma uno para saltarse el mensaje de CATEGORIASRECETA
