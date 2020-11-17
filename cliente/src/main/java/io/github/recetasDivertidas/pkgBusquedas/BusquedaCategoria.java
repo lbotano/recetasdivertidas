@@ -76,9 +76,9 @@ public class BusquedaCategoria {
         }
     }
 
-    public void prevPag(ActionEvent actionEvent) {
+    public void prevPag() {
     }
 
-    public void nextPag(ActionEvent actionEvent) {
+    public void nextPag() {
     }
 }

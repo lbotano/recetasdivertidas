@@ -10,8 +10,12 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
+<?import javafx.geometry.Insets?>
 <BorderPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
-   <center>
+    <padding>
+        <Insets topRightBottomLeft="10"/>
+    </padding>
+    <center>
        <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
            <Tab fx:id="tabMisRecetas" text="Mis Recetas">
                <ScrollPane fx:id="scrollpane"/>
