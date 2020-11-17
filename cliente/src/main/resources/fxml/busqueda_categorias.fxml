@@ -19,7 +19,7 @@
     </padding>
         <top>
             <VBox>
-                <Label fx:id="lblBuscaCat" text="Busca recetas eligiendo categorias">
+                <Label text="Busca recetas eligiendo categorias">
                     <font>
                         <Font size="16.0" />
                     </font>

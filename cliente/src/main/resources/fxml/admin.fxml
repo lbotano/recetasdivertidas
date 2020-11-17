@@ -69,7 +69,7 @@
                     </font>
                 </Label>
                 <HBox spacing="5">
-                    <CheckComboBox fx:id="chkcmbCategoriasIngrediente" HBox.hgrow="ALWAYS"/>
+                    <CheckComboBox fx:id="chkcmbCategoriasIngrediente" maxWidth="200" HBox.hgrow="ALWAYS"/>
                     <TextField fx:id="txtSubirIng" promptText="Nombre del ingrediente" HBox.hgrow="ALWAYS"/>
                     <Button fx:id="btnSubirIng" text="Subir Ingrediente" minWidth="170" onAction="#subirIng"/>
                 </HBox>
