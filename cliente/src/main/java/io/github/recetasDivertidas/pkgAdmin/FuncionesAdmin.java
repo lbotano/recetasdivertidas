@@ -20,7 +20,7 @@ import java.util.Arrays;
 public class FuncionesAdmin {
 
     private ArrayList<String> mensaje; //objeto donde voy a guardar los mensajes para el server
-
+    private Alerta alerta;
     //Referencia a los objetos de la interfaz grafica
     @FXML ComboBox cmbBorrarCatIngrediente;
     @FXML Button btnBorrarCatIngrediente;
@@ -99,7 +99,7 @@ public class FuncionesAdmin {
     }
 
     public ArrayList<String> consSubirCategoriaReceta (String nombreReceta) throws IOException {
-        mensaje = new ArrayList<>(Arrays.asList("BORRARREC", nombreReceta));
+        mensaje = new ArrayList<>(Arrays.asList("SUBIRCATREC", nombreReceta));
         if (Conexion.isSvResponse()) {
             return Conexion.sendMessage(mensaje);
         }
@@ -113,65 +113,55 @@ public class FuncionesAdmin {
         }
         return null;
     }
-    //true: ingrediente
-    //false: receta
-    private void borrarCategoria(boolean ingORec, int idCategoria) throws IOException{
-        Alerta alerta;
-        ArrayList<String> respServer;
-        if(ingORec){
-            respServer = consBorrarCategoriaIngrediente(idCategoria);
-        }else{
-            respServer = consBorrarCategoriaReceta(idCategoria);
-        }
-        if(respServer != null){
-            System.out.println(respServer.get(0));
-            switch (respServer.get(0)) {
-                case "BORRARCATINGFAIL", "BORRARCATRECFAIL" -> {
-                    alerta = new Alerta(Alert.AlertType.ERROR,
-                            "Errpr inesperado",
-                            "Hubo un error al tratar de borrar la categoria");
-                    alerta.showAndWait();
-                }
-                case "BORRARCATINGOK", "BORRARCATRECOK" -> {
-                    alerta = new Alerta(Alert.AlertType.CONFIRMATION,
-                            "Todo salio bien!",
-                            "Se borro correctamente la categoria");
-                    alerta.showAndWait();
-                }
-                case "MESSAGEERROR" -> {
-                    alerta = new Alerta(Alert.AlertType.ERROR,
-                            "Error inesperado",
-                            "El server no reconocio la petición");
-                    alerta.showAndWait();
-                }
-                default -> {
-                    alerta = new Alerta(Alert.AlertType.INFORMATION,
-                            "Error en el server!",
-                            "Se ha recibido una respuesta erronea por parte del server");
-                    alerta.showAndWait();
-                }
+
+    private void respuestasDeServerComunes(String mensaje){
+        switch(mensaje){
+            case "MESSAGEERROR" -> {
+                alerta = new Alerta(Alert.AlertType.ERROR,
+                        "Error inesperado",
+                        "El server no reconocio la petición");
+                alerta.showAndWait();
             }
-        }else{
-            alerta = new Alerta(Alert.AlertType.ERROR,
-                    "No se ha podido conectar con el servidor",
-                    "El server no responde");
-            alerta.showAndWait();
+            default -> {
+                alerta = new Alerta(Alert.AlertType.INFORMATION,
+                        "Error en el server!",
+                        "Se ha recibido una respuesta erronea por parte del server");
+                alerta.showAndWait();
+            }
         }
     }
 
     public void borrarCategoriaIngrediente(ActionEvent actionEvent) {
-
+        ArrayList<String> respServer;
         try {
             CategoriaIngrediente itemSeleccionado =  (CategoriaIngrediente) cmbBorrarCatIngrediente.getValue();
-            if(itemSeleccionado != null){
-                borrarCategoria(true, itemSeleccionado.getId());
-                //Actualizar categorias
-                cmbBorrarCatIngrediente.getItems().clear();
-                cmbBorrarCatIngrediente.getItems().addAll(CategoriaIngrediente.getCategorias());
+            if(itemSeleccionado != null) {
+
+                respServer = consBorrarCategoriaIngrediente(itemSeleccionado.getId());
+                if (respServer != null) {
+                    System.out.println(respServer.get(0));
+                    switch (respServer.get(0)) {
+                        case "BORRARCATINGFAIL" -> {
+                            alerta = new Alerta(Alert.AlertType.ERROR,
+                                    "Errpr inesperado",
+                                    "Hubo un error al tratar de borrar la categoria");
+                            alerta.showAndWait();
+                        }
+                        case "BORRARCATINGOK" -> {
+                            alerta = new Alerta(Alert.AlertType.CONFIRMATION,
+                                    "Todo salio bien!",
+                                    "Se borro correctamente la categoria");
+                            alerta.showAndWait();
+                        }
+                        default -> respuestasDeServerComunes(respServer.get(0));
+                    }
+                    cmbBorrarCatReceta.getItems().clear();
+                    cmbBorrarCatReceta.getItems().addAll(CategoriaReceta.getCategorias());
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
-            Alert alerta = new Alerta(Alert.AlertType.ERROR,
+            alerta = new Alerta(Alert.AlertType.ERROR,
                     "Error inesperado",
                     "Hubo un error al enviar el mensaje");
             alerta.showAndWait();
@@ -179,18 +169,37 @@ public class FuncionesAdmin {
     }
 
     public void borrarCatReceta(ActionEvent actionEvent) {
-
+        Alerta alerta;
+        ArrayList<String> respServer;
         try {
             CategoriaReceta itemSeleccionado =  (CategoriaReceta) cmbBorrarCatReceta.getValue();
-            if(itemSeleccionado != null){
-                borrarCategoria(false, itemSeleccionado.getId());
-                //Actualizar categorias
-                cmbBorrarCatReceta.getItems().clear();
-                cmbBorrarCatReceta.getItems().addAll(CategoriaReceta.getCategorias());
+            if(itemSeleccionado != null) {
+
+                respServer = consBorrarCategoriaReceta(itemSeleccionado.getId());
+                if (respServer != null) {
+                    System.out.println(respServer.get(0));
+                    switch (respServer.get(0)) {
+                        case "BORRARCATRECFAIL" -> {
+                            alerta = new Alerta(Alert.AlertType.ERROR,
+                                    "Errpr inesperado",
+                                    "Hubo un error al tratar de borrar la categoria");
+                            alerta.showAndWait();
+                        }
+                        case "BORRARCATRECOK" -> {
+                            alerta = new Alerta(Alert.AlertType.CONFIRMATION,
+                                    "Todo salio bien!",
+                                    "Se borro correctamente la categoria");
+                            alerta.showAndWait();
+                        }
+                        default -> respuestasDeServerComunes(respServer.get(0));
+                    }
+                    cmbBorrarCatReceta.getItems().clear();
+                    cmbBorrarCatReceta.getItems().addAll(CategoriaReceta.getCategorias());
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
-            Alert alerta = new Alerta(Alert.AlertType.ERROR,
+            alerta = new Alerta(Alert.AlertType.ERROR,
                     "Error inesperado",
                     "Hubo un error al enviar el mensaje");
             alerta.showAndWait();
@@ -219,18 +228,7 @@ public class FuncionesAdmin {
                                     "Se borro correctamente el ingrediente");
                             alerta.showAndWait();
                         }
-                        case "MESSAGEERROR" -> {
-                            alerta = new Alerta(Alert.AlertType.ERROR,
-                                    "Error inesperado",
-                                    "El server no reconocio la petición");
-                            alerta.showAndWait();
-                        }
-                        default -> {
-                            alerta = new Alerta(Alert.AlertType.INFORMATION,
-                                    "Error en el server!",
-                                    "Se ha recibido una respuesta erronea por parte del server");
-                            alerta.showAndWait();
-                        }
+                        default -> respuestasDeServerComunes(respServer.get(0));
                     }
                     //Actualizar ingredientes
                     cmbBorrarIngrediente.getItems().clear();
@@ -251,7 +249,47 @@ public class FuncionesAdmin {
         }
     }
 
+    public void borrarReceta(ActionEvent actionEvent){
+
+    }
+
     public void subirCatRec(ActionEvent actionEvent) {
+        ArrayList<String> respServer;
+        Alerta alerta;
+
+        try {
+            respServer = consSubirCategoriaReceta(txtSubirCatRec.getText());
+            if(respServer != null){
+                switch (respServer.get(0)){
+                    case "SUBIRCATRECFAIL" ->{
+                        alerta = new Alerta(Alert.AlertType.ERROR,
+                                "Error",
+                                "No se ha podido subir la receta");
+                        alerta.showAndWait();
+                    }
+                    case "SUBIRCATRECOK" ->{
+                        alerta = new Alerta(Alert.AlertType.CONFIRMATION,
+                                "Todo salio bien!",
+                                "Se ha subido la categoria de receta correctamente");
+                        alerta.showAndWait();
+                    }
+
+                    default -> respuestasDeServerComunes(respServer.get(0));
+                }
+            }else{
+                alerta = new Alerta(Alert.AlertType.ERROR,
+                        "No se ha podido conectar con el servidor",
+                        "El server no responde");
+                alerta.showAndWait();
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            alerta = new Alerta(Alert.AlertType.ERROR,
+                    "Error inesperado",
+                    "Hubo un error al enviar el mensaje");
+            alerta.showAndWait();
+        }
     }
 
     public void subirIng(ActionEvent actionEvent) {
@@ -261,6 +299,42 @@ public class FuncionesAdmin {
     }
 
     public void banearUsuario(ActionEvent actionEvent) {
+        ArrayList<String> respServer;
+        Alerta alerta;
+
+        try {
+            respServer = consBanearUsuario(txtBanearUsuario.getText());
+            if(respServer != null){
+                switch (respServer.get(0)) {
+                    case "BANEARUSUFAIL" -> {
+                        alerta = new Alerta(Alert.AlertType.ERROR,
+                                "Error",
+                                "No se ha podido banear al usuario");
+                        alerta.showAndWait();
+                    }
+                    case "BANEARUSUOK" -> {
+                        alerta = new Alerta(Alert.AlertType.CONFIRMATION,
+                                "Todo salio bien!",
+                                "Se ha baneado al usuario correctamente");
+                        alerta.showAndWait();
+                    }
+                    default -> respuestasDeServerComunes(respServer.get(0));
+                }
+            }else{
+                alerta = new Alerta(Alert.AlertType.ERROR,
+                        "No se ha podido conectar con el servidor",
+                        "El server no responde");
+                alerta.showAndWait();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            alerta = new Alerta(Alert.AlertType.ERROR,
+                    "Error inesperado",
+                    "Hubo un error al enviar el mensaje");
+            alerta.showAndWait();
+        }
+
+
     }
 
 
