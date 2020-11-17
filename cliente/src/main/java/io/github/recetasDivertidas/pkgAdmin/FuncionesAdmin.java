@@ -197,6 +197,7 @@ public class FuncionesAdmin {
         }
     }
 
+    @FXML
     public void borrarIngrediente(ActionEvent actionEvent) {
         ArrayList<String> respServer;
         Alerta alerta;

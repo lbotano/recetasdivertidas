@@ -2,6 +2,9 @@ package io.github.recetasDivertidas.pkgBusquedas;
 
 import io.github.recetasDivertidas.pkgAplicacion.Alerta;
 import io.github.recetasDivertidas.pkgConexion.Conexion;
+import io.github.recetasDivertidas.pkgRecetasDivertidas.CategoriaIngrediente;
+import io.github.recetasDivertidas.pkgRecetasDivertidas.CategoriaReceta;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
@@ -21,13 +24,7 @@ public class BusquedaCategoria {
 
     @FXML
     private void initialize() throws IOException {
-        if (Conexion.isSvResponse()){
-            ArrayList<String> message = new ArrayList<>();
-            message.add("LISTARCATREC");
-            ArrayList<String> ans = Conexion.sendMessage(message);
-
-            chkcmbCategorias.getItems().addAll(ans);
-        }
+        chkcmbCategorias.getItems().addAll(CategoriaReceta.getCategorias());
         current_pag=0;
     }
 
@@ -79,4 +76,9 @@ public class BusquedaCategoria {
         }
     }
 
+    public void prevPag(ActionEvent actionEvent) {
+    }
+
+    public void nextPag(ActionEvent actionEvent) {
+    }
 }

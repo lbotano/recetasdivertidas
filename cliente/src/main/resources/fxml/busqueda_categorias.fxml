@@ -11,41 +11,48 @@
 
 <?import javafx.scene.layout.VBox?>
 <?import org.controlsfx.glyphfont.Glyph?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.HBox?>
 <BorderPane fx:id="borderpane" fx:controller="io.github.recetasDivertidas.pkgBusquedas.BusquedaCategoria" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
-   <top>
-      <GridPane fx:id="gridpane" BorderPane.alignment="CENTER">
-            <Label fx:id="lblBuscaCat" text="Busca recetas eligiendo categorias">
-               <font>
-                  <Font size="16.0" />
-               </font>
-            </Label>
-            <Button fx:id="btnBuscar" onAction="#buscar" text="Buscar" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                <graphic>
-                    <Glyph fontFamily="FontAwesome" icon="SEARCH"/>
-                </graphic>
-            </Button>
-            <CheckComboBox fx:id="chkcmbCategorias" maxWidth="Infinity" GridPane.rowIndex="1" />
-      </GridPane>
-   </top>
-   <center>
-      <ScrollPane fx:id="scrollpane" maxWidth="Infinity">
-          <VBox fx:id="vbox"/>
-      </ScrollPane>
-   </center>
-    <bottom>
-        <ButtonBar fx:id="btnBar" nodeOrientation="RIGHT_TO_LEFT" BorderPane.alignment="CENTER">
-            <buttons>
-                <Button fx:id="btnPrevPag">
-                    <graphic>
-                        <Glyph fontFamily="FontAwesome" icon="CHEVRON_LEFT"/>
-                    </graphic>
-                </Button>
-                <Button fx:id="btnNextPag">
-                    <graphic>
-                        <Glyph fontFamily="FontAwesome" icon="CHEVRON_RIGHT"/>
-                    </graphic>
-                </Button>
-            </buttons>
-        </ButtonBar>
-    </bottom>
+    <padding>
+        <Insets topRightBottomLeft="10"/>
+    </padding>
+        <top>
+            <VBox>
+                <Label fx:id="lblBuscaCat" text="Busca recetas eligiendo categorias">
+                    <font>
+                        <Font size="16.0" />
+                    </font>
+                </Label>
+                <HBox>
+                    <CheckComboBox fx:id="chkcmbCategorias" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+                    <Button fx:id="btnBuscar" onAction="#buscar" text="Buscar">
+                        <graphic>
+                            <Glyph fontFamily="FontAwesome" icon="SEARCH"/>
+                        </graphic>
+                    </Button>
+                </HBox>
+            </VBox>
+       </top>
+       <center>
+          <ScrollPane fx:id="scrollpane" maxWidth="Infinity">
+              <VBox fx:id="vbox"/>
+          </ScrollPane>
+       </center>
+        <bottom>
+            <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                <buttons>
+                    <Button fx:id="btnPrevPag" onAction="#nextPag">
+                        <graphic>
+                            <Glyph fontFamily="FontAwesome" icon="CHEVRON_LEFT"/>
+                        </graphic>
+                    </Button>
+                    <Button fx:id="btnNextPag" onAction="#prevPag">
+                        <graphic>
+                            <Glyph fontFamily="FontAwesome" icon="CHEVRON_RIGHT"/>
+                        </graphic>
+                    </Button>
+                </buttons>
+            </ButtonBar>
+        </bottom>
 </BorderPane>
