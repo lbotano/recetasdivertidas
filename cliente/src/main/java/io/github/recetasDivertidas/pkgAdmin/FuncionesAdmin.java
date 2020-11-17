@@ -5,6 +5,8 @@ import io.github.recetasDivertidas.pkgConexion.Conexion;
 import io.github.recetasDivertidas.pkgRecetasDivertidas.CategoriaIngrediente;
 import io.github.recetasDivertidas.pkgRecetasDivertidas.CategoriaReceta;
 import io.github.recetasDivertidas.pkgRecetasDivertidas.Ingrediente;
+import javafx.collections.ObservableArray;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -16,6 +18,7 @@ import org.controlsfx.control.CheckComboBox;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.stream.Collectors;
 
 public class FuncionesAdmin {
 
@@ -106,8 +109,13 @@ public class FuncionesAdmin {
         return null;
     }
 
-    public ArrayList<String> consSubirIngrediente (String nombreIngrediente, int idCategoria) throws IOException {
-        mensaje = new ArrayList<>(Arrays.asList("SUBIRING", nombreIngrediente, String.valueOf(idCategoria)));
+    public ArrayList<String> consSubirIngrediente (String nombreIngrediente, ObservableList<CategoriaIngrediente> categorias) throws IOException {
+        mensaje = new ArrayList<>();
+        mensaje.add("SUBIRING");
+        mensaje.add(nombreIngrediente);
+        for (CategoriaIngrediente i: categorias) {
+            mensaje.add(String.valueOf(i.getId()));
+        }
         if (Conexion.isSvResponse()) {
             return Conexion.sendMessage(mensaje);
         }
@@ -152,11 +160,12 @@ public class FuncionesAdmin {
                                     "Todo salio bien!",
                                     "Se borro correctamente la categoria");
                             alerta.showAndWait();
+                            //Actualizar categorias
+                            cmbBorrarCatReceta.getItems().clear();
+                            cmbBorrarCatReceta.getItems().addAll(CategoriaReceta.getCategorias());
                         }
                         default -> respuestasDeServerComunes(respServer.get(0));
                     }
-                    cmbBorrarCatReceta.getItems().clear();
-                    cmbBorrarCatReceta.getItems().addAll(CategoriaReceta.getCategorias());
                 }
             }
         } catch (IOException e) {
@@ -190,11 +199,12 @@ public class FuncionesAdmin {
                                     "Todo salio bien!",
                                     "Se borro correctamente la categoria");
                             alerta.showAndWait();
+                            //Actualizar categorias
+                            cmbBorrarCatReceta.getItems().clear();
+                            cmbBorrarCatReceta.getItems().addAll(CategoriaReceta.getCategorias());
                         }
                         default -> respuestasDeServerComunes(respServer.get(0));
                     }
-                    cmbBorrarCatReceta.getItems().clear();
-                    cmbBorrarCatReceta.getItems().addAll(CategoriaReceta.getCategorias());
                 }
             }
         } catch (IOException e) {
@@ -227,12 +237,12 @@ public class FuncionesAdmin {
                                     "Todo salio bien!",
                                     "Se borro correctamente el ingrediente");
                             alerta.showAndWait();
+                            //Actualizar ingredientes
+                            cmbBorrarIngrediente.getItems().clear();
+                            cmbBorrarIngrediente.getItems().addAll(Ingrediente.getIngredientes());
                         }
                         default -> respuestasDeServerComunes(respServer.get(0));
                     }
-                    //Actualizar ingredientes
-                    cmbBorrarIngrediente.getItems().clear();
-                    cmbBorrarIngrediente.getItems().addAll(Ingrediente.getIngredientes());
                 }else{
                     alerta = new Alerta(Alert.AlertType.ERROR,
                             "No se ha podido conectar con el servidor",
@@ -255,7 +265,6 @@ public class FuncionesAdmin {
 
     public void subirCatRec(ActionEvent actionEvent) {
         ArrayList<String> respServer;
-        Alerta alerta;
 
         try {
             respServer = consSubirCategoriaReceta(txtSubirCatRec.getText());
@@ -264,7 +273,7 @@ public class FuncionesAdmin {
                     case "SUBIRCATRECFAIL" ->{
                         alerta = new Alerta(Alert.AlertType.ERROR,
                                 "Error",
-                                "No se ha podido subir la receta");
+                                "No se ha podido subir la categoria de receta");
                         alerta.showAndWait();
                     }
                     case "SUBIRCATRECOK" ->{
@@ -272,6 +281,8 @@ public class FuncionesAdmin {
                                 "Todo salio bien!",
                                 "Se ha subido la categoria de receta correctamente");
                         alerta.showAndWait();
+                        cmbBorrarCatReceta.getItems().clear();
+                        cmbBorrarCatReceta.getItems().addAll(CategoriaReceta.getCategorias());
                     }
 
                     default -> respuestasDeServerComunes(respServer.get(0));
@@ -293,9 +304,87 @@ public class FuncionesAdmin {
     }
 
     public void subirIng(ActionEvent actionEvent) {
+        ArrayList<String> respServer;
+
+        try {
+            ObservableList<CategoriaIngrediente> catIngSeleccionados = chkcmbCategoriasIngrediente.getCheckModel().getCheckedItems();
+            respServer = consSubirIngrediente(txtSubirIng.getText(), catIngSeleccionados);
+
+            if(respServer != null){
+                switch (respServer.get(0)){
+                    case "SUBIRINGFAIL" ->{
+                        alerta = new Alerta(Alert.AlertType.ERROR,
+                                "Error",
+                                "No se ha podido subir el ingrediente");
+                        alerta.showAndWait();
+                    }
+                    case "SUBIRINGOK" ->{
+                        alerta = new Alerta(Alert.AlertType.CONFIRMATION,
+                                "Todo salio bien!",
+                                "Se ha subido el ingrediente correctamente");
+                        alerta.showAndWait();
+                        cmbBorrarIngrediente.getItems().clear();
+                        cmbBorrarIngrediente.getItems().addAll(Ingrediente.getIngredientes());
+                    }
+
+                    default -> respuestasDeServerComunes(respServer.get(0));
+                }
+            }else{
+                alerta = new Alerta(Alert.AlertType.ERROR,
+                        "No se ha podido conectar con el servidor",
+                        "El server no responde");
+                alerta.showAndWait();
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            alerta = new Alerta(Alert.AlertType.ERROR,
+                    "Error inesperado",
+                    "Hubo un error al enviar el mensaje");
+            alerta.showAndWait();
+        }
     }
 
     public void subirCatIng(ActionEvent actionEvent) {
+        ArrayList<String> respServer;
+
+        try {
+            respServer = consSubirCategoriaIngrediente(txtSubirCatIng.getText());
+            if(respServer != null){
+                switch (respServer.get(0)){
+                    case "SUBIRCATINGFAIL" ->{
+                        alerta = new Alerta(Alert.AlertType.ERROR,
+                                "Error",
+                                "No se ha podido subir la categoria de ingrediente");
+                        alerta.showAndWait();
+                    }
+                    case "SUBIRCATINGOK" ->{
+                        alerta = new Alerta(Alert.AlertType.CONFIRMATION,
+                                "Todo salio bien!",
+                                "Se ha subido la categoria de ingrediente correctamente");
+                        alerta.showAndWait();
+                        cmbBorrarCatIngrediente.getItems().clear();
+                        chkcmbCategoriasIngrediente.getItems().clear();
+                        cmbBorrarCatIngrediente.getItems().addAll(CategoriaIngrediente.getCategorias());
+                        chkcmbCategoriasIngrediente.getItems().addAll(CategoriaIngrediente.getCategorias());
+                    }
+
+                    default -> respuestasDeServerComunes(respServer.get(0));
+                }
+            }else{
+                alerta = new Alerta(Alert.AlertType.ERROR,
+                        "No se ha podido conectar con el servidor",
+                        "El server no responde");
+                alerta.showAndWait();
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            alerta = new Alerta(Alert.AlertType.ERROR,
+                    "Error inesperado",
+                    "Hubo un error al enviar el mensaje");
+            alerta.showAndWait();
+        }
     }
 
     public void banearUsuario(ActionEvent actionEvent) {

@@ -16,7 +16,7 @@ public final class Conexion {
     public static ObjectInputStream input;
     public static boolean svResponse;
     private final static String HOST = "127.0.0.1";
-    private final static int PORT = 6969;
+    private final static int PORT = 7070;
 
     public static ArrayList<String> sendMessage(List<String> message) throws IOException {
         ArrayList<String> answer;
