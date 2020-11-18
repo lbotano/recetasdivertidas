@@ -18,6 +18,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class SubirReceta {
@@ -136,8 +137,8 @@ public class SubirReceta {
                 txtTitulo.getText(),
                 txaDescripcion.getText(),
                 txaInstrucciones.getText(),
-                cmbIngredientes.getItems(),
-                cmbCategorias.getItems());
+                getIngredientes(),
+                getCategorias());
 
         receta.subir();
     }
