@@ -1,8 +1,12 @@
 package io.github.recetasDivertidas.pkgRecetasDivertidas;
 
 import io.github.recetasDivertidas.pkgAplicacion.Alerta;
+import io.github.recetasDivertidas.pkgComponentes.ResultadoBusqueda;
 import io.github.recetasDivertidas.pkgConexion.Conexion;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -128,6 +132,47 @@ public class Receta {
 
         ArrayList<String> mensajeRecibir = Conexion.sendMessage(mensajeEnviar);
         return Receta.getRecetasConsultaBusquedas(mensajeRecibir);
+    }
+
+    public static ArrayList<Receta> getRecetasUsuario(String usuario) throws MensajeServerInvalidoException, IOException {
+        ArrayList<String> mensajeEnviar = new ArrayList<>();
+        mensajeEnviar.add("RECETASDEUSUARIO");
+        mensajeEnviar.add(usuario);
+
+
+        if (Conexion.isSvResponse()) {
+            try {
+                ArrayList<String> mensajeRecibir = Conexion.sendMessage(mensajeEnviar);
+                //Hay que cambiar este if por un switch, pero tengo mucho sueño bye
+                if (mensajeRecibir.get(0).equals("RECETASDEUSUARIOOK")) {
+                    ArrayList<Receta> resultado = new ArrayList<>();
+                    for (int i = 1; i < mensajeRecibir.size(); i += 6) {
+                        Receta receta = new Receta(
+                                Integer.parseInt(mensajeRecibir.get(i)),
+                                mensajeRecibir.get(i + 1),
+                                mensajeRecibir.get(i + 2),
+                                mensajeRecibir.get(i + 3),
+                                Float.parseFloat(mensajeRecibir.get(i + 4)),
+                                Integer.parseInt(mensajeRecibir.get(i + 5))
+                        );
+                        resultado.add(receta);
+                    }
+                }
+            } catch(IOException e) {
+                e.printStackTrace();
+                Alerta alerta = new Alerta(Alert.AlertType.ERROR,
+                        "Error inesperado",
+                        "Ocurrión un error inesperado.");
+                alerta.showAndWait();
+            }
+        } else {
+            Alerta alerta = new Alerta(Alert.AlertType.ERROR,
+                    "Error de conexión",
+                    "Hubo un problema al conectarse al servidor");
+            alerta.showAndWait();
+        }
+
+        return null;
     }
 
 

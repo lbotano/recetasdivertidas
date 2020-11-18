@@ -16,7 +16,6 @@ public class BusquedaIngredientes {
 
     @FXML
     public void initialize() throws IOException {
-        //xd
         chkcmbIngredientes.getItems().addAll(CategoriaIngrediente.getCategorias());
         current_pag=0;
     }

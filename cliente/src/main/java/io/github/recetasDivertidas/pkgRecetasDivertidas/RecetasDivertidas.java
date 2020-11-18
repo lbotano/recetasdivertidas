@@ -15,6 +15,8 @@ import java.util.Hashtable;
 public class RecetasDivertidas{
     public static boolean logueadoComoAdmin;
     public static String username;
+    public final static String HOVERED="E7E7E7";
+    public final static String EXITED="FFFFFF";
     public BorderPane borderPane;
 
     private Hashtable<String, BorderPane> pestanas = new Hashtable<>();
