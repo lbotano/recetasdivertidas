@@ -274,7 +274,13 @@ CREATE PROCEDURE spGetRecetasUsuario (
 	uNickname varchar(32)
 )
 BEGIN
-	SELECT *, fnGetCalificacionReceta(rID), fnGetCalificacionesReceta(rID)
+	SELECT
+		rID,
+        rAutor,
+        rNombre,
+        rDescripcion,
+        fnGetCalificacionReceta(rID),
+        fnGetCalificacionesReceta(rID)
 	FROM Receta WHERE rAutor = uNickname;
 END//
 DELIMITER ;

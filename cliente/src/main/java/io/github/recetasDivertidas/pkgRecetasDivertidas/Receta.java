@@ -135,6 +135,7 @@ public class Receta {
     }
 
     public static ArrayList<Receta> getRecetasUsuario(String usuario) throws MensajeServerInvalidoException, IOException {
+        ArrayList<Receta> resultado = new ArrayList<>();
         ArrayList<String> mensajeEnviar = new ArrayList<>();
         mensajeEnviar.add("RECETASDEUSUARIO");
         mensajeEnviar.add(usuario);
@@ -143,22 +144,34 @@ public class Receta {
         if (Conexion.isSvResponse()) {
             try {
                 ArrayList<String> mensajeRecibir = Conexion.sendMessage(mensajeEnviar);
-                //Hay que cambiar este if por un switch, pero tengo mucho sueño bye
-                if (mensajeRecibir.get(0).equals("RECETASDEUSUARIOOK")) {
-                    ArrayList<Receta> resultado = new ArrayList<>();
-                    for (int i = 1; i < mensajeRecibir.size(); i += 6) {
-                        Receta receta = new Receta(
-                                Integer.parseInt(mensajeRecibir.get(i)),
-                                mensajeRecibir.get(i + 1),
-                                mensajeRecibir.get(i + 2),
-                                mensajeRecibir.get(i + 3),
-                                Float.parseFloat(mensajeRecibir.get(i + 4)),
-                                Integer.parseInt(mensajeRecibir.get(i + 5))
-                        );
-                        resultado.add(receta);
+                switch (mensajeRecibir.get(0)) {
+                    case "RESPCONSULTA" -> {
+                        for (int i = 1; i < mensajeRecibir.size(); i += 6) {
+                            Receta receta = new Receta(
+                                    Integer.parseInt(mensajeRecibir.get(i)),
+                                    mensajeRecibir.get(i + 1),
+                                    mensajeRecibir.get(i + 2),
+                                    mensajeRecibir.get(i + 3),
+                                    Float.parseFloat(mensajeRecibir.get(i + 4)),
+                                    Integer.parseInt(mensajeRecibir.get(i + 5))
+                            );
+                            resultado.add(receta);
+                        }
+                    }
+                    case "RESPCONSULTAFAIL" -> {
+                        Alerta alerta = new Alerta(Alert.AlertType.ERROR,
+                                "Error",
+                                mensajeRecibir.get(1));
+                        alerta.showAndWait();
+                    }
+                    default -> {
+                        Alerta alerta = new Alerta(Alert.AlertType.ERROR,
+                                "Error inesperado",
+                                "Hubo un error inesperado");
+                        alerta.showAndWait();
                     }
                 }
-            } catch(IOException e) {
+            } catch (IOException e) {
                 e.printStackTrace();
                 Alerta alerta = new Alerta(Alert.AlertType.ERROR,
                         "Error inesperado",
@@ -172,7 +185,7 @@ public class Receta {
             alerta.showAndWait();
         }
 
-        return null;
+        return resultado;
     }
 
 

@@ -40,7 +40,7 @@ public class Perfil {
         try {
             ArrayList<Receta> recetasUsuario = Receta.getRecetasUsuario(RecetasDivertidas.username);
 
-            if (recetasUsuario != null) {
+            if (recetasUsuario.size() > 0) {
                 for (Receta r : recetasUsuario) {
                     FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/componentes/resultado_busqueda.fxml"));
                     HBox paneReceta = fxmlLoader.load();

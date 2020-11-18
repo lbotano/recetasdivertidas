@@ -68,9 +68,9 @@ public class ThreadClient implements Runnable{
 	protected void sqlExceptionHandler(SQLException e, String failMsg) {
 		answer.clear();
 		answer.add(failMsg);
-		if(e.getSQLState().contentEquals("45000")) {
+		if (e.getSQLState().contentEquals("45000")) {
     		answer.add(e.getMessage());
-		}else {
+		} else {
 			answer.add(DefaultSQLErrorMsg);
 			e.printStackTrace();
 		}
@@ -93,7 +93,7 @@ public class ThreadClient implements Runnable{
 			answer.add("BORRARRECOK");
 		} catch (SQLException e) {
 			sqlExceptionHandler(e, "BORRARRECFAIL");
-		} catch(NumberFormatException e){
+		} catch (NumberFormatException e){
 			intExceptionHandler(e, "BORRARRECFAIL");
 		}
 
@@ -491,9 +491,11 @@ public class ThreadClient implements Runnable{
 	
 	private void recetaUsuario() {
 		try {
+			String username = message.get(1);
+
 			stmt = conn.prepareCall(RECETASDEUSUARIO);
 			//pone de parametro del sp el nickname recibido del cliente
-			stmt.setString(1, message.get(1));
+			stmt.setString(1, username);
 			stmt.execute();
 
 			ResultSet resultadoSP = stmt.getResultSet();
@@ -502,16 +504,20 @@ public class ThreadClient implements Runnable{
 			
 			if(resultadoSP.next()) {
 
-				answer.add("RECETASDEUSUARIOOK");
+				answer.add("RESPCONSULTA");
 				do {
 					//agarra los elementos de la fila y los pone en el aeeay de respuesta
 					answer.add(resultadoSP.getString(1));
 					answer.add(resultadoSP.getString(2));
-					answer.add(resultadoSP.getString(3));		
+					answer.add(resultadoSP.getString(3));
+					answer.add(resultadoSP.getString(4));
+					answer.add(resultadoSP.getString(5));
+					answer.add(resultadoSP.getString(6));
 				//Mueve el cursor a la siguiente fila, si hay mas resultados devuelve true
 				} while (resultadoSP.next());
-			}else {
-				answer.add("RECETASDEUSUARIONULL");
+			} else {
+				answer.add("RESPCONSULTAFAIL");
+				answer.add("Error al obtener las recetas de " + username);
 			}
 		
 		}catch (SQLException e) {
