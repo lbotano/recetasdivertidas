@@ -125,6 +125,49 @@ public class Receta {
         return resultado;
     }
 
+    public static ArrayList<Receta> getRecetas(int pagina, List<CategoriaReceta> categorias) throws IOException {
+        ArrayList<Receta> resultado = new ArrayList<>();
+
+        ArrayList<String> mensajeEnviar = new ArrayList<>();
+        mensajeEnviar.add("CONSRECETASCATREC");
+        mensajeEnviar.add(String.valueOf(pagina));
+        for (CategoriaReceta c : categorias) {
+            mensajeEnviar.add(String.valueOf(c.getId()));
+        }
+
+        ArrayList<String> mensajeRecibir = Conexion.sendMessage(mensajeEnviar);
+
+        switch (mensajeRecibir.get(0)) {
+            case "RESPCONSULTA" -> {
+                for (int i = 1; i < mensajeRecibir.size(); i += 6) {
+                    Receta receta = new Receta(
+                            Integer.parseInt(mensajeRecibir.get(i)),
+                            mensajeRecibir.get(i + 1),
+                            mensajeRecibir.get(i + 2),
+                            mensajeRecibir.get(i + 3),
+                            Float.parseFloat(mensajeRecibir.get(i + 4)),
+                            Integer.parseInt(mensajeRecibir.get(i + 5))
+                    );
+                    resultado.add(receta);
+                }
+            }
+            case "RESPOCONSULTAFAIL" -> {
+                Alerta alerta = new Alerta(Alert.AlertType.ERROR,
+                        "Error",
+                        mensajeEnviar.get(1));
+                alerta.showAndWait();
+            }
+            default -> {
+                Alerta alerta = new Alerta(Alert.AlertType.ERROR,
+                        "Error inesperado",
+                        "Hubo un error inesperado");
+                alerta.showAndWait();
+            }
+        }
+
+        return resultado;
+    }
+
     public static ArrayList<Receta> getTopRecetas(int pagina) throws IOException, MensajeServerInvalidoException {
         ArrayList<String> mensajeEnviar = new ArrayList<>();
         mensajeEnviar.add("CONSTOPRECETAS");

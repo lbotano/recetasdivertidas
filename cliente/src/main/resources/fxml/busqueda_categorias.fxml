@@ -36,7 +36,7 @@
        </top>
        <center>
           <ScrollPane fx:id="scrollpane" maxWidth="Infinity">
-              <VBox fx:id="vbox"/>
+              <VBox fx:id="vboxResultados"/>
           </ScrollPane>
        </center>
         <bottom>
