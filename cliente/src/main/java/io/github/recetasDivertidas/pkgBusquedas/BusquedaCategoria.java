@@ -22,31 +22,50 @@ public class BusquedaCategoria {
     @FXML Button btnBuscar;
     @FXML CheckComboBox<CategoriaReceta> chkcmbCategorias;
     @FXML VBox vboxResultados;
-    private int paginaActual;
+    private int paginaActual = 0;
 
     @FXML
-    private void initialize() throws IOException {
-        chkcmbCategorias.getItems().addAll(CategoriaReceta.getCategorias());
-        paginaActual = 0;
+    private void initialize() {
+        try {
+            chkcmbCategorias.getItems().addAll(CategoriaReceta.getCategorias());
+        } catch (IOException e) {
+            e.printStackTrace();
+            Alerta alerta = new Alerta(Alert.AlertType.ERROR,
+                    "Error inesperado",
+                    "Hubo un error inesperado");
+            alerta.showAndWait();
+        }
     }
 
     @FXML
-    private void buscar() throws IOException {
-        vboxResultados.getChildren().clear();
-        ArrayList<Receta> recetasEncontradas = Receta.getRecetas(paginaActual, chkcmbCategorias.getItems());
+    private void buscar() {
+        try {
+            vboxResultados.getChildren().clear();
+            ArrayList<Receta> recetasEncontradas = Receta.getRecetas(paginaActual, chkcmbCategorias.getCheckModel().getCheckedItems());
 
-        for (Receta receta : recetasEncontradas) {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/componentes/resultado_busqueda.fxml"));
-            Pane res = loader.load();
-            ResultadoBusqueda resController = loader.getController();
-            resController.ponerReceta(receta);
-            vboxResultados.getChildren().add(res);
+            for (Receta receta : recetasEncontradas) {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/componentes/resultado_busqueda.fxml"));
+                Pane res = loader.load();
+                ResultadoBusqueda resController = loader.getController();
+                resController.ponerReceta(receta);
+                vboxResultados.getChildren().add(res);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            Alerta alerta = new Alerta(Alert.AlertType.ERROR,
+                    "Error inesperado",
+                    "Hubo un error inesperado");
+            alerta.showAndWait();
         }
     }
 
     public void prevPag() {
+        paginaActual--;
+        buscar();
     }
 
     public void nextPag() {
+        paginaActual++;
+        buscar();
     }
 }
