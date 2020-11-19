@@ -28,12 +28,13 @@ public class Login {
     @FXML
     private void login() {
         try {
-            if (consLogin(txtUsuario.getText(), txtContrasena.getText())) {
+            if (consLogin(txtUsuario.getText().trim(), txtContrasena.getText())) {
                 Alerta alerta = new Alerta(Alert.AlertType.CONFIRMATION, "Bienvenidx de nuevo!",
                         "Identidad confirmada con éxito");
                 alerta.showAndWait();
 
-                // "Mostrá el inicio de la app (si es o no admin) y ocultá el login"
+                if (admin = true){Conexion.setAdminPort();} //Conectarse al puerto de admin
+
                 RecetasDivertidas.logueadoComoAdmin = admin;
                 RecetasDivertidas.username = username;
 

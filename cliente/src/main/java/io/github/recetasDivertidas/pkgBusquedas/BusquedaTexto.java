@@ -51,7 +51,6 @@ public class BusquedaTexto {
                                 controllerResultadoBusqueda.ponerReceta(r);
                                 vboxResultados.getChildren().add(paneReceta);
                             }
-                            //vbox.getChildren().addAll(recetas);
                         } catch (MensajeServerInvalidoException e) {
                             Alerta alerta = new Alerta(Alert.AlertType.ERROR,
                                 "Error inesperado",
