@@ -1,8 +1,6 @@
 package io.github.recetasDivertidas.pkgBusquedas;
 
-import io.github.recetasDivertidas.pkgRecetasDivertidas.CategoriaIngrediente;
-import io.github.recetasDivertidas.pkgRecetasDivertidas.CategoriaReceta;
-import javafx.event.ActionEvent;
+import io.github.recetasDivertidas.pkgRecetasDivertidas.Ingrediente;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import org.controlsfx.control.CheckComboBox;
@@ -16,7 +14,7 @@ public class BusquedaIngredientes {
 
     @FXML
     public void initialize() throws IOException {
-        chkcmbIngredientes.getItems().addAll(CategoriaIngrediente.getCategorias());
+        chkcmbIngredientes.getItems().addAll(Ingrediente.getIngredientes());
         current_pag=0;
     }
 
