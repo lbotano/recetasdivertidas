@@ -34,8 +34,6 @@ public class BusquedaCategoria {
         }
     }
 
-
-
     @FXML
     private void buscar() {
         try {
@@ -58,13 +56,17 @@ public class BusquedaCategoria {
         }
     }
 
-    public void prevPag() {
-        paginaActual--;
-        buscar();
+    public void nextPag() {
+        if(vboxResultados.getChildren().size() == 10){
+            paginaActual++;
+            buscar();
+        }
     }
 
-    public void nextPag() {
-        paginaActual++;
-        buscar();
+    public void prevPag() {
+        if (paginaActual > 0) {
+            paginaActual--;
+            buscar();
+        }
     }
 }

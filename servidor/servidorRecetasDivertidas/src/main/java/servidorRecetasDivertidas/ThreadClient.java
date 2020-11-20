@@ -220,7 +220,7 @@ public class ThreadClient implements Runnable{
 	private void consRecetaIng() {
 		try {
 			stmt = conn.prepareCall(CONSRECETAING);
-			ArrayList<String> ingredientes = new ArrayList<String>();
+			ArrayList<String> ingredientes = new ArrayList<>();
 
 			//llena el arraylist con los id de ingredientes
 			for (int i = 2; i < message.size(); i++) {

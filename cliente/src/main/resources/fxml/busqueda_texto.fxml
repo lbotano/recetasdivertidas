@@ -29,7 +29,7 @@
                <TextField fx:id="txtBuscar"
                           HBox.hgrow="ALWAYS"/>
                <Button fx:id="btnBuscar"
-                       onAction="#buscarRecetas"
+                       onAction="#buscar"
                        text="Buscar">
                    <graphic>
                        <Glyph fontFamily="FontAwesome" icon="SEARCH"/>
@@ -50,12 +50,12 @@
    <bottom>
       <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
         <buttons>
-            <Button fx:id="btnPrevPag" onAction="#nextPag">
+            <Button fx:id="btnPrevPag" onAction="#prevPag">
                 <graphic>
                     <Glyph fontFamily="FontAwesome" icon="CHEVRON_LEFT"/>
                 </graphic>
             </Button>
-            <Button fx:id="btnNextPag" onAction="#prevPag">
+            <Button fx:id="btnNextPag" onAction="#nextPag">
                 <graphic>
                     <Glyph fontFamily="FontAwesome" icon="CHEVRON_RIGHT"/>
                 </graphic>
