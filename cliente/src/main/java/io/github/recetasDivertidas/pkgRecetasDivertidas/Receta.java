@@ -202,10 +202,6 @@ public class Receta {
                         }
                     }
                     case "RESPCONSULTAFAIL" -> {
-                        Alerta alerta = new Alerta(Alert.AlertType.ERROR,
-                                "Error",
-                                mensajeRecibir.get(1));
-                        alerta.showAndWait();
                     }
                     default -> {
                         Alerta alerta = new Alerta(Alert.AlertType.ERROR,
