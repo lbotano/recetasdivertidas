@@ -8,10 +8,10 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.layout.HBox?>
 <?import org.controlsfx.glyphfont.Glyph?>
+
 <BorderPane xmlns="http://javafx.com/javafx/11.0.1"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="io.github.recetasDivertidas.pkgBusquedas.BusquedaTexto">
@@ -20,7 +20,7 @@
     </padding>
    <top>
        <VBox>
-           <Label fx:id="lblBuscaTexto" text="Escribe lo que desees buscar">
+           <Label text="Escribe lo que desees buscar">
               <font>
                   <Font size="16.0" />
               </font>

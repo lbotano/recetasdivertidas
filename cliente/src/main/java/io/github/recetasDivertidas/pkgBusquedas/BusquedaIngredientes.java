@@ -6,7 +6,6 @@ import io.github.recetasDivertidas.pkgConexion.Conexion;
 import io.github.recetasDivertidas.pkgRecetasDivertidas.Ingrediente;
 import io.github.recetasDivertidas.pkgRecetasDivertidas.MensajeServerInvalidoException;
 import io.github.recetasDivertidas.pkgRecetasDivertidas.Receta;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
@@ -22,15 +21,12 @@ import java.util.List;
 public class BusquedaIngredientes {
     public VBox vboxResultados;
     @FXML Button btnBuscar;
-    @FXML CheckComboBox chkcmbIngredientes;
+    @FXML CheckComboBox<Ingrediente> chkcmbIngredientes;
     int current_pag;
-
-    ArrayList<Ingrediente> ingredientes;
 
     @FXML
     public void initialize() throws IOException {
-        ingredientes = Ingrediente.getIngredientes();
-        chkcmbIngredientes.getItems().addAll(ingredientes);
+        chkcmbIngredientes.getItems().addAll(Ingrediente.getIngredientes());
         current_pag=0;
     }
 
@@ -89,7 +85,7 @@ public class BusquedaIngredientes {
                         }
                     }
                     case "RESPOCONSULTAFAIL" -> {
-                        Alerta alerta = new Alerta(Alert.AlertType.ERROR, "Upsi", ans.get(1));
+                        Alerta alerta = new Alerta(Alert.AlertType.NONE, "Upsi", ans.get(1));
                         alerta.showAndWait();
                         return false;
                     }

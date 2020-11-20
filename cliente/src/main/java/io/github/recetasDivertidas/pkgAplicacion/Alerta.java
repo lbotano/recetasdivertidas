@@ -1,6 +1,7 @@
 package io.github.recetasDivertidas.pkgAplicacion;
 
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
@@ -18,6 +19,10 @@ public class Alerta extends Alert {
         switch (alertType){
             case CONFIRMATION -> img = new Image(getClass().getResourceAsStream("/ok.png"));
             case ERROR -> img = new Image(getClass().getResourceAsStream("/error.png"));
+            case NONE -> {
+                img =  new Image(getClass().getResourceAsStream("/atention.png"));
+                this.getDialogPane().getButtonTypes().add(ButtonType.OK);
+            }
         }
 
         //Aca se usa el mensaje de error proporcionado con el servidor

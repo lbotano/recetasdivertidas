@@ -152,9 +152,7 @@ public class Receta {
                 }
             }
             case "RESPOCONSULTAFAIL" -> {
-                Alerta alerta = new Alerta(Alert.AlertType.ERROR,
-                        "Error",
-                        mensajeEnviar.get(1));
+                Alerta alerta = new Alerta(Alert.AlertType.NONE, "Upsi", mensajeRecibir.get(1));
                 alerta.showAndWait();
             }
             default -> {
