@@ -45,12 +45,12 @@
         <bottom>
             <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                 <buttons>
-                    <Button fx:id="btnPrevPag" onAction="#nextPag">
+                    <Button onAction="#prevPag">
                         <graphic>
                             <Glyph fontFamily="FontAwesome" icon="CHEVRON_LEFT"/>
                         </graphic>
                     </Button>
-                    <Button fx:id="btnNextPag" onAction="#prevPag">
+                    <Button onAction="#nextPag">
                         <graphic>
                             <Glyph fontFamily="FontAwesome" icon="CHEVRON_RIGHT"/>
                         </graphic>

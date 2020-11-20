@@ -1,13 +1,8 @@
 package io.github.recetasDivertidas.pkgRecetasDivertidas;
 
 import io.github.recetasDivertidas.pkgAplicacion.Alerta;
-import io.github.recetasDivertidas.pkgComponentes.ResultadoBusqueda;
 import io.github.recetasDivertidas.pkgConexion.Conexion;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -170,7 +165,7 @@ public class Receta {
         ArrayList<Receta> resultado = new ArrayList<>();
 
         ArrayList<String> mensajeEnviar = new ArrayList<>();
-        mensajeEnviar.add("CONSRECETASING");
+        mensajeEnviar.add("CONSRECETAING");
         mensajeEnviar.add(String.valueOf(pagina));
         for (Ingrediente i : ingredientes) {
             mensajeEnviar.add(String.valueOf(i.getId()));

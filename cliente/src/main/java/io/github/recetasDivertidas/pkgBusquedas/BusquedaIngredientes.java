@@ -22,7 +22,6 @@ public class BusquedaIngredientes {
     @FXML
     CheckComboBox<Ingrediente> chkcmbIngredientes;
     int paginaActual;
-    boolean datos_encontrados;
 
     @FXML
     public void initialize() throws IOException {
@@ -31,10 +30,9 @@ public class BusquedaIngredientes {
     }
 
     public void nextPag() {
-        paginaActual++;
-        buscar();
-        if (!datos_encontrados) {
-            paginaActual--;
+        if(vboxResultados.getChildren().size() == 10){
+            paginaActual++;
+            buscar();
         }
     }
 
@@ -49,7 +47,6 @@ public class BusquedaIngredientes {
         try {
             ArrayList<Receta> recetasEncontradas = Receta.getRecetasIngredientes(paginaActual, chkcmbIngredientes.getCheckModel().getCheckedItems());
             if (recetasEncontradas.size() > 0) {
-                datos_encontrados = true;
                 vboxResultados.getChildren().clear();
                 for (Receta receta : recetasEncontradas) {
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/componentes/resultado_busqueda.fxml"));
@@ -58,8 +55,6 @@ public class BusquedaIngredientes {
                     resController.ponerReceta(receta);
                     vboxResultados.getChildren().add(res);
                 }
-            } else {
-                datos_encontrados = false;
             }
         } catch (IOException e) {
             e.printStackTrace();
