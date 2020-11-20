@@ -125,7 +125,7 @@ public class Receta {
         return resultado;
     }
 
-    public static ArrayList<Receta> getRecetas(int pagina, List<CategoriaReceta> categorias) throws IOException {
+    public static ArrayList<Receta> getRecetasCategorias(int pagina, List<CategoriaReceta> categorias) throws IOException {
         ArrayList<Receta> resultado = new ArrayList<>();
 
         ArrayList<String> mensajeEnviar = new ArrayList<>();
@@ -133,6 +133,47 @@ public class Receta {
         mensajeEnviar.add(String.valueOf(pagina));
         for (CategoriaReceta c : categorias) {
             mensajeEnviar.add(String.valueOf(c.getId()));
+        }
+
+        ArrayList<String> mensajeRecibir = Conexion.sendMessage(mensajeEnviar);
+
+        switch (mensajeRecibir.get(0)) {
+            case "RESPCONSULTA" -> {
+                for (int i = 1; i < mensajeRecibir.size(); i += 6) {
+                    Receta receta = new Receta(
+                            Integer.parseInt(mensajeRecibir.get(i)),
+                            mensajeRecibir.get(i + 1),
+                            mensajeRecibir.get(i + 2),
+                            mensajeRecibir.get(i + 3),
+                            Float.parseFloat(mensajeRecibir.get(i + 4)),
+                            Integer.parseInt(mensajeRecibir.get(i + 5))
+                    );
+                    resultado.add(receta);
+                }
+            }
+            case "RESPOCONSULTAFAIL" -> {
+                Alerta alerta = new Alerta(Alert.AlertType.NONE, "Upsi", mensajeRecibir.get(1));
+                alerta.showAndWait();
+            }
+            default -> {
+                Alerta alerta = new Alerta(Alert.AlertType.ERROR,
+                        "Error inesperado",
+                        "Hubo un error inesperado");
+                alerta.showAndWait();
+            }
+        }
+
+        return resultado;
+    }
+
+    public static ArrayList<Receta> getRecetasIngredientes(int pagina, List<Ingrediente> ingredientes) throws IOException {
+        ArrayList<Receta> resultado = new ArrayList<>();
+
+        ArrayList<String> mensajeEnviar = new ArrayList<>();
+        mensajeEnviar.add("CONSRECETASING");
+        mensajeEnviar.add(String.valueOf(pagina));
+        for (Ingrediente i : ingredientes) {
+            mensajeEnviar.add(String.valueOf(i.getId()));
         }
 
         ArrayList<String> mensajeRecibir = Conexion.sendMessage(mensajeEnviar);
@@ -175,7 +216,7 @@ public class Receta {
         return Receta.getRecetasConsultaBusquedas(mensajeRecibir);
     }
 
-    public static ArrayList<Receta> getRecetasUsuario(String usuario) throws MensajeServerInvalidoException, IOException {
+    public static ArrayList<Receta> getRecetasUsuario(String usuario){
         ArrayList<Receta> resultado = new ArrayList<>();
         ArrayList<String> mensajeEnviar = new ArrayList<>();
         mensajeEnviar.add("RECETASDEUSUARIO");
