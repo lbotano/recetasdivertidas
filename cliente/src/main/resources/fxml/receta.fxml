@@ -7,10 +7,10 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-
 <?import javafx.scene.control.ScrollPane?>
 <?import io.github.recetasDivertidas.pkgComponentes.Calificador?>
 <?import org.controlsfx.glyphfont.Glyph?>
+
 <BorderPane prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="io.github.recetasDivertidas.pkgRecetasDivertidas.RecetaController">
     <padding>
         <Insets topRightBottomLeft="10" />

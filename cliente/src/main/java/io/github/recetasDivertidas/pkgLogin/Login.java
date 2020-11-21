@@ -33,7 +33,7 @@ public class Login {
                         "Identidad confirmada con éxito");
                 alerta.showAndWait();
 
-                if (admin = true){Conexion.setAdminPort();} //Conectarse al puerto de admin
+                if (admin){Conexion.setAdminPort();} //Conectarse al puerto de admin
 
                 RecetasDivertidas.logueadoComoAdmin = admin;
                 RecetasDivertidas.username = username;
@@ -105,7 +105,11 @@ public class Login {
                 alert.showAndWait();
             }
             case "LOGINOK" -> {
-                admin = ans.get(1).equals("true");
+                if(ans.get(1).equals("true")){
+                    admin = true;
+                }else{
+                    admin = false;
+                }
                 username = txtUsuario.getText();
 
                 return true;

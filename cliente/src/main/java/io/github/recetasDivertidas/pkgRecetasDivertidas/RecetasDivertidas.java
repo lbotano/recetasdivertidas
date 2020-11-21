@@ -5,9 +5,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 
 import java.io.IOException;
 import java.util.Hashtable;
@@ -18,6 +17,7 @@ public class RecetasDivertidas{
     public final static String HOVERED="E7E7E7";
     public final static String EXITED="FFFFFF";
     public BorderPane borderPane;
+    public Button btnAdmin;
 
     private Hashtable<String, BorderPane> pestanas = new Hashtable<>();
 
@@ -41,7 +41,6 @@ public class RecetasDivertidas{
             nodeBusquedaTexto = FXMLLoader.load(getClass().getResource("/fxml/busqueda_texto.fxml"));
             nodeSubirReceta = FXMLLoader.load(getClass().getResource("/fxml/subir_receta.fxml"));
             nodeAdmin = FXMLLoader.load(getClass().getResource("/fxml/admin.fxml"));
-
             // Llena el diccionario de pestañas
             pestanas.put("btnInicio", nodeInicio);
             pestanas.put("btnPerfil", nodePerfil);
@@ -58,13 +57,16 @@ public class RecetasDivertidas{
 
     @FXML
     private void initialize() {
+        if(!logueadoComoAdmin){
+            btnAdmin.setVisible(false); //TODO: No se eliminar el boton
+        }
         bpanePrincipal.setCenter(nodeInicio);
     }
 
     @FXML
     private void cambiarPestana(ActionEvent event) {
         Button btn = (Button) event.getSource();
-        System.out.println(btn.getId());
+        System.out.println("Pressed " + btn.getId());
         bpanePrincipal.setCenter(pestanas.get(btn.getId()));
     }
 }

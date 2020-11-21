@@ -2,11 +2,8 @@ package io.github.recetasDivertidas.pkgBusquedas;
 
 import io.github.recetasDivertidas.pkgAplicacion.Alerta;
 import io.github.recetasDivertidas.pkgComponentes.ResultadoBusqueda;
-import io.github.recetasDivertidas.pkgConexion.Conexion;
-import io.github.recetasDivertidas.pkgRecetasDivertidas.CategoriaIngrediente;
 import io.github.recetasDivertidas.pkgRecetasDivertidas.CategoriaReceta;
 import io.github.recetasDivertidas.pkgRecetasDivertidas.Receta;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
@@ -41,7 +38,7 @@ public class BusquedaCategoria {
     private void buscar() {
         try {
             vboxResultados.getChildren().clear();
-            ArrayList<Receta> recetasEncontradas = Receta.getRecetas(paginaActual, chkcmbCategorias.getCheckModel().getCheckedItems());
+            ArrayList<Receta> recetasEncontradas = Receta.getRecetasCategorias(paginaActual, chkcmbCategorias.getCheckModel().getCheckedItems());
 
             for (Receta receta : recetasEncontradas) {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/componentes/resultado_busqueda.fxml"));
@@ -59,13 +56,17 @@ public class BusquedaCategoria {
         }
     }
 
-    public void prevPag() {
-        paginaActual--;
-        buscar();
+    public void nextPag() {
+        if(vboxResultados.getChildren().size() == 10){
+            paginaActual++;
+            buscar();
+        }
     }
 
-    public void nextPag() {
-        paginaActual++;
-        buscar();
+    public void prevPag() {
+        if (paginaActual > 0) {
+            paginaActual--;
+            buscar();
+        }
     }
 }
