@@ -1,16 +1,18 @@
 package servidorRecetasDivertidas;
 
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Arrays;
+
 import com.google.gson.*;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
 import jsonClasess.Categoria;
-import jsonClasess.IdIngrediente;
 import jsonClasess.Ingrediente;
 import jsonClasess.Multimedia;
 
@@ -29,6 +31,14 @@ public class ThreadClient implements Runnable{
 	//objeto para guardar la conexion a la base de datos
 	protected Connection conn;
 	protected ArrayListStringValidator stringValidator;
+
+	protected ObjectOutputStream out;
+	protected ObjectInputStream in;
+
+	protected static ThreadLocal<String> usuarioLogueado = new ThreadLocal<>();
+
+	// Mensajes que se pueden ejecutar sin estar logueado
+	protected String[] mensajesSinLogueo = {"LOGIN", "PREGUNTASSEG", "REGISTRO", "SERVIDORVIVE"};
 
 	
 	//llamadas a SPs
@@ -57,6 +67,13 @@ public class ThreadClient implements Runnable{
 	public ThreadClient(ComboPooledDataSource c, Socket s) {
 		this.cpds = c;
 		this.socket = s;
+
+		try {
+			this.out = new ObjectOutputStream(socket.getOutputStream());
+			this.in = new ObjectInputStream(socket.getInputStream());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	/*
 	 * Cuando se ejecuta un sp puede tirar un error, este metodo recibe el SQLException
@@ -79,7 +96,7 @@ public class ThreadClient implements Runnable{
 	protected void intExceptionHandler(NumberFormatException e, String failMsg){
 		answer.clear();
 		answer.add(failMsg);
-		answer.add("Uno de los datos ingresados que debia ser numerico, no lo es");
+		answer.add("Uno de los datos ingresados debía ser numérico pero no lo es");
 	}
 	
 	private void borrarRecetaUsu() {
@@ -202,7 +219,7 @@ public class ThreadClient implements Runnable{
 			/*Toma las categorias seleccionadas por el usuario y las pone en un arraylist para pasarlas
 			 a json y mandarlo como parametro al sp
 			 */
-			ArrayList<String> categorias = new ArrayList<String>();
+			ArrayList<String> categorias = new ArrayList<>();
 			for (int i = 2; i < message.size(); i++) {
 				categorias.add(message.get(i));
 			}
@@ -220,7 +237,7 @@ public class ThreadClient implements Runnable{
 	private void consRecetaIng() {
 		try {
 			stmt = conn.prepareCall(CONSRECETAING);
-			ArrayList<String> ingredientes = new ArrayList<String>();
+			ArrayList<String> ingredientes = new ArrayList<>();
 
 			//llena el arraylist con los id de ingredientes
 			for (int i = 2; i < message.size(); i++) {
@@ -464,7 +481,8 @@ public class ThreadClient implements Runnable{
 			if(stmt.getBoolean(3)) {
 				answer.add("LOGINOK");
 				answer.add(String.valueOf(stmt.getBoolean(4)));
-			}else {
+				usuarioLogueado.set(message.get(1));
+			} else {
 				answer.add("LOGINFAIL");
 				answer.add("Error en la consulta");
 			}
@@ -555,9 +573,9 @@ public class ThreadClient implements Runnable{
 	private void subirReceta() {
 		try {
 			stmt = conn.prepareCall(SUBIRRECETA);
-			ArrayList<Ingrediente> ing = new ArrayList<Ingrediente>();
-			ArrayList<Categoria> catRec = new ArrayList<Categoria>();
-			ArrayList<Multimedia> mult = new ArrayList<Multimedia>();
+			ArrayList<Ingrediente> ing = new ArrayList<>();
+			ArrayList<Categoria> catRec = new ArrayList<>();
+			ArrayList<Multimedia> mult = new ArrayList<>();
 			int i;
 			for (i = 1; i < 5; i++) {
 				//1: nickname, 2: nombre receta, 3: descripcion, 4: instrucciones
@@ -715,46 +733,37 @@ public class ThreadClient implements Runnable{
 	@SuppressWarnings("unchecked")
 	@Override
 	public void run() {
-		try {	
-			System.out.println("Client: Connected with client" + this.socket);
+		try {
 			//inicializacion de los atributos
 			this.conn = cpds.getConnection();
-			this.answer = new ArrayList<String>();
-			ObjectOutputStream output = new ObjectOutputStream(this.socket.getOutputStream());
-	        ObjectInputStream input = new ObjectInputStream(this.socket.getInputStream());
-	        //recibe el mensaje del cliente
-			this.message = (ArrayList<String>) input.readObject();
-			System.out.println("Recived " + message.get(0) + " from socket: " + this.socket);
-			stringValidator = new ArrayListStringValidator(message);
-			if(stringValidator.elementArrayListBlank(message)) {
-				answer.add("ELEMENTBLANK");
-			}else {
-				//switch de opcioens del cliente
-		        opcionesCliente(message.get(0));
-			}
-	        //una vez ejecutados los metodos correspondientes, manda la respuesta
-    		output.writeObject(answer);
-    		//vacia el objeto para la proxima respuesta
-			answer.clear();
-			
-		}catch (Exception e){
-        	System.out.println("Client error: " + e.getMessage() + " in socket: " + socket);
-		}finally {
-
-			try {
-				if(conn != null){
-					this.conn.close();
+			while (true) {
+				this.answer = new ArrayList<>();
+				//recibe el mensaje del cliente
+				this.message = (ArrayList<String>) in.readObject();
+				System.out.println("[INFO] User: " + usuarioLogueado.get());
+				System.out.println("Recived " + message.get(0) + " from socket: " + this.socket);
+				stringValidator = new ArrayListStringValidator(message);
+				if (stringValidator.elementArrayListBlank(message)) {
+					answer.add("ELEMENTBLANK");
+				} else {
+					// Switch de opcioens del cliente
+					if (usuarioLogueado.get() != null
+							|| Arrays.stream(mensajesSinLogueo).anyMatch(message.get(0)::equals)) {
+						opcionesCliente(message.get(0));
+					} else {
+						System.err.println("[WARNING] User tried to make an unauthorized call.");
+						answer.add("USUARIONOAUTORIZADO");
+					}
 				}
-			} catch (SQLException e) {
-				System.out.println("Client error: " + e.getMessage() + " in socket: " + socket);
+				//una vez ejecutados los metodos correspondientes, manda la respuesta
+				out.writeObject(answer);
+				//vacia el objeto para la proxima respuesta
+				answer.clear();
 			}
-			try {
-	        	this.socket.close();
-	        } catch (Exception e) {
-	        	System.out.println("Client error: " + e.getMessage() + " in socket: " + socket);
-	        }
-	        System.out.println("Closed: " + socket );
-	        System.out.println();
+			
+		} catch (Exception e) {
+        	System.out.println("[ERROR] in socket: " + socket);
+        	e.printStackTrace();
 		}
 	}
 }

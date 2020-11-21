@@ -9,27 +9,34 @@ import java.util.List;
 
 public final class Conexion {
     public static Socket socket;
-    public static ObjectOutputStream output;
-    public static ObjectInputStream input;
+    public static ObjectOutputStream out;
+    public static ObjectInputStream in;
     public static boolean svResponse;
     private final static String HOST = "127.0.0.1";
     private static int port = 7070;
 
+    public static void iniciarConexion() {
+        try {
+            socket = new Socket(HOST, port);
+            socket.setSoTimeout(5000);
+            out = new ObjectOutputStream(socket.getOutputStream());
+            in = new ObjectInputStream(socket.getInputStream());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static ArrayList<String> sendMessage(List<String> message) throws IOException {
         ArrayList<String> answer;
+        //out.flush();
 
         for(String s: message) {
             System.out.println("Send: " + s);
         }
 
-        socket = new Socket(HOST, port);
-        output = new ObjectOutputStream(socket.getOutputStream());
-        socket.setSoTimeout(5000);
-        input = new ObjectInputStream(socket.getInputStream());
-
-        output.writeObject(message);
+        out.writeObject(message);
         try {
-            answer = (ArrayList<String>) input.readObject();
+            answer = (ArrayList<String>) in.readObject();
         } catch (ClassNotFoundException e) {
             throw new IOException();
         }
@@ -37,8 +44,6 @@ public final class Conexion {
         for(String s: answer) {
             System.out.println("Received: " + s);
         }
-
-        socket.close();
 
         return answer;
     }
