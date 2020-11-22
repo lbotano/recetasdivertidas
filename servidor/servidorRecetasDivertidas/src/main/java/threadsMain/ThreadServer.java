@@ -9,26 +9,17 @@ import java.util.concurrent.TimeUnit;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
-import servidorRecetasDivertidas.ThreadAdmin;
 import servidorRecetasDivertidas.ThreadClient;
 
-public class ThreadServer implements Runnable{
+public class ThreadServer implements Runnable {
 	private String name;
-	private boolean type;
 	private int port;
 	private ExecutorService pool;
 	private int sizeThreadPool;
 	private ComboPooledDataSource cpds;
-	private ServerSocket ss;
+	private ServerSocket socketListener;
 
-	//typeServer true = admin  false = client
-	public ThreadServer(boolean typeServer, ComboPooledDataSource combo, int port, int sizePool) {
-		this.type = typeServer;
-		if(type){
-			this.name = "Admin";
-		}else{
-			this.name = "Client";
-		}
+	public ThreadServer(boolean esTipoAdmin, ComboPooledDataSource combo, int port, int sizePool) {
 		this.cpds = combo;
 		this.port = port;
 		this.sizeThreadPool = sizePool;
@@ -36,37 +27,36 @@ public class ThreadServer implements Runnable{
 	
 	@Override
 	public void run() {
-		try{
-			ss = new ServerSocket(port);
-			System.out.println(name+ ": Server running ");
-
+		try {
+			socketListener = new ServerSocket(port);
 			pool = Executors.newFixedThreadPool(sizeThreadPool);
-			while(true) {						
+
+			System.out.println("[INFO] Server running ");
+
+			boolean isRunning = true;
+			while (isRunning) {
 				try {
-					if(type){
-						pool.execute(new ThreadAdmin(cpds , ss.accept()));
-					}else{
-						pool.execute(new ThreadClient(cpds , ss.accept()));
-					}
-				}catch(SocketException se) {
-					System.out.println(name + ": Server stopped");
-					break;
+					pool.execute(new ThreadClient(cpds, socketListener.accept()));
+				} catch (SocketException se) {
+					System.out.println("[INFO] Server stopped");
+					isRunning = false;
 				}
 			}
+
 		} catch (IOException e) {
-			System.out.println(name + ": Failed to initiate server");
-			System.out.println(e.getMessage());
+			System.err.println("[ERROR] Failed to start server");
+			e.printStackTrace();
 		}
 	}
 	public void shutDownServer() {
-		if(ss.isClosed()) {
-			System.out.println(name+ ": Server socket already close!");
-		}else {
+		if (socketListener.isClosed()) {
+			System.out.println("[WARNING] Server socket already closed!");
+		} else {
 			try {
-				ss.close();
+				socketListener.close();
 			} catch (IOException e) {
-				System.out.println("Error while trying to close server socket: " + name);
-				System.out.println(e.getMessage());
+				System.err.println("[ERROR] Error while trying to close server socket: " + name);
+				e.printStackTrace();
 			}
 		}
 	}
@@ -74,22 +64,19 @@ public class ThreadServer implements Runnable{
 		pool.shutdown();
 		try {
 			// Wait a while for existing tasks to terminate
-			System.out.println(name +": Waiting for threads to finish their tasks... ");
+			System.out.println("[INFO] Waiting for threads to finish their tasks... ");
 			if (pool.awaitTermination(secWait, TimeUnit.SECONDS)) {
-				System.out.println(name + ": Thread pool successfully terminated!");				
-			}else {
-				System.out.println(name +": Time passed, forcing shutdown...");
+				System.out.println("[INFO] Thread pool successfully terminated!");
+			} else {
+				System.out.println("[WARNING] Time passed, forcing shutdown...");
 				pool.shutdownNow(); // Cancel currently executing tasks
 				// Wait a while for tasks to respond to being cancelled
-				System.out.println(name + ": Waiting for threads to respond to shutdownnow...");
-				if (pool.awaitTermination(secWait, TimeUnit.SECONDS)) {
-					System.out.println(name + ": Thread pool successfully terminated!");
-				}else {
-					System.out.println(name+ ": Pool did not terminate :(");
-				}
+				System.out.println("[INFO] Waiting for threads to respond to shutdownnow...");
+				System.out.println((pool.awaitTermination(secWait, TimeUnit.SECONDS) ?
+						"[INFO] Thread pool successfully terminated!" : "[WARNING] Pool didn't terminate :("));
 			}
 		} catch (InterruptedException ie) {
-			System.out.println(name + ": Shutdown interrupted, server will call shutdownnow anyways");
+			System.out.println("[WARNING] Shutdown interrupted, server will call shutdownnow anyway");
 			// (Re-)Cancel if current thread also interrupted
 			pool.shutdownNow();
 		}

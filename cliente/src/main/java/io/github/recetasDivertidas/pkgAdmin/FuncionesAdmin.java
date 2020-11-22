@@ -5,7 +5,6 @@ import io.github.recetasDivertidas.pkgConexion.Conexion;
 import io.github.recetasDivertidas.pkgRecetasDivertidas.CategoriaIngrediente;
 import io.github.recetasDivertidas.pkgRecetasDivertidas.CategoriaReceta;
 import io.github.recetasDivertidas.pkgRecetasDivertidas.Ingrediente;
-import javafx.collections.ObservableArray;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -18,20 +17,19 @@ import org.controlsfx.control.CheckComboBox;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.stream.Collectors;
 
 public class FuncionesAdmin {
 
     private ArrayList<String> mensaje; //objeto donde voy a guardar los mensajes para el server
     private Alerta alerta;
     //Referencia a los objetos de la interfaz grafica
-    @FXML ComboBox cmbBorrarCatIngrediente;
+    @FXML ComboBox<CategoriaIngrediente> cmbBorrarCatIngrediente;
     @FXML Button btnBorrarCatIngrediente;
 
-    @FXML ComboBox cmbBorrarIngrediente;
+    @FXML ComboBox<Ingrediente> cmbBorrarIngrediente;
     @FXML Button btnBorrarIngrediente;
 
-    @FXML ComboBox cmbBorrarCatReceta;
+    @FXML ComboBox<CategoriaReceta> cmbBorrarCatReceta;
     @FXML Button btnBorrarCatReceta;
 
     @FXML TextField txtBanearUsuario;
@@ -40,7 +38,7 @@ public class FuncionesAdmin {
     @FXML TextField txtSubirCatIng;
     @FXML Button btnSubirCatIng;
 
-    @FXML CheckComboBox chkcmbCategoriasIngrediente;
+    @FXML CheckComboBox<CategoriaIngrediente> chkcmbCategoriasIngrediente;
     @FXML TextField txtSubirIng;
     @FXML Button btnSubirIng;
 
@@ -53,96 +51,71 @@ public class FuncionesAdmin {
     //si hay conexion mandan el mensaje y devuelven la respuesta
     //si no consigue conexion devuelve null
 
-    private ArrayList<String> consBorrarCategoriaIngrediente (int idCategoriaIngrediente) throws IOException {
+    private ArrayList<String> consBorrarCategoriaIngrediente (int idCategoriaIngrediente) throws IOException, ClassNotFoundException {
         mensaje = new ArrayList<>(Arrays.asList("BORRARCATING", String.valueOf(idCategoriaIngrediente)));
-        if (Conexion.isSvResponse()) {
-            return Conexion.sendMessage(mensaje);
-        }
-        return null;
+        return Conexion.sendMessage(mensaje);
     }
 
-    public ArrayList<String> consBorrarCategoriaReceta (int idCategoriaReceta) throws IOException {
+    public ArrayList<String> consBorrarCategoriaReceta (int idCategoriaReceta) throws IOException, ClassNotFoundException {
         mensaje = new ArrayList<>(Arrays.asList("BORRARCATREC", String.valueOf(idCategoriaReceta)));
-        if (Conexion.isSvResponse()) {
-            return Conexion.sendMessage(mensaje);
-        }
-        return null;
+        return Conexion.sendMessage(mensaje);
     }
 
-    public ArrayList<String> consBorrarIngrediente (int idIngrediente) throws IOException {
+    public ArrayList<String> consBorrarIngrediente (int idIngrediente) throws IOException, ClassNotFoundException {
         mensaje = new ArrayList<>(Arrays.asList("BORRARING", String.valueOf(idIngrediente)));
-        if (Conexion.isSvResponse()) {
-            return Conexion.sendMessage(mensaje);
-        }
-        return null;
+        return Conexion.sendMessage(mensaje);
     }
 
-    public ArrayList<String> consBorrarReceta (int idReceta) throws IOException {
+    public ArrayList<String> consBorrarReceta (int idReceta) throws IOException, ClassNotFoundException {
         mensaje = new ArrayList<>(Arrays.asList("BORRARREC", String.valueOf(idReceta)));
-        if (Conexion.isSvResponse()) {
-            return Conexion.sendMessage(mensaje);
-        }
-        return null;
+        return Conexion.sendMessage(mensaje);
     }
 
-    public ArrayList<String> consBanearUsuario (String nickname) throws IOException {
+    public ArrayList<String> consBanearUsuario (String nickname) throws IOException, ClassNotFoundException {
         mensaje = new ArrayList<>(Arrays.asList("BANEARUSUARIO", nickname));
-        if (Conexion.isSvResponse()) {
-            return Conexion.sendMessage(mensaje);
-        }
-        return null;
+        return Conexion.sendMessage(mensaje);
     }
 
-    public ArrayList<String> consSubirCategoriaIngrediente (String nombreCategoria) throws IOException {
+    public ArrayList<String> consSubirCategoriaIngrediente (String nombreCategoria)
+            throws IOException, ClassNotFoundException {
         mensaje = new ArrayList<>(Arrays.asList("SUBIRCATING", nombreCategoria));
-        if (Conexion.isSvResponse()) {
-            return Conexion.sendMessage(mensaje);
-        }
-        return null;
+        return Conexion.sendMessage(mensaje);
     }
 
-    public ArrayList<String> consSubirCategoriaReceta (String nombreReceta) throws IOException {
+    public ArrayList<String> consSubirCategoriaReceta (String nombreReceta) throws IOException, ClassNotFoundException {
         mensaje = new ArrayList<>(Arrays.asList("SUBIRCATREC", nombreReceta));
-        if (Conexion.isSvResponse()) {
-            return Conexion.sendMessage(mensaje);
-        }
-        return null;
+        return Conexion.sendMessage(mensaje);
     }
 
-    public ArrayList<String> consSubirIngrediente (String nombreIngrediente, ObservableList<CategoriaIngrediente> categorias) throws IOException {
+    public ArrayList<String> consSubirIngrediente (String nombreIngrediente,
+                                                   ObservableList<CategoriaIngrediente> categorias)
+            throws IOException, ClassNotFoundException {
         mensaje = new ArrayList<>();
         mensaje.add("SUBIRING");
         mensaje.add(nombreIngrediente);
         for (CategoriaIngrediente i: categorias) {
             mensaje.add(String.valueOf(i.getId()));
         }
-        if (Conexion.isSvResponse()) {
-            return Conexion.sendMessage(mensaje);
-        }
-        return null;
+
+        return Conexion.sendMessage(mensaje);
     }
 
-    private void respuestasDeServerComunes(String mensaje){
-        switch(mensaje){
-            case "MESSAGEERROR" -> {
-                alerta = new Alerta(Alert.AlertType.ERROR,
-                        "Error inesperado",
-                        "El server no reconocio la petición");
-                alerta.showAndWait();
-            }
-            default -> {
-                alerta = new Alerta(Alert.AlertType.INFORMATION,
-                        "Error en el server!",
-                        "Se ha recibido una respuesta erronea por parte del server");
-                alerta.showAndWait();
-            }
-        }
+    private void respuestasDeServerComunes(String mensaje) {
+        if ("MESSAGEERROR".equals(mensaje))
+            System.err.println("[ERROR] El servidor no ha reconocido la petición.");
+        else
+            System.err.println("[ERROR] El servidor ha devuelto un resultado inválido.");
+
+        alerta = new Alerta(Alert.AlertType.ERROR,
+                "Error inesperado",
+                "Hubo un error inesperado");
+        alerta.showAndWait();
     }
 
-    public void borrarCategoriaIngrediente(ActionEvent actionEvent) {
+    public void borrarCategoriaIngrediente() {
         ArrayList<String> respServer;
         try {
-            CategoriaIngrediente itemSeleccionado =  (CategoriaIngrediente) cmbBorrarCatIngrediente.getValue();
+            CategoriaIngrediente itemSeleccionado =  cmbBorrarCatIngrediente.getValue();
             if(itemSeleccionado != null) {
 
                 respServer = consBorrarCategoriaIngrediente(itemSeleccionado.getId());
@@ -168,7 +141,7 @@ public class FuncionesAdmin {
                     }
                 }
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             alerta = new Alerta(Alert.AlertType.ERROR,
                     "Error inesperado",
@@ -177,13 +150,12 @@ public class FuncionesAdmin {
         }
     }
 
-    public void borrarCatReceta(ActionEvent actionEvent) {
+    public void borrarCatReceta() {
         Alerta alerta;
         ArrayList<String> respServer;
         try {
-            CategoriaReceta itemSeleccionado =  (CategoriaReceta) cmbBorrarCatReceta.getValue();
-            if(itemSeleccionado != null) {
-
+            CategoriaReceta itemSeleccionado =  cmbBorrarCatReceta.getValue();
+            if (itemSeleccionado != null) {
                 respServer = consBorrarCategoriaReceta(itemSeleccionado.getId());
                 if (respServer != null) {
                     System.out.println(respServer.get(0));
@@ -207,7 +179,7 @@ public class FuncionesAdmin {
                     }
                 }
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             alerta = new Alerta(Alert.AlertType.ERROR,
                     "Error inesperado",
@@ -217,13 +189,13 @@ public class FuncionesAdmin {
     }
 
     @FXML
-    public void borrarIngrediente(ActionEvent actionEvent) {
+    public void borrarIngrediente() {
         ArrayList<String> respServer;
         Alerta alerta;
         try {
-            Ingrediente itemSeleccionado =  (Ingrediente) cmbBorrarIngrediente.getValue();
+            Ingrediente itemSeleccionado = cmbBorrarIngrediente.getValue();
 
-            if(itemSeleccionado != null){
+            if (itemSeleccionado != null){
                 respServer = consBorrarIngrediente(itemSeleccionado.getId());
                 if(respServer != null){
                     switch (respServer.get(0)) {
@@ -244,14 +216,14 @@ public class FuncionesAdmin {
                         }
                         default -> respuestasDeServerComunes(respServer.get(0));
                     }
-                }else{
+                } else {
                     alerta = new Alerta(Alert.AlertType.ERROR,
                             "No se ha podido conectar con el servidor",
                             "El server no responde");
                     alerta.showAndWait();
                 }
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             alerta = new Alerta(Alert.AlertType.ERROR,
                     "Error inesperado",
@@ -260,16 +232,12 @@ public class FuncionesAdmin {
         }
     }
 
-    public void borrarReceta(ActionEvent actionEvent){
-
-    }
-
-    public void subirCatRec(ActionEvent actionEvent) {
+    public void subirCatRec() {
         ArrayList<String> respServer;
 
         try {
             respServer = consSubirCategoriaReceta(txtSubirCatRec.getText());
-            if(respServer != null){
+            if (respServer != null) {
                 switch (respServer.get(0)){
                     case "SUBIRCATRECFAIL" ->{
                         alerta = new Alerta(Alert.AlertType.ERROR,
@@ -288,14 +256,14 @@ public class FuncionesAdmin {
 
                     default -> respuestasDeServerComunes(respServer.get(0));
                 }
-            }else{
+            } else {
                 alerta = new Alerta(Alert.AlertType.ERROR,
                         "No se ha podido conectar con el servidor",
                         "El server no responde");
                 alerta.showAndWait();
             }
 
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             alerta = new Alerta(Alert.AlertType.ERROR,
                     "Error inesperado",
@@ -304,14 +272,14 @@ public class FuncionesAdmin {
         }
     }
 
-    public void subirIng(ActionEvent actionEvent) {
+    public void subirIng() {
         ArrayList<String> respServer;
 
         try {
             ObservableList<CategoriaIngrediente> catIngSeleccionados = chkcmbCategoriasIngrediente.getCheckModel().getCheckedItems();
             respServer = consSubirIngrediente(txtSubirIng.getText(), catIngSeleccionados);
 
-            if(respServer != null){
+            if (respServer != null) {
                 switch (respServer.get(0)){
                     case "SUBIRINGFAIL" ->{
                         alerta = new Alerta(Alert.AlertType.ERROR,
@@ -330,14 +298,14 @@ public class FuncionesAdmin {
 
                     default -> respuestasDeServerComunes(respServer.get(0));
                 }
-            }else{
+            } else {
                 alerta = new Alerta(Alert.AlertType.ERROR,
                         "No se ha podido conectar con el servidor",
                         "El server no responde");
                 alerta.showAndWait();
             }
 
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             alerta = new Alerta(Alert.AlertType.ERROR,
                     "Error inesperado",
@@ -346,12 +314,12 @@ public class FuncionesAdmin {
         }
     }
 
-    public void subirCatIng(ActionEvent actionEvent) {
+    public void subirCatIng() {
         ArrayList<String> respServer;
 
         try {
             respServer = consSubirCategoriaIngrediente(txtSubirCatIng.getText());
-            if(respServer != null){
+            if (respServer != null) {
                 switch (respServer.get(0)){
                     case "SUBIRCATINGFAIL" ->{
                         alerta = new Alerta(Alert.AlertType.ERROR,
@@ -372,14 +340,14 @@ public class FuncionesAdmin {
 
                     default -> respuestasDeServerComunes(respServer.get(0));
                 }
-            }else{
+            } else {
                 alerta = new Alerta(Alert.AlertType.ERROR,
                         "No se ha podido conectar con el servidor",
                         "El server no responde");
                 alerta.showAndWait();
             }
 
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             alerta = new Alerta(Alert.AlertType.ERROR,
                     "Error inesperado",
@@ -388,13 +356,13 @@ public class FuncionesAdmin {
         }
     }
 
-    public void banearUsuario(ActionEvent actionEvent) {
+    public void banearUsuario() {
         ArrayList<String> respServer;
         Alerta alerta;
 
         try {
             respServer = consBanearUsuario(txtBanearUsuario.getText());
-            if(respServer != null){
+            if (respServer != null) {
                 switch (respServer.get(0)) {
                     case "BANEARUSUFAIL" -> {
                         alerta = new Alerta(Alert.AlertType.ERROR,
@@ -410,13 +378,13 @@ public class FuncionesAdmin {
                     }
                     default -> respuestasDeServerComunes(respServer.get(0));
                 }
-            }else{
+            } else {
                 alerta = new Alerta(Alert.AlertType.ERROR,
                         "No se ha podido conectar con el servidor",
                         "El server no responde");
                 alerta.showAndWait();
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             alerta = new Alerta(Alert.AlertType.ERROR,
                     "Error inesperado",
@@ -429,14 +397,14 @@ public class FuncionesAdmin {
 
 
     @FXML
-    private void initialize() throws IOException {
+    private void initialize() {
         try{
             //llenar comboboxes
             cmbBorrarCatIngrediente.getItems().addAll(CategoriaIngrediente.getCategorias());
             cmbBorrarIngrediente.getItems().addAll(Ingrediente.getIngredientes());
             cmbBorrarCatReceta.getItems().addAll(CategoriaReceta.getCategorias());
             chkcmbCategoriasIngrediente.getItems().addAll(CategoriaIngrediente.getCategorias());
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             Alerta alerta = new Alerta(Alert.AlertType.ERROR,
                     "Error inesperado",

@@ -30,13 +30,12 @@ public class Receta {
 
     // Receta para subir
     // TODO: Implementar multimedia
-    public Receta(String autor,
+    public Receta(
                   String titulo,
                   String descripcion,
                   String instrucciones,
                   List<Ingrediente> ingredientes,
                   List<CategoriaReceta> categorias) {
-        this.autor = autor;
         this.titulo = titulo;
         this.descripcion = descripcion;
         this.instrucciones = instrucciones;
@@ -77,7 +76,7 @@ public class Receta {
                 if (mensajeRecibir.get(0).equals("CALIFICACIONUSUARIO")) {
                     return Integer.parseInt(mensajeRecibir.get(1));
                 }
-            } catch(IOException e) {
+            } catch(Exception e) {
                 e.printStackTrace();
                 Alerta alerta = new Alerta(Alert.AlertType.ERROR,
                         "Error inesperado",
@@ -120,7 +119,8 @@ public class Receta {
         return resultado;
     }
 
-    public static ArrayList<Receta> getRecetasCategorias(int pagina, List<CategoriaReceta> categorias) throws IOException {
+    public static ArrayList<Receta> getRecetasCategorias(int pagina, List<CategoriaReceta> categorias)
+            throws IOException, ClassNotFoundException {
         ArrayList<Receta> resultado = new ArrayList<>();
 
         ArrayList<String> mensajeEnviar = new ArrayList<>();
@@ -161,7 +161,8 @@ public class Receta {
         return resultado;
     }
 
-    public static ArrayList<Receta> getRecetasIngredientes(int pagina, List<Ingrediente> ingredientes) throws IOException {
+    public static ArrayList<Receta> getRecetasIngredientes(int pagina, List<Ingrediente> ingredientes)
+            throws IOException, ClassNotFoundException{
         ArrayList<Receta> resultado = new ArrayList<>();
 
         ArrayList<String> mensajeEnviar = new ArrayList<>();
@@ -202,7 +203,8 @@ public class Receta {
         return resultado;
     }
 
-    public static ArrayList<Receta> getTopRecetas(int pagina) throws IOException, MensajeServerInvalidoException {
+    public static ArrayList<Receta> getTopRecetas(int pagina)
+            throws IOException, ClassNotFoundException, MensajeServerInvalidoException {
         ArrayList<String> mensajeEnviar = new ArrayList<>();
         mensajeEnviar.add("CONSTOPRECETAS");
         mensajeEnviar.add(String.valueOf(pagina));
@@ -244,7 +246,7 @@ public class Receta {
                         alerta.showAndWait();
                     }
                 }
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
                 Alerta alerta = new Alerta(Alert.AlertType.ERROR,
                         "Error inesperado",
@@ -262,7 +264,7 @@ public class Receta {
     }
 
 
-    public boolean calificar(int calificacion) {
+    public void calificar(int calificacion) {
         ArrayList<String> mensajeEnviar = new ArrayList<>();
         mensajeEnviar.add("CALIFICAR");
         mensajeEnviar.add(RecetasDivertidas.username);
@@ -271,17 +273,12 @@ public class Receta {
 
         try {
             Conexion.sendMessage(mensajeEnviar);
-            if (Conexion.isSvResponse()) {
-                ArrayList<String> respuesta = Conexion.sendMessage(mensajeEnviar);
-                if (respuesta.get(0).equals("CALIFICAROK")) return true;
-            }
-        } catch (IOException e) {
+        } catch (Exception e) {
             Alerta alerta =
                     new Alerta(Alert.AlertType.ERROR, "Error inesperado", "Hubo un error inesperado");
             alerta.showAndWait();
             e.printStackTrace();
         }
-        return false;
     }
 
     // Actualiza el nombre, el autor, la descripción y las calificaciones
@@ -302,7 +299,7 @@ public class Receta {
                     this.cantCalificaciones = Integer.parseInt(respuesta.get(7));
                 }
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             Alerta alerta =
                     new Alerta(Alert.AlertType.ERROR, "Error inesperado", "Hubo un error inesperado");
             alerta.showAndWait();
@@ -314,7 +311,6 @@ public class Receta {
         try {
             ArrayList<String> mensajeEnviar = new ArrayList<>();
             mensajeEnviar.add("SUBIRRECETA");
-            mensajeEnviar.add(this.autor);
             mensajeEnviar.add(this.titulo);
             mensajeEnviar.add(this.descripcion);
             mensajeEnviar.add(this.instrucciones);
@@ -336,21 +332,20 @@ public class Receta {
             ArrayList<String> mensajeRecibir = Conexion.sendMessage(mensajeEnviar);
             Alerta alerta;
             switch (mensajeRecibir.get(0)) {
-                case "SUBIRRECETAOK" ->
+                case "SUBIRRECETAOK" -> {
                     alerta = new Alerta(Alert.AlertType.CONFIRMATION,
                             "Receta subida",
                             "Su receta se ha subido exitosamente.");
-                case "SUBIRRECETAFAIL" ->
+                    alerta.showAndWait();
+                }
+                case "SUBIRRECETAFAIL" -> {
                     alerta = new Alerta(Alert.AlertType.ERROR,
                             "Error al subir receta",
                             "Error: " + mensajeRecibir.get(1));
-                default ->
-                    alerta = new Alerta(Alert.AlertType.ERROR,
-                            "Error inesperado",
-                            "Hubo un error inesperado");
+                    alerta.showAndWait();
+                }
             }
-            alerta.showAndWait();
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             Alerta alerta = new Alerta(Alert.AlertType.ERROR,
                     "Error inesperado",

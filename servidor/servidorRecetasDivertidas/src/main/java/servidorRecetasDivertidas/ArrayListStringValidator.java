@@ -5,7 +5,7 @@ import java.util.regex.Pattern;
 
 
 public class ArrayListStringValidator {
-	private ArrayList<String> alValidar;
+	private ArrayList<String> stringsValidar;
 	//cualquier caracter menos saltos de linea y puede aparecer un minimo y maximo de veces
 	private final String patternDato = ".{%d,%d}";
 	//caracter numerico de rango [0-9] y puede ocurrir un minimo o maximo de veces
@@ -21,34 +21,32 @@ public class ArrayListStringValidator {
 	
 	
 	public ArrayListStringValidator(ArrayList<String> a) {
-		alValidar = a;
+		stringsValidar = a;
 	}
 	//Cliente
 	//-----------------------------------------------------------------
 	
 	public boolean esSubirRecetaValido() {
 		//si no tiene estos datos, la estructura del mensaje es invalida.
-		if(!alValidar.contains("CATEGORIASRECETA") || !alValidar.contains("INICIOMULTIMEDIA")) {
+		if (!stringsValidar.contains("CATEGORIASRECETA") || !stringsValidar.contains("INICIOMULTIMEDIA")) {
 			return false;
 		}
-		//minimo tiene que tener [SUBIRRECETA, nickname, rNombre, rDescripcion, iID, cantidad, unidad]
-		if(alValidar.size() < 8) {
+		//minimo tiene que tener [SUBIRRECETA, rNombre, rDescripcion, iID, cantidad, unidad]
+		if (stringsValidar.size() < 7) {
 			return false;
 		}
-		boolean nickname = vDato(alValidar.get(1), 3, 32);
-		boolean rNombre = vDato(alValidar.get(2), 1, 128);
+		boolean rNombre = vDato(stringsValidar.get(1), 1, 128);
 		/*3 (instrucciones) y 4 (descripcion) no hace falta validarlos ya que son textos
 		 * que ingresa el usuario y pueden ser cualquier caracter incluyendo Line terminators
 		 * (saltos de linea, carriage-return, etc)
 		 */
-		if(!nickname || !rNombre) {
-			return false;
-		}
-		int i = 5;
+		if(!rNombre) return false;
+
+		int i = 4;
 		//validar los ingredientes
-		while(!alValidar.get(i).contentEquals("CATEGORIASRECETA")) {
+		while (!stringsValidar.get(i).contentEquals("CATEGORIASRECETA")) {
 			//si alguno (idIngrediente, cantidad, unidad) tiene un formato invalido
-			if(!vNum(alValidar.get(i),1,11) || !vNum(alValidar.get(i+1),1,11) || !vDato(alValidar.get(i+2),1,16)) {
+			if(!vNum(stringsValidar.get(i),1,11) || !vNum(stringsValidar.get(i+1),1,11) || !vDato(stringsValidar.get(i+2),1,16)) {
 				return false;
 			}
 			i+=3;
@@ -56,8 +54,8 @@ public class ArrayListStringValidator {
 		//Suma uno para saltarse el mensaje CATEGORIASRECETA
 		i++;
 		//validar las categorias de la receta
-		while(!alValidar.get(i).contentEquals("INICIOMULTIMEDIA")) {
-			if(!vNum(alValidar.get(i),1,11)) {
+		while(!stringsValidar.get(i).contentEquals("INICIOMULTIMEDIA")) {
+			if(!vNum(stringsValidar.get(i),1,11)) {
 				return false;
 			}
 			i++;
@@ -65,8 +63,8 @@ public class ArrayListStringValidator {
 		//suma 1 para saltarse el mensaje iniciomultimedia
 		i++;
 		//validar la multimedia
-		while(i < alValidar.size()) {
-			if(!vURL(alValidar.get(i))) {
+		while(i < stringsValidar.size()) {
+			if(!vURL(stringsValidar.get(i))) {
 				return false;
 			}
 			i++;
@@ -76,42 +74,42 @@ public class ArrayListStringValidator {
 	}
 	
 	public boolean esResgistroValido() {
-		if(alValidar.size() != 9) {
+		if(stringsValidar.size() != 9) {
 			return false;
 		}
 		
-		boolean nickname = vDato(alValidar.get(1), 3, 32);
-		boolean preguntaSeg = vNum(alValidar.get(2), 1, 2);
-		boolean respuestaSeg = vDato(alValidar.get(3), 1, 64);
-		boolean uNombre = vDato(alValidar.get(4), 1, 50);
-		boolean uApellido = vDato(alValidar.get(5), 1, 50);
-		boolean uContra = vDato(alValidar.get(6), 8, 50);
-		boolean uGenero = vNum(alValidar.get(7), 1, 1);
-		boolean uMail = vMail(alValidar.get(8));
+		boolean nickname = vDato(stringsValidar.get(1), 3, 32);
+		boolean preguntaSeg = vNum(stringsValidar.get(2), 1, 2);
+		boolean respuestaSeg = vDato(stringsValidar.get(3), 1, 64);
+		boolean uNombre = vDato(stringsValidar.get(4), 1, 50);
+		boolean uApellido = vDato(stringsValidar.get(5), 1, 50);
+		boolean uContra = vDato(stringsValidar.get(6), 8, 50);
+		boolean uGenero = vNum(stringsValidar.get(7), 1, 1);
+		boolean uMail = vMail(stringsValidar.get(8));
 		
 		return (nickname && preguntaSeg && respuestaSeg && uApellido && uNombre && uContra && uGenero && uMail);
 	}
 	
 	public boolean esCalificarValido() {
 		//primero se fija si hay algun elemento nulo
-		if(alValidar.size() != 4) {
+		if(stringsValidar.size() != 4) {
 			return false;
 		}
-		boolean nickname = vDato(alValidar.get(1), 1, 32);
-		boolean idReceta = vNum(alValidar.get(2), 1, 11);
-		boolean calificacion = vNum(alValidar.get(3), 1, 2);
+		boolean nickname = vDato(stringsValidar.get(1), 1, 32);
+		boolean idReceta = vNum(stringsValidar.get(2), 1, 11);
+		boolean calificacion = vNum(stringsValidar.get(3), 1, 2);
 		//idReceta, nickname y calificacion
 		return (idReceta && nickname && calificacion);
 
 	}
 	
 	public boolean esCambiarContraValido() {
-		if(alValidar.size() != 4) {
+		if(stringsValidar.size() != 4) {
 			return false;
 		}
-		boolean nickname = vDato(alValidar.get(1), 3, 32);
-		boolean respuesta = vDato(alValidar.get(2), 1, 64);
-		boolean contraNueva = vDato(alValidar.get(3), 8, 50);
+		boolean nickname = vDato(stringsValidar.get(1), 3, 32);
+		boolean respuesta = vDato(stringsValidar.get(2), 1, 64);
+		boolean contraNueva = vDato(stringsValidar.get(3), 8, 50);
 		
 		return (nickname && contraNueva && respuesta);
 	}
@@ -120,19 +118,19 @@ public class ArrayListStringValidator {
 	//-----------------------------------
 	
 	public boolean esSubirCatValido() {
-		if(alValidar.size() != 2) {
+		if(stringsValidar.size() != 2) {
 			return false;
 		}
-		return vDato(alValidar.get(1),1,64);
+		return vDato(stringsValidar.get(1),1,64);
 	}
 	
 	public boolean esSubirIngValido() {
-		if(alValidar.size() < 2) {
+		if(stringsValidar.size() < 2) {
 			return false;
 		}
 		int i = 2;
-		while(i < alValidar.size()) {
-			if(!vNum(alValidar.get(i), 1, 11)) {
+		while(i < stringsValidar.size()) {
+			if(!vNum(stringsValidar.get(i), 1, 11)) {
 				return false;
 			}
 			i++;

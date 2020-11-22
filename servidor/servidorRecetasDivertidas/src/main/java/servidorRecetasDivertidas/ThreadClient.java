@@ -1,5 +1,6 @@
 package servidorRecetasDivertidas;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -36,12 +37,13 @@ public class ThreadClient implements Runnable{
 	protected ObjectInputStream in;
 
 	protected static ThreadLocal<String> usuarioLogueado = new ThreadLocal<>();
+	private static ThreadLocal<Boolean> esAdmin = new ThreadLocal<>();
 
 	// Mensajes que se pueden ejecutar sin estar logueado
 	protected String[] mensajesSinLogueo = {"LOGIN", "PREGUNTASSEG", "REGISTRO", "SERVIDORVIVE"};
 
 	
-	//llamadas a SPs
+	// SPs para usuario
 	private static final String BORRARRECUSU = "{call spUsuarioBorrarReceta(?,?)}";
 	private static final String CALIFICAR = "{call spCalificarReceta(?,?,?)}";
 	private static final String CAMBIARCONTRA = "{call spCambiarContrasena(?,?,?)}";
@@ -62,11 +64,23 @@ public class ThreadClient implements Runnable{
 	private static final String SUBIRRECETA = "{call spSubirReceta(?,?,?,?,?,?,?)}";
 	private static final String USUPREGSEG = "SELECT * FROM PreguntasSeguridad WHERE id in" +
 											" (SELECT uPreguntaSeguridad FROM usuario  WHERE uNickname = ?)";
+
+	// SPs para admin
+	private static final String BANEARUSUARIO = "{call spBaneoUsuario(?)}";
+	private static final String BORRARCATING = "{call spBorrarCategoriaIngrediente(?)}";
+	private static final String BORRARCATREC = "{call spBorrarCategoriaReceta(?)}";
+	private static final String BORRARREC = "{call spAdminBorrarReceta(?)}";
+	private static final String BORRARING = "{}";
+	private static final String SUBIRCATING = "{call spAgregarCategoriaIngrediente(?)}";
+	private static final String SUBIRCATREC = "{call spAgregarCategoriaReceta(?)}";
+	private static final String SUBIRING = "{call spAgregarIngrediente(?,?)}";
+
 	private static final String DefaultSQLErrorMsg = "Error en la base de datos";
 
 	public ThreadClient(ComboPooledDataSource c, Socket s) {
 		this.cpds = c;
 		this.socket = s;
+		esAdmin.set(false);
 
 		try {
 			this.out = new ObjectOutputStream(socket.getOutputStream());
@@ -75,13 +89,13 @@ public class ThreadClient implements Runnable{
 			e.printStackTrace();
 		}
 	}
+
 	/*
 	 * Cuando se ejecuta un sp puede tirar un error, este metodo recibe el SQLException
 	 * y el mensaje de error que se la va a comunicar al cliente si el error de sql
 	 * es 45000 (estos son los mensajes de error definidos por lauti pro gamer), si no lo es
 	 * entonces le manda el 'DefaultSQLErrorMsg'
 	 */
-	
 	protected void sqlExceptionHandler(SQLException e, String failMsg) {
 		answer.clear();
 		answer.add(failMsg);
@@ -110,7 +124,7 @@ public class ThreadClient implements Runnable{
 			answer.add("BORRARRECOK");
 		} catch (SQLException e) {
 			sqlExceptionHandler(e, "BORRARRECFAIL");
-		} catch (NumberFormatException e){
+		} catch (NumberFormatException e) {
 			intExceptionHandler(e, "BORRARRECFAIL");
 		}
 
@@ -145,7 +159,7 @@ public class ThreadClient implements Runnable{
 			}
 			stmt.execute();
 			answer.add("CAMBIARCONTRAOK");
-		}catch(SQLException e) {
+		} catch(SQLException e) {
 			sqlExceptionHandler(e, "CAMBIARCONTRAFAIL");
 		}
 	}
@@ -243,10 +257,10 @@ public class ThreadClient implements Runnable{
 			for (int i = 2; i < message.size(); i++) {
 				ingredientes.add(message.get(i));
 			}
-			//pone el json en el primer parametro del sp
 
-			System.out.println(new Gson().toJson(ingredientes));
+			//pone el json en el primer parametro del sp
 			stmt.setString(1, new Gson().toJson(ingredientes));
+
 			//numero de pagina
 			stmt.setInt(2, Integer.parseInt(message.get(1)));
 			stmt.execute();
@@ -470,14 +484,13 @@ public class ThreadClient implements Runnable{
 			
 			stmt.registerOutParameter(3, Types.BOOLEAN);
 			stmt.registerOutParameter(4, Types.BOOLEAN);
-			
-			//ejecuta la consulta			
+
 			stmt.execute();
-			/*Si pudo logearse entonces manda un LOGINOK
-			 * y si es admin o no (true: si)
-			 * Se fija por el 3er parametro que es el resultado
-			 * si es false cagaada xd
-			 */
+
+			// Define si es admin
+			esAdmin.set(stmt.getBoolean(4));
+
+			// Si pudo logearse entonces manda un LOGINOK
 			if(stmt.getBoolean(3)) {
 				answer.add("LOGINOK");
 				answer.add(String.valueOf(stmt.getBoolean(4)));
@@ -548,11 +561,10 @@ public class ThreadClient implements Runnable{
 			stmt = conn.prepareCall(REGISTRO); 
 			//poner en el statement todos los parametros de registro
     		for (int i = 1; i < message.size(); i++) {
-    			if (i == 2 || i == 7) {
+    			if (i == 2 || i == 7)
     				stmt.setInt(i, Integer.parseInt(message.get(i)));
-    			}else {
-            		stmt.setString(i, message.get(i));            				
-    			}
+    			else
+            		stmt.setString(i, message.get(i));
 			}
     		stmt.setBoolean(9,false);
     		stmt.registerOutParameter(10, Types.BOOLEAN);
@@ -573,52 +585,56 @@ public class ThreadClient implements Runnable{
 	private void subirReceta() {
 		try {
 			stmt = conn.prepareCall(SUBIRRECETA);
-			ArrayList<Ingrediente> ing = new ArrayList<>();
+			ArrayList<Ingrediente> ingredientes = new ArrayList<>();
 			ArrayList<Categoria> catRec = new ArrayList<>();
-			ArrayList<Multimedia> mult = new ArrayList<>();
+			ArrayList<Multimedia> multimedia = new ArrayList<>();
+
+			stmt.setString(1, usuarioLogueado.get());
+
 			int i;
-			for (i = 1; i < 5; i++) {
-				//1: nickname, 2: nombre receta, 3: descripcion, 4: instrucciones
-				stmt.setString(i, message.get(i));
-			}
-			//agregar ingredientes
-			while(!(message.get(i).contentEquals("CATEGORIASRECETA"))){
-				String unidad;
-				if(message.get(i+2).contentEquals("SinUnidad")){
-					unidad = "";
-				}else{
-					unidad = message.get(i+2);
-				}
-				ing.add(new Ingrediente(Integer.parseInt(message.get(i)) ,Integer.parseInt(message.get(i+1)),unidad));
+
+			for (i = 1; i < 4; i++)
+				// 2: nombre receta, 3: descripcion, 4: instrucciones
+				stmt.setString(i + 1, message.get(i));
+
+			// Agregar ingredientes
+			while (!message.get(i).contentEquals("CATEGORIASRECETA")) {
+				// Si el cliente manda SinUnidad como unidad, entonces se la declara como un string vacío
+				String unidad = (message.get(i + 2).contentEquals("SinUnidad")) ? "" : message.get(i + 2);
+
+				ingredientes.add(new Ingrediente(
+						Integer.parseInt(message.get(i)),
+						Integer.parseInt(message.get(i+1)),
+						unidad));
 				i+=3;
 			}
-			//suma uno para saltarse el mensaje de CATEGORIASRECETA
+			// Suma uno para saltarse el mensaje de CATEGORIASRECETA
 			i++;
-			//agregar categorias de recetas
-			while(!(message.get(i).contentEquals("INICIOMULTIMEDIA"))){
+			// Agregar categorias de recetas
+			while (!(message.get(i).contentEquals("INICIOMULTIMEDIA"))) {
 				catRec.add(new Categoria(Integer.parseInt(message.get(i))));
 				i++;
 			}
 			//suma uno para saltarse el mensaje de INICIOMULTIMEDIA
 			i++;
 			//agregar multimedia
-			while(i < message.size()){
-				mult.add(new Multimedia(message.get(i)));
+			while (i < message.size()) {
+				multimedia.add(new Multimedia(message.get(i)));
 				i++;
 			}
 
 			//cuarto elemento el json de ingredientes
-		    stmt.setString(5,new Gson().toJson(ing));
+		    stmt.setString(5,new Gson().toJson(ingredientes));
 			//cuarto elemento el json de multimedia
-		    stmt.setString(6,new Gson().toJson(mult));
+		    stmt.setString(6,new Gson().toJson(multimedia));
 			//cuarto elemento el json de categorias de recetas
 		    stmt.setString(7,new Gson().toJson(catRec));
 		    
 			stmt.execute();
 			answer.add("SUBIRRECETAOK");
-		}catch(SQLException e) {
+		} catch (SQLException e) {
 			sqlExceptionHandler(e, "SUBIRRECETAFAIL");
-		} catch(NumberFormatException e){
+		} catch (NumberFormatException e) {
 			intExceptionHandler(e, "SUBIRRECETAFAIL");
 		}
 	}
@@ -630,104 +646,244 @@ public class ThreadClient implements Runnable{
 			pstmt.setString(1, message.get(1));
 			ResultSet rs = pstmt.executeQuery();
 			//si no hubo ningun error ejecutando el query, entonces pone este mensaje
-			if(rs.next()) {
+			if (rs.next()) {
 
 				answer.add("RESPUSUPREGSEG");
 				//id de la pregunta
 				answer.add(String.valueOf(rs.getInt(1)));
 				//pregunta del usuario
 				answer.add(rs.getString(2));
-			}else {
+			} else {
 				throw new SQLException("Error en la consulta", "45000");
 			}
-		}catch(SQLException e) {
+		} catch(SQLException e) {
 			sqlExceptionHandler(e, "RESPUSUPREGSEGFAIL");
 		}
 	}
-	
-	protected void opcionesCliente(String peticion) {
-		//segun la peticion, ejecuta cierto metodo
-        switch(peticion) {
-	        case "BORRARRECUSU":
-	        	borrarRecetaUsu();
-	        	break;
-	        case "CALIFICAR"://
-	        	if(stringValidator.esCalificarValido()) {
-	        		calificar();
-	        	}else {
-	        		answer.add("FORMATERROR");
-	        	}
-	        	break;
-	        case "CAMBIARCONTRA": //
-	        	if(stringValidator.esCambiarContraValido()) {
-	        		cambiarContra();
-	        	}else {
-	        		answer.add("FORMATERROR");	        		
-	        	}
-	        	break;
+
+	private void borrarCatIng() {
+		try {
+			stmt = conn.prepareCall(BORRARCATING);
+			//id de la categoria de ingrediente
+			stmt.setInt(1, Integer.parseInt(message.get(1)));
+			stmt.execute();
+			answer.add("BORRARCATINGOK");
+		} catch (SQLException e) {
+			sqlExceptionHandler(e, "BORRARCATINGFAIL");
+		} catch(NumberFormatException e) {
+			intExceptionHandler(e, "BORRARCATINGFAIL");
+		}
+	}
+
+	private void borrarCatRec() {
+		try {
+			stmt = conn.prepareCall(BORRARCATREC);
+			//id de la categoria de receta
+			stmt.setInt(1, Integer.parseInt(message.get(1)));
+			stmt.execute();
+			answer.add("BORRARCATRECOK");
+		} catch (SQLException e) {
+			sqlExceptionHandler(e, "BORRARCATRECFAIL");
+		} catch (NumberFormatException e) {
+			intExceptionHandler(e, "BORRARCATRECFAIL");
+		}
+	}
+
+	private void borrarRec(){
+		try {
+			stmt = conn.prepareCall(BORRARREC);
+			//id de la receta
+			stmt.setInt(1, Integer.parseInt(message.get(1)));
+			stmt.execute();
+			answer.add("BORRARRECOK");
+		} catch (SQLException e) {
+			sqlExceptionHandler(e, "BORRARRECFAIL");
+		} catch (NumberFormatException e) {
+			intExceptionHandler(e, "BORRARRECFAIL");
+		}
+	}
+
+	private void borrarIng(){
+		answer.add("BORRARINGFAIL");
+		answer.add("No se implemento todavia");
+	}
+
+	private void banearUsuario() {
+		try {
+			stmt = conn.prepareCall(BANEARUSUARIO);
+			stmt.setString(1, message.get(1));
+			stmt.execute();
+			answer.add("BANEARUSUOK");
+		} catch(SQLException e) {
+			sqlExceptionHandler(e, "BORRARUSUFAIL");
+		}
+	}
+
+	//true: subir ingrediente
+	//false: subir receta
+	private void subirCatRecIng(boolean recoing) {
+		String ok, fail = "";
+		try {
+			if(recoing) {
+				stmt = conn.prepareCall(SUBIRCATING);
+				ok = "SUBIRCATINGOK";
+				fail = "SUBIRCATINGFAIL";
+			} else {
+				stmt = conn.prepareCall(SUBIRCATREC);
+				ok = "SUBIRCATRECOK";
+				fail = "SUBIRCATRECFAIL";
+			}
+			stmt.setString(1,message.get(1));
+			stmt.execute();
+			answer.add(ok);
+		} catch (SQLException e) {
+			sqlExceptionHandler(e,fail);
+		}
+	}
+
+	private void subirIng() {
+		try {
+			stmt = conn.prepareCall(SUBIRING);
+			ArrayList<Categoria> catIng = new ArrayList<Categoria>();
+			//primer parametro: nombre del ingrediente
+			stmt.setString(1, message.get(1));
+			//Arma el json con los ingredientes
+			for (int i = 2; i < message.size(); i++)
+				catIng.add(new Categoria(Integer.parseInt(message.get(i))));
+			stmt.setString(2, new Gson().toJson(catIng));
+			stmt.execute();
+			answer.add("SUBIRINGOK");
+		} catch (SQLException e) {
+			sqlExceptionHandler(e, "SUBIRINGFAIL");
+		} catch (NumberFormatException e){
+			intExceptionHandler(e, "SUBIRINGFAIL");
+		}
+	}
+
+	protected boolean ejecutarPeticionCliente() {
+		switch(message.get(0)) {
+			case "BORRARRECUSU":
+				borrarRecetaUsu();
+				break;
+			case "CALIFICAR":
+				if (stringValidator.esCalificarValido())
+					calificar();
+				else
+					answer.add("FORMATERROR");
+				break;
+			case "CAMBIARCONTRA":
+				if (stringValidator.esCambiarContraValido())
+					cambiarContra();
+				else
+					answer.add("FORMATERROR");
+				break;
 			case "CONSCALIFUSUARIO":
 				consCalifUsuario();
 				break;
-	        case "CONSRECETASCATING":
-	        	consRecetasCatRecIng(false);
-	        	break;
-	        case "CONSRECETASCATREC":
-	        	consRecetasCatRecIng(true);
-	        	break;
-	        case "CONSRECETAING":
-	        	consRecetaIng();
-	        	break;
-	        case "CONSRECETATEXT":
-	        	consRecetaText();
-	        	break;
+			case "CONSRECETASCATING":
+				consRecetasCatRecIng(false);
+				break;
+			case "CONSRECETASCATREC":
+				consRecetasCatRecIng(true);
+				break;
+			case "CONSRECETAING":
+				consRecetaIng();
+				break;
+			case "CONSRECETATEXT":
+				consRecetaText();
+				break;
 			case "CONSTOPRECETAS":
 				consTopRecetas();
 				break;
-	        case "DATOSRECETA":
-	        	datosReceta();
-	        	break;
-	        case "INGREDIENTES":
-	        	ingredientes();
-	        	break;
-	        case "LISTARCATING":
-	        	listarCatIng();
-	        	break;
-	        case "LISTARCATREC":
-	        	listarCatRec();
-	        	break;
-	        case "LOGIN":
-	        	login();
-	        	break;
-	        case "PREGUNTASSEG":
-	        	preguntasSeg();
-	        	break;
-	        case "RECETASDEUSUARIO":
-	        	recetaUsuario();
-	        	break;
-	        case "REGISTRO":   //       	
-	        	if(stringValidator.esResgistroValido()) {     		
-	        		registro();     
-	        	}else {
-	        		answer.add("FORMATERROR");
-	        	}
-	    		break;
+			case "DATOSRECETA":
+				datosReceta();
+				break;
+			case "INGREDIENTES":
+				ingredientes();
+				break;
+			case "LISTARCATING":
+				listarCatIng();
+				break;
+			case "LISTARCATREC":
+				listarCatRec();
+				break;
+			case "LOGIN":
+				login();
+				break;
+			case "PREGUNTASSEG":
+				preguntasSeg();
+				break;
+			case "RECETASDEUSUARIO":
+				recetaUsuario();
+				break;
+			case "REGISTRO":
+				if (stringValidator.esResgistroValido())
+					registro();
+				else
+					answer.add("FORMATERROR");
+				break;
 			case "SERVIDORVIVE":
 				servidorVive();
 				break;
-	        case "SUBIRRECETA"://  	
-	        	if(stringValidator.esSubirRecetaValido()) { 
-	        		subirReceta();    
-	        	}else {
-	        		answer.add("FORMATERROR");
-	        	}
-	        	break;
-	        case "USUPREGSEG":
-	        	usuPregSeg();
-	        	break;
-	    	default:
-	    		//se manda esta respuesta si la peticion es invalida
-	    		answer.add("MESSAGEERROR");
-        }
+			case "SUBIRRECETA":
+				if (stringValidator.esSubirRecetaValido())
+					subirReceta();
+				else
+					answer.add("FORMATERROR");
+				break;
+			case "USUPREGSEG":
+				usuPregSeg();
+				break;
+			default:
+				return false;
+		}
+
+		return true;
+	}
+
+	private void ejecutarPeticionAdmin() {
+		switch (message.get(0)) {
+			case "BORRARCATING":
+				borrarCatIng();
+				break;
+			case "BORRARCATREC":
+				borrarCatRec();
+				break;
+			case "BORRARREC":
+				borrarRec();
+				break;
+			case "BORRARING":
+				borrarIng();
+				break;
+			case "BANEARUSUARIO":
+				banearUsuario();
+				break;
+			case "SUBIRCATING":
+				if(stringValidator.esSubirCatValido())
+					subirCatRecIng(true);
+				else
+					answer.add("FORMATERROR");
+				break;
+			case "SUBIRCATREC":
+				if(stringValidator.esSubirCatValido())
+					subirCatRecIng(false);
+				else
+					answer.add("FORMATERROR");
+				break;
+			case "SUBIRING":
+				if(stringValidator.esSubirIngValido())
+					subirIng();
+				else
+					answer.add("FORMATERROR");
+		}
+	}
+	
+	protected void ejecutarPeticion() {
+		// Se fija de ejecutar las peticiones del cliente primero y despues se fija de ejecutar las del admin
+		// si es que el usuario es un admin.
+		if (!ejecutarPeticionCliente() && esAdmin.get()) {
+			ejecutarPeticionAdmin();
+		}
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -741,7 +897,7 @@ public class ThreadClient implements Runnable{
 				//recibe el mensaje del cliente
 				this.message = (ArrayList<String>) in.readObject();
 				System.out.println("[INFO] User: " + usuarioLogueado.get());
-				System.out.println("Recived " + message.get(0) + " from socket: " + this.socket);
+				System.out.println("[INFO] Recived " + message.get(0) + " from socket: " + this.socket);
 				stringValidator = new ArrayListStringValidator(message);
 				if (stringValidator.elementArrayListBlank(message)) {
 					answer.add("ELEMENTBLANK");
@@ -749,7 +905,7 @@ public class ThreadClient implements Runnable{
 					// Switch de opcioens del cliente
 					if (usuarioLogueado.get() != null
 							|| Arrays.stream(mensajesSinLogueo).anyMatch(message.get(0)::equals)) {
-						opcionesCliente(message.get(0));
+						ejecutarPeticion();
 					} else {
 						System.err.println("[WARNING] User tried to make an unauthorized call.");
 						answer.add("USUARIONOAUTORIZADO");
@@ -762,8 +918,20 @@ public class ThreadClient implements Runnable{
 			}
 			
 		} catch (Exception e) {
-        	System.out.println("[ERROR] in socket: " + socket);
-        	e.printStackTrace();
+			System.out.println("[INFO] Conection ended in socket: " + socket);
+			try {
+				conn.close();
+			} catch (SQLException sqlException) {
+				System.err.println("[ERROR] Error closing JDBC connection");
+				sqlException.printStackTrace();
+			} finally {
+				try {
+					socket.close();
+				} catch (IOException ioException) {
+					System.err.println("[ERROR] Error closing socket: " + socket);
+					ioException.printStackTrace();
+				}
+			}
 		}
 	}
 }

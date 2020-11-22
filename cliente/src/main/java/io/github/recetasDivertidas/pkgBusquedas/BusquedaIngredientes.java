@@ -24,7 +24,7 @@ public class BusquedaIngredientes {
     int paginaActual;
 
     @FXML
-    public void initialize() throws IOException {
+    public void initialize() throws IOException, ClassNotFoundException {
         chkcmbIngredientes.getItems().addAll(Ingrediente.getIngredientes());
         paginaActual = 0;
     }
@@ -56,7 +56,7 @@ public class BusquedaIngredientes {
                     vboxResultados.getChildren().add(res);
                 }
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             Alerta alerta = new Alerta(Alert.AlertType.ERROR,
                     "Error inesperado",

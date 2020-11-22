@@ -42,7 +42,7 @@ public class SubirReceta {
         // Poner los ingredientes en el combobox
         try {
             cmbIngredientes.getItems().addAll(Ingrediente.getIngredientes());
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             Alerta alerta = new Alerta(Alert.AlertType.ERROR,
                     "Error inesperado",
@@ -53,7 +53,7 @@ public class SubirReceta {
         // Poner las categorías en el combobox
         try {
             cmbCategorias.getItems().addAll(CategoriaReceta.getCategorias());
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             Alerta alerta = new Alerta(Alert.AlertType.ERROR,
                     "Error inesperado",
@@ -133,8 +133,7 @@ public class SubirReceta {
 
     @FXML
     private void subirReceta() {
-        Receta receta = new Receta(RecetasDivertidas.username,
-                txtTitulo.getText(),
+        Receta receta = new Receta(txtTitulo.getText(),
                 txaDescripcion.getText(),
                 txaInstrucciones.getText(),
                 getIngredientes(),

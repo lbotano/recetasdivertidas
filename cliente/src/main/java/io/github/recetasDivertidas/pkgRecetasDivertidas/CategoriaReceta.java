@@ -26,7 +26,7 @@ public class CategoriaReceta {
     }
 
     // Devuelve todas las categorías de receta
-    public static ArrayList<CategoriaReceta> getCategorias() throws IOException {
+    public static ArrayList<CategoriaReceta> getCategorias() throws IOException, ClassNotFoundException {
         ArrayList<String> mensajeEnviar = new ArrayList<>();
         mensajeEnviar.add("LISTARCATREC");
 

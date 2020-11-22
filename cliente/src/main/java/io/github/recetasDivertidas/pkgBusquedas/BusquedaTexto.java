@@ -25,7 +25,7 @@ public class BusquedaTexto {
     private int paginaActual = 0;
 
     @FXML
-    private void buscar() throws IOException {
+    private void buscar() throws IOException, ClassNotFoundException {
         if(txtBuscar.getText().length() > 0) {
             ArrayList<Receta> recetas;
             ArrayList<String> message = new ArrayList<>();
@@ -78,14 +78,14 @@ public class BusquedaTexto {
         }
     }
 
-    public void nextPag() throws IOException {
+    public void nextPag() throws IOException, ClassNotFoundException {
         if(vboxResultados.getChildren().size() == 10){
             paginaActual++;
             buscar();
         }
     }
 
-    public void prevPag() throws IOException {
+    public void prevPag() throws IOException, ClassNotFoundException {
         if (paginaActual > 0) {
             paginaActual--;
             buscar();

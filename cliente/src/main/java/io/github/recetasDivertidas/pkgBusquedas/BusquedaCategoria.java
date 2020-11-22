@@ -25,7 +25,7 @@ public class BusquedaCategoria {
     private void initialize() {
         try {
             chkcmbCategorias.getItems().addAll(CategoriaReceta.getCategorias());
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             Alerta alerta = new Alerta(Alert.AlertType.ERROR,
                     "Error inesperado",
@@ -47,7 +47,7 @@ public class BusquedaCategoria {
                 resController.ponerReceta(receta);
                 vboxResultados.getChildren().add(res);
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             Alerta alerta = new Alerta(Alert.AlertType.ERROR,
                     "Error inesperado",

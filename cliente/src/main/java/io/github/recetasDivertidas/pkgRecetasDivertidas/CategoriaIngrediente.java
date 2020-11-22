@@ -26,7 +26,7 @@ public class CategoriaIngrediente {
     }
 
     // Devuelve todas las categorías de ingrediente
-    public static ArrayList<CategoriaIngrediente> getCategorias() throws IOException {
+    public static ArrayList<CategoriaIngrediente> getCategorias() throws IOException, ClassNotFoundException {
         ArrayList<String> mensajeEnviar = new ArrayList<>();
         mensajeEnviar.add("LISTARCATING");
 

@@ -44,7 +44,7 @@ public class Register{
         try {
             ArrayList<PreguntaSeguridad> resPreguntas = getPreguntasSeguridad();
             cbPregunta.getItems().addAll(resPreguntas);
-        } catch (IOException e) {
+        } catch (Exception e) {
             Alerta alerta = new Alerta(Alert.AlertType.ERROR,
                     "Hubo un error",
                     "Fallo de conexión con el servidor.");
@@ -114,7 +114,7 @@ public class Register{
                         }
                     }
                 }
-            } catch (IOException e) {
+            } catch (Exception e) {
                 alerta = new Alerta(Alert.AlertType.ERROR,
                         "Error fatal", "Hubo un error al conectarse con el servidor.");
                 alerta.showAndWait();
@@ -233,7 +233,7 @@ public class Register{
         return pat.matcher(email).matches();
     }
 
-    private ArrayList<PreguntaSeguridad> getPreguntasSeguridad() throws IOException {
+    private ArrayList<PreguntaSeguridad> getPreguntasSeguridad() throws IOException, ClassNotFoundException {
         //Se crea el arraylist y se le añade el mensaje que se manda
         ArrayList<String> message = new ArrayList<>();
         message.add("PREGUNTASSEG");

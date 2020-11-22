@@ -22,7 +22,6 @@ public class Login {
 
     @FXML TextField txtUsuario;
     @FXML TextField txtContrasena;
-    private boolean admin = false;
     private String username = "";
 
     @FXML
@@ -33,9 +32,6 @@ public class Login {
                         "Identidad confirmada con éxito");
                 alerta.showAndWait();
 
-                if (admin){Conexion.setAdminPort();} //Conectarse al puerto de admin
-
-                RecetasDivertidas.logueadoComoAdmin = admin;
                 RecetasDivertidas.username = username;
 
                 Stage recetasdivertidas = new Stage();
@@ -50,8 +46,8 @@ public class Login {
 
                 Aplicacion.hide();
             }
-        } catch (IOException ioException) {
-            ioException.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -80,7 +76,7 @@ public class Login {
         if (e.getCode().equals(KeyCode.ENTER)) login();
     }
 
-    private boolean consLogin(String Usr, String Pwd) throws IOException {
+    private boolean consLogin(String Usr, String Pwd) throws IOException, ClassNotFoundException {
         ArrayList<String> login = new ArrayList<>();
         Alerta alert;
 
@@ -105,13 +101,8 @@ public class Login {
                 alert.showAndWait();
             }
             case "LOGINOK" -> {
-                if(ans.get(1).equals("true")){
-                    admin = true;
-                }else{
-                    admin = false;
-                }
                 username = txtUsuario.getText();
-
+                RecetasDivertidas.logueadoComoAdmin = Boolean.parseBoolean(ans.get(1));
                 return true;
             }
             case "ELEMENTBLANK" ->{
