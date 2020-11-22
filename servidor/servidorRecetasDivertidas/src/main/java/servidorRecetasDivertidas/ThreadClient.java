@@ -70,7 +70,7 @@ public class ThreadClient implements Runnable{
 	private static final String BORRARCATING = "{call spBorrarCategoriaIngrediente(?)}";
 	private static final String BORRARCATREC = "{call spBorrarCategoriaReceta(?)}";
 	private static final String BORRARREC = "{call spAdminBorrarReceta(?)}";
-	private static final String BORRARING = "{}";
+	private static final String BORRARING = "{call spBorrarIngrediente(?)}";
 	private static final String SUBIRCATING = "{call spAgregarCategoriaIngrediente(?)}";
 	private static final String SUBIRCATREC = "{call spAgregarCategoriaReceta(?)}";
 	private static final String SUBIRING = "{call spAgregarIngrediente(?,?)}";
@@ -704,8 +704,17 @@ public class ThreadClient implements Runnable{
 	}
 
 	private void borrarIng(){
-		answer.add("BORRARINGFAIL");
-		answer.add("No se implemento todavia");
+		try {
+			stmt = conn.prepareCall(BORRARING);
+
+			stmt.setInt(1, Integer.parseInt(message.get(1)));
+			stmt.execute();
+			answer.add("BORRARINGOK");
+		} catch (SQLException e) {
+			sqlExceptionHandler(e, "BORRARINGFAIL");
+		} catch (NumberFormatException e) {
+			intExceptionHandler(e, "BORRARINGFAIL");
+		}
 	}
 
 	private void banearUsuario() {

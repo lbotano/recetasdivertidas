@@ -226,3 +226,38 @@ BEGIN
     SET autocommit = 1;
 END//
 DELIMITER ;
+
+DROP PROCEDURE IF EXISTS spBorrarIngrediente;
+DELIMITER //
+CREATE PROCEDURE spBorrarIngrediente (
+	piID int
+)
+BEGIN
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+		ROLLBACK;
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Error inesperado';
+    END;
+    
+    DECLARE EXIT HANDLER FOR SQLWARNING
+    BEGIN
+		ROLLBACK;
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Error inesperado';
+    END;
+    
+    SET autocommit = 0;
+    START TRANSACTION;
+    
+    DELETE FROM IngredienteReceta
+    WHERE iID = piID;
+    
+    DELETE FROM RelCatIngred
+    WHERE iID = piID;
+    
+    DELETE FROM Ingrediente
+    WHERE iID = piID;
+    
+    COMMIT;
+    SET autocommit = 1;
+END//
+DELIMITER ;

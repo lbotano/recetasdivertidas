@@ -666,7 +666,8 @@ BEGIN
         CategoriaDeIngrediente c
 	WHERE
         i.iID = ic.iID AND
-        ic.cID = c.cID;
+        ic.cID = c.cID
+	ORDER BY i.iID;
 END//
 DELIMITER ;
 
