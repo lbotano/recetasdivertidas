@@ -18,13 +18,13 @@
         <Insets topRightBottomLeft="10" />
     </padding>
     <top>
-        <HBox alignment="BASELINE_LEFT" spacing="5" maxWidth="Infinity" >
-            <Label fx:id="lblTitulo" text="Título super genial">
+        <HBox alignment="BASELINE_LEFT" spacing="5" maxWidth="Infinity">
+            <Label fx:id="lblTitulo" text="Título super genial" HBox.hgrow="ALWAYS" maxWidth="Infinity">
                 <font>
                     <Font size="26.0" />
                 </font>
             </Label>
-            <Calificador fx:id="calificador" HBox.hgrow="ALWAYS"/>
+            <Calificador fx:id="calificador"/>
             <HBox>
                 <Label text="Calificación: "/>
                 <Label fx:id="lblCalificacion">
@@ -39,9 +39,9 @@
     <center>
         <ScrollPane fitToWidth="true">
             <VBox>
-                <Label text="Descripcion:">
+                <Label text="Descripcion">
                     <font>
-                        <Font size="16.0"/>
+                        <Font size="20"/>
                     </font>
                 </Label>
                 <Label fx:id="lblDescripcion"
@@ -51,9 +51,9 @@
                         <Font size="14.0"/>
                     </font>
                 </Label>
-                <Label style="font-weight: bold;" text="Instrucciones:">
+                <Label text="Instrucciones">
                     <font>
-                        <Font size="16.0"/>
+                        <Font size="20"/>
                     </font>
                 </Label>
                 <Label fx:id="lblInstrucciones" wrapText="true" text="Nibh nisl condimentum id venenatis a. Et netus et malesuada fames. Risus in hendrerit gravida rutrum. Et leo duis ut diam. Diam donec adipiscing tristique risus. Viverra justo nec ultrices dui sapien eget. In est ante in nibh mauris cursus. Suspendisse potenti nullam ac tortor vitae purus. Pellentesque nec nam aliquam sem et tortor consequat. Justo eget magna fermentum iaculis eu non diam phasellus. Vel orci porta non pulvinar neque. Eget dolor morbi non arcu risus quis varius. Nisl nisi scelerisque eu ultrices vitae auctor eu.">
@@ -61,9 +61,9 @@
                         <Font size="14.0"/>
                     </font>
                 </Label>
-                <Label style="font-weight: bold;" text="Ingredientes:">
+                <Label text="Ingredientes">
                     <font>
-                        <Font size="16.0"/>
+                        <Font size="20"/>
                     </font>
                 </Label>
                 <ScrollPane fitToWidth="true" maxHeight="150">
@@ -75,9 +75,9 @@
                         </Label>
                     </VBox>
                 </ScrollPane>
-                <Label text="Imagenes:">
+                <Label text="Imagenes">
                     <font>
-                        <Font size="16.0"/>
+                        <Font size="20"/>
                     </font>
                 </Label>
                 <VBox/>
