@@ -19,7 +19,7 @@
         <URL value="@/css/main.css"/>
     </stylesheets>
    <top>
-       <HBox prefHeight="32.0" prefWidth="806.0" BorderPane.alignment="CENTER">
+       <HBox prefHeight="32.0" prefWidth="806.0" BorderPane.alignment="CENTER" styleClass="topBar">
            <Button maxHeight="Infinity"
                    fx:id="btnInicio"
                    styleClass="btnPestana"

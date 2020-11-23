@@ -9,12 +9,12 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-
-
 <?import org.controlsfx.glyphfont.Glyph?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.geometry.Insets?>
+
+<?import io.github.recetasDivertidas.pkgComponentes.MultimediaCargar?>
 <BorderPane fx:id="borderpane"
             xmlns="http://javafx.com/javafx/11.0.1"
             xmlns:fx="http://javafx.com/fxml/1" fx:controller="io.github.recetasDivertidas.pkgSubirReceta.SubirReceta"
@@ -77,6 +77,21 @@
                                 <Glyph fontFamily="FontAwesome" icon="PLUS"/>
                             </graphic>
                         </Button>
+                    </VBox>
+                    <VBox fx:id="vboxDown"
+                          styleClass="lista"
+                          spacing="10"
+                          GridPane.rowIndex="3"
+                          GridPane.columnIndex="0"
+                          GridPane.columnSpan="2"
+                          GridPane.hgrow="ALWAYS"
+                          GridPane.vgrow="ALWAYS">
+                        <padding>
+                            <Insets topRightBottomLeft="10"/>
+                        </padding>
+                        <VBox fx:id="vboxMultimedia" VBox.vgrow="ALWAYS" minHeight="150" spacing="10">
+                            <MultimediaCargar/>
+                        </VBox>
                     </VBox>
                 </GridPane>
             </VBox>

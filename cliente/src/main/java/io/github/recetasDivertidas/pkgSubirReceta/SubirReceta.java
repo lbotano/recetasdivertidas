@@ -7,6 +7,7 @@ import io.github.recetasDivertidas.pkgRecetasDivertidas.CategoriaReceta;
 import io.github.recetasDivertidas.pkgRecetasDivertidas.Ingrediente;
 import io.github.recetasDivertidas.pkgRecetasDivertidas.Receta;
 import io.github.recetasDivertidas.pkgRecetasDivertidas.RecetasDivertidas;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -140,5 +141,8 @@ public class SubirReceta {
                 getCategorias());
 
         receta.subir();
+    }
+
+    public void agregarMultimedia(ActionEvent actionEvent) {
     }
 }

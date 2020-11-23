@@ -18,14 +18,13 @@
         <Insets topRightBottomLeft="10" />
     </padding>
     <top>
-        <HBox alignment="BASELINE_LEFT" spacing="5">
+        <HBox alignment="BASELINE_LEFT" spacing="5" maxWidth="Infinity" >
             <Label fx:id="lblTitulo" text="Título super genial">
                 <font>
                     <Font size="26.0" />
                 </font>
             </Label>
-            <Label text="5" />
-            <Calificador fx:id="calificador"/>
+            <Calificador fx:id="calificador" HBox.hgrow="ALWAYS"/>
             <HBox>
                 <Label text="Calificación: "/>
                 <Label fx:id="lblCalificacion">
