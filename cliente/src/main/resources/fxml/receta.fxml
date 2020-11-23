@@ -11,18 +11,20 @@
 <?import io.github.recetasDivertidas.pkgComponentes.Calificador?>
 <?import org.controlsfx.glyphfont.Glyph?>
 
-<BorderPane prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="io.github.recetasDivertidas.pkgRecetasDivertidas.RecetaController">
+<BorderPane xmlns="http://javafx.com/javafx/11.0.1"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="io.github.recetasDivertidas.pkgRecetas.RecetaController">
     <padding>
         <Insets topRightBottomLeft="10" />
     </padding>
     <top>
         <HBox alignment="BASELINE_LEFT" spacing="5">
-            <Label fx:id="titulo" text="Titulo super genial">
+            <Label fx:id="lblTitulo" text="Título super genial">
                 <font>
                     <Font size="26.0" />
                 </font>
             </Label>
-            <Label fx:id="calificacion" text="5" />
+            <Label text="5" />
             <Calificador fx:id="calificador"/>
             <HBox>
                 <Label text="Calificación: "/>
@@ -38,51 +40,52 @@
     <center>
         <ScrollPane fitToWidth="true">
             <VBox>
-                <Label fx:id="lblDescripcion" text="Descripcion:">
+                <Label text="Descripcion:">
                     <font>
                         <Font size="16.0"/>
                     </font>
                 </Label>
-                <Label fx:id="descripcion" wrapText="true" text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Sed tempus urna et pharetra pharetra massa. Est ultricies integer quis auctor elit sed vulputate. Urna condimentum mattis pellentesque id nibh. Mattis molestie a iaculis at erat pellentesque adipiscing commodo. Semper risus in hendrerit gravida rutrum quisque non. Enim ut tellus elementum sagittis. Ac placerat vestibulum lectus mauris. Scelerisque varius morbi enim nunc faucibus a pellentesque. Blandit turpis cursus in hac. Tempor commodo ullamcorper a lacus. Adipiscing tristique risus nec feugiat. Pretium vulputate sapien nec sagittis aliquam malesuada bibendum arcu vitae. Tempus iaculis urna id volutpat lacus laoreet non. Et tortor consequat id porta nibh venenatis cras. Vel elit scelerisque mauris pellentesque pulvinar pellentesque habitant morbi. Risus commodo viverra maecenas accumsan. Nam aliquam sem et tortor consequat id. Consectetur adipiscing elit ut aliquam purus. Vestibulum rhoncus est pellentesque elit ullamcorper dignissim cras.">
+                <Label fx:id="lblDescripcion"
+                       wrapText="true"
+                       text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Sed tempus urna et pharetra pharetra massa. Est ultricies integer quis auctor elit sed vulputate. Urna condimentum mattis pellentesque id nibh. Mattis molestie a iaculis at erat pellentesque adipiscing commodo. Semper risus in hendrerit gravida rutrum quisque non. Enim ut tellus elementum sagittis. Ac placerat vestibulum lectus mauris. Scelerisque varius morbi enim nunc faucibus a pellentesque. Blandit turpis cursus in hac. Tempor commodo ullamcorper a lacus. Adipiscing tristique risus nec feugiat. Pretium vulputate sapien nec sagittis aliquam malesuada bibendum arcu vitae. Tempus iaculis urna id volutpat lacus laoreet non. Et tortor consequat id porta nibh venenatis cras. Vel elit scelerisque mauris pellentesque pulvinar pellentesque habitant morbi. Risus commodo viverra maecenas accumsan. Nam aliquam sem et tortor consequat id. Consectetur adipiscing elit ut aliquam purus. Vestibulum rhoncus est pellentesque elit ullamcorper dignissim cras.">
                     <font>
                         <Font size="14.0"/>
                     </font>
                 </Label>
-                <Label fx:id="lblInstrucciones" style="font-weight: bold;" text="Instrucciones:">
+                <Label style="font-weight: bold;" text="Instrucciones:">
                     <font>
                         <Font size="16.0"/>
                     </font>
                 </Label>
-                <Label fx:id="instrucciones" wrapText="true" text="Nibh nisl condimentum id venenatis a. Et netus et malesuada fames. Risus in hendrerit gravida rutrum. Et leo duis ut diam. Diam donec adipiscing tristique risus. Viverra justo nec ultrices dui sapien eget. In est ante in nibh mauris cursus. Suspendisse potenti nullam ac tortor vitae purus. Pellentesque nec nam aliquam sem et tortor consequat. Justo eget magna fermentum iaculis eu non diam phasellus. Vel orci porta non pulvinar neque. Eget dolor morbi non arcu risus quis varius. Nisl nisi scelerisque eu ultrices vitae auctor eu.">
+                <Label fx:id="lblInstrucciones" wrapText="true" text="Nibh nisl condimentum id venenatis a. Et netus et malesuada fames. Risus in hendrerit gravida rutrum. Et leo duis ut diam. Diam donec adipiscing tristique risus. Viverra justo nec ultrices dui sapien eget. In est ante in nibh mauris cursus. Suspendisse potenti nullam ac tortor vitae purus. Pellentesque nec nam aliquam sem et tortor consequat. Justo eget magna fermentum iaculis eu non diam phasellus. Vel orci porta non pulvinar neque. Eget dolor morbi non arcu risus quis varius. Nisl nisi scelerisque eu ultrices vitae auctor eu.">
                     <font>
                         <Font size="14.0"/>
                     </font>
                 </Label>
-                <Label fx:id="lblIngredientes" style="font-weight: bold;" text="Ingredientes:">
+                <Label style="font-weight: bold;" text="Ingredientes:">
                     <font>
                         <Font size="16.0"/>
                     </font>
                 </Label>
                 <ScrollPane fitToWidth="true" maxHeight="150">
-                    <VBox fx:id="vboxIngredientes">
-                        <Label fx:id="ingredientes" text="Manzanas;Melones">
+                    <VBox>
+                        <Label text="Manzanas;Melones">
                             <font>
                                 <Font size="14.0"/>
                             </font>
                         </Label>
                     </VBox>
                 </ScrollPane>
-                <Label fx:id="imagenes" text="Imagenes:">
+                <Label text="Imagenes:">
                     <font>
                         <Font size="16.0"/>
                     </font>
                 </Label>
-                <VBox fx:id="vboxImagenes"/>
+                <VBox/>
             </VBox>
         </ScrollPane>
     </center>
-   <cursor>
-      <Cursor fx:constant="TEXT" />
-   </cursor>
-
+    <cursor>
+        <Cursor fx:constant="TEXT"/>
+    </cursor>
 </BorderPane>

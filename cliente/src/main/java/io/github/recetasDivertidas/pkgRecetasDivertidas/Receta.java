@@ -16,7 +16,33 @@ public class Receta {
     private float calificacion;
     private int cantCalificaciones;
     private final ArrayList<Ingrediente> ingredientes = new ArrayList<>();
-    private final ArrayList<CategoriaReceta> categorias = new ArrayList<>();
+    private final ArrayList<CategoriaReceta> categoriasReceta = new ArrayList<>();
+    private final ArrayList<CategoriaIngrediente> categoriasIngrediente = new ArrayList<>();
+
+    // Receta completa
+    public Receta(
+            int id,
+            String autor,
+            String titulo,
+            String descripcion,
+            String instrucciones,
+            float calificacion,
+            int cantCalificaciones,
+            List<Ingrediente> ingredientes,
+            List<CategoriaReceta> categoriasReceta,
+            List<CategoriaIngrediente> categoriasIngrediente
+    ) {
+        this.id = id;
+        this.autor = autor;
+        this.titulo = titulo;
+        this.descripcion = descripcion;
+        this.instrucciones = instrucciones;
+        this.calificacion = calificacion;
+        this.cantCalificaciones = cantCalificaciones;
+        this.ingredientes.addAll(ingredientes);
+        this.categoriasReceta.addAll(categoriasReceta);
+        this.categoriasIngrediente.addAll(categoriasIngrediente);
+    }
 
     // Receta para resultado de búsqueda
     public Receta(int id, String autor, String titulo, String descripcion, float calificacion, int cantCalificaciones) {
@@ -40,7 +66,7 @@ public class Receta {
         this.descripcion = descripcion;
         this.instrucciones = instrucciones;
         this.ingredientes.addAll(ingredientes);
-        this.categorias.addAll(categorias);
+        this.categoriasReceta.addAll(categorias);
     }
 
     public int getId() {
@@ -57,6 +83,10 @@ public class Receta {
 
     public String getDescripcion() {
         return descripcion;
+    }
+
+    public String getInstrucciones() {
+        return instrucciones;
     }
 
     public float getCalificacion() {
@@ -250,7 +280,7 @@ public class Receta {
                 e.printStackTrace();
                 Alerta alerta = new Alerta(Alert.AlertType.ERROR,
                         "Error inesperado",
-                        "Ocurrión un error inesperado.");
+                        "Ocurrió un error inesperado.");
                 alerta.showAndWait();
             }
         } else {
@@ -263,6 +293,78 @@ public class Receta {
         return resultado;
     }
 
+    // Devuelve los datos completos de una receta
+    public static Receta getReceta(int idBusqueda) throws IOException, ClassNotFoundException {
+        Receta resultado = null;
+
+        ArrayList<String> mensajeEnviar = new ArrayList<>();
+        mensajeEnviar.add("DATOSRECETA");
+        mensajeEnviar.add(String.valueOf(idBusqueda));
+
+        ArrayList<String> mensajeRecibir = Conexion.sendMessage(mensajeEnviar);
+
+        if (mensajeRecibir.get(0).equals("DATOSRECETAOK")) {
+            int id = Integer.parseInt(mensajeRecibir.get(1));
+            String autor = mensajeRecibir.get(2);
+            String titulo = mensajeRecibir.get(3);
+            String descripcion = mensajeRecibir.get(4);
+            String instrucciones = mensajeRecibir.get(5);
+            float promedioCalificacion = Float.parseFloat(mensajeRecibir.get(6));
+            int cantCalificaciones = Integer.parseInt(mensajeRecibir.get(7));
+
+            ArrayList<Ingrediente> ingredientes = new ArrayList<>();
+            ArrayList<CategoriaReceta> categoriasReceta = new ArrayList<>();
+            ArrayList<CategoriaIngrediente> categoriasIngrediente = new ArrayList<>();
+
+            int i = 8;
+
+            while (!mensajeRecibir.get(i).equals("CATEGORIASRECETA")) {
+                int idIngrediente = Integer.parseInt(mensajeRecibir.get(i++));
+                String nombreIngrediente = mensajeRecibir.get(i++);
+                String unidadIngrediente = mensajeRecibir.get(i++);
+                int cantIngrediente = Integer.parseInt(mensajeRecibir.get(i++));
+                ingredientes.add(new Ingrediente(idIngrediente, nombreIngrediente, unidadIngrediente, cantIngrediente));
+
+            }
+            i++;
+
+            while (!mensajeRecibir.get(i).equals("CATEGORIASING")) {
+                int idCategoria = Integer.parseInt(mensajeRecibir.get(i++));
+                String nombreCategoria = mensajeRecibir.get(i++);
+                categoriasReceta.add(new CategoriaReceta(idCategoria, nombreCategoria));
+            }
+            i++;
+
+            while (!mensajeRecibir.get(i).equals("MULTIMEDIA")) {
+                int idCategoria = Integer.parseInt(mensajeRecibir.get(i++));
+                String nombreCategoria = mensajeRecibir.get(i++);
+                categoriasIngrediente.add(new CategoriaIngrediente(idCategoria, nombreCategoria));
+            }
+            i++;
+
+            resultado = new Receta(
+                    id,
+                    autor,
+                    titulo,
+                    descripcion,
+                    instrucciones,
+                    promedioCalificacion,
+                    cantCalificaciones,
+                    ingredientes,
+                    categoriasReceta,
+                    categoriasIngrediente
+            );
+
+        } else {
+            Alerta alerta = new Alerta(Alert.AlertType.ERROR,
+                    "Error inesperado",
+                    mensajeRecibir.get(0).equals("DATOSRECETAFAIL") ? mensajeRecibir.get(1)
+                            : "Ocurrió un error inesperado al abrir la receta.");
+            alerta.showAndWait();
+        }
+
+        return resultado;
+    }
 
     public void calificar(int calificacion) {
         ArrayList<String> mensajeEnviar = new ArrayList<>();
@@ -322,7 +424,7 @@ public class Receta {
             }
 
             mensajeEnviar.add("CATEGORIASRECETA");
-            for (CategoriaReceta c : this.categorias) {
+            for (CategoriaReceta c : this.categoriasReceta) {
                 mensajeEnviar.add(String.valueOf(c.getId()));
             }
 

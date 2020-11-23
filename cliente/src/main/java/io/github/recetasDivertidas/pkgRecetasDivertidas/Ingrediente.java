@@ -22,6 +22,13 @@ public class Ingrediente {
         this.nombre = nombre;
     }
 
+    public Ingrediente(int id, String nombre, String unidad, int cantidad) {
+        this.id = id;
+        this.nombre = nombre;
+        this.unidad = unidad;
+        this.cantidad = cantidad;
+    }
+
     @Override
     public String toString() {
         return nombre;

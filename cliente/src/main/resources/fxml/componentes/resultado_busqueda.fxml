@@ -12,7 +12,7 @@
       fx:controller="io.github.recetasDivertidas.pkgComponentes.ResultadoBusqueda"
       spacing="15">
     <VBox HBox.hgrow="ALWAYS">
-        <HBox>
+        <HBox onMouseClicked="#onAbrirReceta">
             <Label fx:id="lblTitulo"
                    text="Título"
                    HBox.hgrow="ALWAYS"

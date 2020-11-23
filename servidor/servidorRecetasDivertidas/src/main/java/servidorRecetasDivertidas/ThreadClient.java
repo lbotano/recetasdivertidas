@@ -723,7 +723,7 @@ public class ThreadClient implements Runnable{
 			stmt.setString(1, message.get(1));
 			stmt.execute();
 			answer.add("BANEARUSUOK");
-		} catch(SQLException e) {
+		} catch (SQLException e) {
 			sqlExceptionHandler(e, "BORRARUSUFAIL");
 		}
 	}

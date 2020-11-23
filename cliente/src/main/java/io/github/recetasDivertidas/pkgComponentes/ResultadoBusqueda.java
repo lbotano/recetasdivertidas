@@ -1,9 +1,16 @@
 package io.github.recetasDivertidas.pkgComponentes;
 
+import io.github.recetasDivertidas.pkgAplicacion.Alerta;
+import io.github.recetasDivertidas.pkgAplicacion.Aplicacion;
+import io.github.recetasDivertidas.pkgRecetas.RecetaStage;
 import io.github.recetasDivertidas.pkgRecetasDivertidas.Receta;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
+import javafx.stage.Stage;
+
+import java.io.IOException;
 
 public class ResultadoBusqueda {
     @FXML private Label lblTitulo;
@@ -41,5 +48,19 @@ public class ResultadoBusqueda {
         receta.calificar(calificador.getCalificacionPuesta());
         receta.actualizarSimple();
         actualizarDatos();
+    }
+
+    @FXML
+    private void onAbrirReceta() throws IOException {
+        try {
+            Stage recetaStage = new RecetaStage(Receta.getReceta(receta.getId()));
+            recetaStage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Alerta alerta = new Alerta(Alert.AlertType.ERROR,
+                    "Error inesperado",
+                    "Hubo un error inesperado");
+            alerta.showAndWait();
+        }
     }
 }
