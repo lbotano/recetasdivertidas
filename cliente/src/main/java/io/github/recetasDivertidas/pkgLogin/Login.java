@@ -39,7 +39,7 @@ public class Login {
                 Scene scene = new Scene(rootRecetasDivertidas);
 
                 recetasdivertidas.setTitle("Recetas Divertidas");
-                recetasdivertidas.getIcons().add(new Image(getClass().getResourceAsStream("/logo_chiquito.png")));
+                recetasdivertidas.getIcons().add(new Image(getClass().getResourceAsStream("/logo_recetas_divertidas.png")));
 
                 recetasdivertidas.setScene(scene);
                 recetasdivertidas.show();

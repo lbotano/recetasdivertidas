@@ -24,7 +24,7 @@ public final class Aplicacion extends Application {
     public void start(Stage stage) throws Exception {
         window = stage;
         window.setScene(loginScene);
-        window.getIcons().add(new Image(getClass().getResourceAsStream("/logo_chiquito.png")));
+        window.getIcons().add(new Image(getClass().getResourceAsStream("/logo_recetas_divertidas.png")));
         window.setTitle("Recetas Divertidas");
 
         if (Conexion.isSvResponse()) {

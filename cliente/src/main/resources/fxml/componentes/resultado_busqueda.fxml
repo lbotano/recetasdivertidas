@@ -18,7 +18,7 @@
                    HBox.hgrow="ALWAYS"
                    maxWidth="Infinity">
                 <font>
-                    <Font size="16.0"/>
+                    <Font size="20.0"/>
                 </font>
             </Label>
             <Label fx:id="lblAutor"
