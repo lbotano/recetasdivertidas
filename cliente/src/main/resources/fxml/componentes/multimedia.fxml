@@ -2,19 +2,18 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-
 <?import org.controlsfx.glyphfont.Glyph?>
 <?import javafx.scene.image.ImageView?>
-<?import org.controlsfx.control.HyperlinkLabel?>
+
 <HBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="io.github.recetasDivertidas.pkgComponentes.MultimediaCargado"
       fx:id="root">
-    <Hyperlink fx:id="lblMultimedia" accessibleText="https://tenor.com/view/el-bananero-oficial-point-gotcha-gif-10106219" text="Multimedia" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
+    <Hyperlink fx:id="lblMultimedia"  text="Multimedia" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
     <Button fx:id="btnRemover" onAction="#remover" maxWidth="Infinity">
         <graphic>
             <Glyph fontFamily="FontAwesome" icon="MINUS"/>
         </graphic>
     </Button>
-    <ImageView fx:id="imgView" />
+    <ImageView fx:id="imgView" fitWidth="50" fitHeight="50"/>
 </HBox>

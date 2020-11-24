@@ -20,6 +20,8 @@ import java.util.ArrayList;
 
 public class SubirReceta {
     @FXML
+    private TextField txtMultimedia;
+    @FXML
     private VBox vboxDown;
     @FXML
     private VBox vboxLeft;
@@ -140,10 +142,15 @@ public class SubirReceta {
     }
 
     public void agregarMultimedia() throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/componentes/multimedia.fxml"));
-        Pane multimedia = loader.load();
-        MultimediaCargado multimediaController = loader.getController();
-        vboxDown.getChildren().add(multimedia);
+        if(txtMultimedia.getText().length() > 0) { //TODO: Confirmar que sea un link de una imagen
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/componentes/multimedia.fxml"));
+            Pane multimedia = loader.load();
+            MultimediaCargado multimediaController = loader.getController();
+            multimediaController.setMultimedia(txtMultimedia.getText());
+            txtMultimedia.setText("");
+
+            vboxDown.getChildren().add(multimedia);
+        }
     }
 
     @FXML
