@@ -13,8 +13,8 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.HBox?>
 
-<?import io.github.recetasDivertidas.pkgComponentes.MultimediaCargar?>
 <BorderPane fx:id="borderpane"
             xmlns="http://javafx.com/javafx/11.0.1"
             xmlns:fx="http://javafx.com/fxml/1" fx:controller="io.github.recetasDivertidas.pkgSubirReceta.SubirReceta"
@@ -81,6 +81,8 @@
                     <VBox fx:id="vboxDown"
                           styleClass="lista"
                           spacing="10"
+                          minHeight="150"
+                          VBox.vgrow="ALWAYS"
                           GridPane.rowIndex="3"
                           GridPane.columnIndex="0"
                           GridPane.columnSpan="2"
@@ -89,9 +91,14 @@
                         <padding>
                             <Insets topRightBottomLeft="10"/>
                         </padding>
-                        <VBox fx:id="vboxMultimedia" VBox.vgrow="ALWAYS" minHeight="150" spacing="10">
-                            <MultimediaCargar/>
-                        </VBox>
+                        <HBox>
+                            <TextField fx:id="txtMultimedia" promptText="Multimedia" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
+                            <Button fx:id="btnAgregar" onAction="#agregarMultimedia" maxWidth="Infinity">
+                                <graphic>
+                                    <Glyph fontFamily="FontAwesome" icon="PLUS"/>
+                                </graphic>
+                            </Button>
+                        </HBox>
                     </VBox>
                 </GridPane>
             </VBox>

@@ -3,11 +3,8 @@ package io.github.recetasDivertidas.pkgSubirReceta;
 import io.github.recetasDivertidas.pkgAplicacion.Alerta;
 import io.github.recetasDivertidas.pkgComponentes.CategoriaSubir;
 import io.github.recetasDivertidas.pkgComponentes.IngredienteSubir;
-import io.github.recetasDivertidas.pkgRecetasDivertidas.CategoriaReceta;
-import io.github.recetasDivertidas.pkgRecetasDivertidas.Ingrediente;
-import io.github.recetasDivertidas.pkgRecetasDivertidas.Receta;
-import io.github.recetasDivertidas.pkgRecetasDivertidas.RecetasDivertidas;
-import javafx.event.ActionEvent;
+import io.github.recetasDivertidas.pkgComponentes.MultimediaCargado;
+import io.github.recetasDivertidas.pkgRecetasDivertidas.*;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -19,20 +16,30 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class SubirReceta {
-    @FXML private VBox vboxLeft;
-    @FXML private VBox vboxRight;
-    @FXML private VBox vboxIngredientes;
-    @FXML private VBox vboxCategorias;
-    @FXML private TextField txtTitulo;
-    @FXML private TextArea txaDescripcion;
-    @FXML private TextArea txaInstrucciones;
+    @FXML
+    private VBox vboxDown;
+    @FXML
+    private VBox vboxLeft;
+    @FXML
+    private VBox vboxRight;
+    @FXML
+    private VBox vboxIngredientes;
+    @FXML
+    private VBox vboxCategorias;
+    @FXML
+    private TextField txtTitulo;
+    @FXML
+    private TextArea txaDescripcion;
+    @FXML
+    private TextArea txaInstrucciones;
 
-    @FXML private ComboBox<Ingrediente> cmbIngredientes;
-    @FXML private ComboBox<CategoriaReceta> cmbCategorias;
+    @FXML
+    private ComboBox<Ingrediente> cmbIngredientes;
+    @FXML
+    private ComboBox<CategoriaReceta> cmbCategorias;
 
     @FXML
     private void initialize() {
@@ -132,17 +139,68 @@ public class SubirReceta {
         cmbCategorias.getSelectionModel().clearSelection();
     }
 
-    @FXML
-    private void subirReceta() {
-        Receta receta = new Receta(txtTitulo.getText(),
-                txaDescripcion.getText(),
-                txaInstrucciones.getText(),
-                getIngredientes(),
-                getCategorias());
-
-        receta.subir();
+    public void agregarMultimedia() throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/componentes/multimedia.fxml"));
+        Pane multimedia = loader.load();
+        MultimediaCargado multimediaController = loader.getController();
+        vboxDown.getChildren().add(multimedia);
     }
 
-    public void agregarMultimedia(ActionEvent actionEvent) {
+    @FXML
+    private void subirReceta() {
+        if (checkItems()) {
+            Receta receta = new Receta(txtTitulo.getText(),
+                    txaDescripcion.getText(),
+                    txaInstrucciones.getText(),
+                    getIngredientes(),
+                    getCategorias());
+
+            receta.subir();
+        }
+    }
+
+    private boolean checkItems() {
+        boolean datos_ok = true;
+        Alerta alerta;
+        String partes= "";
+        String STYLE_BUENO = "-fx-control-inner-background: #CCFFCC";
+        String STYLE_MALO = "-fx-control-inner-background: #FFCCCC";
+
+        if (txtTitulo.getText().length() < 3) {
+            txtTitulo.setStyle(STYLE_MALO);
+            partes += "Titulo. ";
+            datos_ok = false;
+        } else {
+            txtTitulo.setStyle(STYLE_BUENO);
+        }
+        if (txaDescripcion.getText().length() < 6) {
+            txaDescripcion.setStyle(STYLE_MALO);
+            partes += "Descripcion. ";
+            datos_ok = false;
+        } else {
+            txaDescripcion.setStyle(STYLE_BUENO);
+        }
+        if (txaInstrucciones.getText().length() < 6) {
+            txaInstrucciones.setStyle(STYLE_MALO);
+            partes += "Instrucciones. ";
+            datos_ok = false;
+        } else {
+            txaInstrucciones.setStyle(STYLE_BUENO);
+        }
+        if (getIngredientes().size() == 0) {
+            partes += "Ingredientes. ";
+            datos_ok = false;
+        }
+        if (getCategorias().size() == 0) {
+            partes += "Categorias. ";
+            datos_ok = false;
+        }
+
+        if (!datos_ok){
+            alerta = new Alerta(Alert.AlertType.ERROR,"Olvidaste llenar las siguientes partes:",partes);
+            alerta.showAndWait();
+        }
+
+        return datos_ok;
     }
 }
