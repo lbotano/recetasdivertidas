@@ -1,6 +1,9 @@
 package servidorRecetasDivertidas;
 
 import java.io.*;
+import java.util.Properties;
+
+//    System.out.println(System.getProperty("user.dir")); directorio actual
 
 public class ArchivoConfiguracion extends File {
     private boolean tuvoQueCrearArchivo = false;
@@ -10,18 +13,20 @@ public class ArchivoConfiguracion extends File {
     private String usuarioMysql;
     private String passMysql;
 
+
     public ArchivoConfiguracion(String path) {
         super(path);
+
         // Crea el archivo si no existe
 
         try {
             if (this.createNewFile()) {
                 FileWriter writer = new FileWriter(this);
-                writer.write("IP: localhost\r\n" +
-                        "Admin-port: 6969\r\n" +
-                        "Client-port: 7070\r\n" +
-                        "Mysql-user: root\r\n" +
-                        "Mysql-pass: 12345");
+                writer.write("IP=localhost\r\n" +
+                        "Admin-port=6969\r\n" +
+                        "Client-port=7070\r\n" +
+                        "Mysql-user=root\r\n" +
+                        "Mysql-pass=12345");
                 writer.close();
                 tuvoQueCrearArchivo = true;
             } else {
@@ -58,30 +63,16 @@ public class ArchivoConfiguracion extends File {
 
     private void cargarDatos() {
         try {
-            BufferedReader br = new BufferedReader(new FileReader(this));
-            String linea, dato, valor;
+            Properties propiedades = new Properties();
 
-            while ((linea = br.readLine()) != null) {
-                dato = linea.substring(0, linea.indexOf(':')).strip();
-                valor = linea.substring(dato.length() + 1).strip();
-
-                switch (dato) {
-                    case "IP":
-                        this.ip = valor;
-                        break;
-                    case "Admin-port":
-                        this.puertoAdmin = valor;
-                        break;
-                    case "Client-port":
-                        this.puertoCliente = valor;
-                        break;
-                    case "Mysql-user":
-                        this.usuarioMysql = valor;
-                        break;
-                    case "Mysql-pass":
-                        this.passMysql = valor;
-                }
-            }
+            FileInputStream file = new FileInputStream(this.getPath());
+            propiedades.load(file);
+            file.close();
+            this.ip = propiedades.getProperty("IP");
+            this.puertoAdmin = propiedades.getProperty("Admin-port");
+            this.puertoCliente = propiedades.getProperty("Client-port");
+            this.usuarioMysql = propiedades.getProperty("Mysql-user");
+            this.passMysql = propiedades.getProperty("Mysql-pass");
         } catch (Exception e) {
             System.out.println("Hubo un error inesperado al leer el archivo de configuración.");
         }

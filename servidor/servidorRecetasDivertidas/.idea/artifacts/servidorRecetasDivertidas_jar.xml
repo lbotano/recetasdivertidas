@@ -1,0 +1,16 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="servidorRecetasDivertidas:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/servidorRecetasDivertidas_jar</output-path>
+    <root id="archive" name="servidorRecetasDivertidas.jar">
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/../JAR/META-INF/MANIFEST.MF" />
+      </element>
+      <element id="module-output" name="servidorRecetasDivertidas" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/google/code/gson/gson/2.8.6/gson-2.8.6.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/google/protobuf/protobuf-java/3.11.4/protobuf-java-3.11.4.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/c3p0/c3p0/0.9.1.2/c3p0-0.9.1.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/mysql/mysql-connector-java/8.0.22/mysql-connector-java-8.0.22.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/mchange/mchange-commons-java/0.2.20/mchange-commons-java-0.2.20.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

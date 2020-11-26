@@ -15,7 +15,7 @@ public class Main {
 	
 
 	public static void main(String[] args) throws Exception {
-		String pathConfig = "src/main/java/servidorRecetasDivertidas/config.conf";
+		String pathConfig = "./config.properties";
 		ArchivoConfiguracion archivoConfig = new ArchivoConfiguracion(pathConfig);
 
 		if (archivoConfig.getTuvoQueCrearArchivo()) {
