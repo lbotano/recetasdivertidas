@@ -19,29 +19,18 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class SubirReceta {
-    @FXML
-    private TextField txtMultimedia;
-    @FXML
-    private VBox vboxDown;
-    @FXML
-    private VBox vboxLeft;
-    @FXML
-    private VBox vboxRight;
-    @FXML
-    private VBox vboxIngredientes;
-    @FXML
-    private VBox vboxCategorias;
-    @FXML
-    private TextField txtTitulo;
-    @FXML
-    private TextArea txaDescripcion;
-    @FXML
-    private TextArea txaInstrucciones;
+    @FXML private TextField txtMultimedia;
+    @FXML private VBox vboxDown;
+    @FXML private VBox vboxLeft;
+    @FXML private VBox vboxRight;
+    @FXML private VBox vboxIngredientes;
+    @FXML private VBox vboxCategorias;
+    @FXML private TextField txtTitulo;
+    @FXML private TextArea txaDescripcion;
+    @FXML private TextArea txaInstrucciones;
 
-    @FXML
-    private ComboBox<Ingrediente> cmbIngredientes;
-    @FXML
-    private ComboBox<CategoriaReceta> cmbCategorias;
+    @FXML private ComboBox<Ingrediente> cmbIngredientes;
+    @FXML private ComboBox<CategoriaReceta> cmbCategorias;
 
     @FXML
     private void initialize() {
@@ -169,42 +158,46 @@ public class SubirReceta {
     private boolean checkItems() {
         boolean datos_ok = true;
         Alerta alerta;
-        String partes= "";
-        String STYLE_BUENO = "-fx-control-inner-background: #CCFFCC";
-        String STYLE_MALO = "-fx-control-inner-background: #FFCCCC";
+        String partes = "";
+        final String STYLE_BUENO = "-fx-control-inner-background: #CCFFCC";
+        final String STYLE_MALO = "-fx-control-inner-background: #FFCCCC";
 
         if (txtTitulo.getText().length() < 3) {
             txtTitulo.setStyle(STYLE_MALO);
-            partes += "Titulo. ";
+            partes += "Titulo\n";
             datos_ok = false;
         } else {
             txtTitulo.setStyle(STYLE_BUENO);
         }
+
         if (txaDescripcion.getText().length() < 6) {
             txaDescripcion.setStyle(STYLE_MALO);
-            partes += "Descripcion. ";
+            partes += "Descripcion\n";
             datos_ok = false;
         } else {
             txaDescripcion.setStyle(STYLE_BUENO);
         }
+
         if (txaInstrucciones.getText().length() < 6) {
             txaInstrucciones.setStyle(STYLE_MALO);
-            partes += "Instrucciones. ";
+            partes += "Instrucciones\n";
             datos_ok = false;
         } else {
             txaInstrucciones.setStyle(STYLE_BUENO);
         }
+
         if (getIngredientes().size() == 0) {
-            partes += "Ingredientes. ";
+            partes += "Ingredientes\n";
             datos_ok = false;
         }
+
         if (getCategorias().size() == 0) {
-            partes += "Categorias. ";
+            partes += "Categorias\n";
             datos_ok = false;
         }
 
         if (!datos_ok){
-            alerta = new Alerta(Alert.AlertType.ERROR,"Olvidaste llenar las siguientes partes:",partes);
+            alerta = new Alerta(Alert.AlertType.ERROR,"Los siguientes campos están vacíos o son muy cortos:", partes);
             alerta.showAndWait();
         }
 

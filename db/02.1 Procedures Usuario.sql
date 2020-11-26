@@ -17,6 +17,8 @@ BEGIN
 	GROUP BY r.rID
 	INTO resultado;
     
+    SELECT IF(resultado IS NULL, 0, resultado) INTO resultado;
+    
     RETURN resultado;
 END//
 DELIMITER ;
