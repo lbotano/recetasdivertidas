@@ -93,7 +93,7 @@ public class SubirReceta {
             if (cmbIngredientes.getValue() != null && !getIngredientes().contains(cmbIngredientes.getValue())) {
                 try {
                     FXMLLoader loader =
-                            new FXMLLoader(getClass().getResource("/fxml/componentes/ingrediente.fxml"));
+                            new FXMLLoader(getClass().getResource("/fxml/componentes/ingrediente_subir.fxml"));
                     Pane paneIngrediente = loader.load();
                     IngredienteSubir controllerIngrediente = loader.getController();
                     controllerIngrediente.setIngrediente(cmbIngredientes.getValue());
