@@ -6,7 +6,6 @@ import io.github.recetasDivertidas.pkgRecetasDivertidas.CategoriaIngrediente;
 import io.github.recetasDivertidas.pkgRecetasDivertidas.CategoriaReceta;
 import io.github.recetasDivertidas.pkgRecetasDivertidas.Ingrediente;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -334,8 +333,8 @@ public class FuncionesAdmin {
                         alerta.showAndWait();
                         cmbBorrarCatIngrediente.getItems().clear();
                         chkcmbCategoriasIngrediente.getItems().clear();
-                        cmbBorrarCatIngrediente.getItems().addAll(CategoriaIngrediente.getCategorias());
-                        chkcmbCategoriasIngrediente.getItems().addAll(CategoriaIngrediente.getCategorias());
+                        cmbBorrarCatIngrediente.getItems().addAll(CategoriaIngrediente.getCategoriasIngrediente());
+                        chkcmbCategoriasIngrediente.getItems().addAll(CategoriaIngrediente.getCategoriasIngrediente());
                     }
 
                     default -> respuestasDeServerComunes(respServer.get(0));
@@ -400,10 +399,10 @@ public class FuncionesAdmin {
     private void initialize() {
         try{
             //llenar comboboxes
-            cmbBorrarCatIngrediente.getItems().addAll(CategoriaIngrediente.getCategorias());
+            cmbBorrarCatIngrediente.getItems().addAll(CategoriaIngrediente.getCategoriasIngrediente());
             cmbBorrarIngrediente.getItems().addAll(Ingrediente.getIngredientes());
             cmbBorrarCatReceta.getItems().addAll(CategoriaReceta.getCategorias());
-            chkcmbCategoriasIngrediente.getItems().addAll(CategoriaIngrediente.getCategorias());
+            chkcmbCategoriasIngrediente.getItems().addAll(CategoriaIngrediente.getCategoriasIngrediente());
         } catch (Exception e) {
             e.printStackTrace();
             Alerta alerta = new Alerta(Alert.AlertType.ERROR,

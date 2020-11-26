@@ -101,6 +101,17 @@ public class Receta {
         return categoriasReceta;
     }
 
+    public ArrayList<CategoriaIngrediente> getCategoriasIngrediente() {
+        /*ArrayList<CategoriaIngrediente> result = ingredientes.get(0).getCategorias();
+
+        // Solo devuelve las categorías que compartan TODOS los ingredientes
+        for (int i = 1; i < result.size(); i++) {
+            result.retainAll(ingredientes.get(i).getCategorias());
+        }
+        return result;*/
+        return categoriasIngrediente;
+    }
+
     // Devuelve la calificación del usuario logueado
     public int getCalificacionPropia() {
         ArrayList<String> mensajeEnviar = new ArrayList<>();

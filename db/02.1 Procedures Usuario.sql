@@ -328,7 +328,7 @@ BEGIN
         r.rID = prID;
 	
     -- Seleccionar categorías los ingredientes
-	SELECT DISTINCT
+	/*SELECT DISTINCT
 		c.cID,
         c.cNombre
     FROM
@@ -340,7 +340,14 @@ BEGIN
 		i.iID = cr.iID AND
         c.cID = cr.cID AND
         i.iID = ir.iID AND
-        ir.rID = prID;
+        ir.rID = prID;*/
+	SELECT COUNT(*) FROM (SELECT DISTINCT iID FROM IngredienteReceta ir WHERE ir.rID = prID) t INTO @cantIngredientes;
+    
+    SELECT c.cID, cNombre FROM RelCatIngred rci
+    INNER JOIN CategoriaDeIngrediente c
+    ON rci.cID = c.cID
+	GROUP BY c.cID, c.cNombre
+	HAVING COUNT(iID) = @cantIngredientes;
 	
     -- Seleccionar multimedia
     SELECT mID, link

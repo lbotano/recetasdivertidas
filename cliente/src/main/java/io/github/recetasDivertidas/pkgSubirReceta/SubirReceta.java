@@ -119,7 +119,7 @@ public class SubirReceta {
         // Detecta que el combobox tenga seleccionado algo y que no se repita
         if (cmbCategorias.getValue() != null && !getCategorias().contains(cmbCategorias.getValue())) {
             try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/componentes/categoria.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/componentes/categoria_subir.fxml"));
                 Pane paneCategoria = loader.load();
                 CategoriaSubir controllerCategoria = loader.getController();
                 controllerCategoria.setCategoria(cmbCategorias.getValue());

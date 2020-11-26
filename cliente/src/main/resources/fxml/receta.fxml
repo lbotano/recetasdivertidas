@@ -49,6 +49,30 @@
                         <Font size="14.0"/>
                     </font>
                 </Label>
+
+                <HBox>
+                    <VBox HBox.hgrow="ALWAYS">
+                        <Label text="Ingredientes">
+                            <font>
+                                <Font size="20"/>
+                            </font>
+                        </Label>
+                        <ScrollPane fitToWidth="true" maxHeight="150">
+                            <VBox fx:id="vboxIngredientes"/>
+                        </ScrollPane>
+                    </VBox>
+                    <VBox HBox.hgrow="ALWAYS">
+                        <Label text="Categorías">
+                            <font>
+                                <Font size="20"/>
+                            </font>
+                        </Label>
+                        <ScrollPane fitToWidth="true" maxHeight="150">
+                            <VBox fx:id="vboxCategorias"/>
+                        </ScrollPane>
+                    </VBox>
+                </HBox>
+
                 <Label text="Instrucciones">
                     <font>
                         <Font size="20"/>
@@ -59,14 +83,7 @@
                         <Font size="14.0"/>
                     </font>
                 </Label>
-                <Label text="Ingredientes">
-                    <font>
-                        <Font size="20"/>
-                    </font>
-                </Label>
-                <ScrollPane fitToWidth="true" maxHeight="150">
-                    <VBox fx:id="vboxIngredientes"/>
-                </ScrollPane>
+
                 <Label text="Imagenes">
                     <font>
                         <Font size="20"/>

@@ -75,8 +75,8 @@ CALL spAgregarCategoríaIngrediente("Vegetariano");
 CALL spAgregarCategoríaIngrediente("Con azucar");
 
 -- Añadir ingredientes
-CALL spAgregarIngrediente("Leche", '[{"cID":1},{"cID":3}]');
-CALL spAgregarIngrediente("Azúcar", '[{"cID":1},{"cID":2}]');
+CALL spAgregarIngrediente("Leche", '[{"cID":2},{"cID":3}]');
+CALL spAgregarIngrediente("Azúcar", '[{"cID":1},{"cID":2},{"cID":3},{"cID":4}]');
 
 -- Subir receta
 CALL spSubirReceta (

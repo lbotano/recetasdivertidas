@@ -7,26 +7,13 @@ import javafx.scene.control.Alert;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class CategoriaIngrediente {
-    private final int id;
-    private final String nombre;
-
+public class CategoriaIngrediente extends CategoriaReceta {
     public CategoriaIngrediente(int id, String nombre){
-        this.id = id;
-        this.nombre = nombre;
-    }
-
-    @Override
-    public String toString() {
-        return this.nombre;
-    }
-
-    public int getId() {
-        return id;
+        super(id, nombre);
     }
 
     // Devuelve todas las categorías de ingrediente
-    public static ArrayList<CategoriaIngrediente> getCategorias() throws IOException, ClassNotFoundException {
+    public static ArrayList<CategoriaIngrediente> getCategoriasIngrediente() throws IOException, ClassNotFoundException {
         ArrayList<String> mensajeEnviar = new ArrayList<>();
         mensajeEnviar.add("LISTARCATING");
 

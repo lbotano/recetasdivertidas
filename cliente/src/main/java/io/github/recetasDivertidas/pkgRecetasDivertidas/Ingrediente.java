@@ -58,6 +58,10 @@ public class Ingrediente {
         this.categorias.add(categoria);
     }
 
+    public ArrayList<CategoriaIngrediente> getCategorias() {
+        return categorias;
+    }
+
     public static ArrayList<Ingrediente> getIngredientes() throws IOException, ClassNotFoundException {
         ArrayList<Ingrediente> ingredientes = new ArrayList<>();
         ArrayList<String> mensajeEnviar = new ArrayList<>();
