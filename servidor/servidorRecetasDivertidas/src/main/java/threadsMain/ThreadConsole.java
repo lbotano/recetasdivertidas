@@ -12,16 +12,13 @@ import java.util.ArrayList;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
 public class ThreadConsole implements Runnable {
-	private ThreadServer refServerAdmin;
-	private ThreadServer refServerClient;
-	private ComboPooledDataSource cpds;
+	private final ThreadServer refServer;
+	private final ComboPooledDataSource cpds;
 	private Connection con;
 	private boolean exit = false;
-	private final String commands = "stop; newAdmin <nickname>;";
-	
-	public ThreadConsole(ComboPooledDataSource c, ThreadServer refAdmin, ThreadServer refClient) {
-		this.refServerAdmin = refAdmin;
-		this.refServerClient = refClient;
+
+	public ThreadConsole(ComboPooledDataSource c, ThreadServer refServer) {
+		this.refServer = refServer;
 		this.cpds = c;
 	}
 	
@@ -31,10 +28,8 @@ public class ThreadConsole implements Runnable {
 			while (!exit) {
 				input = br.readLine().strip();
 				if(input.contentEquals("stop")) {
-					refServerAdmin.shutDownServer();
-					refServerAdmin.shutDownThreadPool(20);
-					refServerClient.shutDownServer();
-					refServerClient.shutDownThreadPool(20);
+					refServer.shutDownServer();
+					refServer.shutDownThreadPool(20);
 					exit = true;
 				}else if(input.contains("newAdmin")) {
 
@@ -60,13 +55,14 @@ public class ThreadConsole implements Runnable {
 							try {
 								con.close();
 							} catch (SQLException throwables) {
-								System.out.println("Console: rror while trying to close connection for console");
+								System.out.println("Console: error while trying to close connection for console");
 							}
 						}
 					}else{
 						System.out.println("Console: The number of parameters is not valid!");
 					}
 				}else {
+					String commands = "stop; newAdmin <nickname>;";
 					System.out.println("Console: " +input + " is not a valid command! try: " + commands);
 				}						
 			}

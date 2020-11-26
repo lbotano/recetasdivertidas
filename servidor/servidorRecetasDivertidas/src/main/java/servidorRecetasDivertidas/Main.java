@@ -45,25 +45,19 @@ public class Main {
 		// Iniciar el server
         Connection c = null;
 		try {
-            System.out.println("Testing database connection...");
 
+            System.out.println("Testing database connection...");
             c = cpds.getConnection();
             c.close();
             System.out.println("Database OK");
 
-			ThreadServer admin = new ThreadServer(true, cpds, archivoConfig.getPuertoAdmin(), 3);
-			Thread ServerAdmin = new Thread(admin);
-			ServerAdmin.setPriority(Thread.MAX_PRIORITY -1);
-			
-			ThreadServer client = new ThreadServer(false, cpds, archivoConfig.getPuertoCliente(), 3);
-			Thread ServerClient = new Thread(client);
-			
-			ServerAdmin.start();
-			ServerClient.start();			
-			
-			Thread ServerConsole = new Thread(new ThreadConsole(cpds, admin, client));		
+			ThreadServer server = new ThreadServer(true, cpds, archivoConfig.getPuerto(), 3);
+			Thread threadServer = new Thread(server);
+
+			Thread ServerConsole = new Thread(new ThreadConsole(cpds, server));
 			ServerConsole.setPriority(Thread.MAX_PRIORITY);
-			
+
+			threadServer.start();
 			ServerConsole.start();
 
 		}catch(Exception e) {

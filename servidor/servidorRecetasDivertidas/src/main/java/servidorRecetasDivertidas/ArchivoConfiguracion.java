@@ -7,9 +7,8 @@ import java.util.Properties;
 
 public class ArchivoConfiguracion extends File {
     private boolean tuvoQueCrearArchivo = false;
-    private String ip;
-    private String puertoAdmin;
-    private String puertoCliente;
+    private String mysqlIp;
+    private String puerto;
     private String usuarioMysql;
     private String passMysql;
 
@@ -22,11 +21,10 @@ public class ArchivoConfiguracion extends File {
         try {
             if (this.createNewFile()) {
                 FileWriter writer = new FileWriter(this);
-                writer.write("IP=localhost\r\n" +
-                        "Admin-port=6969\r\n" +
-                        "Client-port=7070\r\n" +
-                        "Mysql-user=root\r\n" +
-                        "Mysql-pass=12345");
+                writer.write("Port=7070\r\n" +
+                            "Mysql-IP=localhost\r\n" +
+                            "Mysql-user=root\r\n" +
+                            "Mysql-pass=12345");
                 writer.close();
                 tuvoQueCrearArchivo = true;
             } else {
@@ -42,15 +40,11 @@ public class ArchivoConfiguracion extends File {
     }
 
     public String getIp() {
-        return ip;
+        return mysqlIp;
     }
 
-    public int getPuertoAdmin() {
-        return Integer.parseInt(puertoAdmin);
-    }
-
-    public int getPuertoCliente() {
-        return Integer.parseInt(puertoCliente);
+    public int getPuerto() {
+        return Integer.parseInt(puerto);
     }
 
     public String getUsuarioMysql() {
@@ -68,9 +62,8 @@ public class ArchivoConfiguracion extends File {
             FileInputStream file = new FileInputStream(this.getPath());
             propiedades.load(file);
             file.close();
-            this.ip = propiedades.getProperty("IP");
-            this.puertoAdmin = propiedades.getProperty("Admin-port");
-            this.puertoCliente = propiedades.getProperty("Client-port");
+            this.puerto = propiedades.getProperty("Port");
+            this.mysqlIp = propiedades.getProperty("Mysql-IP");
             this.usuarioMysql = propiedades.getProperty("Mysql-user");
             this.passMysql = propiedades.getProperty("Mysql-pass");
         } catch (Exception e) {
@@ -79,30 +72,18 @@ public class ArchivoConfiguracion extends File {
     }
 
     public boolean validarDatos() {
-        if (ipEsInvalida(ip) && !ip.equals("localhost")) {
+        if (ipEsInvalida(mysqlIp) && !mysqlIp.equals("localhost")) {
             System.out.println("Error: Dirección IP inválida.");
-            System.out.println(ip);
+            System.out.println(mysqlIp);
             return false;
         }
 
-        if (puertoAdmin.equals(puertoCliente)){
-            System.out.println("Error: El puerto del admin y el puerto del cliente no pueden ser el mismo.");
+        if (puertoEsInvalido(puerto)) {
+            System.out.println("Error: Puerto inválido.");
             return false;
         }
-
-        if (puertoEsInvalido(puertoAdmin)) {
-            System.out.println("Error: Puerto para admin inválido.");
-            return false;
-        }
-
-        if (puertoEsInvalido(puertoCliente)) {
-            System.out.println("Error: Puerto para cliente inválido.");
-            return false;
-        }
-
         if (usuarioMysql == null || usuarioMysql.equals("")) {
             System.out.println("Error: El usuario de MySQL tiene que estar especificado");
-            System.out.println(usuarioMysql);
             return false;
         }
 
