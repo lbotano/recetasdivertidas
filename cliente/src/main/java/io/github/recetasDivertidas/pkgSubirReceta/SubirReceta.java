@@ -16,6 +16,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
+import java.io.InvalidObjectException;
 import java.util.ArrayList;
 
 public class SubirReceta {
@@ -61,11 +62,12 @@ public class SubirReceta {
         }
     }
 
-    private ArrayList<Ingrediente> getIngredientes() {
+    private ArrayList<Ingrediente> getIngredientes() throws InvalidObjectException {
         ArrayList<Ingrediente> ingredientes = new ArrayList<>();
 
         for (Node n : vboxIngredientes.getChildren()) {
             Ingrediente i = (Ingrediente) n.getUserData();
+            if (i.getCantidad() <= 0) throw new InvalidObjectException("Hay un ingrediente que no tiene cantidad");
             ingredientes.add(i);
         }
 
@@ -87,20 +89,25 @@ public class SubirReceta {
     private void agregarIngrediente() {
 
         // Detecta que el combobox tenga seleccionado algo y que no se repita
-        if (cmbIngredientes.getValue() != null && !getIngredientes().contains(cmbIngredientes.getValue())) {
-            try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/componentes/ingrediente.fxml"));
-                Pane paneIngrediente = loader.load();
-                IngredienteSubir controllerIngrediente = loader.getController();
-                controllerIngrediente.setIngrediente(cmbIngredientes.getValue());
-                vboxIngredientes.getChildren().add(paneIngrediente);
-            } catch (IOException e) {
-                e.printStackTrace();
-                Alerta alerta = new Alerta(Alert.AlertType.ERROR,
-                        "Error inesperado",
-                        "Hubo un error inesperado");
-                alerta.showAndWait();
+        try {
+            if (cmbIngredientes.getValue() != null && !getIngredientes().contains(cmbIngredientes.getValue())) {
+                try {
+                    FXMLLoader loader =
+                            new FXMLLoader(getClass().getResource("/fxml/componentes/ingrediente.fxml"));
+                    Pane paneIngrediente = loader.load();
+                    IngredienteSubir controllerIngrediente = loader.getController();
+                    controllerIngrediente.setIngrediente(cmbIngredientes.getValue());
+                    vboxIngredientes.getChildren().add(paneIngrediente);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    Alerta alerta = new Alerta(Alert.AlertType.ERROR,
+                            "Error inesperado",
+                            "Hubo un error inesperado");
+                    alerta.showAndWait();
+                }
             }
+        } catch (InvalidObjectException e) {
+            // Se ignora porque no importa por ahora si un ingrediente no tiene especificada su cantidad
         }
 
         // Reinicia el combobox
@@ -152,14 +159,22 @@ public class SubirReceta {
 
     @FXML
     private void subirReceta() {
-        if (checkItems()) {
-            Receta receta = new Receta(txtTitulo.getText(),
-                    txaDescripcion.getText(),
-                    txaInstrucciones.getText(),
-                    getIngredientes(),
-                    getCategorias());
+        try {
+            if (checkItems()) {
+                Receta receta = new Receta(txtTitulo.getText(),
+                        txaDescripcion.getText(),
+                        txaInstrucciones.getText(),
+                        getIngredientes(),
+                        getCategorias());
 
-            receta.subir();
+                receta.subir();
+            }
+        } catch (InvalidObjectException e) {
+            e.printStackTrace();
+            Alerta alerta = new Alerta(Alert.AlertType.ERROR,
+                    "Error al subir receta",
+                    "Al menos uno de los ingredientes no tiene especificada una cantidad");
+            alerta.showAndWait();
         }
     }
 
@@ -194,9 +209,13 @@ public class SubirReceta {
             txaInstrucciones.setStyle(STYLE_BUENO);
         }
 
-        if (getIngredientes().size() == 0) {
-            partes += "Ingredientes\n";
-            datos_ok = false;
+        try {
+            if (getIngredientes().size() == 0) {
+                partes += "Ingredientes\n";
+                datos_ok = false;
+            }
+        } catch (InvalidObjectException e) {
+            // Hay un ingrediente sin unidad
         }
 
         if (getCategorias().size() == 0) {
@@ -205,7 +224,9 @@ public class SubirReceta {
         }
 
         if (!datos_ok){
-            alerta = new Alerta(Alert.AlertType.ERROR,"Los siguientes campos están vacíos o son muy cortos:", partes);
+            alerta = new Alerta(Alert.AlertType.ERROR,
+                    "Los siguientes campos están vacíos o son muy cortos:",
+                    partes);
             alerta.showAndWait();
         }
 
