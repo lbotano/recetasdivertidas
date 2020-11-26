@@ -93,6 +93,14 @@ public class Receta {
         return calificacion;
     }
 
+    public ArrayList<Ingrediente> getIngredientes() {
+        return ingredientes;
+    }
+
+    public ArrayList<CategoriaReceta> getCategoriasReceta() {
+        return categoriasReceta;
+    }
+
     // Devuelve la calificación del usuario logueado
     public int getCalificacionPropia() {
         ArrayList<String> mensajeEnviar = new ArrayList<>();

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import org.controlsfx.glyphfont.Glyph?>
+<HBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="io.github.recetasDivertidas.pkgComponentes.IngredienteBajar"
+      fx:id="root"
+      alignment="BASELINE_LEFT">
+    <Label fx:id="lblIngrediente" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+    <Label fx:id="lblCantidad"/>
+    <Label fx:id="lblUnidad"/>
+</HBox>
