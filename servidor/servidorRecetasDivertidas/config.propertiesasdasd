@@ -1,5 +1,0 @@
-IP=localhost
-Admin-port=6969
-Client-port=7070
-Mysql-user=root
-Mysql-pass=12345
