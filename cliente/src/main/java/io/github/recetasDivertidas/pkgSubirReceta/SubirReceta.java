@@ -131,14 +131,22 @@ public class SubirReceta {
     }
 
     public void agregarMultimedia() throws IOException {
-        if(txtMultimedia.getText().length() > 0) { //TODO: Confirmar que sea un link de una imagen
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/componentes/multimedia.fxml"));
-            Pane multimedia = loader.load();
-            MultimediaCargado multimediaController = loader.getController();
-            multimediaController.setMultimedia(txtMultimedia.getText());
-            txtMultimedia.setText("");
+        try {
+            if(txtMultimedia.getText().length() > 0) {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/componentes/multimedia.fxml"));
+                Pane multimedia = loader.load();
+                MultimediaCargado multimediaController = loader.getController();
+                    multimediaController.setMultimedia(txtMultimedia.getText());
 
-            vboxDown.getChildren().add(multimedia);
+                txtMultimedia.setText("");
+
+                vboxDown.getChildren().add(multimedia);
+            }
+        } catch (IllegalArgumentException e) {
+            Alerta alerta = new Alerta(Alert.AlertType.ERROR,
+                    "Enlace inválido",
+                    "El enlace multimedia es inválido.");
+            alerta.showAndWait();
         }
     }
 
