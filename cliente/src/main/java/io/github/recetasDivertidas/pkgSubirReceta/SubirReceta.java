@@ -21,7 +21,7 @@ import java.util.ArrayList;
 
 public class SubirReceta {
     @FXML private TextField txtMultimedia;
-    @FXML private VBox vboxDown;
+    @FXML private VBox vboxMultimedia;
     @FXML private VBox vboxLeft;
     @FXML private VBox vboxRight;
     @FXML private VBox vboxIngredientes;
@@ -147,7 +147,7 @@ public class SubirReceta {
 
                 txtMultimedia.setText("");
 
-                vboxDown.getChildren().add(multimedia);
+                vboxMultimedia.getChildren().add(multimedia);
             }
         } catch (IllegalArgumentException e) {
             Alerta alerta = new Alerta(Alert.AlertType.ERROR,
@@ -168,6 +168,7 @@ public class SubirReceta {
                         getCategorias());
 
                 receta.subir();
+                limpiarCampos();
             }
         } catch (InvalidObjectException e) {
             e.printStackTrace();
@@ -231,5 +232,23 @@ public class SubirReceta {
         }
 
         return datos_ok;
+    }
+
+    // Limpia todos los campos
+    private void limpiarCampos() {
+        txtTitulo.setStyle("");
+        txaDescripcion.setStyle("");
+        txaInstrucciones.setStyle("");
+
+        txtTitulo.clear();
+        txaDescripcion.clear();
+        txaInstrucciones.clear();
+        txtMultimedia.clear();
+        cmbIngredientes.getSelectionModel().clearSelection();
+        cmbCategorias.getSelectionModel().clearSelection();
+        vboxIngredientes.getChildren().clear();
+        vboxCategorias.getChildren().clear();
+        txtMultimedia.clear();
+        vboxMultimedia.getChildren().clear();
     }
 }

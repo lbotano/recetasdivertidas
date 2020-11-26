@@ -78,10 +78,9 @@
                             </graphic>
                         </Button>
                     </VBox>
-                    <VBox fx:id="vboxDown"
+                    <VBox
                           styleClass="lista"
                           spacing="10"
-                          minHeight="150"
                           VBox.vgrow="ALWAYS"
                           GridPane.rowIndex="3"
                           GridPane.columnIndex="0"
@@ -99,6 +98,7 @@
                                 </graphic>
                             </Button>
                         </HBox>
+                        <VBox fx:id="vboxMultimedia" spacing="10" minHeight="150" VBox.vgrow="ALWAYS"/>
                     </VBox>
                 </GridPane>
             </VBox>
