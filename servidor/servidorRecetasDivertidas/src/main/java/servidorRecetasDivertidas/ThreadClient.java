@@ -71,6 +71,7 @@ public class ThreadClient implements Runnable{
 	private static final String BORRARCATREC = "{call spBorrarCategoriaReceta(?)}";
 	private static final String BORRARREC = "{call spAdminBorrarReceta(?)}";
 	private static final String BORRARING = "{call spBorrarIngrediente(?)}";
+	private static final String PERDONARUSU = "{call spPerdonarUsuarui(?)}";
 	private static final String SUBIRCATING = "{call spAgregarCategoriaIngrediente(?)}";
 	private static final String SUBIRCATREC = "{call spAgregarCategoriaReceta(?)}";
 	private static final String SUBIRING = "{call spAgregarIngrediente(?,?)}";
@@ -661,6 +662,19 @@ public class ThreadClient implements Runnable{
 		}
 	}
 
+	//---- ADMIN -----
+
+	private void banearUsuario() {
+		try {
+			stmt = conn.prepareCall(BANEARUSUARIO);
+			stmt.setString(1, message.get(1));
+			stmt.execute();
+			answer.add("BANEARUSUOK");
+		} catch (SQLException e) {
+			sqlExceptionHandler(e, "BORRARUSUFAIL");
+		}
+	}
+
 	private void borrarCatIng() {
 		try {
 			stmt = conn.prepareCall(BORRARCATING);
@@ -717,14 +731,14 @@ public class ThreadClient implements Runnable{
 		}
 	}
 
-	private void banearUsuario() {
-		try {
-			stmt = conn.prepareCall(BANEARUSUARIO);
+	private void perdonarUsu(){
+		try{
+			stmt = conn.prepareCall(PERDONARUSU);
 			stmt.setString(1, message.get(1));
 			stmt.execute();
-			answer.add("BANEARUSUOK");
+			answer.add("PERDONARUSUOK");
 		} catch (SQLException e) {
-			sqlExceptionHandler(e, "BORRARUSUFAIL");
+			sqlExceptionHandler(e, "PERDONARUSUFAIL");
 		}
 	}
 
@@ -852,6 +866,9 @@ public class ThreadClient implements Runnable{
 
 	private void ejecutarPeticionAdmin() {
 		switch (message.get(0)) {
+			case "BANEARUSUARIO":
+				banearUsuario();
+				break;
 			case "BORRARCATING":
 				borrarCatIng();
 				break;
@@ -864,8 +881,8 @@ public class ThreadClient implements Runnable{
 			case "BORRARING":
 				borrarIng();
 				break;
-			case "BANEARUSUARIO":
-				banearUsuario();
+			case "PERDONARUSU":
+				perdonarUsu();
 				break;
 			case "SUBIRCATING":
 				if(stringValidator.esSubirCatValido())
