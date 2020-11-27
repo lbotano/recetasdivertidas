@@ -15,6 +15,10 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.layout.HBox?>
 
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.util.Duration?>
 <BorderPane fx:id="borderpane"
             xmlns="http://javafx.com/javafx/11.0.1"
             xmlns:fx="http://javafx.com/fxml/1" fx:controller="io.github.recetasDivertidas.pkgSubirReceta.SubirReceta"
@@ -53,7 +57,15 @@
                         <padding>
                             <Insets topRightBottomLeft="10"/>
                         </padding>
-                        <ComboBox fx:id="cmbIngredientes" promptText="Ingredientes" maxWidth="Infinity"/>
+                        <ComboBox fx:id="cmbIngredientes" promptText="Ingredientes" maxWidth="Infinity">
+                            <tooltip>
+                                <Tooltip text="Recuerde de llenar todos los casilleros cuando seleccione un ingrediente">
+                                    <showDelay><Duration millis="0"/></showDelay>
+                                    <hideDelay><Duration millis="0"/></hideDelay>
+                                    <graphic><ImageView><Image url="/atention.png"/></ImageView></graphic>
+                                </Tooltip>
+                            </tooltip>
+                        </ComboBox>
                         <VBox fx:id="vboxIngredientes" VBox.vgrow="ALWAYS" minHeight="150" spacing="10"/>
                         <Button text="Agregar" onAction="#agregarIngrediente" maxWidth="Infinity">
                             <graphic>
@@ -70,7 +82,15 @@
                         <padding>
                             <Insets topRightBottomLeft="10"/>
                         </padding>
-                        <ComboBox fx:id="cmbCategorias" promptText="Categorías" maxWidth="Infinity"/>
+                        <ComboBox fx:id="cmbCategorias" promptText="Categorías" maxWidth="Infinity">
+                            <tooltip>
+                                <Tooltip text="No se olvide de seleccionar para que clase de comida es su receta">
+                                    <showDelay><Duration millis="0"/></showDelay>
+                                    <hideDelay><Duration millis="0"/></hideDelay>
+                                    <graphic><ImageView><Image url="/atention.png"/></ImageView></graphic>
+                                </Tooltip>
+                            </tooltip>
+                        </ComboBox>
                         <VBox fx:id="vboxCategorias" VBox.vgrow="ALWAYS" minHeight="150" spacing="10"/>
                         <Button fx:id="btnAgregarCat" text="Agregar" onAction="#agregarCategoria" maxWidth="Infinity">
                             <graphic>
@@ -91,7 +111,15 @@
                             <Insets topRightBottomLeft="10"/>
                         </padding>
                         <HBox>
-                            <TextField fx:id="txtMultimedia" promptText="Multimedia" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
+                            <TextField fx:id="txtMultimedia" promptText="Multimedia" maxWidth="Infinity" HBox.hgrow="ALWAYS">
+                                <tooltip>
+                                    <Tooltip text="Ingrese links de internet que terminen en un formato de imagen como .png o .jpg">
+                                        <showDelay><Duration millis="0"/></showDelay>
+                                        <hideDelay><Duration millis="0"/></hideDelay>
+                                        <graphic><ImageView><Image url="/atention.png"/></ImageView></graphic>
+                                    </Tooltip>
+                                </tooltip>
+                            </TextField>
                             <Button fx:id="btnAgregar" onAction="#agregarMultimedia" maxWidth="Infinity">
                                 <graphic>
                                     <Glyph fontFamily="FontAwesome" icon="PLUS"/>

@@ -6,6 +6,7 @@ import io.github.recetasDivertidas.pkgRecetasDivertidas.CategoriaIngrediente;
 import io.github.recetasDivertidas.pkgRecetasDivertidas.CategoriaReceta;
 import io.github.recetasDivertidas.pkgRecetasDivertidas.Ingrediente;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -411,5 +412,11 @@ public class FuncionesAdmin {
             alerta.showAndWait();
         }
 
+    }
+
+    public void borrarReceta(ActionEvent actionEvent) {
+    }
+
+    public void desbanearUsuario(ActionEvent actionEvent) {
     }
 }

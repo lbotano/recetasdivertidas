@@ -6,6 +6,10 @@
 <?import java.net.URL?>
 <?import org.controlsfx.glyphfont.Glyph?>
 
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.util.Duration?>
+<?import javafx.scene.image.Image?>
 <BorderPane maxHeight="Infinity"
             maxWidth="Infinity"
             prefHeight="700.0"
@@ -27,6 +31,13 @@
                <graphic>
                    <Glyph fontFamily="FontAwesome" icon="HOME"/>
                </graphic>
+               <tooltip>
+                   <Tooltip text="Aquí podra ver las mejores recetas que tenemos">
+                       <showDelay><Duration millis="400"/></showDelay>
+                       <hideDelay><Duration millis="0"/></hideDelay>
+                       <graphic><ImageView><Image url="/atention.png"/></ImageView></graphic>
+                   </Tooltip>
+               </tooltip>
            </Button>
            <Button maxHeight="Infinity"
                    fx:id="btnPerfil"
@@ -35,6 +46,13 @@
                <graphic>
                    <Glyph fontFamily="FontAwesome" icon="USER"/>
                </graphic>
+               <tooltip>
+                   <Tooltip text="Aquí podra ver sus recetas y cambiar de contraseña">
+                       <showDelay><Duration millis="400"/></showDelay>
+                       <hideDelay><Duration millis="0"/></hideDelay>
+                       <graphic><ImageView><Image url="/atention.png"/></ImageView></graphic>
+                   </Tooltip>
+               </tooltip>
            </Button>
            <Button maxHeight="Infinity"
                    fx:id="btnBusquedaIng"
@@ -44,6 +62,13 @@
                <graphic>
                    <Glyph fontFamily="FontAwesome" icon="SEARCH"/>
                </graphic>
+               <tooltip>
+                   <Tooltip text="Aquí podra buscar una receta por ingredientes">
+                       <showDelay><Duration millis="400"/></showDelay>
+                       <hideDelay><Duration millis="0"/></hideDelay>
+                       <graphic><ImageView><Image url="/atention.png"/></ImageView></graphic>
+                   </Tooltip>
+               </tooltip>
            </Button>
            <Button maxHeight="Infinity"
                    fx:id="btnBusquedaCat"
@@ -53,6 +78,13 @@
                <graphic>
                    <Glyph fontFamily="FontAwesome" icon="SEARCH"/>
                </graphic>
+               <tooltip>
+                   <Tooltip text="Aquí podra buscar recetas por que tipo de comida son">
+                       <showDelay><Duration millis="400"/></showDelay>
+                       <hideDelay><Duration millis="0"/></hideDelay>
+                       <graphic><ImageView><Image url="/atention.png"/></ImageView></graphic>
+                   </Tooltip>
+               </tooltip>
            </Button>
            <Button maxHeight="Infinity"
                    fx:id="btnBusquedaTexto"
@@ -62,6 +94,13 @@
                <graphic>
                    <Glyph fontFamily="FontAwesome" icon="SEARCH"/>
                </graphic>
+               <tooltip>
+                   <Tooltip text="Aquí podra encontrar recetas escribiendo que desea buscar">
+                       <showDelay><Duration millis="400"/></showDelay>
+                       <hideDelay><Duration millis="0"/></hideDelay>
+                       <graphic><ImageView><Image url="/atention.png"/></ImageView></graphic>
+                   </Tooltip>
+               </tooltip>
            </Button>
            <Button maxHeight="Infinity"
                    fx:id="btnSubirReceta"
@@ -71,6 +110,13 @@
                <graphic>
                    <Glyph fontFamily="FontAwesome" icon="PENCIL"/>
                </graphic>
+               <tooltip>
+                   <Tooltip text="Aquí podra compartir sus propias recetas con la comunidad">
+                       <showDelay><Duration millis="400"/></showDelay>
+                       <hideDelay><Duration millis="0"/></hideDelay>
+                       <graphic><ImageView><Image url="/atention.png"/></ImageView></graphic>
+                   </Tooltip>
+               </tooltip>
            </Button>
            <Button maxHeight="Infinity"
                    fx:id="btnAdmin"
@@ -80,6 +126,13 @@
                <graphic>
                    <Glyph fontFamily="FontAwesome" icon="USER_SECRET"/>
                </graphic>
+               <tooltip>
+                   <Tooltip text="Aquí podra utilizar sus poderes de administrador">
+                       <showDelay><Duration millis="400"/></showDelay>
+                       <hideDelay><Duration millis="0"/></hideDelay>
+                       <graphic><ImageView><Image url="/atention.png"/></ImageView></graphic>
+                   </Tooltip>
+               </tooltip>
            </Button>
        </HBox>
    </top>
