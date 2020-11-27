@@ -401,10 +401,6 @@ public class FuncionesAdmin {
 
     }
 
-    public void borrarReceta() {
-
-    }
-
     public void desbanearUsuario() {
         ArrayList<String> respServer;
         try{
