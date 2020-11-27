@@ -120,6 +120,33 @@ BEGIN
 END//
 DELIMITER ;
 
+-- Perdonar usuario 
+DROP PROCEDURE IF EXISTS spPerdonarUsuario;
+DELIMITER //
+CREATE PROCEDURE spPerdonarUsuario
+(
+	puNickname varchar(32)
+)
+BEGIN
+	DECLARE existeUsuario boolean;
+    
+    -- Averiguar si el usuario existe
+	SELECT COUNT(*) > 0
+    INTO existeUsuario
+	FROM Usuario
+    WHERE uNickname = puNickname;
+    
+    IF NOT existeUsuario THEN
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Este usuario no existe';
+    ELSE
+		UPDATE Usuario
+		SET uHabilitado = true
+		WHERE uNickname = puNickname;
+    END IF;
+END//
+DELIMITER ;
+
+
 -- Borrar receta (como usuario, sólo se puede borrar la receta de uno mismo)
 DROP PROCEDURE IF EXISTS spAdminBorrarReceta;
 DELIMITER //
