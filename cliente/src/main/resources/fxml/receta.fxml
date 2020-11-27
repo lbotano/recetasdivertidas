@@ -11,6 +11,7 @@
 <?import io.github.recetasDivertidas.pkgComponentes.Calificador?>
 <?import org.controlsfx.glyphfont.Glyph?>
 
+<?import javafx.scene.control.Button?>
 <BorderPane xmlns="http://javafx.com/javafx/11.0.1"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="io.github.recetasDivertidas.pkgRecetas.RecetaController">
@@ -24,15 +25,20 @@
                     <Font size="26.0" />
                 </font>
             </Label>
-            <Calificador fx:id="calificador"/>
-            <HBox>
-                <Label text="Calificación: "/>
-                <Label fx:id="lblCalificacion">
+            <Button fx:id="btnBorrar" text="Borrar" onAction="#borrarReceta">
+                <graphic>
+                    <Glyph fontFamily="FontAwesome" icon="CLOSE"/>
+                </graphic>
+            </Button>
+            <Calificador fx:id="calificador" alignment="BASELINE_LEFT"/>
+            <HBox alignment="BASELINE_LEFT">
+                <Label text="Calificación: " alignment="CENTER" maxHeight="Infinity"/>
+                <Label fx:id="lblCalificacion" alignment="CENTER" maxHeight="Infinity">
                     <graphic>
                         <Glyph fontFamily="FontAwesome" icon="STAR"/>
                     </graphic>
                 </Label>
-                <Label fx:id="lblCantCalificaciones"/>
+                <Label fx:id="lblCantCalificaciones" alignment="CENTER" maxHeight="Infinity"/>
             </HBox>
         </HBox>
     </top>
@@ -84,7 +90,7 @@
                     </font>
                 </Label>
 
-                <Label text="Imagenes">
+                <Label text="Multimedia">
                     <font>
                         <Font size="20"/>
                     </font>

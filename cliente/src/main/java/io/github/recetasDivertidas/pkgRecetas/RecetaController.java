@@ -1,44 +1,62 @@
 package io.github.recetasDivertidas.pkgRecetas;
 
 import io.github.recetasDivertidas.pkgAplicacion.Alerta;
+import io.github.recetasDivertidas.pkgAplicacion.Aplicacion;
 import io.github.recetasDivertidas.pkgComponentes.Calificador;
 import io.github.recetasDivertidas.pkgComponentes.CategoriaBajar;
 import io.github.recetasDivertidas.pkgComponentes.IngredienteBajar;
-import io.github.recetasDivertidas.pkgRecetasDivertidas.CategoriaIngrediente;
-import io.github.recetasDivertidas.pkgRecetasDivertidas.CategoriaReceta;
-import io.github.recetasDivertidas.pkgRecetasDivertidas.Ingrediente;
-import io.github.recetasDivertidas.pkgRecetasDivertidas.Receta;
+import io.github.recetasDivertidas.pkgConexion.Conexion;
+import io.github.recetasDivertidas.pkgRecetasDivertidas.*;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
+import java.awt.*;
 import java.io.IOException;
+import java.util.ArrayList;
 
 
 public class RecetaController {
-    @FXML private Label lblTitulo;
-    @FXML private Label lblCalificacion;
-    @FXML private Calificador calificador;
-    @FXML private Label lblCantCalificaciones;
-    @FXML private Label lblDescripcion;
-    @FXML private Label lblInstrucciones;
-    @FXML private VBox vboxIngredientes;
-    @FXML private VBox vboxCategorias;
+    @FXML
+    private Button btnBorrar;
+    @FXML
+    private Label lblTitulo;
+    @FXML
+    private Label lblCalificacion;
+    @FXML
+    private Calificador calificador;
+    @FXML
+    private Label lblCantCalificaciones;
+    @FXML
+    private Label lblDescripcion;
+    @FXML
+    private Label lblInstrucciones;
+    @FXML
+    private VBox vboxIngredientes;
+    @FXML
+    private VBox vboxCategorias;
 
     private Receta receta;
 
     public void setReceta(Receta receta) {
         this.receta = receta;
 
+        //Si sos el autor entonces poder borrarlo
+        if (!this.receta.getAutor().equals(RecetasDivertidas.username))
+            btnBorrar.setVisible(false);
         lblTitulo.setText(this.receta.getTitulo());
         lblCalificacion.setText(String.valueOf(this.receta.getCalificacion()));
         calificador.setCalificacionApariencia(this.receta.getCalificacionPropia());
-        lblCantCalificaciones.setText(String.valueOf(this.receta.getCantCalificaciones()));
+        lblCantCalificaciones.setText("(" + this.receta.getCantCalificaciones() + ")");
         lblDescripcion.setText(this.receta.getDescripcion());
         lblInstrucciones.setText(this.receta.getInstrucciones());
 
@@ -99,6 +117,55 @@ public class RecetaController {
                 receta.calificar(calificador.getCalificacionPuesta());
                 receta.actualizarSimple();
                 calificador.setCalificacionApariencia(receta.getCalificacionPropia());
+            }
+        });
+    }
+
+    @FXML
+    private void borrarReceta() {
+        //Alerta de si quiere borrar receta
+        Alert alertPregunta = new Alert(Alert.AlertType.CONFIRMATION);
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        ImageView imgView = new ImageView(new Image(getClass().getResourceAsStream("/atention.png")));
+        imgView.setSmooth(false);
+        alertPregunta.setTitle("Recetas divertidas");
+        alertPregunta.setHeaderText("¿Está segurx que quiere borrar la receta?");
+        alertPregunta.setGraphic(imgView);
+        alertPregunta.setContentText("No hay marcha atrás en esta acción");
+        alertPregunta.setX(screenSize.getWidth()/2.5);
+        alertPregunta.setY(screenSize.getHeight()/4);
+        alertPregunta.initOwner(Aplicacion.window.getScene().getWindow());
+
+        alertPregunta.showAndWait().ifPresent(response -> {
+            if (response == ButtonType.OK) {
+                ArrayList<String> msg = new ArrayList<>();
+                msg.add("BORRARRECUSU");
+                msg.add(String.valueOf(this.receta.getId()));
+                msg.add(RecetasDivertidas.username);
+
+                try {
+                    ArrayList<String> ans = Conexion.sendMessage(msg);
+                    switch (ans.get(0)){
+                        case "BORRARRECOK" -> {
+                            Alerta alerta = new Alerta(Alert.AlertType.CONFIRMATION,
+                                    "Borrado exitoso",
+                                    "La receta se ha borrado con exito");
+                            alerta.showAndWait();
+                        }
+                        case "BORRARRECFAIL" -> {
+                            Alerta alerta = new Alerta(Alert.AlertType.ERROR,
+                                    "Error al borrar receta",
+                                    ans.get(1));
+                            alerta.showAndWait();
+                        }
+                    }
+                } catch (IOException | ClassNotFoundException e) {
+                    e.printStackTrace();
+                    Alerta a = new Alerta(Alert.AlertType.ERROR,
+                            "Error inesperado",
+                            "Hubo un error inesperado");
+                    a.showAndWait();
+                }
             }
         });
     }

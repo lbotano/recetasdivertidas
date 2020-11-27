@@ -3,6 +3,8 @@ package io.github.recetasDivertidas.pkgRecetasDivertidas;
 import io.github.recetasDivertidas.pkgAplicacion.Alerta;
 import io.github.recetasDivertidas.pkgConexion.Conexion;
 import javafx.scene.control.Alert;
+import org.controlsfx.glyphfont.FontAwesome;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
