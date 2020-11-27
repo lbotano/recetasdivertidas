@@ -71,7 +71,7 @@ public class ThreadClient implements Runnable{
 	private static final String BORRARCATREC = "{call spBorrarCategoriaReceta(?)}";
 	private static final String BORRARREC = "{call spAdminBorrarReceta(?)}";
 	private static final String BORRARING = "{call spBorrarIngrediente(?)}";
-	private static final String PERDONARUSU = "{call spPerdonarUsuarui(?)}";
+	private static final String PERDONARUSU = "{call spPerdonarUsuario(?)}";
 	private static final String SUBIRCATING = "{call spAgregarCategoriaIngrediente(?)}";
 	private static final String SUBIRCATREC = "{call spAgregarCategoriaReceta(?)}";
 	private static final String SUBIRING = "{call spAgregarIngrediente(?,?)}";

@@ -35,6 +35,12 @@ public class FuncionesAdmin {
     @FXML TextField txtBanearUsuario;
     @FXML Button btnBanearUsuario;
 
+    @FXML TextField txtBorrarRec;
+    @FXML Button btnBorrarRec;
+
+    @FXML TextField txtDesbanearUsuario;
+    @FXML Button btnDesbanearUsuario;
+
     @FXML TextField txtSubirCatIng;
     @FXML Button btnSubirCatIng;
 
@@ -76,6 +82,11 @@ public class FuncionesAdmin {
         return Conexion.sendMessage(mensaje);
     }
 
+    public ArrayList<String> consPerdonarUsu (String nickname)throws IOException, ClassNotFoundException {
+        mensaje = new ArrayList<>(Arrays.asList("PERDONARUSU", nickname));
+        return Conexion.sendMessage(mensaje);
+    }
+
     public ArrayList<String> consSubirCategoriaIngrediente (String nombreCategoria)
             throws IOException, ClassNotFoundException {
         mensaje = new ArrayList<>(Arrays.asList("SUBIRCATING", nombreCategoria));
@@ -87,9 +98,7 @@ public class FuncionesAdmin {
         return Conexion.sendMessage(mensaje);
     }
 
-    public ArrayList<String> consSubirIngrediente (String nombreIngrediente,
-                                                   ObservableList<CategoriaIngrediente> categorias)
-            throws IOException, ClassNotFoundException {
+    public ArrayList<String> consSubirIngrediente (String nombreIngrediente, ObservableList<CategoriaIngrediente> categorias) throws IOException, ClassNotFoundException {
         mensaje = new ArrayList<>();
         mensaje.add("SUBIRING");
         mensaje.add(nombreIngrediente);
@@ -129,7 +138,7 @@ public class FuncionesAdmin {
                             alerta.showAndWait();
                         }
                         case "BORRARCATINGOK" -> {
-                            alerta = new Alerta(Alert.AlertType.CONFIRMATION,
+                            alerta = new Alerta(Alert.AlertType.INFORMATION,
                                     "Todo salio bien!",
                                     "Se borro correctamente la categoria");
                             alerta.showAndWait();
@@ -167,7 +176,7 @@ public class FuncionesAdmin {
                             alerta.showAndWait();
                         }
                         case "BORRARCATRECOK" -> {
-                            alerta = new Alerta(Alert.AlertType.CONFIRMATION,
+                            alerta = new Alerta(Alert.AlertType.INFORMATION,
                                     "Todo salio bien!",
                                     "Se borro correctamente la categoria");
                             alerta.showAndWait();
@@ -188,7 +197,6 @@ public class FuncionesAdmin {
         }
     }
 
-    @FXML
     public void borrarIngrediente() {
         ArrayList<String> respServer;
         Alerta alerta;
@@ -206,7 +214,7 @@ public class FuncionesAdmin {
                             alerta.showAndWait();
                         }
                         case "BORRARINGOK" -> {
-                            alerta = new Alerta(Alert.AlertType.CONFIRMATION,
+                            alerta = new Alerta(Alert.AlertType.INFORMATION,
                                     "Todo salio bien!",
                                     "Se borro correctamente el ingrediente");
                             alerta.showAndWait();
@@ -246,7 +254,7 @@ public class FuncionesAdmin {
                         alerta.showAndWait();
                     }
                     case "SUBIRCATRECOK" ->{
-                        alerta = new Alerta(Alert.AlertType.CONFIRMATION,
+                        alerta = new Alerta(Alert.AlertType.INFORMATION,
                                 "Todo salio bien!",
                                 "Se ha subido la categoria de receta correctamente");
                         alerta.showAndWait();
@@ -288,7 +296,7 @@ public class FuncionesAdmin {
                         alerta.showAndWait();
                     }
                     case "SUBIRINGOK" ->{
-                        alerta = new Alerta(Alert.AlertType.CONFIRMATION,
+                        alerta = new Alerta(Alert.AlertType.INFORMATION,
                                 "Todo salio bien!",
                                 "Se ha subido el ingrediente correctamente");
                         alerta.showAndWait();
@@ -328,7 +336,7 @@ public class FuncionesAdmin {
                         alerta.showAndWait();
                     }
                     case "SUBIRCATINGOK" ->{
-                        alerta = new Alerta(Alert.AlertType.CONFIRMATION,
+                        alerta = new Alerta(Alert.AlertType.INFORMATION,
                                 "Todo salio bien!",
                                 "Se ha subido la categoria de ingrediente correctamente");
                         alerta.showAndWait();
@@ -358,8 +366,6 @@ public class FuncionesAdmin {
 
     public void banearUsuario() {
         ArrayList<String> respServer;
-        Alerta alerta;
-
         try {
             respServer = consBanearUsuario(txtBanearUsuario.getText());
             if (respServer != null) {
@@ -371,7 +377,7 @@ public class FuncionesAdmin {
                         alerta.showAndWait();
                     }
                     case "BANEARUSUOK" -> {
-                        alerta = new Alerta(Alert.AlertType.CONFIRMATION,
+                        alerta = new Alerta(Alert.AlertType.INFORMATION,
                                 "Todo salio bien!",
                                 "Se ha baneado al usuario correctamente");
                         alerta.showAndWait();
@@ -395,6 +401,44 @@ public class FuncionesAdmin {
 
     }
 
+    public void borrarReceta() {
+
+    }
+
+    public void desbanearUsuario() {
+        ArrayList<String> respServer;
+        try{
+            respServer = consPerdonarUsu(txtDesbanearUsuario.getText());
+            if (respServer != null) {
+                switch (respServer.get(0)) {
+                    case "PERDONARUSUFAIL" -> {
+                        alerta = new Alerta(Alert.AlertType.ERROR,
+                                "Error",
+                                "No se ha podido perdonar al usuario");
+                        alerta.showAndWait();
+                    }
+                    case "PERDONARUSUOK" -> {
+                        alerta = new Alerta(Alert.AlertType.INFORMATION,
+                                "Todo salio bien!",
+                                "Se ha perdonado al usuario");
+                        alerta.showAndWait();
+                    }
+                    default -> respuestasDeServerComunes(respServer.get(0));
+                }
+            } else {
+                alerta = new Alerta(Alert.AlertType.ERROR,
+                        "No se ha podido conectar con el servidor",
+                        "El server no responde");
+                alerta.showAndWait();
+            }
+        }  catch (Exception e) {
+            e.printStackTrace();
+            alerta = new Alerta(Alert.AlertType.ERROR,
+                    "Error inesperado",
+                    "Hubo un error al enviar el mensaje");
+            alerta.showAndWait();
+        }
+    }
 
     @FXML
     private void initialize() {
@@ -412,11 +456,5 @@ public class FuncionesAdmin {
             alerta.showAndWait();
         }
 
-    }
-
-    public void borrarReceta(ActionEvent actionEvent) {
-    }
-
-    public void desbanearUsuario(ActionEvent actionEvent) {
     }
 }
