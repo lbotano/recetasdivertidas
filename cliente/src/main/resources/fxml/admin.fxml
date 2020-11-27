@@ -45,15 +45,6 @@
                     <ComboBox promptText="Borrar Categoria Receta" maxWidth="Infinity" fx:id="cmbBorrarCatReceta" HBox.hgrow="ALWAYS"/>
                     <Button fx:id="btnBorrarCatReceta" text="Borrar Categoria Receta" minWidth="170" onAction="#borrarCatReceta"/>
                 </HBox>
-                <Label text="Borrar una receta">
-                    <font>
-                        <Font size="14.0"/>
-                    </font>
-                </Label>
-                <HBox spacing="5">
-                    <TextField fx:id="txtBorrarRec" promptText="Nombre de la receta" HBox.hgrow="ALWAYS"/>
-                    <Button fx:id="btnBorrarRec" text="Borrar Receta" minWidth="170" onAction="#borrarReceta"/>
-                </HBox>
                 <Label text="Banear usuario">
                     <font>
                         <Font size="14.0"/>

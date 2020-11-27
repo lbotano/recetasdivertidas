@@ -19,6 +19,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 import java.awt.*;
 import java.io.IOException;
@@ -50,9 +51,10 @@ public class RecetaController {
     public void setReceta(Receta receta) {
         this.receta = receta;
 
-        //Si sos el autor entonces poder borrarlo
-        if (!this.receta.getAutor().equals(RecetasDivertidas.username))
-            btnBorrar.setVisible(false);
+        btnBorrar.setVisible(false);
+        //Si sos el autor o admin entonces podes borrar receta
+        if (this.receta.getAutor().equals(RecetasDivertidas.username) || RecetasDivertidas.logueadoComoAdmin)
+            btnBorrar.setVisible(true);
         lblTitulo.setText(this.receta.getTitulo());
         lblCalificacion.setText(String.valueOf(this.receta.getCalificacion()));
         calificador.setCalificacionApariencia(this.receta.getCalificacionPropia());
@@ -136,12 +138,18 @@ public class RecetaController {
         alertPregunta.setY(screenSize.getHeight()/4);
         alertPregunta.initOwner(Aplicacion.window.getScene().getWindow());
 
+        //Obtiene la respuesta
         alertPregunta.showAndWait().ifPresent(response -> {
             if (response == ButtonType.OK) {
                 ArrayList<String> msg = new ArrayList<>();
-                msg.add("BORRARRECUSU");
-                msg.add(String.valueOf(this.receta.getId()));
-                msg.add(RecetasDivertidas.username);
+                if(RecetasDivertidas.logueadoComoAdmin){
+                    msg.add("BORRARREC");
+                    msg.add(String.valueOf(this.receta.getId()));
+                }else {
+                    msg.add("BORRARRECUSU");
+                    msg.add(String.valueOf(this.receta.getId()));
+                    msg.add(RecetasDivertidas.username);
+                }
 
                 try {
                     ArrayList<String> ans = Conexion.sendMessage(msg);
@@ -151,6 +159,8 @@ public class RecetaController {
                                     "Borrado exitoso",
                                     "La receta se ha borrado con exito");
                             alerta.showAndWait();
+                            Stage stage = (Stage) btnBorrar.getScene().getWindow();
+                            stage.close();
                         }
                         case "BORRARRECFAIL" -> {
                             Alerta alerta = new Alerta(Alert.AlertType.ERROR,
