@@ -20,6 +20,12 @@ INSERT INTO PreguntasSeguridad (pregunta)
 VALUES ("¿Cómo se llamó tu primer mascota?");
 INSERT INTO PreguntasSeguridad (pregunta)
 VALUES ("¿Cuál fue tu primer auto?");
+INSERT INTO PreguntasSeguridad (pregunta)
+VALUES ("¿Cómo se llama tu mejor amigo de la infancia?");
+INSERT INTO PreguntasSeguridad (pregunta)
+VALUES ("¿Cuál es tu pelicula favorita?");
+INSERT INTO PreguntasSeguridad (pregunta)
+VALUES ("¿Cómo se llama tu serie preferida?");
 
 -- Insertar usuarios
 CALL spRegistroUsuario (
@@ -67,12 +73,17 @@ CALL spCambiarContrasena(
 -- Añadir categorías de recetas
 CALL spAgregarCategoriaReceta("Almuerzo");
 CALL spAgregarCategoriaReceta("Postre");
+CALL spAgregarCategoriaReceta("Cena");
+CALL spAgregarCategoriaReceta("Desayuno");
+CALL spAgregarCategoriaReceta("Merienda");
+CALL spAgregarCategoriaReceta("Colación");
 
 -- Añadir categorías de ingredientes
 CALL spAgregarCategoriaIngrediente("Vegano");
 CALL spAgregarCategoriaIngrediente("Celíaco");
 CALL spAgregarCategoríaIngrediente("Vegetariano");
 CALL spAgregarCategoríaIngrediente("Con azucar");
+CALL spAgregarCategoríaIngrediente("Carnes");
 
 -- Añadir ingredientes
 CALL spAgregarIngrediente("Leche", '[{"cID":2},{"cID":3}]');
