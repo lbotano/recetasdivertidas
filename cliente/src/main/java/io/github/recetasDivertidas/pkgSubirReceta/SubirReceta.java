@@ -220,7 +220,7 @@ public class SubirReceta {
         }
 
         if (getCategorias().size() == 0) {
-            partes += "Categorias\n";
+            partes += "Categorias";
             datos_ok = false;
         }
 
