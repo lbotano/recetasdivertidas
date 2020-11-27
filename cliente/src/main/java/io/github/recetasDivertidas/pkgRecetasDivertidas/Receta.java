@@ -79,9 +79,7 @@ public class Receta {
         return autor;
     }
 
-    public String getTitulo() {
-        return titulo;
-    }
+    public String getTitulo() { return titulo; }
 
     public String getDescripcion() {
         return descripcion;
