@@ -52,10 +52,6 @@ public class Multimedia {
         return img;
     }
 
-    public String getUrlEmbeed() {
-        return urlEmbeed;
-    }
-
     public boolean esVideoYoutube() {
         return esVideoYoutube;
     }
