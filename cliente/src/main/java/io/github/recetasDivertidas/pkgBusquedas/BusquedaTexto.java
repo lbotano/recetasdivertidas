@@ -33,8 +33,6 @@ public class BusquedaTexto {
             message.add(String.valueOf(paginaActual));
             message.add(txtBuscar.getText());
 
-            vboxResultados.getChildren().clear();
-
             if (Conexion.isSvResponse()) {
                 ArrayList<String> ans = Conexion.sendMessage(message);
                 if (ans.size() > 0) {
@@ -43,13 +41,16 @@ public class BusquedaTexto {
                             try {
                                 // Convierte los strings de la consulta en objetos Receta
                                 recetas = Receta.getRecetasConsultaBusquedas(ans);
-                                // Muestra las recetas
-                                for (Receta r : recetas) {
-                                    FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/componentes/resultado_busqueda.fxml"));
-                                    HBox paneReceta = fxmlLoader.load();
-                                    ResultadoBusqueda controllerResultadoBusqueda = fxmlLoader.getController();
-                                    controllerResultadoBusqueda.ponerReceta(r);
-                                    vboxResultados.getChildren().add(paneReceta);
+                                if(recetas.size() > 0) {
+                                    vboxResultados.getChildren().clear();
+                                    // Muestra las recetas
+                                    for (Receta r : recetas) {
+                                        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/componentes/resultado_busqueda.fxml"));
+                                        HBox paneReceta = fxmlLoader.load();
+                                        ResultadoBusqueda controllerResultadoBusqueda = fxmlLoader.getController();
+                                        controllerResultadoBusqueda.ponerReceta(r);
+                                        vboxResultados.getChildren().add(paneReceta);
+                                    }
                                 }
                             } catch (MensajeServerInvalidoException e) {
                                 Alerta alerta = new Alerta(Alert.AlertType.ERROR,

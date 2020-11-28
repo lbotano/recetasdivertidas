@@ -37,15 +37,17 @@ public class BusquedaCategoria {
     @FXML
     private void buscar() {
         try {
-            vboxResultados.getChildren().clear();
             ArrayList<Receta> recetasEncontradas = Receta.getRecetasCategorias(paginaActual, chkcmbCategorias.getCheckModel().getCheckedItems());
 
-            for (Receta receta : recetasEncontradas) {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/componentes/resultado_busqueda.fxml"));
-                Pane res = loader.load();
-                ResultadoBusqueda resController = loader.getController();
-                resController.ponerReceta(receta);
-                vboxResultados.getChildren().add(res);
+            if (recetasEncontradas.size() > 0) {
+                vboxResultados.getChildren().clear();
+                for (Receta receta : recetasEncontradas) {
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/componentes/resultado_busqueda.fxml"));
+                    Pane res = loader.load();
+                    ResultadoBusqueda resController = loader.getController();
+                    resController.ponerReceta(receta);
+                    vboxResultados.getChildren().add(res);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
