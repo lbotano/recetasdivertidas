@@ -12,17 +12,18 @@
 <?import org.controlsfx.glyphfont.Glyph?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.FlowPane?>
 <BorderPane xmlns="http://javafx.com/javafx/11.0.1"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="io.github.recetasDivertidas.pkgRecetas.RecetaController">
     <padding>
-        <Insets topRightBottomLeft="10" />
+        <Insets topRightBottomLeft="10"/>
     </padding>
     <top>
         <HBox alignment="BASELINE_LEFT" spacing="5" maxWidth="Infinity">
             <Label fx:id="lblTitulo" text="Título super genial" HBox.hgrow="ALWAYS" maxWidth="Infinity">
                 <font>
-                    <Font size="26.0" />
+                    <Font size="26.0"/>
                 </font>
             </Label>
             <Button fx:id="btnBorrar" text="Borrar" onAction="#borrarReceta">
@@ -44,7 +45,11 @@
     </top>
     <center>
         <ScrollPane fitToWidth="true">
-            <VBox>
+            <VBox spacing="10">
+                <padding>
+                    <Insets topRightBottomLeft="10"/>
+                </padding>
+
                 <Label text="Descripcion">
                     <font>
                         <Font size="20"/>
@@ -52,11 +57,14 @@
                 </Label>
                 <Label fx:id="lblDescripcion" wrapText="true">
                     <font>
-                        <Font size="14.0"/>
+                        <Font size="14"/>
                     </font>
                 </Label>
 
-                <HBox>
+                <HBox spacing="10">
+                    <padding>
+                        <Insets topRightBottomLeft="10"/>
+                    </padding>
                     <VBox HBox.hgrow="ALWAYS">
                         <Label text="Ingredientes">
                             <font>
@@ -64,7 +72,11 @@
                             </font>
                         </Label>
                         <ScrollPane fitToWidth="true" maxHeight="150" VBox.vgrow="ALWAYS">
-                            <VBox fx:id="vboxIngredientes"/>
+                            <VBox fx:id="vboxIngredientes">
+                                <padding>
+                                    <Insets topRightBottomLeft="10"/>
+                                </padding>
+                            </VBox>
                         </ScrollPane>
                     </VBox>
                     <VBox HBox.hgrow="ALWAYS">
@@ -74,7 +86,11 @@
                             </font>
                         </Label>
                         <ScrollPane fitToWidth="true" maxHeight="150" VBox.vgrow="ALWAYS">
-                            <VBox fx:id="vboxCategorias"/>
+                            <VBox fx:id="vboxCategorias">
+                                <padding>
+                                    <Insets topRightBottomLeft="10"/>
+                                </padding>
+                            </VBox>
                         </ScrollPane>
                     </VBox>
                 </HBox>
@@ -96,7 +112,7 @@
                             <Font size="20"/>
                         </font>
                     </Label>
-                    <VBox fx:id="vboxMultimedia"/>
+                    <FlowPane fx:id="fpMultimedia" vgap="10" hgap="10"/>
                 </VBox>
             </VBox>
         </ScrollPane>

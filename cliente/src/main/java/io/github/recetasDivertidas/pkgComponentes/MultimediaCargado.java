@@ -10,10 +10,10 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 
 public class MultimediaCargado {
-    public HBox root;
-    public Hyperlink lblMultimedia;
-    public Button btnRemover;
-    public ImageView imgView;
+    @FXML public HBox root;
+    @FXML public Hyperlink lblMultimedia;
+    @FXML public Button btnRemover;
+    @FXML public ImageView imgView;
 
     private Multimedia multimedia;
 

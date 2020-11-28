@@ -11,8 +11,8 @@
       xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="io.github.recetasDivertidas.pkgComponentes.ResultadoBusqueda"
       spacing="15">
-    <VBox HBox.hgrow="ALWAYS">
-        <HBox onMouseClicked="#onAbrirReceta">
+    <VBox styleClass="clickable" HBox.hgrow="ALWAYS" onMouseClicked="#onAbrirReceta">
+        <HBox>
             <Label fx:id="lblTitulo"
                    text="Título"
                    HBox.hgrow="ALWAYS"

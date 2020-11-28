@@ -63,7 +63,7 @@ public class ThreadClient implements Runnable{
 	private static final String REGISTRO = "{call spRegistroUsuario(?,?,?,?,?,?,?,?,?,?)}";
 	private static final String SUBIRRECETA = "{call spSubirReceta(?,?,?,?,?,?,?)}";
 	private static final String USUPREGSEG = "SELECT * FROM PreguntasSeguridad WHERE id in" +
-											" (SELECT uPreguntaSeguridad FROM Usuario WHERE uNickname = ?)";
+											" (SELECT uPreguntaSeguridad FROM Usuario| WHERE uNickname = ?)";
 
 	// SPs para admin
 	private static final String BANEARUSUARIO = "{call spBaneoUsuario(?)}";

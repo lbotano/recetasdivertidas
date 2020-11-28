@@ -25,6 +25,11 @@
             <artifactId>controlsfx</artifactId>
             <version>11.0.2</version>
         </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-web</artifactId>
+            <version>16-ea+4</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>

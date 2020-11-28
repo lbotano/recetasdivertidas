@@ -1,5 +1,6 @@
 package io.github.recetasDivertidas.pkgRecetas;
 
+import io.github.recetasDivertidas.pkgAbrirMultimedia.MultimediaStage;
 import io.github.recetasDivertidas.pkgAplicacion.Alerta;
 import io.github.recetasDivertidas.pkgAplicacion.Aplicacion;
 import io.github.recetasDivertidas.pkgComponentes.Calificador;
@@ -7,6 +8,7 @@ import io.github.recetasDivertidas.pkgComponentes.CategoriaBajar;
 import io.github.recetasDivertidas.pkgComponentes.IngredienteBajar;
 import io.github.recetasDivertidas.pkgConexion.Conexion;
 import io.github.recetasDivertidas.pkgRecetasDivertidas.*;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
@@ -15,6 +17,8 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -22,7 +26,6 @@ import javafx.stage.Stage;
 import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
-
 
 public class RecetaController {
     @FXML private Button btnBorrar;
@@ -35,7 +38,7 @@ public class RecetaController {
     @FXML private VBox vboxIngredientes;
     @FXML private VBox vboxCategorias;
     @FXML private VBox vboxMultimediaBox;
-    @FXML private VBox vboxMultimedia;
+    @FXML private FlowPane fpMultimedia;
 
     private Receta receta;
 
@@ -105,13 +108,28 @@ public class RecetaController {
         }
 
         // Añadir multimedia
-        if (this.receta.getMultimedia().size() < 1 && vboxMultimedia.getParent() instanceof Pane) {
+        if (this.receta.getMultimedia().size() < 1 && fpMultimedia.getParent() instanceof Pane) {
             // Si no hay multimedia elimina todos los elementos gráficos que tengan que ver con ella.
-            ((Pane) vboxMultimedia.getParent()).getChildren().remove(vboxMultimediaBox);
+            ((Pane) fpMultimedia.getParent()).getChildren().remove(vboxMultimediaBox);
         } else {
             for (Multimedia m : this.receta.getMultimedia()) {
                 ImageView multimediaImg = new ImageView(m.getImg());
-                vboxMultimedia.getChildren().add(multimediaImg);
+                multimediaImg.setUserData(m);
+
+                multimediaImg.setFitWidth(190);
+                multimediaImg.setFitHeight(100);
+                multimediaImg.setPreserveRatio(true);
+
+                fpMultimedia.getChildren().add(multimediaImg);
+
+                multimediaImg.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent mouseEvent) {
+                        ImageView source = (ImageView) mouseEvent.getSource();
+                        MultimediaStage ventanaMultimedia = new MultimediaStage((Multimedia) source.getUserData());
+                        ventanaMultimedia.show();
+                    }
+                });
             }
         }
 
