@@ -5,6 +5,7 @@ import io.github.recetasDivertidas.pkgConexion.Conexion;
 import io.github.recetasDivertidas.pkgRecetasDivertidas.CategoriaIngrediente;
 import io.github.recetasDivertidas.pkgRecetasDivertidas.CategoriaReceta;
 import io.github.recetasDivertidas.pkgRecetasDivertidas.Ingrediente;
+import io.github.recetasDivertidas.pkgSubirReceta.SubirReceta;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
