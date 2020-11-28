@@ -68,7 +68,7 @@
                                 </Tooltip>
                             </tooltip>
                         </ComboBox>
-                        <VBox fx:id="vboxIngredientes" VBox.vgrow="ALWAYS" minHeight="150" spacing="10"/>
+                        <VBox fx:id="vboxIngredientes" VBox.vgrow="ALWAYS" minHeight="150" maxHeight="Infinity" spacing="10"/>
                         <Button text="Agregar" onAction="#agregarIngrediente" maxWidth="Infinity">
                             <graphic>
                                 <Glyph fontFamily="FontAwesome" icon="PLUS"/>
