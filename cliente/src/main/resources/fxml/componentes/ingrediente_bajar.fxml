@@ -9,6 +9,8 @@
       fx:controller="io.github.recetasDivertidas.pkgComponentes.IngredienteBajar"
       fx:id="root"
       alignment="BASELINE_LEFT">
+    <CheckBox/>
+    <Region prefWidth="10"/>
     <Label fx:id="lblIngrediente" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
     <Label fx:id="lblCantidad"/>
     <Label fx:id="lblUnidad"/>

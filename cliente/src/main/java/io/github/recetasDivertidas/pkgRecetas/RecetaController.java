@@ -25,6 +25,8 @@ import javafx.stage.Stage;
 
 import java.awt.*;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 
 public class RecetaController {
@@ -119,6 +121,7 @@ public class RecetaController {
                 multimediaImg.setFitWidth(190);
                 multimediaImg.setFitHeight(100);
                 multimediaImg.setPreserveRatio(true);
+                multimediaImg.setStyle("-fx-cursor: hand");
 
                 fpMultimedia.getChildren().add(multimediaImg);
 
@@ -126,8 +129,21 @@ public class RecetaController {
                     @Override
                     public void handle(MouseEvent mouseEvent) {
                         ImageView source = (ImageView) mouseEvent.getSource();
-                        MultimediaStage ventanaMultimedia = new MultimediaStage((Multimedia) source.getUserData());
-                        ventanaMultimedia.show();
+                        Multimedia multimedia = (Multimedia) source.getUserData();
+                        if (multimedia.esVideoYoutube()) {
+                            try {
+                                Desktop.getDesktop().browse(new URI(multimedia.getUrl()));
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                Alerta alerta = new Alerta(Alert.AlertType.ERROR,
+                                        "Error inesperado",
+                                        "No se pudo abrir el video");
+                                alerta.showAndWait();
+                            }
+                        } else {
+                            MultimediaStage ventanaMultimedia = new MultimediaStage((Multimedia) source.getUserData());
+                            ventanaMultimedia.show();
+                        }
                     }
                 });
             }

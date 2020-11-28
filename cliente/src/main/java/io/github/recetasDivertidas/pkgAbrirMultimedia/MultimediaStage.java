@@ -6,9 +6,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.web.WebEngine;
-import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 
 
@@ -25,17 +22,10 @@ public class MultimediaStage extends Stage {
         this.setTitle(this.multimedia.esVideoYoutube() ? "Video" : "Imágen");
         this.getIcons().add(new Image(getClass().getResourceAsStream("/logo_recetas_divertidas.png")));
 
-        Parent parent;
-        if (this.multimedia.esVideoYoutube()) {
-            parent = new WebView();
-            System.out.println(this.multimedia.getUrlEmbeed());
-            ((WebView)parent).getEngine().load(this.multimedia.getUrlEmbeed());
-        } else {
-            parent = new ScrollPane();
-            ImageView viewImagen = new ImageView(this.multimedia.getImg());
-            ((ScrollPane) parent).setContent(viewImagen);
-        }
-        Scene scene = new Scene(parent);
+        ScrollPane scrollPane = new ScrollPane();
+        ImageView viewImagen = new ImageView(this.multimedia.getImg());
+        scrollPane.setContent(viewImagen);
+        Scene scene = new Scene(scrollPane);
 
         setScene(scene);
     }
