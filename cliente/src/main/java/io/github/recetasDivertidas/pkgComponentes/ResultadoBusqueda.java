@@ -8,6 +8,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -19,6 +20,7 @@ public class ResultadoBusqueda {
     @FXML private Label lblCalificacion;
     @FXML private Label lblCantCalificaciones;
     @FXML private Calificador calificador;
+    @FXML private HBox paneResultado;
 
     Receta receta;
 
@@ -26,6 +28,16 @@ public class ResultadoBusqueda {
         this.receta = receta;
 
         actualizarDatos();
+    }
+
+    @FXML
+    private void hovered(){
+        this.paneResultado.setStyle("-fx-background-color: #E1E1E1");
+    }
+
+    @FXML
+    private void exited(){
+        this.paneResultado.setStyle("");
     }
 
     private void actualizarDatos() {

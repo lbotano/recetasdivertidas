@@ -50,7 +50,10 @@
     </top>
     <center>
         <ScrollPane fitToWidth="true">
-            <VBox fx:id="vboxMisRecetas"/>
+            <VBox fx:id="vboxMisRecetas"
+                  maxWidth="Infinity"
+                  maxHeight="Infinity">
+            </VBox>
         </ScrollPane>
    </center>
 </BorderPane>

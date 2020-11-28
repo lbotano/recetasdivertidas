@@ -34,11 +34,10 @@
             </VBox>
         </top>
         <center>
-            <ScrollPane maxWidth="Infinity" fitToWidth="true">
-                <VBox fx:id="vboxResultados" maxHeight="Infinity" maxWidth="Infinity" spacing="15">
-                    <padding>
-                        <Insets topRightBottomLeft="15"/>
-                    </padding>
+            <ScrollPane fitToWidth="true">
+                <VBox fx:id="vboxResultados"
+                      maxWidth="Infinity"
+                      maxHeight="Infinity">
                 </VBox>
             </ScrollPane>
         </center>
