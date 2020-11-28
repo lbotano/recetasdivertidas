@@ -119,6 +119,7 @@ public class RecetaController {
                 multimediaImg.setFitWidth(190);
                 multimediaImg.setFitHeight(100);
                 multimediaImg.setPreserveRatio(true);
+                multimediaImg.setStyle("-fx-cursor: hand");
 
                 fpMultimedia.getChildren().add(multimediaImg);
 
