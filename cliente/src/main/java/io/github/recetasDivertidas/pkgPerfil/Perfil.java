@@ -104,6 +104,7 @@ public class Perfil {
         }
     }
 
+
     private void showRecetasUsuario() {
         vboxMisRecetas.getChildren().clear();
 
@@ -146,6 +147,10 @@ public class Perfil {
                                 "Su contraseña se ha cambiado con exito");
                         a.showAndWait();
                         stage.close();
+                        txtRespuesta.setText("");
+                        txtRespuesta.setStyle("");
+                        txtNewPwd.setText("");
+                        txtNewPwd.setStyle("");
                     }
                     case "CAMBIARCONTRAFAIL" -> {
                         Alerta a = new Alerta(Alert.AlertType.ERROR, "Ha ocurrido un error", ans.get(1));
