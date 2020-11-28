@@ -40,3 +40,61 @@ Truco: el almíbar es muy sencillo de hacer: hierve el agua con el azúcar por 2
 '[{"link":"https://t1.rg.ltmcdn.com/es/images/1/3/7/torta_matera_74731_paso_0_600.jpg"}, {"link":"https://t2.rg.ltmcdn.com/es/images/1/3/7/torta_matera_74731_paso_1_600.jpg"}, {"link":"https://t1.rg.ltmcdn.com/es/images/1/3/7/torta_matera_74731_paso_2_600.jpg"}, {"link":"https://t2.rg.ltmcdn.com/es/images/1/3/7/torta_matera_74731_paso_3_600.jpg"}, {"link":"https://t2.rg.ltmcdn.com/es/images/1/3/7/torta_matera_74731_paso_4_600.jpg"}, {"link":"https://t2.rg.ltmcdn.com/es/images/1/3/7/torta_matera_74731_paso_5_600.jpg"}, {"link":"https://t1.rg.ltmcdn.com/es/images/1/3/7/torta_matera_74731_paso_6_600.jpg"}]',
 '[{"cID":5}]'
 );
+
+CAll spSubirReceta(
+	'Chefsito',
+    'Milanesa de berenjena',
+    'En esta receta traemos una opción deliciosa para los vegetarianos',
+    'El primer paso para realizar nuestra receta de milanesas de berenjena es prealistar los ingredientes.
+
+1
+Lava las berenjenas y retira el tallo, corta a lo largo como se ve en la fotografía.
+
+2
+Remoja las berenjenas en agua y sal durante unos 30 minutos para retirar el amargo que contiene esta verduras.
+
+3
+Una vez transcurra este tiempo, vamos a realizar el rebozado de nuestras milanesas argentinas vegetarianas. Entonces en un bol adiciona la miga de pan, sal y orégano. Mezcla muy bien hasta integrar los ingredientes.
+
+4
+Adiciona los huevos en un bol aparte con sal y pimienta al gusto. Bate como si fueses a realizar una tortilla.
+
+5
+A continuación, vamos a mostrar la forma correcta de realizar el rebozado. Primero pasamos nuestras milanesas de berenjena por el huevo, bañando muy bien y luego en la miga de pan. Muchas personas utilizan harina de trigo antes de rebozar pueden hacerlo si desean.
+
+6
+Antes de rebozar, agrega un poco de sal de ajo o pasta de ajo a cada una de las milanesas argentinas.
+
+7
+Reboza de la forma que expliqué en el paso seis y reserva nuestras milanesas de berenjena.
+
+8
+Lleva una sartén a fuego medio con un poquito de aceite de girasol, una vez caliente añade nuestras milanesas de berenjena y deja sofreír por cada uno de los lados. Dale la vuelta a cada una de éstas con una pinza y una vez doradas por lado y lado están listas para disfrutar.
+
+9
+Sirve nuestras milanesas de berenjena espolvoreando un poquito de orégano si deseas y buen provecho. ¡Disfruta!',
+
+'[{"iID": 3, "cantidad": 1, "unidadCantidad": "pisca"},
+{"iID": 2, "cantidad": 1, "unidadCantidad": "pisca"},
+{"iID": 68, "cantidad": 1, "unidadCantidad": "diente"},
+{"iID": 71, "cantidad": 2, "unidadCantidad": ""},
+{"iID": 11, "cantidad": 2, "unidadCantidad": "piscas"},
+{"iID": 42, "cantidad": 1, "unidadCantidad": ""}]',
+
+'[{"link":"https://t2.rg.ltmcdn.com/es/images/2/1/3/img_milanesas_de_berenjena_25312_600.jpg"},
+{"link": "https://t2.rg.ltmcdn.com/es/images/2/1/3/img_milanesas_de_berenjena_25312_paso_0_600.jpg"},
+{"link": "https://t1.rg.ltmcdn.com/es/images/2/1/3/img_milanesas_de_berenjena_25312_paso_1_600.jpg"},
+{"link": "https://t2.rg.ltmcdn.com/es/images/2/1/3/img_milanesas_de_berenjena_25312_paso_2_600.jpg"},
+{"link": "https://t2.rg.ltmcdn.com/es/images/2/1/3/img_milanesas_de_berenjena_25312_paso_3_600.jpg"},
+{"link": "https://t2.rg.ltmcdn.com/es/images/2/1/3/img_milanesas_de_berenjena_25312_paso_4_600.jpg"},
+{"link": "https://t2.rg.ltmcdn.com/es/images/2/1/3/img_milanesas_de_berenjena_25312_paso_5_600.jpg"},
+{"link": "https://t2.rg.ltmcdn.com/es/images/2/1/3/img_milanesas_de_berenjena_25312_paso_6_600.jpg"},
+{"link": "https://t2.rg.ltmcdn.com/es/images/2/1/3/img_milanesas_de_berenjena_25312_paso_7_600.jpg"},
+{"link": "https://t2.rg.ltmcdn.com/es/images/2/1/3/img_milanesas_de_berenjena_25312_paso_8_600.jpg"},
+{"link": "https://t1.rg.ltmcdn.com/es/images/2/1/3/img_milanesas_de_berenjena_25312_paso_9_600.jpg"}
+]',
+'[{"cID":1},
+{"cID":3},
+{"cID":11}]'    
+);
+
