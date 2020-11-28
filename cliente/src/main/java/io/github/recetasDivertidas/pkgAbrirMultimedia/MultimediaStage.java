@@ -3,6 +3,7 @@ package io.github.recetasDivertidas.pkgAbrirMultimedia;
 import io.github.recetasDivertidas.pkgRecetasDivertidas.Multimedia;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
@@ -30,9 +31,9 @@ public class MultimediaStage extends Stage {
             System.out.println(this.multimedia.getUrlEmbeed());
             ((WebView)parent).getEngine().load(this.multimedia.getUrlEmbeed());
         } else {
-            parent = new BorderPane();
+            parent = new ScrollPane();
             ImageView viewImagen = new ImageView(this.multimedia.getImg());
-            ((BorderPane) parent).getChildren().add(viewImagen);
+            ((ScrollPane) parent).setContent(viewImagen);
         }
         Scene scene = new Scene(parent);
 
