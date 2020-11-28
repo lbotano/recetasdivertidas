@@ -85,6 +85,17 @@ public class SubirReceta {
         return categorias;
     }
 
+    private ArrayList<Multimedia> getMultimedia() {
+        ArrayList<Multimedia> multimedia = new ArrayList<>();
+
+        for (Node n : vboxMultimedia.getChildren()) {
+            Multimedia m = (Multimedia) n.getUserData();
+            multimedia.add(m);
+        }
+
+        return multimedia;
+    }
+
     @FXML
     private void agregarIngrediente() {
 
@@ -139,14 +150,13 @@ public class SubirReceta {
 
     public void agregarMultimedia() throws IOException {
         try {
-            if(txtMultimedia.getText().length() > 0) {
+            if (txtMultimedia.getText().length() > 0) {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/componentes/multimedia.fxml"));
                 Pane multimedia = loader.load();
                 MultimediaCargado multimediaController = loader.getController();
-                    multimediaController.setMultimedia(txtMultimedia.getText());
+                multimediaController.setMultimedia(txtMultimedia.getText());
 
                 txtMultimedia.setText("");
-
                 vboxMultimedia.getChildren().add(multimedia);
             }
         } catch (IllegalArgumentException e) {
@@ -165,7 +175,8 @@ public class SubirReceta {
                         txaDescripcion.getText(),
                         txaInstrucciones.getText(),
                         getIngredientes(),
-                        getCategorias());
+                        getCategorias(),
+                        getMultimedia());
 
                 receta.subir();
                 limpiarCampos();

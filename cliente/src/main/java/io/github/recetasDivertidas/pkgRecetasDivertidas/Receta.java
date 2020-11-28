@@ -20,6 +20,7 @@ public class Receta {
     private final ArrayList<Ingrediente> ingredientes = new ArrayList<>();
     private final ArrayList<CategoriaReceta> categoriasReceta = new ArrayList<>();
     private final ArrayList<CategoriaIngrediente> categoriasIngrediente = new ArrayList<>();
+    private final ArrayList<Multimedia> multimedia = new ArrayList<>();
 
     // Receta completa
     public Receta(
@@ -32,7 +33,8 @@ public class Receta {
             int cantCalificaciones,
             List<Ingrediente> ingredientes,
             List<CategoriaReceta> categoriasReceta,
-            List<CategoriaIngrediente> categoriasIngrediente
+            List<CategoriaIngrediente> categoriasIngrediente,
+            List<Multimedia> multimedia
     ) {
         this.id = id;
         this.autor = autor;
@@ -44,6 +46,7 @@ public class Receta {
         this.ingredientes.addAll(ingredientes);
         this.categoriasReceta.addAll(categoriasReceta);
         this.categoriasIngrediente.addAll(categoriasIngrediente);
+        this.multimedia.addAll(multimedia);
     }
 
     // Receta para resultado de búsqueda
@@ -63,12 +66,14 @@ public class Receta {
                   String descripcion,
                   String instrucciones,
                   List<Ingrediente> ingredientes,
-                  List<CategoriaReceta> categorias) {
+                  List<CategoriaReceta> categorias,
+                  List<Multimedia> multimedia) {
         this.titulo = titulo;
         this.descripcion = descripcion;
         this.instrucciones = instrucciones;
         this.ingredientes.addAll(ingredientes);
         this.categoriasReceta.addAll(categorias);
+        this.multimedia.addAll(multimedia);
     }
 
     public int getId() {
@@ -102,14 +107,11 @@ public class Receta {
     }
 
     public ArrayList<CategoriaIngrediente> getCategoriasIngrediente() {
-        /*ArrayList<CategoriaIngrediente> result = ingredientes.get(0).getCategorias();
-
-        // Solo devuelve las categorías que compartan TODOS los ingredientes
-        for (int i = 1; i < result.size(); i++) {
-            result.retainAll(ingredientes.get(i).getCategorias());
-        }
-        return result;*/
         return categoriasIngrediente;
+    }
+
+    public ArrayList<Multimedia> getMultimedia() {
+        return multimedia;
     }
 
     // Devuelve la calificación del usuario logueado
@@ -334,9 +336,11 @@ public class Receta {
             ArrayList<Ingrediente> ingredientes = new ArrayList<>();
             ArrayList<CategoriaReceta> categoriasReceta = new ArrayList<>();
             ArrayList<CategoriaIngrediente> categoriasIngrediente = new ArrayList<>();
+            ArrayList<Multimedia> multimedia = new ArrayList<>();
 
             int i = 8;
 
+            // Recibe los ingredinetes
             while (!mensajeRecibir.get(i).equals("CATEGORIASRECETA")) {
                 int idIngrediente = Integer.parseInt(mensajeRecibir.get(i++));
                 String nombreIngrediente = mensajeRecibir.get(i++);
@@ -347,6 +351,7 @@ public class Receta {
             }
             i++;
 
+            // Recibe las categorías de receta
             while (!mensajeRecibir.get(i).equals("CATEGORIASING")) {
                 int idCategoria = Integer.parseInt(mensajeRecibir.get(i++));
                 String nombreCategoria = mensajeRecibir.get(i++);
@@ -354,12 +359,20 @@ public class Receta {
             }
             i++;
 
+            // Recibe las categorías de ingrediente
             while (!mensajeRecibir.get(i).equals("MULTIMEDIA")) {
                 int idCategoria = Integer.parseInt(mensajeRecibir.get(i++));
                 String nombreCategoria = mensajeRecibir.get(i++);
                 categoriasIngrediente.add(new CategoriaIngrediente(idCategoria, nombreCategoria));
             }
             i++;
+
+            // Recibe el multimedia
+            while (i < mensajeRecibir.size()) {
+                int idMultimedia = Integer.parseInt(mensajeRecibir.get(i++));
+                String nombreMultimedia = mensajeRecibir.get(i++);
+                multimedia.add(new Multimedia(idMultimedia, nombreMultimedia));
+            }
 
             resultado = new Receta(
                     id,
@@ -371,7 +384,8 @@ public class Receta {
                     cantCalificaciones,
                     ingredientes,
                     categoriasReceta,
-                    categoriasIngrediente
+                    categoriasIngrediente,
+                    multimedia
             );
 
         } else {
@@ -448,7 +462,9 @@ public class Receta {
             }
 
             mensajeEnviar.add("INICIOMULTIMEDIA");
-            // TODO: Agregar multimedia
+            for (Multimedia m : this.multimedia) {
+                mensajeEnviar.add(String.valueOf(m.getUrl()));
+            }
 
             ArrayList<String> mensajeRecibir = Conexion.sendMessage(mensajeEnviar);
             Alerta alerta;

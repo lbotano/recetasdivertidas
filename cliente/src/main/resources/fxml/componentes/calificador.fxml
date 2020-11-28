@@ -8,27 +8,27 @@
          xmlns="http://javafx.com/javafx"
          xmlns:fx="http://javafx.com/fxml" stylesheets="/css/global.css">
     <!-- IMPORTANTE: Ignorá los errores de que los onAction no se están en el controlador -->
-    <Button fx:id="btn1" onAction="#calificar" userData="1">
+    <Button fx:id="btn1" onAction="#calificar" userData="1" minWidth="35">
         <graphic>
             <Glyph fontFamily="FontAwesome" icon="STAR_ALT"/>
         </graphic>
     </Button>
-    <Button fx:id="btn2" onAction="#calificar" userData="2">
+    <Button fx:id="btn2" onAction="#calificar" userData="2" minWidth="35">
         <graphic>
             <Glyph fontFamily="FontAwesome" icon="STAR_ALT"/>
         </graphic>
     </Button>
-    <Button fx:id="btn3" onAction="#calificar" userData="3">
+    <Button fx:id="btn3" onAction="#calificar" userData="3" minWidth="35">
         <graphic>
             <Glyph fontFamily="FontAwesome" icon="STAR_ALT"/>
         </graphic>
     </Button>
-    <Button fx:id="btn4" onAction="#calificar" userData="4">
+    <Button fx:id="btn4" onAction="#calificar" userData="4" minWidth="35">
         <graphic>
             <Glyph fontFamily="FontAwesome" icon="STAR_ALT"/>
         </graphic>
     </Button>
-    <Button fx:id="btn5" onAction="#calificar" userData="5">
+    <Button fx:id="btn5" onAction="#calificar" userData="5" minWidth="35">
         <graphic>
             <Glyph fontFamily="FontAwesome" icon="STAR_ALT"/>
         </graphic>

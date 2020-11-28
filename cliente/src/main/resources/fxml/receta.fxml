@@ -63,7 +63,7 @@
                                 <Font size="20"/>
                             </font>
                         </Label>
-                        <ScrollPane fitToWidth="true" maxHeight="150">
+                        <ScrollPane fitToWidth="true" maxHeight="150" VBox.vgrow="ALWAYS">
                             <VBox fx:id="vboxIngredientes"/>
                         </ScrollPane>
                     </VBox>
@@ -73,7 +73,7 @@
                                 <Font size="20"/>
                             </font>
                         </Label>
-                        <ScrollPane fitToWidth="true" maxHeight="150">
+                        <ScrollPane fitToWidth="true" maxHeight="150" VBox.vgrow="ALWAYS">
                             <VBox fx:id="vboxCategorias"/>
                         </ScrollPane>
                     </VBox>
@@ -90,12 +90,14 @@
                     </font>
                 </Label>
 
-                <Label text="Multimedia">
-                    <font>
-                        <Font size="20"/>
-                    </font>
-                </Label>
-                <VBox/>
+                <VBox fx:id="vboxMultimediaBox">
+                    <Label text="Multimedia">
+                        <font>
+                            <Font size="20"/>
+                        </font>
+                    </Label>
+                    <VBox fx:id="vboxMultimedia"/>
+                </VBox>
             </VBox>
         </ScrollPane>
     </center>

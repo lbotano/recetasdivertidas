@@ -3,12 +3,21 @@ package io.github.recetasDivertidas.pkgRecetasDivertidas;
 import javafx.scene.image.Image;
 
 public class Multimedia {
+    private int id;
     private String url;
     private Image img;
 
-    public Multimedia(String url){
+    // Multimedia para enviar
+    public Multimedia(String url) {
         this.url = url;
-        img = new Image(url);
+        this.img = new Image(url);
+    }
+
+    // Multimedia para recibir
+    public Multimedia(int id, String url) {
+        this.id = id;
+        this.url = url;
+        this.img = new Image(url);
     }
 
     public String getUrl() {

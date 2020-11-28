@@ -7,8 +7,6 @@ import io.github.recetasDivertidas.pkgComponentes.CategoriaBajar;
 import io.github.recetasDivertidas.pkgComponentes.IngredienteBajar;
 import io.github.recetasDivertidas.pkgConexion.Conexion;
 import io.github.recetasDivertidas.pkgRecetasDivertidas.*;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
@@ -27,24 +25,17 @@ import java.util.ArrayList;
 
 
 public class RecetaController {
-    @FXML
-    private Button btnBorrar;
-    @FXML
-    private Label lblTitulo;
-    @FXML
-    private Label lblCalificacion;
-    @FXML
-    private Calificador calificador;
-    @FXML
-    private Label lblCantCalificaciones;
-    @FXML
-    private Label lblDescripcion;
-    @FXML
-    private Label lblInstrucciones;
-    @FXML
-    private VBox vboxIngredientes;
-    @FXML
-    private VBox vboxCategorias;
+    @FXML private Button btnBorrar;
+    @FXML private Label lblTitulo;
+    @FXML private Label lblCalificacion;
+    @FXML private Calificador calificador;
+    @FXML private Label lblCantCalificaciones;
+    @FXML private Label lblDescripcion;
+    @FXML private Label lblInstrucciones;
+    @FXML private VBox vboxIngredientes;
+    @FXML private VBox vboxCategorias;
+    @FXML private VBox vboxMultimediaBox;
+    @FXML private VBox vboxMultimedia;
 
     private Receta receta;
 
@@ -113,13 +104,21 @@ public class RecetaController {
             alerta.showAndWait();
         }
 
-        calificador.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                receta.calificar(calificador.getCalificacionPuesta());
-                receta.actualizarSimple();
-                calificador.setCalificacionApariencia(receta.getCalificacionPropia());
+        // Añadir multimedia
+        if (this.receta.getMultimedia().size() < 1 && vboxMultimedia.getParent() instanceof Pane) {
+            // Si no hay multimedia elimina todos los elementos gráficos que tengan que ver con ella.
+            ((Pane) vboxMultimedia.getParent()).getChildren().remove(vboxMultimediaBox);
+        } else {
+            for (Multimedia m : this.receta.getMultimedia()) {
+                ImageView multimediaImg = new ImageView(m.getImg());
+                vboxMultimedia.getChildren().add(multimediaImg);
             }
+        }
+
+        calificador.setOnAction(actionEvent -> {
+            receta.calificar(calificador.getCalificacionPuesta());
+            receta.actualizarSimple();
+            calificador.setCalificacionApariencia(receta.getCalificacionPropia());
         });
     }
 
