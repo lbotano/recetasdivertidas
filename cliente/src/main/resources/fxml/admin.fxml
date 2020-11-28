@@ -1,23 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-
 <?import org.controlsfx.control.CheckComboBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.geometry.Insets?>
+
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="io.github.recetasDivertidas.pkgAdmin.FuncionesAdmin">
+            fx:controller="io.github.recetasDivertidas.pkgAdmin.FuncionesAdmin"
+            style="-fx-background-color: #FFFFFF">
     <center>
-        <ScrollPane fitToWidth="true">
+        <ScrollPane fitToWidth="true" style="-fx-background-color: #FFFFFF">
             <padding>
                 <Insets topRightBottomLeft="10"/>
             </padding>
-            <VBox spacing="10" maxWidth="Infinity">
+            <VBox spacing="10" maxWidth="Infinity" style="-fx-background-color: #FFFFFF">
                 <Label text="Borrar una categoria de ingrediente">
                     <font>
                         <Font size="14.0"/>

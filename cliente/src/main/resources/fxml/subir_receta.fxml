@@ -22,7 +22,8 @@
 <BorderPane fx:id="borderpane"
             xmlns="http://javafx.com/javafx/11.0.1"
             xmlns:fx="http://javafx.com/fxml/1" fx:controller="io.github.recetasDivertidas.pkgSubirReceta.SubirReceta"
-            stylesheets="/css/subir_receta.css">
+            stylesheets="/css/subir_receta.css"
+            style="-fx-background-color: #FFFFFF">
     <padding>
         <Insets topRightBottomLeft="10"/>
     </padding>
