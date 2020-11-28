@@ -54,7 +54,8 @@
                           spacing="10"
                           GridPane.columnIndex="0"
                           GridPane.hgrow="ALWAYS"
-                          GridPane.vgrow="ALWAYS">
+                          GridPane.vgrow="ALWAYS"
+                          VBox.vgrow="ALWAYS">
                         <padding>
                             <Insets topRightBottomLeft="10"/>
                         </padding>

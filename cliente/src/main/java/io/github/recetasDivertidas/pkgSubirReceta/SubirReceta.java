@@ -36,8 +36,8 @@ public class SubirReceta {
     @FXML
     private void initialize() {
         // Hack para que los combobox no cambien de tamaño al clickearlos
-        vboxLeft.setPrefSize(vboxLeft.getWidth(), vboxLeft.getHeight());
-        vboxRight.setPrefSize(vboxRight.getWidth(), vboxRight.getHeight());
+        /*vboxLeft.setPrefSize(vboxLeft.getWidth(), vboxLeft.getHeight());
+        vboxRight.setPrefSize(vboxRight.getWidth(), vboxRight.getHeight());*/
 
         // Poner los ingredientes en el combobox
         try {
