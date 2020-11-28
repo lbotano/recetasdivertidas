@@ -23,6 +23,9 @@
     </padding>
     <top>
         <HBox alignment="BASELINE_LEFT" spacing="5" maxWidth="Infinity">
+            <padding>
+                <Insets bottom="10"/>
+            </padding>
             <Label fx:id="lblTitulo" text="Título super genial" HBox.hgrow="ALWAYS" maxWidth="Infinity">
                 <font>
                     <Font size="26.0"/>

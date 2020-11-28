@@ -34,9 +34,12 @@
             </VBox>
        </top>
        <center>
-          <ScrollPane fitToWidth="true" maxWidth="Infinity">
-              <VBox fx:id="vboxResultados" maxHeight="Infinity" maxWidth="Infinity" spacing="15"/>
-          </ScrollPane>
+           <ScrollPane fitToWidth="true">
+               <VBox fx:id="vboxResultados"
+                     maxWidth="Infinity"
+                     maxHeight="Infinity">
+               </VBox>
+           </ScrollPane>
        </center>
         <bottom>
             <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">

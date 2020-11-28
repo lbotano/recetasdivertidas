@@ -7,10 +7,17 @@
 <?import org.controlsfx.glyphfont.Glyph?>
 <?import io.github.recetasDivertidas.pkgComponentes.Calificador?>
 
+<?import javafx.geometry.Insets?>
 <HBox xmlns="http://javafx.com/11.0.1"
       xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="io.github.recetasDivertidas.pkgComponentes.ResultadoBusqueda"
-      spacing="15">
+      spacing="15"
+      fx:id="paneResultado"
+      onMouseEntered="#hovered"
+      onMouseExited="#exited">
+    <padding>
+        <Insets topRightBottomLeft="10"/>
+    </padding>
     <VBox styleClass="clickable" HBox.hgrow="ALWAYS" onMouseClicked="#onAbrirReceta">
         <HBox>
             <Label fx:id="lblTitulo"
