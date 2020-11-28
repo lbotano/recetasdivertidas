@@ -55,8 +55,8 @@ public class ThreadClient implements Runnable{
 	private static final String CONSTOPRECETAS = "{call spSeleccionarTopRecetas(?)}";
 	private static final String DATOSRECETA = "{call spGetDatosReceta(?)}";
 	private static final String INGREDIENTES = "{call spSeleccionarIngredientes()}";
-	private static final String LISTARCATREC = "SELECT * FROM CategoriaDeReceta;";
-	private static final String LISTARCATING = "SELECT * FROM CategoriaDeIngrediente;";
+	private static final String LISTARCATREC = "SELECT * FROM CategoriaDeReceta ORDER BY cNombre;";
+	private static final String LISTARCATING = "SELECT * FROM CategoriaDeIngrediente ORDER BY cNombre;";
 	private static final String LOGIN = "{call spInicioSesion(?,?,?,?)}";
 	private static final String PREGUNTASSEG = "SELECT * FROM PreguntasSeguridad;";
 	private static final String RECETASDEUSUARIO = "{call spGetRecetasUsuario(?)}";

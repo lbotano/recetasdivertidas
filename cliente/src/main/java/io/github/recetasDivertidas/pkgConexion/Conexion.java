@@ -16,7 +16,7 @@ public final class Conexion {
     public static ObjectOutputStream out;
     public static ObjectInputStream in;
     public static boolean svResponse;
-    private final static String HOST = "127.0.0.1";
+    private final static String HOST = "186.22.250.160";
     private final static int PORT = 7070;
 
     public static void iniciarConexion() {

@@ -676,7 +676,7 @@ BEGIN
 	WHERE
         i.iID = ic.iID AND
         ic.cID = c.cID
-	ORDER BY i.iID;
+	ORDER BY i.INombre;
 END//
 DELIMITER ;
 
