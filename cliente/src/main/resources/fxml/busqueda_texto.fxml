@@ -14,7 +14,8 @@
 
 <BorderPane xmlns="http://javafx.com/javafx/11.0.1"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="io.github.recetasDivertidas.pkgBusquedas.BusquedaTexto">
+            fx:controller="io.github.recetasDivertidas.pkgBusquedas.BusquedaTexto"
+            style="-fx-background-color: #FFFFFF">
     <padding>
         <Insets topRightBottomLeft="10"/>
     </padding>
