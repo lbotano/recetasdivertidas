@@ -43,6 +43,27 @@ BEGIN
 END//;
 DELIMITER ;
 
+-- Obtiene la calificacion que le puso un usuario a una receta
+DROP FUNCTION IF EXISTS fnGetCalificacionPorUsuario;
+DELIMITER //
+CREATE FUNCTION fnGetCalificacionPorUsuario(
+    idReceta int,
+	nickname varchar(32)
+) RETURNS float
+READS SQL DATA
+BEGIN
+	DECLARE rCalificacion float;
+	SELECT c.calificacion
+    FROM Calificacion c
+    WHERE
+		c.uNickname = nickname AND
+        c.rID = idReceta
+	INTO rCalificacion;
+    
+    RETURN rCalificacion;
+END//
+DELIMITER ;
+
 -- Registro de usuarios --
 -- Devuelve un True si el usuario se creó con éxito
 DROP PROCEDURE IF EXISTS spRegistroUsuario;
@@ -297,11 +318,12 @@ DELIMITER ;
 DROP PROCEDURE IF EXISTS spGetDatosReceta;
 DELIMITER //
 CREATE PROCEDURE spGetDatosReceta (
-	prID int
+	prID int,
+    pUsuario nvarchar(32)
 )
 BEGIN
 	-- Obtener los datos de la receta
-    SELECT *, fnGetCalificacionReceta(rID), fnGetCalificacionesReceta(rID)
+    SELECT *, fnGetCalificacionReceta(rID), fnGetCalificacionesReceta(rID), fnGetCalificacionPorUsuario(prID, pUsuario)
     FROM Receta
     WHERE rID = prID;
     
@@ -328,20 +350,12 @@ BEGIN
         r.rID = prID;
 	
     -- Seleccionar categorías los ingredientes
-	/*SELECT DISTINCT
-		c.cID,
-        c.cNombre
-    FROM
-		CategoriaDeIngrediente c,
-        RelCatIngred cr,
-        Ingrediente i,
-        IngredienteReceta ir
-	WHERE
-		i.iID = cr.iID AND
-        c.cID = cr.cID AND
-        i.iID = ir.iID AND
-        ir.rID = prID;*/
-	SELECT COUNT(*) FROM (SELECT DISTINCT iID FROM IngredienteReceta ir WHERE ir.rID = prID) t INTO @cantIngredientes;
+	SELECT COUNT(*)
+    FROM (
+		SELECT DISTINCT iID
+        FROM IngredienteReceta ir
+        WHERE ir.rID = prID) t
+	INTO @cantIngredientes;
     
     SELECT c.cID, cNombre FROM RelCatIngred rci
     INNER JOIN CategoriaDeIngrediente c
@@ -353,6 +367,7 @@ BEGIN
     SELECT mID, link
 	FROM Multimedia m
     WHERE m.rID = prID;
+    
 END//
 DELIMITER ;
 
@@ -466,19 +481,6 @@ BEGIN
         LIMIT ?, ?';
     EXECUTE stmt USING @pagina, @paginaHasta;
     
-END//
-DELIMITER ;
-
-DROP PROCEDURE IF EXISTS spGetCalificacionPorUsuario;
-DELIMITER //
-CREATE PROCEDURE spGetCalificacionPorUsuario(IN nickname varchar(32), IN idReceta int, OUT rCalificacion int)
-BEGIN
-	SELECT c.calificacion
-    FROM Calificacion c
-    WHERE
-		c.uNickname = nickname AND
-        c.rID = idReceta
-	INTO rCalificacion;
 END//
 DELIMITER ;
 

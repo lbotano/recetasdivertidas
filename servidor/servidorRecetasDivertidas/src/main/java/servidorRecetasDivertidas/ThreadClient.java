@@ -1,6 +1,5 @@
 package servidorRecetasDivertidas;
 
-import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -47,7 +46,7 @@ public class ThreadClient implements Runnable{
 	private static final String BORRARRECUSU = "{call spUsuarioBorrarReceta(?,?)}";
 	private static final String CALIFICAR = "{call spCalificarReceta(?,?,?)}";
 	private static final String CAMBIARCONTRA = "{call spCambiarContrasena(?,?,?)}";
-	private static final String CONSCALIFUSUARIO = "{call spGetCalificacionPorUsuario(?,?,?)}";
+	private static final String CONSCALIFUSUARIO = "{SELECT fnGetCalificacionPorUsuario(?,?)}";
 	private static final String CONSRECETASCATING = "{call spBuscarRecetasPorCatIngr(?,?)}";
 	private static final String CONSRECETASCATREC = "{call spBuscarRecetasPorCatReceta(?,?)}";
 	private static final String CONSRECETAING = "{call spBuscarRecetasPorIngr(?,?)}";
@@ -168,15 +167,17 @@ public class ThreadClient implements Runnable{
 	private void consCalifUsuario(){
 		try {
 			stmt = conn.prepareCall(CONSCALIFUSUARIO);
-			//nickname
-			stmt.setString(1,message.get(1));
 			//id receta
-			stmt.setInt(2, Integer.parseInt(message.get(2)));
+			stmt.setInt(1, Integer.parseInt(message.get(2)));
+			//nickname
+			stmt.setString(2,message.get(1));
 			//calificación
 			stmt.registerOutParameter(3, Types.INTEGER);
-			stmt.execute();
+			ResultSet rs = stmt.executeQuery();
+
 			answer.add("CALIFICACIONUSUARIO");
-			answer.add(String.valueOf(stmt.getInt(3)));
+			if (rs.next())
+				answer.add(String.valueOf(rs.getInt(1)));
 
 		} catch (SQLException e) {
 			sqlExceptionHandler(e, "CALIFICACIONUSUARIOFAIL");
@@ -206,9 +207,11 @@ public class ThreadClient implements Runnable{
 				//descripcion de la receta
 				answer.add(rs.getString(4));
 				//calificacion
-				answer.add(String.valueOf(rs.getInt(5)));
+				answer.add(String.valueOf(rs.getFloat(5)));
 				//cantidad de calificaciones
 				answer.add(String.valueOf(rs.getInt(6)));
+				//calificación por el usuario
+				answer.add(String.valueOf(rs.getFloat(7)));
 				index++;
 			}
 			rs.close();
@@ -343,20 +346,24 @@ public class ThreadClient implements Runnable{
 					answer.add(rs.getString(i));
 				}
 				//promedioCalificacion
-				answer.add(String.valueOf(rs.getInt(6)));
+				answer.add(String.valueOf(rs.getFloat(6)));
 				//cantidadCalificaciones
 				answer.add(String.valueOf(rs.getInt(7)));
+				//calificacion del usuario
+				answer.add(String.valueOf(rs.getInt(8)));
 				index++;
 			}
-			if(index == 0){
+			if (index == 0) {
 				throw new SQLException("La receta no existe", "45000");
 			}
 			rs.close();
+
 			//Toma el proximo resultset, si no hay (o es un update) entonces error
-			if(!stmt.getMoreResults()){
+			if (!stmt.getMoreResults()) {
 				throw new SQLException("Error en la consulta: no se encontro datos de los ingredientes de la receta", "45000");
 			}
 			rs = stmt.getResultSet();
+
 			//2. ingredientes
 			while(rs.next()){
 				//iID id del ingrediente
@@ -369,7 +376,9 @@ public class ThreadClient implements Runnable{
 				answer.add(String.valueOf(rs.getInt(3)));
 			}
 			rs.close();
+
 			answer.add("CATEGORIASRECETA");
+
 			// Se toman los datos de las categorias de recetas, categorias de ingredientes y multimedia
 			for (int i = 0; i < 3; i++) {
 				//Toma el proximo resultset, si no hay (o es un update) entonces error
