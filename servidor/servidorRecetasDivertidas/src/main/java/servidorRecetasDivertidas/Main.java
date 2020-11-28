@@ -51,7 +51,7 @@ public class Main {
             c.close();
             System.out.println("Database OK");
 
-			ThreadServer server = new ThreadServer(true, cpds, archivoConfig.getPuerto(), 3);
+			ThreadServer server = new ThreadServer(cpds, archivoConfig.getPuerto(), 3);
 			Thread threadServer = new Thread(server);
 
 			Thread ServerConsole = new Thread(new ThreadConsole(cpds, server));

@@ -19,28 +19,28 @@ import jsonClasess.Multimedia;
 
 public class ThreadClient implements Runnable{
 	//referencia al objeto que maneja las conexiones a la base de datos
-	protected ComboPooledDataSource cpds;
+	private ComboPooledDataSource cpds;
 	//objeto que maneja el enlace con el cliente
-	protected Socket socket;
+	private Socket socket;
 	//objetos que guardan los mensajes que se transmiten
-	protected ArrayList<String> answer;
-	protected ArrayList<String> message;
+	private ArrayList<String> answer;
+	private ArrayList<String> message;
 	//objeto para llamar a store procedures
-	protected CallableStatement stmt;
+	private  CallableStatement stmt;
 	//objeto para hacer consultas simples a la bd 
-	protected PreparedStatement pstmt;
+	private PreparedStatement pstmt;
 	//objeto para guardar la conexion a la base de datos
-	protected Connection conn;
-	protected ArrayListStringValidator stringValidator;
+	private Connection conn;
+	private ArrayListStringValidator stringValidator;
 
-	protected ObjectOutputStream out;
-	protected ObjectInputStream in;
+	private ObjectOutputStream out;
+	private ObjectInputStream in;
 
-	protected static ThreadLocal<String> usuarioLogueado = new ThreadLocal<>();
+	private static ThreadLocal<String> usuarioLogueado = new ThreadLocal<>();
 	private static ThreadLocal<Boolean> esAdmin = new ThreadLocal<>();
 
 	// Mensajes que se pueden ejecutar sin estar logueado
-	protected String[] mensajesSinLogueo = {"LOGIN", "PREGUNTASSEG", "REGISTRO", "SERVIDORVIVE"};
+	private String[] mensajesSinLogueo = {"LOGIN", "PREGUNTASSEG", "REGISTRO", "SERVIDORVIVE"};
 
 	
 	// SPs para usuario
@@ -901,14 +901,22 @@ public class ThreadClient implements Runnable{
 					subirIng();
 				else
 					answer.add("FORMATERROR");
+			default:
+				//mensaje de que la petición es incorrecta
+				answer.add("MESSAGEERROR");
 		}
 	}
 	
 	protected void ejecutarPeticion() {
 		// Se fija de ejecutar las peticiones del cliente primero y despues se fija de ejecutar las del admin
 		// si es que el usuario es un admin.
-		if (!ejecutarPeticionCliente() && esAdmin.get()) {
-			ejecutarPeticionAdmin();
+		if(!ejecutarPeticionCliente()){
+			if(esAdmin.get()){
+				ejecutarPeticionAdmin();
+			}else{
+				//mensaje de que la petición es incorrect
+				answer.add("MESSAGEERROR");
+			}
 		}
 	}
 	
@@ -930,7 +938,7 @@ public class ThreadClient implements Runnable{
 				} else {
 					// Switch de opcioens del cliente
 					if (usuarioLogueado.get() != null
-							|| Arrays.stream(mensajesSinLogueo).anyMatch(message.get(0)::equals)) {
+							|| Arrays.asList(mensajesSinLogueo).contains(message.get(0))) {
 						ejecutarPeticion();
 					} else {
 						System.err.println("[WARNING] User tried to make an unauthorized call.");
