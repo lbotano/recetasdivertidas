@@ -19,7 +19,7 @@ public class ThreadServer implements Runnable {
 	private ComboPooledDataSource cpds;
 	private ServerSocket socketListener;
 
-	public ThreadServer(boolean esTipoAdmin, ComboPooledDataSource combo, int port, int sizePool) {
+	public ThreadServer(ComboPooledDataSource combo, int port, int sizePool) {
 		this.cpds = combo;
 		this.port = port;
 		this.sizeThreadPool = sizePool;
