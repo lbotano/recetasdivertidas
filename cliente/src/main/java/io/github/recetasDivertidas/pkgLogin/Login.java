@@ -55,6 +55,8 @@ public class Login {
     private void registrarse() {
         if (Conexion.isSvResponse()) {
             Stage stageRegistro = new Stage();
+            stageRegistro.getIcons().add(new Image(getClass().getResourceAsStream("/logo_recetas_divertidas.png")));
+            stageRegistro.setTitle("Registro");
             // Evitar que la ventana se abra más de una vez
             stageRegistro.initModality(Modality.APPLICATION_MODAL);
 
