@@ -1,5 +1,7 @@
+USE RecetasDivertidasDB;
+-- select * from receta;
 CALL spSubirReceta (
-	'ryukyz',
+	'lbotano',
 	'Receta de Torta matera',
     '¡Increíblemente fácil y rica es esta receta de torta matera! Como bien lo dice su nombre, es ideal para acompañar unos mates. Es muy esponjosa y la crema pastelera que se usa para prepararla le da la humedad justa. También puedes agregarle dulce de membrillo si así lo deseas.
 
@@ -34,12 +36,7 @@ Cuando la torta ya esté cocida, retírala del horno. Si deseas, puedes colocarl
 
 Truco: el almíbar es muy sencillo de hacer: hierve el agua con el azúcar por 2 minutos.',
 
-'[{"iID": 2, "cantidad": 4, "unidadCantidad": "kg"}]',
-    NULL,
-    '[{"cID":1}]'
+'[{"iID": 40, "cantidad": 300, "unidadCantidad": "gramos"}, {"iID": 1, "cantidad": 200, "unidadCantidad": "gramos"}, {"iID": 50, "cantidad": 120, "unidadCantidad": "mililitros"}, {"iID": 30, "cantidad": 5, "unidadCantidad": "cucharadas"}]',
+'[{"link":"https://t1.rg.ltmcdn.com/es/images/1/3/7/torta_matera_74731_paso_0_600.jpg"}, {"link":"https://t2.rg.ltmcdn.com/es/images/1/3/7/torta_matera_74731_paso_1_600.jpg"}, {"link":"https://t1.rg.ltmcdn.com/es/images/1/3/7/torta_matera_74731_paso_2_600.jpg"}, {"link":"https://t2.rg.ltmcdn.com/es/images/1/3/7/torta_matera_74731_paso_3_600.jpg"}, {"link":"https://t2.rg.ltmcdn.com/es/images/1/3/7/torta_matera_74731_paso_4_600.jpg"}, {"link":"https://t2.rg.ltmcdn.com/es/images/1/3/7/torta_matera_74731_paso_5_600.jpg"}, {"link":"https://t1.rg.ltmcdn.com/es/images/1/3/7/torta_matera_74731_paso_6_600.jpg"}]',
+'[{"cID":5}]'
 );
-
--- Calificar recetas
-CALL spCalificarReceta('lbotano', 1, 5);
-CALL spCalificarReceta('jorgelina', 1, 3);
-CALL spCalificarReceta('jorgelina', 2, 1);

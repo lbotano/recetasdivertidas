@@ -81,16 +81,3 @@ CALL spCambiarContrasena(
 	"lbotano",
     "Morita",
     "lautaro200");
-
-
--- Subir receta
-
-CALL spSubirReceta (
-	'jorgelina',
-	'Empanada',
-    'Se come',
-    'Haces empanadas ._.',
-    '[{"iID": 2, "cantidad": 4, "unidadCantidad": "kg"}]',
-    NULL,
-    '[{"cID":1}]'
-);

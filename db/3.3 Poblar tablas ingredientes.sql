@@ -1,3 +1,5 @@
+USE RecetasDivertidasDB;
+
 -- Añadir ingredientes
 -- Especias
 CALL spAgregarIngrediente("Azúcar", '[{"cID":1},{"cID":2},{"cID":3},{"cID":4},{"cID":18}]'); -- 1

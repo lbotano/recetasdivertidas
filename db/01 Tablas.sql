@@ -91,7 +91,7 @@ CREATE TABLE IngredienteReceta (
 	rID int NOT NULL,
 	iID int NOT NULL,
 	cantidad int NOT NULL DEFAULT 1,
-	unidadCantidad varchar(16) NULL,
+	unidadCantidad varchar(32) NULL,
 	CONSTRAINT pk_ir PRIMARY KEY (rID, iID),
 	CONSTRAINT fk_irrID FOREIGN KEY (rID) REFERENCES Receta (rID),
 	CONSTRAINT fk_iriID FOREIGN KEY (iID) REFERENCES Ingrediente(iID)
