@@ -686,8 +686,10 @@ CREATE PROCEDURE spSeleccionarTopRecetas(
 	pagina int
 )
 BEGIN
+	DECLARE paginaActual int;
 	DECLARE paginaSiguiente int;
-    SELECT pagina + 10 INTO paginaSiguiente;
+    SELECT pagina * 10 INTO paginaActual;
+    SELECT paginaActual + 10 INTO paginaSiguiente;
     
 	SELECT
 		rID,
@@ -698,6 +700,6 @@ BEGIN
         fnGetCalificacionesReceta(rID)
     FROM Receta
     ORDER BY fnGetCalificacionReceta(rID) DESC, fnGetCalificacionesReceta(rID) DESC
-    LIMIT pagina, paginaSiguiente;
+    LIMIT paginaActual, paginaSiguiente;
 END//
 DELIMITER ;
