@@ -129,13 +129,14 @@ public class FuncionesAdmin {
                 if (respServer != null) {
                     System.out.println(respServer.get(0));
                     switch (respServer.get(0)) {
-                        case "BORRARCATINGFAIL" -> {
+                        case "BORRARCATINGFAIL": {
                             alerta = new Alerta(Alert.AlertType.ERROR,
                                     "Errpr inesperado",
                                     "Hubo un error al tratar de borrar la categoria");
                             alerta.showAndWait();
                         }
-                        case "BORRARCATINGOK" -> {
+                        break;
+                        case "BORRARCATINGOK": {
                             alerta = new Alerta(Alert.AlertType.INFORMATION,
                                     "Todo salio bien!",
                                     "Se borro correctamente la categoria");
@@ -144,7 +145,9 @@ public class FuncionesAdmin {
                             cmbBorrarCatReceta.getItems().clear();
                             cmbBorrarCatReceta.getItems().addAll(CategoriaReceta.getCategorias());
                         }
-                        default -> respuestasDeServerComunes(respServer.get(0));
+                        break;
+                        default:
+                            respuestasDeServerComunes(respServer.get(0));
                     }
                 }
             }
@@ -167,13 +170,14 @@ public class FuncionesAdmin {
                 if (respServer != null) {
                     System.out.println(respServer.get(0));
                     switch (respServer.get(0)) {
-                        case "BORRARCATRECFAIL" -> {
+                        case "BORRARCATRECFAIL": {
                             alerta = new Alerta(Alert.AlertType.ERROR,
                                     "Errpr inesperado",
                                     "Hubo un error al tratar de borrar la categoria");
                             alerta.showAndWait();
                         }
-                        case "BORRARCATRECOK" -> {
+                        break;
+                        case "BORRARCATRECOK": {
                             alerta = new Alerta(Alert.AlertType.INFORMATION,
                                     "Todo salio bien!",
                                     "Se borro correctamente la categoria");
@@ -182,7 +186,9 @@ public class FuncionesAdmin {
                             cmbBorrarCatReceta.getItems().clear();
                             cmbBorrarCatReceta.getItems().addAll(CategoriaReceta.getCategorias());
                         }
-                        default -> respuestasDeServerComunes(respServer.get(0));
+                        break;
+                        default:
+                            respuestasDeServerComunes(respServer.get(0));
                     }
                 }
             }
@@ -205,13 +211,14 @@ public class FuncionesAdmin {
                 respServer = consBorrarIngrediente(itemSeleccionado.getId());
                 if(respServer != null){
                     switch (respServer.get(0)) {
-                        case "BORRARINGFAIL" -> {
+                        case "BORRARINGFAIL": {
                             alerta = new Alerta(Alert.AlertType.ERROR,
                                     "Errpr inesperado",
                                     "Hubo un error al tratar de borrar el ingrediente");
                             alerta.showAndWait();
                         }
-                        case "BORRARINGOK" -> {
+                        break;
+                        case "BORRARINGOK": {
                             alerta = new Alerta(Alert.AlertType.INFORMATION,
                                     "Todo salio bien!",
                                     "Se borro correctamente el ingrediente");
@@ -220,7 +227,9 @@ public class FuncionesAdmin {
                             cmbBorrarIngrediente.getItems().clear();
                             cmbBorrarIngrediente.getItems().addAll(Ingrediente.getIngredientes());
                         }
-                        default -> respuestasDeServerComunes(respServer.get(0));
+                        break;
+                        default:
+                            respuestasDeServerComunes(respServer.get(0));
                     }
                 } else {
                     alerta = new Alerta(Alert.AlertType.ERROR,
@@ -245,13 +254,14 @@ public class FuncionesAdmin {
             respServer = consSubirCategoriaReceta(txtSubirCatRec.getText());
             if (respServer != null) {
                 switch (respServer.get(0)){
-                    case "SUBIRCATRECFAIL" ->{
+                    case "SUBIRCATRECFAIL": {
                         alerta = new Alerta(Alert.AlertType.ERROR,
                                 "Error",
                                 "No se ha podido subir la categoria de receta");
                         alerta.showAndWait();
                     }
-                    case "SUBIRCATRECOK" ->{
+                    break;
+                    case "SUBIRCATRECOK": {
                         alerta = new Alerta(Alert.AlertType.INFORMATION,
                                 "Todo salio bien!",
                                 "Se ha subido la categoria de receta correctamente");
@@ -259,8 +269,9 @@ public class FuncionesAdmin {
                         cmbBorrarCatReceta.getItems().clear();
                         cmbBorrarCatReceta.getItems().addAll(CategoriaReceta.getCategorias());
                     }
-
-                    default -> respuestasDeServerComunes(respServer.get(0));
+                    break;
+                    default:
+                        respuestasDeServerComunes(respServer.get(0));
                 }
             } else {
                 alerta = new Alerta(Alert.AlertType.ERROR,
@@ -288,13 +299,14 @@ public class FuncionesAdmin {
 
                 if (respServer != null) {
                     switch (respServer.get(0)){
-                        case "SUBIRINGFAIL" ->{
+                        case "SUBIRINGFAIL": {
                             alerta = new Alerta(Alert.AlertType.ERROR,
                                     "Error",
                                     "No se ha podido subir el ingrediente");
                             alerta.showAndWait();
                         }
-                        case "SUBIRINGOK" ->{
+                        break;
+                        case "SUBIRINGOK": {
                             alerta = new Alerta(Alert.AlertType.INFORMATION,
                                     "Todo salio bien!",
                                     "Se ha subido el ingrediente correctamente");
@@ -302,8 +314,9 @@ public class FuncionesAdmin {
                             cmbBorrarIngrediente.getItems().clear();
                             cmbBorrarIngrediente.getItems().addAll(Ingrediente.getIngredientes());
                         }
-
-                        default -> respuestasDeServerComunes(respServer.get(0));
+                        break;
+                        default:
+                            respuestasDeServerComunes(respServer.get(0));
                     }
                 } else {
                     alerta = new Alerta(Alert.AlertType.ERROR,
@@ -336,13 +349,14 @@ public class FuncionesAdmin {
             respServer = consSubirCategoriaIngrediente(txtSubirCatIng.getText());
             if (respServer != null) {
                 switch (respServer.get(0)){
-                    case "SUBIRCATINGFAIL" ->{
+                    case "SUBIRCATINGFAIL": {
                         alerta = new Alerta(Alert.AlertType.ERROR,
                                 "Error",
                                 "No se ha podido subir la categoria de ingrediente");
                         alerta.showAndWait();
                     }
-                    case "SUBIRCATINGOK" ->{
+                    break;
+                    case "SUBIRCATINGOK": {
                         alerta = new Alerta(Alert.AlertType.INFORMATION,
                                 "Todo salio bien!",
                                 "Se ha subido la categoria de ingrediente correctamente");
@@ -352,8 +366,8 @@ public class FuncionesAdmin {
                         cmbBorrarCatIngrediente.getItems().addAll(CategoriaIngrediente.getCategoriasIngrediente());
                         chkcmbCategoriasIngrediente.getItems().addAll(CategoriaIngrediente.getCategoriasIngrediente());
                     }
-
-                    default -> respuestasDeServerComunes(respServer.get(0));
+                    break;
+                    default: respuestasDeServerComunes(respServer.get(0));
                 }
             } else {
                 alerta = new Alerta(Alert.AlertType.ERROR,
@@ -377,19 +391,22 @@ public class FuncionesAdmin {
             respServer = consBanearUsuario(txtBanearUsuario.getText());
             if (respServer != null) {
                 switch (respServer.get(0)) {
-                    case "BANEARUSUFAIL" -> {
+                    case "BANEARUSUFAIL": {
                         alerta = new Alerta(Alert.AlertType.ERROR,
                                 "Error",
                                 "No se ha podido banear al usuario");
                         alerta.showAndWait();
                     }
-                    case "BANEARUSUOK" -> {
+                    break;
+                    case "BANEARUSUOK": {
                         alerta = new Alerta(Alert.AlertType.INFORMATION,
                                 "Todo salio bien!",
                                 "Se ha baneado al usuario correctamente");
                         alerta.showAndWait();
                     }
-                    default -> respuestasDeServerComunes(respServer.get(0));
+                    break;
+                    default:
+                        respuestasDeServerComunes(respServer.get(0));
                 }
             } else {
                 alerta = new Alerta(Alert.AlertType.ERROR,

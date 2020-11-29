@@ -33,7 +33,7 @@ public class IngredienteSubir {
             txtCantidad.setText(txtCantidad.getText().replaceAll("[^\\d]", ""));
         }
 
-        this.ingrediente.setCantidad(txtCantidad.getText().isBlank() ? 0 : Integer.parseInt(txtCantidad.getText()));
+        this.ingrediente.setCantidad(txtCantidad.getText().equals("") ? 0 : Integer.parseInt(txtCantidad.getText()));
         this.ingrediente.setUnidad(txtUnidad.getText());
     }
 

@@ -25,6 +25,11 @@
             <artifactId>controlsfx</artifactId>
             <version>11.0.2</version>
         </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-maven-plugin</artifactId>
+            <version>0.0.5</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
@@ -34,7 +39,6 @@
                 <version>3.8.0</version>
                 <configuration>
                     <release>14</release>
-                    <compilerArgs>--enable-preview</compilerArgs>
                     <source>14</source>
                     <target>14</target>
                 </configuration>
@@ -56,11 +60,12 @@
             <plugin>
                 <groupId>org.openjfx</groupId>
                 <artifactId>javafx-maven-plugin</artifactId>
-                <version>0.0.1</version>
+                <version>0.0.5</version>
                 <configuration>
-                    <mainClass>io.github.recetasDivertidas.App</mainClass>
+                    <mainClass>io.github.recetasDivertidas.pkgAplicacion.Main</mainClass>
                 </configuration>
             </plugin>
+
         </plugins>
     </build>
 </project>

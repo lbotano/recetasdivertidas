@@ -63,7 +63,9 @@ public class BusquedaTexto {
                             Alerta alerta = new Alerta(Alert.AlertType.ERROR, "Error: ", ans.get(1));
                             alerta.showAndWait();
                         break;
-                        case "MESSAGEERROR", "ELEMENTBLANK", "FORMATERROR":
+                        case "MESSAGEERROR":
+                        case "ELEMENTBLANK":
+                        case "FORMATERROR":
                             alerta = new Alerta(Alert.AlertType.ERROR, "Error inesperado",
                                     "Hubo un error inesperado");
                             alerta.showAndWait();

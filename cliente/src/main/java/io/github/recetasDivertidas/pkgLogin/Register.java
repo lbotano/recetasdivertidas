@@ -148,9 +148,14 @@ public class Register{
         String res = "";
 
         switch (cbGenero.getValue()){
-            case "Masculino" -> res = "0";
-            case "Femenino" -> res = "1";
-            case "Otro" -> res = "2";
+            case "Masculino":
+                res = "0";
+                break;
+            case "Femenino":
+                res = "1";
+                break;
+            case "Otro":
+                res = "2";
         }
 
         return res;

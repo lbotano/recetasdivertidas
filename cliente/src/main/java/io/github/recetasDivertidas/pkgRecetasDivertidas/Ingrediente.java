@@ -109,17 +109,4 @@ public class Ingrediente {
 
         return ingredientes;
     }
-
-    public static void borrarIngrediente(Ingrediente ingrediente) throws IOException, ClassNotFoundException {
-        ArrayList<String> mensajeEnviar = new ArrayList<>();
-        mensajeEnviar.add("BORRARING");
-        mensajeEnviar.add(String.valueOf(ingrediente.id));
-
-        ArrayList<String> mensajeRecibir = Conexion.sendMessage(mensajeEnviar);
-
-        switch (mensajeRecibir.get(0)) {
-            case "BORRARINGOK" -> {}
-            case "BORRARINGFAIL" -> throw new IOException();
-        }
-    }
 }
