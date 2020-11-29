@@ -286,33 +286,42 @@ public class FuncionesAdmin {
 
         try {
             ObservableList<CategoriaIngrediente> catIngSeleccionados = chkcmbCategoriasIngrediente.getCheckModel().getCheckedItems();
-            respServer = consSubirIngrediente(txtSubirIng.getText(), catIngSeleccionados);
+            if(catIngSeleccionados.size() != 0){
+                respServer = consSubirIngrediente(txtSubirIng.getText(), catIngSeleccionados);
 
-            if (respServer != null) {
-                switch (respServer.get(0)){
-                    case "SUBIRINGFAIL" ->{
-                        alerta = new Alerta(Alert.AlertType.ERROR,
-                                "Error",
-                                "No se ha podido subir el ingrediente");
-                        alerta.showAndWait();
-                    }
-                    case "SUBIRINGOK" ->{
-                        alerta = new Alerta(Alert.AlertType.INFORMATION,
-                                "Todo salio bien!",
-                                "Se ha subido el ingrediente correctamente");
-                        alerta.showAndWait();
-                        cmbBorrarIngrediente.getItems().clear();
-                        cmbBorrarIngrediente.getItems().addAll(Ingrediente.getIngredientes());
-                    }
+                if (respServer != null) {
+                    switch (respServer.get(0)){
+                        case "SUBIRINGFAIL" ->{
+                            alerta = new Alerta(Alert.AlertType.ERROR,
+                                    "Error",
+                                    "No se ha podido subir el ingrediente");
+                            alerta.showAndWait();
+                        }
+                        case "SUBIRINGOK" ->{
+                            alerta = new Alerta(Alert.AlertType.INFORMATION,
+                                    "Todo salio bien!",
+                                    "Se ha subido el ingrediente correctamente");
+                            alerta.showAndWait();
+                            cmbBorrarIngrediente.getItems().clear();
+                            cmbBorrarIngrediente.getItems().addAll(Ingrediente.getIngredientes());
+                        }
 
-                    default -> respuestasDeServerComunes(respServer.get(0));
+                        default -> respuestasDeServerComunes(respServer.get(0));
+                    }
+                } else {
+                    alerta = new Alerta(Alert.AlertType.ERROR,
+                            "No se ha podido conectar con el servidor",
+                            "El server no responde");
+                    alerta.showAndWait();
                 }
-            } else {
+            }else{
                 alerta = new Alerta(Alert.AlertType.ERROR,
-                        "No se ha podido conectar con el servidor",
-                        "El server no responde");
+                        "Error",
+                        "No se puede subir ingredientes sin categorias");
                 alerta.showAndWait();
+
             }
+
 
         } catch (Exception e) {
             e.printStackTrace();
