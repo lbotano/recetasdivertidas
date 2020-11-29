@@ -88,29 +88,30 @@ public class Register{
                 ans = Conexion.sendMessage(message);
                 if(ans.size() != 0) {
                     switch (ans.get(0)) {
-                        case "REGISTEROK" -> { return true; }
-                        case "REGISTERFAIL" -> {
+                        case "REGISTEROK":
+                            return true;
+                        case "REGISTERFAIL":
                             alerta = new Alerta(Alert.AlertType.ERROR, "Error al registrarse", ans.get(1));
                             alerta.showAndWait();
-                        }
-                        case "MESSAGEERROR" -> {
+                        break;
+                        case "MESSAGEERROR":
                             alerta = new Alerta(Alert.AlertType.ERROR, "Hubo un error en la comunicación con el server", ans.get(1));
                             alerta.showAndWait();
-                        }
-                        case "FORMATERROR" -> {
+                        break;
+                        case "FORMATERROR":
                             alerta = new Alerta(Alert.AlertType.ERROR, "Error en el formato", "Consulte a su técnico de cabecera");
                             System.out.println(ans.get(0));
                             alerta.showAndWait();
-                        }
-                        case "ELEMENTBLANK" ->{
+                        break;
+                        case "ELEMENTBLANK":
                             alerta = new Alerta(Alert.AlertType.ERROR, "Error en el mensaje",
                                     "El mensaje contenia espacios en blanco");
                             alerta.showAndWait();
-                        }
-                        default -> {
+                        break;
+                        default:
                             alerta = new Alerta(Alert.AlertType.ERROR, "Error desconocido", "Esto no debería haber sucedido");
                             alerta.showAndWait();
-                        }
+
                     }
                 }
             } catch (Exception e) {
@@ -244,33 +245,33 @@ public class Register{
         if (answer.size() < 1) throw new IOException();
 
         switch(answer.get(0)){
-            case "PREGUNTASSEG" ->{
+            case "PREGUNTASSEG":
                 int i = 1;
                 while(i < answer.size()){
                     preguntas.add(new PreguntaSeguridad(Integer.parseInt(answer.get(i)), answer.get(i+1)));
                     i += 2;
                 }
-            }
-            case "MESSAGEERROR" ->{
+            break;
+            case "MESSAGEERROR":
                 Alerta alerta = new Alerta(Alert.AlertType.ERROR, "Error en el mensaje.",
                         "Hubo un problema al comunicarse con el servidor.");
                 alerta.showAndWait();
-            }
-            case "PREGUNTASSEGFAIL" -> {
-                Alerta alerta = new Alerta(Alert.AlertType.ERROR, "Error al obtener preguntas de seguridad.", answer.get(1));
+            break;
+            case "PREGUNTASSEGFAIL":
+                alerta = new Alerta(Alert.AlertType.ERROR, "Error al obtener preguntas de seguridad.", answer.get(1));
                 System.out.println(answer.get(0));
                 alerta.showAndWait();
-            }
-            case "ELEMENTBLANK" ->{
-                Alerta alerta = new Alerta(Alert.AlertType.ERROR, "Error en el mensaje.",
+            break;
+            case "ELEMENTBLANK":
+                alerta = new Alerta(Alert.AlertType.ERROR, "Error en el mensaje.",
                         "El mensaje contenía espacios en blanco.");
                 alerta.showAndWait();
-            }
-            case "FORMATERROR" ->{
-                Alerta alerta = new Alerta(Alert.AlertType.ERROR, "Error en el mensaje.",
+            break;
+            case "FORMATERROR":
+                alerta = new Alerta(Alert.AlertType.ERROR, "Error en el mensaje.",
                         "Hubo un problema en el formato del mensaje.");
                 alerta.showAndWait();
-            }
+            break;
         }
 
         return preguntas;

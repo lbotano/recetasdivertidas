@@ -93,30 +93,29 @@ public class Login {
         }
 
         switch (ans.get(0)) {
-            case "LOGINFAIL" -> {
+            case "LOGINFAIL":
                 alert = new Alerta(Alert.AlertType.ERROR, "Error al logearse", ans.get(1));
                 alert.showAndWait();
-            }
-            case "MESSAGEERROR" -> {
+            break;
+            case "MESSAGEERROR":
                 alert = new Alerta(Alert.AlertType.ERROR, "Error al logearse",
                         "Hubo un problema al enviar la peticion");
                 alert.showAndWait();
-            }
-            case "LOGINOK" -> {
+            break;
+            case "LOGINOK":
                 username = txtUsuario.getText();
                 RecetasDivertidas.logueadoComoAdmin = Boolean.parseBoolean(ans.get(1));
                 return true;
-            }
-            case "ELEMENTBLANK" ->{
+            case "ELEMENTBLANK":
                 Alerta alerta = new Alerta(Alert.AlertType.ERROR, "Error en el mensaje",
                         "El mensaje contenia espacios en blanco");
                 alerta.showAndWait();
-            }
-            case "FORMATERROR" ->{
-                Alerta alerta = new Alerta(Alert.AlertType.ERROR, "Error en el mensaje",
+            break;
+            case "FORMATERROR":
+                alerta = new Alerta(Alert.AlertType.ERROR, "Error en el mensaje",
                         "Hubo un problema en el formato del mensaje");
                 alerta.showAndWait();
-            }
+            break;
         }
         return false;
     }

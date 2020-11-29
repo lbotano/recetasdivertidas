@@ -37,7 +37,7 @@ public class BusquedaTexto {
                 ArrayList<String> ans = Conexion.sendMessage(message);
                 if (ans.size() > 0) {
                     switch (ans.get(0)) {
-                        case "RESPCONSULTA" -> {
+                        case "RESPCONSULTA":
                             try {
                                 // Convierte los strings de la consulta en objetos Receta
                                 recetas = Receta.getRecetasConsultaBusquedas(ans);
@@ -58,16 +58,16 @@ public class BusquedaTexto {
                                         "Hubo un error inesperado");
                                 alerta.showAndWait();
                             }
-                        }
-                        case "RESPOCONSULTAFAIL" -> {
+                        break;
+                        case "RESPOCONSULTAFAIL":
                             Alerta alerta = new Alerta(Alert.AlertType.ERROR, "Error: ", ans.get(1));
                             alerta.showAndWait();
-                        }
-                        case "MESSAGEERROR", "ELEMENTBLANK", "FORMATERROR" -> {
-                            Alerta alerta = new Alerta(Alert.AlertType.ERROR, "Error inesperado",
+                        break;
+                        case "MESSAGEERROR", "ELEMENTBLANK", "FORMATERROR":
+                            alerta = new Alerta(Alert.AlertType.ERROR, "Error inesperado",
                                     "Hubo un error inesperado");
                             alerta.showAndWait();
-                        }
+                        break;
                     }
                 }
 

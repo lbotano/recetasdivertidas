@@ -414,19 +414,20 @@ public class FuncionesAdmin {
             respServer = consPerdonarUsu(txtDesbanearUsuario.getText());
             if (respServer != null) {
                 switch (respServer.get(0)) {
-                    case "PERDONARUSUFAIL" -> {
+                    case "PERDONARUSUFAIL":
                         alerta = new Alerta(Alert.AlertType.ERROR,
                                 "Error",
                                 "No se ha podido perdonar al usuario");
                         alerta.showAndWait();
-                    }
-                    case "PERDONARUSUOK" -> {
+                    break;
+                    case "PERDONARUSUOK":
                         alerta = new Alerta(Alert.AlertType.INFORMATION,
                                 "Todo salio bien!",
                                 "Se ha perdonado al usuario");
                         alerta.showAndWait();
-                    }
-                    default -> respuestasDeServerComunes(respServer.get(0));
+                    break;
+                    default:
+                        respuestasDeServerComunes(respServer.get(0));
                 }
             } else {
                 alerta = new Alerta(Alert.AlertType.ERROR,
