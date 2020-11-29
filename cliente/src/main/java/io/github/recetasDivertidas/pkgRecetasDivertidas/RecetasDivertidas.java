@@ -3,10 +3,17 @@ import io.github.recetasDivertidas.pkgAplicacion.Alerta;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.Hashtable;
@@ -40,7 +47,10 @@ public class RecetasDivertidas{
             nodeBusquedaCat = FXMLLoader.load(getClass().getResource("/fxml/busqueda_categorias.fxml"));
             nodeBusquedaTexto = FXMLLoader.load(getClass().getResource("/fxml/busqueda_texto.fxml"));
             nodeSubirReceta = FXMLLoader.load(getClass().getResource("/fxml/subir_receta.fxml"));
-            nodeAdmin = FXMLLoader.load(getClass().getResource("/fxml/admin.fxml"));
+            if (RecetasDivertidas.logueadoComoAdmin) {
+                nodeAdmin = FXMLLoader.load(getClass().getResource("/fxml/admin.fxml"));
+                pestanas.put("btnAdmin", nodeAdmin);
+            }
             // Llena el diccionario de pestañas
             pestanas.put("btnInicio", nodeInicio);
             pestanas.put("btnPerfil", nodePerfil);
@@ -48,7 +58,6 @@ public class RecetasDivertidas{
             pestanas.put("btnBusquedaCat", nodeBusquedaCat);
             pestanas.put("btnBusquedaTexto", nodeBusquedaTexto);
             pestanas.put("btnSubirReceta", nodeSubirReceta);
-            pestanas.put("btnAdmin", nodeAdmin);
         } catch (IOException e) {
             new Alerta(Alert.AlertType.ERROR, "Error Inesperado", "Ocurrió un error inesperado.");
             e.printStackTrace();
