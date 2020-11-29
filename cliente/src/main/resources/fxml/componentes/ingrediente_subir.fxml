@@ -11,7 +11,7 @@
       alignment="BASELINE_LEFT">
     <Label fx:id="lblIngrediente" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
     <TextField fx:id="txtCantidad" promptText="Cantidad" onKeyTyped="#actualizarDatos" prefWidth="100"/>
-    <TextField fx:id="txtUnidad" promptText="Unidad" onKeyTyped="#actualizarDatos" prefWidth="50"/>
+    <TextField fx:id="txtUnidad" promptText="Unidad" onKeyTyped="#actualizarDatos" prefWidth="60"/>
     <Button onAction="#borrar">
         <graphic>
             <Glyph fontFamily="FontAwesome" icon="REMOVE"/>
