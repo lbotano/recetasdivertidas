@@ -34,7 +34,7 @@ public class CategoriaReceta {
 
         ArrayList<CategoriaReceta> categorias = new ArrayList<>();
         switch (mensajeRecibir.get(0)) {
-            case "LISTCATREC" -> {
+            case "LISTCATREC": {
                 for (int i = 1; i < mensajeRecibir.size(); i += 2) {
                     categorias.add(new CategoriaReceta(
                             Integer.parseInt(mensajeRecibir.get(i)),
@@ -42,13 +42,15 @@ public class CategoriaReceta {
                     );
                 }
             }
-            case "LISTARCATRECFAIL" -> {
+            break;
+            case "LISTARCATRECFAIL": {
                 Alerta alerta = new Alerta(Alert.AlertType.ERROR,
                         "Error inesperado",
                         mensajeRecibir.get(1));
                 alerta.showAndWait();
             }
-            default -> {
+            break;
+            default: {
                 Alerta alerta = new Alerta(Alert.AlertType.ERROR,
                         "Error inesperado",
                         "Hubo un error inesperado.");

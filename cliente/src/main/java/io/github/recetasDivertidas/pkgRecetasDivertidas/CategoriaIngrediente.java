@@ -21,7 +21,7 @@ public class CategoriaIngrediente extends CategoriaReceta {
 
         ArrayList<CategoriaIngrediente> categorias = new ArrayList<>();
         switch (mensajeRecibir.get(0)) {
-            case "LISTCATING" -> {
+            case "LISTCATING": {
                 for (int i = 1; i < mensajeRecibir.size(); i += 2) {
                     categorias.add(new CategoriaIngrediente(
                             Integer.parseInt(mensajeRecibir.get(i)),
@@ -29,15 +29,15 @@ public class CategoriaIngrediente extends CategoriaReceta {
                     );
                 }
             }
-            case "LISTARCATINGFAIL" -> {
+            break;
+            case "LISTARCATINGFAIL": {
                 Alerta alerta = new Alerta(Alert.AlertType.ERROR,
                         "Error inesperado",
                         mensajeRecibir.get(1));
                 alerta.showAndWait();
             }
-            default -> {
+            default:
                 throw new IOException("El mensaje recibido del servidor es erroneo");
-            }
         }
 
         return categorias;

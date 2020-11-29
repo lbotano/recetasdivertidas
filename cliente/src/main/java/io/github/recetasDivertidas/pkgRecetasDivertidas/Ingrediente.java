@@ -71,7 +71,7 @@ public class Ingrediente {
         System.out.println(mensajeRecibir);
 
         switch (mensajeRecibir.get(0)) {
-            case "INGREDIENTESOK" -> {
+            case "INGREDIENTESOK": {
                 Ingrediente ingrediente = null;
                 for (int i = 1; i < mensajeRecibir.size(); i += 2) {
                     if (mensajeRecibir.get(i).equals("NEXTING")) {
@@ -93,11 +93,13 @@ public class Ingrediente {
                 }
                 ingredientes.add(ingrediente);
             }
-            case "INGREDIENTESFAIL" -> {
+            break;
+            case "INGREDIENTESFAIL": {
                 Alerta alerta = new Alerta(Alert.AlertType.ERROR, "Error", mensajeRecibir.get(1));
                 alerta.showAndWait();
             }
-            default -> {
+            break;
+            default: {
                 Alerta alerta = new Alerta(Alert.AlertType.ERROR,
                         "Error inesperado",
                         "Ocurrió un error inesperado");
