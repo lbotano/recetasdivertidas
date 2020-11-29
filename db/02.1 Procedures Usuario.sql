@@ -60,6 +60,10 @@ BEGIN
         c.rID = idReceta
 	INTO rCalificacion;
     
+    IF rCalificacion IS NULL THEN
+		SELECT 0 INTO rCalificacion;
+    END IF;
+    
     RETURN rCalificacion;
 END//
 DELIMITER ;

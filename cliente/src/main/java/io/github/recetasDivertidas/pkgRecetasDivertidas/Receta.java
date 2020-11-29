@@ -458,6 +458,7 @@ public class Receta {
                     this.descripcion = respuesta.get(4);
                     this.calificacion = Float.parseFloat(respuesta.get(6));
                     this.cantCalificaciones = Integer.parseInt(respuesta.get(7));
+                    this.calificacionDelUsuario = Integer.parseInt(respuesta.get(8));
                 }
             }
         } catch (Exception e) {

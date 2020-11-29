@@ -48,10 +48,6 @@ public class Calificador extends HBox {
         botones.add(btn5);
     }
 
-    private void actualizarEstrellas() {
-
-    }
-
     // Cambia visualmente la calificación que está puesta
     public void setCalificacionApariencia(int calificacion) {
         for (Button b : botones)
@@ -64,7 +60,8 @@ public class Calificador extends HBox {
     private void calificar(ActionEvent e) {
         // Cambia la calificacion
         Button btn = (Button) e.getSource();
-        calificacionPuesta.set(Integer.parseInt((String)btn.getUserData()));
+        int calificacion = Integer.parseInt((String) btn.getUserData());
+        calificacionPuesta.set(calificacion);
 
         // Dispara el evento
         ActionEvent evento = new ActionEvent();
