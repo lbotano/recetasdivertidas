@@ -6,7 +6,7 @@
 
     <groupId>org.example</groupId>
     <artifactId>RecetasDivertidasServidor</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>SNAPSHOT-20w48a</version>
 	
 	<!-- Esto hace que se utilice Java 14 por defecto -->
 	<build>
@@ -27,10 +27,7 @@
 				<version>3.2.0</version>
 				<configuration>
 					<archive>
-						<manifest>
-							<addClasspath>true</addClasspath>
-							<mainClass>servidorRecetasDivertidas.Main</mainClass>
-						</manifest>
+                        <manifestFile>src/main/resources/META-INF/MANIFEST.MF</manifestFile>
 					</archive>
 				</configuration>
 			</plugin>
@@ -74,8 +71,6 @@
             <artifactId>mysql-connector-java</artifactId>
             <version>8.0.22</version>
         </dependency>
-
-
     </dependencies>
 
     <properties>
