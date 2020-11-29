@@ -10,6 +10,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.util.Duration?>
 <?import javafx.scene.image.Image?>
+<?import java.lang.String?>
 <BorderPane maxHeight="Infinity"
             maxWidth="Infinity"
             prefHeight="700.0"
@@ -28,6 +29,9 @@
                    fx:id="btnInicio"
                    styleClass="btnPestana"
                    onAction="#cambiarPestana">
+               <userData>
+                   <String fx:value="/fxml/inicio.fxml"/>
+               </userData>
                <graphic>
                    <Glyph fontFamily="FontAwesome" icon="HOME"/>
                </graphic>
@@ -43,6 +47,9 @@
                    fx:id="btnPerfil"
                    styleClass="btnPestana"
                    onAction="#cambiarPestana">
+               <userData>
+                   <String fx:value="/fxml/perfil.fxml"/>
+               </userData>
                <graphic>
                    <Glyph fontFamily="FontAwesome" icon="USER"/>
                </graphic>
@@ -59,6 +66,9 @@
                    styleClass="btnPestana"
                    onAction="#cambiarPestana"
                    text="Ingrediente">
+               <userData>
+                   <String fx:value="/fxml/busqueda_ingredientes.fxml"/>
+               </userData>
                <graphic>
                    <Glyph fontFamily="FontAwesome" icon="SEARCH"/>
                </graphic>
@@ -75,6 +85,9 @@
                    styleClass="btnPestana"
                    onAction="#cambiarPestana"
                    text="Categoría">
+               <userData>
+                   <String fx:value="/fxml/busqueda_categorias.fxml"/>
+               </userData>
                <graphic>
                    <Glyph fontFamily="FontAwesome" icon="SEARCH"/>
                </graphic>
@@ -91,6 +104,9 @@
                    styleClass="btnPestana"
                    onAction="#cambiarPestana"
                    text="Texto">
+               <userData>
+                   <String fx:value="/fxml/busqueda_texto.fxml"/>
+               </userData>
                <graphic>
                    <Glyph fontFamily="FontAwesome" icon="SEARCH"/>
                </graphic>
@@ -107,6 +123,9 @@
                    styleClass="btnPestana"
                    onAction="#cambiarPestana"
                    text="Subir receta">
+               <userData>
+                   <String fx:value="/fxml/subir_receta.fxml"/>
+               </userData>
                <graphic>
                    <Glyph fontFamily="FontAwesome" icon="PENCIL"/>
                </graphic>
@@ -123,6 +142,9 @@
                    styleClass="btnPestana"
                    onAction="#cambiarPestana"
                    text="Admin">
+               <userData>
+                   <String fx:value="/fxml/admin.fxml"/>
+               </userData>
                <graphic>
                    <Glyph fontFamily="FontAwesome" icon="USER_SECRET"/>
                </graphic>

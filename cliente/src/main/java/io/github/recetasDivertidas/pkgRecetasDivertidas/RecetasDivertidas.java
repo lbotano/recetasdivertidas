@@ -1,5 +1,7 @@
 package io.github.recetasDivertidas.pkgRecetasDivertidas;
 import io.github.recetasDivertidas.pkgAplicacion.Alerta;
+import io.github.recetasDivertidas.pkgAplicacion.Aplicacion;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -12,6 +14,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -24,58 +27,39 @@ public class RecetasDivertidas {
     public final static String HOVERED="E7E7E7";
     public final static String EXITED="FFFFFF";
     public BorderPane borderPane;
-    public Button btnAdmin;
-
-    private Hashtable<String, BorderPane> pestanas = new Hashtable<>();
 
     @FXML BorderPane bpanePrincipal;
 
-    private BorderPane nodeInicio;
-    private BorderPane nodePerfil;
-    private BorderPane nodeBusquedaIng;
-    private BorderPane nodeBusquedaCat;
-    private BorderPane nodeBusquedaTexto;
-    private BorderPane nodeSubirReceta;
-    private BorderPane nodeAdmin;
+    @FXML private Button btnInicio;
+    @FXML private Button btnAdmin;
 
-    public RecetasDivertidas() {
-        // Carga todas las pestañas
-        try {
-            nodeInicio = FXMLLoader.load(getClass().getResource("/fxml/inicio.fxml"));
-            nodePerfil = FXMLLoader.load(getClass().getResource("/fxml/perfil.fxml"));
-            nodeBusquedaIng = FXMLLoader.load(getClass().getResource("/fxml/busqueda_ingredientes.fxml"));
-            nodeBusquedaCat = FXMLLoader.load(getClass().getResource("/fxml/busqueda_categorias.fxml"));
-            nodeBusquedaTexto = FXMLLoader.load(getClass().getResource("/fxml/busqueda_texto.fxml"));
-            nodeSubirReceta = FXMLLoader.load(getClass().getResource("/fxml/subir_receta.fxml"));
-            if (RecetasDivertidas.logueadoComoAdmin) {
-                nodeAdmin = FXMLLoader.load(getClass().getResource("/fxml/admin.fxml"));
-                pestanas.put("btnAdmin", nodeAdmin);
-            }
-            // Llena el diccionario de pestañas
-            pestanas.put("btnInicio", nodeInicio);
-            pestanas.put("btnPerfil", nodePerfil);
-            pestanas.put("btnBusquedaIng", nodeBusquedaIng);
-            pestanas.put("btnBusquedaCat", nodeBusquedaCat);
-            pestanas.put("btnBusquedaTexto", nodeBusquedaTexto);
-            pestanas.put("btnSubirReceta", nodeSubirReceta);
-        } catch (IOException e) {
-            new Alerta(Alert.AlertType.ERROR, "Error Inesperado", "Ocurrió un error inesperado.");
-            e.printStackTrace();
-        }
+    private void setPestanaActual(Button b) throws IOException {
+        bpanePrincipal.setCenter(FXMLLoader.load(getClass().getResource((String) b.getUserData())));
     }
 
     @FXML
     private void initialize() {
         if(!logueadoComoAdmin){
-            btnAdmin.setVisible(false); //TODO: No se eliminar el boton
+            ((Pane) btnAdmin.getParent()).getChildren().remove(btnAdmin);
         }
-        bpanePrincipal.setCenter(nodeInicio);
+        try {
+            setPestanaActual(btnInicio);
+        } catch (IOException e) {
+            e.printStackTrace();
+            Platform.exit();
+        }
     }
+
 
     @FXML
     private void cambiarPestana(ActionEvent event) {
         Button btn = (Button) event.getSource();
         System.out.println("Pressed " + btn.getId());
-        bpanePrincipal.setCenter(pestanas.get(btn.getId()));
+        try {
+            setPestanaActual(btn);
+        } catch (IOException e) {
+            e.printStackTrace();
+            Platform.exit();
+        }
     }
 }
