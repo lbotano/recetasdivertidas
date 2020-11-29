@@ -96,7 +96,7 @@ public class ThreadClient implements Runnable{
 	 * es 45000 (estos son los mensajes de error definidos por lauti pro gamer), si no lo es
 	 * entonces le manda el 'DefaultSQLErrorMsg'
 	 */
-	protected void sqlExceptionHandler(SQLException e, String failMsg) {
+	private void sqlExceptionHandler(SQLException e, String failMsg) {
 		answer.clear();
 		answer.add(failMsg);
 		if (e.getSQLState().contentEquals("45000")) {
@@ -107,7 +107,7 @@ public class ThreadClient implements Runnable{
 		}
 	}
 
-	protected void intExceptionHandler(NumberFormatException e, String failMsg){
+	private void intExceptionHandler(NumberFormatException e, String failMsg){
 		answer.clear();
 		answer.add(failMsg);
 		answer.add("Uno de los datos ingresados debía ser numérico pero no lo es");
@@ -796,7 +796,7 @@ public class ThreadClient implements Runnable{
 		}
 	}
 
-	protected boolean ejecutarPeticionCliente() {
+	private boolean ejecutarPeticionCliente() {
 		switch(message.get(0)) {
 			case "BORRARRECUSU":
 				borrarRecetaUsu();
@@ -920,7 +920,7 @@ public class ThreadClient implements Runnable{
 		}
 	}
 	
-	protected void ejecutarPeticion() {
+	private void ejecutarPeticion() {
 		// Se fija de ejecutar las peticiones del cliente primero y despues se fija de ejecutar las del admin
 		// si es que el usuario es un admin.
 		if(!ejecutarPeticionCliente()){
