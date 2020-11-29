@@ -450,8 +450,8 @@ DROP PROCEDURE IF EXISTS spBuscarRecetasPorIngr;
 DELIMITER //
 CREATE PROCEDURE spBuscarRecetasPorIngr (
 	IN ingredientes JSON, -- JSON de un array de ingredientes (tienen que ser en string) Ej: ["1","4","3"]
-    IN pagina int, -- Página de la búsqueda (0, 1, 2, etc)
-    IN pUsuario nvarchar(32) -- Nickname del usuario que hace la consulta
+    IN pUsuario nvarchar(32), -- Nickname del usuario que hace la consulta
+    IN pagina int -- Página de la búsqueda (0, 1, 2, etc)
 )
 BEGIN
     SET @pagina = pagina;
@@ -498,8 +498,8 @@ DROP PROCEDURE IF EXISTS spBuscarRecetasPorCatReceta;
 DELIMITER //
 CREATE PROCEDURE spBuscarRecetasPorCatReceta (
 	IN categorias JSON, -- JSON de un array de categorías (tienen que ser en string) Ej: ["1","4","3"]
-    IN pagina int, -- Página de la búsqueda (0, 1, 2, 3, etc)
-    IN pUsuario nvarchar(32) -- Nickname del usuario que hace la consulta
+    IN pUsuario nvarchar(32), -- Nickname del usuario que hace la consulta
+    IN pagina int -- Página de la búsqueda (0, 1, 2, 3, etc)
 )
 BEGIN
     SET @pagina = pagina;
@@ -545,8 +545,8 @@ DROP PROCEDURE IF EXISTS spBuscarRecetasPorCatIngr;
 DELIMITER //
 CREATE PROCEDURE spBuscarRecetasPorCatIngr (
 	IN categorias JSON, -- JSON de un array de categorías (tienen que ser en string) Ej: ["1","4","3"]
-    IN pagina int, -- Página de la búsqueda (0, 1, 2, 3, etc)
-    IN pUsuario nvarchar(32)
+    IN pUsuario nvarchar(32), -- El usuario que manda la consulta
+    IN pagina int -- Página de la búsqueda (0, 1, 2, 3, etc)
 )
 BEGIN
     SET @pagina = pagina;

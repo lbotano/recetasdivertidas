@@ -250,7 +250,7 @@ public class Receta {
                 int i = 1;
                 while (i < mensajeRecibir.size()) {
                     Receta receta = new Receta(
-                            Integer.parseInt(mensajeRecibir.get(i)),
+                            Integer.parseInt(mensajeRecibir.get(i++)),
                             mensajeRecibir.get(i++),
                             mensajeRecibir.get(i++),
                             mensajeRecibir.get(i++),

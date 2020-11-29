@@ -111,6 +111,7 @@ public class ThreadClient implements Runnable{
 		answer.clear();
 		answer.add(failMsg);
 		answer.add("Uno de los datos ingresados debía ser numérico pero no lo es");
+		e.printStackTrace();
 	}
 	
 	private void borrarRecetaUsu() {
@@ -293,10 +294,8 @@ public class ThreadClient implements Runnable{
 			DatosConsultaRecetas(stmt.getResultSet());
 
 		} catch (SQLException e) {
-			e.printStackTrace();
 			sqlExceptionHandler(e, "RESPOCONSULTAFAIL");
 		} catch (NumberFormatException e){
-			e.printStackTrace();
 			intExceptionHandler(e, "CONSTOPRECETASFAIL");
 		}
 	}
