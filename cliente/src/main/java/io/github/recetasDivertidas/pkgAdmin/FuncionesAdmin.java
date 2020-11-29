@@ -36,9 +36,6 @@ public class FuncionesAdmin {
     @FXML TextField txtBanearUsuario;
     @FXML Button btnBanearUsuario;
 
-    @FXML TextField txtBorrarRec;
-    @FXML Button btnBorrarRec;
-
     @FXML TextField txtDesbanearUsuario;
     @FXML Button btnDesbanearUsuario;
 
