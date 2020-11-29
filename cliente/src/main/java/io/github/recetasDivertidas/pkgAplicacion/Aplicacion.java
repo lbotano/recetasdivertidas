@@ -9,6 +9,11 @@ import javafx.stage.Stage;
 import io.github.recetasDivertidas.pkgConexion.Conexion;
 import io.github.recetasDivertidas.pkgLogin.Login;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.util.Properties;
+
 public final class Aplicacion extends Application {
 
     // Stage significa la ventana
@@ -19,6 +24,7 @@ public final class Aplicacion extends Application {
     public static Stage window = new Stage();
     public static Scene loginScene;
     public Login layoLg;
+    private final String pathConfig = "./configClient.properties";
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -26,7 +32,23 @@ public final class Aplicacion extends Application {
         window.setScene(loginScene);
         window.getIcons().add(new Image(getClass().getResourceAsStream("/logo_recetas_divertidas.png")));
         window.setTitle("Recetas Divertidas");
-
+        File archivoConfig = new File(pathConfig);
+        //si creo el archivo
+        if(archivoConfig.createNewFile()){
+            FileWriter writer = new FileWriter(pathConfig);
+            writer.write("ServerIP=0.0.0.0");
+            writer.close();
+            Alerta alerta = new Alerta(Alert.AlertType.INFORMATION,
+                    "Se ha creado el archivo de configuración",
+                    "Se encuentra en el mismo directorio que el aplicativo, por favor configurelo y vuelva a iniciar el cliente");
+            alerta.showAndWait();
+            //si no creo el archivo cargar los datos
+        }else{
+            cargarDatosArchivo();
+            System.out.println("Configuración cargada");
+            Conexion.iniciarConexion();
+        }
+        System.out.println(Conexion.HOST);
         if (Conexion.isSvResponse()) {
             window.show();
         } else {
@@ -53,5 +75,24 @@ public final class Aplicacion extends Application {
     @Override
     public void stop() throws Exception {
         super.stop();
+    }
+
+    private void cargarDatosArchivo(){
+        try {
+            Properties propiedades = new Properties();
+
+            FileInputStream file = new FileInputStream(pathConfig);
+            propiedades.load(file);
+            file.close();
+            if(!Conexion.setServerIP(propiedades.getProperty("ServerIP"))){
+
+                Alerta alerta = new Alerta(Alert.AlertType.ERROR,
+                        "No se ha podido establecer la IP del server",
+                        "Compruebe que sea un IP valida");
+                alerta.showAndWait();
+            }
+        } catch (Exception e) {
+            System.out.println("Hubo un error inesperado al leer el archivo de configuración.");
+        }
     }
 }
