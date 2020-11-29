@@ -215,11 +215,8 @@ public class ThreadClient implements Runnable{
 				index++;
 			}
 			rs.close();
-			if(index == 0){
-				throw new SQLException("No hay resultados para la busqueda", "45000");
-			}else{
-				answer.add(0,"RESPCONSULTA");
-			}
+
+			answer.add(0,"RESPCONSULTA");
 		}else{
 			throw new SQLException("Error en la consulta", "45000");
 		}
@@ -242,8 +239,9 @@ public class ThreadClient implements Runnable{
 				categorias.add(message.get(i));
 			}
 			stmt.setString(1, new Gson().toJson(categorias));
+			stmt.setString(2, usuarioLogueado.get());
 			//numero de pagina
-			stmt.setInt(2,Integer.parseInt(message.get(1)));
+			stmt.setInt(3, Integer.parseInt(message.get(1)));
 			stmt.execute();
 
 			DatosConsultaRecetas(stmt.getResultSet());
@@ -264,9 +262,10 @@ public class ThreadClient implements Runnable{
 
 			//pone el json en el primer parametro del sp
 			stmt.setString(1, new Gson().toJson(ingredientes));
+			stmt.setString(2, usuarioLogueado.get());
 
 			//numero de pagina
-			stmt.setInt(2, Integer.parseInt(message.get(1)));
+			stmt.setInt(3, Integer.parseInt(message.get(1)));
 			stmt.execute();
 			
 			DatosConsultaRecetas(stmt.getResultSet());
@@ -282,17 +281,22 @@ public class ThreadClient implements Runnable{
 	private void consRecetaText() {
 		try {
 			stmt = conn.prepareCall(CONSRECETATEXT);
-			//num pag
-			stmt.setInt(2, Integer.parseInt(message.get(1)));
+
 			//texto
 			stmt.setString(1, message.get(2));
+			stmt.setString(2, usuarioLogueado.get());
+			//num pag
+			stmt.setInt(3, Integer.parseInt(message.get(1)));
+
 			stmt.execute();
 
 			DatosConsultaRecetas(stmt.getResultSet());
 
 		} catch (SQLException e) {
+			e.printStackTrace();
 			sqlExceptionHandler(e, "RESPOCONSULTAFAIL");
 		} catch (NumberFormatException e){
+			e.printStackTrace();
 			intExceptionHandler(e, "CONSTOPRECETASFAIL");
 		}
 	}
@@ -307,8 +311,10 @@ public class ThreadClient implements Runnable{
 			DatosConsultaRecetas(stmt.getResultSet());
 
 		} catch (SQLException e) {
+			e.printStackTrace();
 			sqlExceptionHandler(e, "CONSTOPRECETASFAIL");
 		} catch (NumberFormatException e){
+			e.printStackTrace();
 			intExceptionHandler(e, "CONSTOPRECETASFAIL");
 		}
 	}

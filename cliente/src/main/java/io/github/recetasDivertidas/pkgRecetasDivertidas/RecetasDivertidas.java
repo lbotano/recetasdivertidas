@@ -18,7 +18,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.Hashtable;
 
-public class RecetasDivertidas{
+public class RecetasDivertidas {
     public static boolean logueadoComoAdmin;
     public static String username;
     public final static String HOVERED="E7E7E7";
