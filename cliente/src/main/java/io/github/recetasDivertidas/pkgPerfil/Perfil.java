@@ -83,11 +83,12 @@ public class Perfil {
         try {
             ArrayList<String> ans = Conexion.sendMessage(msg);
             switch (ans.get(0)) {
-                case "RESPUSUPREGSEG" -> {
+                case "RESPUSUPREGSEG": {
                     preguntaSeguridad = new PreguntaSeguridad(Integer.parseInt(ans.get(1)), ans.get(2));
                     lblPregunta.setText(preguntaSeguridad.getPregunta());
                 }
-                case "RESPUSUPREGSEGFAIL" -> {
+                break;
+                case "RESPUSUPREGSEGFAIL": {
                     Alerta alerta = new Alerta(Alert.AlertType.ERROR, "Error con el servidor", ans.get(1));
                     alerta.showAndWait();
                 }
@@ -138,7 +139,7 @@ public class Perfil {
             try {
                 ArrayList<String> ans = Conexion.sendMessage(msg);
                 switch (ans.get(0)) {
-                    case "CAMBIARCONTRAOK" -> {
+                    case "CAMBIARCONTRAOK": {
                         Alerta a = new Alerta(Alert.AlertType.CONFIRMATION,
                                 "Contraseña cambiada con exito",
                                 "Su contraseña se ha cambiado con exito");
@@ -149,7 +150,8 @@ public class Perfil {
                         txtNewPwd.setText("");
                         txtNewPwd.setStyle("");
                     }
-                    case "CAMBIARCONTRAFAIL" -> {
+                    break;
+                    case "CAMBIARCONTRAFAIL": {
                         Alerta a = new Alerta(Alert.AlertType.ERROR, "Ha ocurrido un error", ans.get(1));
                         a.showAndWait();
                     }

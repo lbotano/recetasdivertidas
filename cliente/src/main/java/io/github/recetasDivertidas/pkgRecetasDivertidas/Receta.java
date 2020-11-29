@@ -202,7 +202,7 @@ public class Receta {
         ArrayList<String> mensajeRecibir = Conexion.sendMessage(mensajeEnviar);
 
         switch (mensajeRecibir.get(0)) {
-            case "RESPCONSULTA" -> {
+            case "RESPCONSULTA": {
                 int i = 1;
                 while (i < mensajeRecibir.size()) {
                     Receta receta = new Receta(
@@ -217,11 +217,13 @@ public class Receta {
                     resultado.add(receta);
                 }
             }
-            case "RESPOCONSULTAFAIL" -> {
+            break;
+            case "RESPOCONSULTAFAIL": {
                 Alerta alerta = new Alerta(Alert.AlertType.NONE, "Upsi", mensajeRecibir.get(1));
                 alerta.showAndWait();
             }
-            default -> {
+            break;
+            default: {
                 Alerta alerta = new Alerta(Alert.AlertType.ERROR,
                         "Error inesperado",
                         "Hubo un error inesperado");
@@ -246,7 +248,7 @@ public class Receta {
         ArrayList<String> mensajeRecibir = Conexion.sendMessage(mensajeEnviar);
 
         switch (mensajeRecibir.get(0)) {
-            case "RESPCONSULTA" -> {
+            case "RESPCONSULTA": {
                 int i = 1;
                 while (i < mensajeRecibir.size()) {
                     Receta receta = new Receta(
@@ -261,11 +263,13 @@ public class Receta {
                     resultado.add(receta);
                 }
             }
-            case "RESPOCONSULTAFAIL" -> {
+            break;
+            case "RESPOCONSULTAFAIL": {
                 Alerta alerta = new Alerta(Alert.AlertType.NONE, "Upsi", mensajeRecibir.get(1));
                 alerta.showAndWait();
             }
-            default -> {
+            break;
+            default: {
                 Alerta alerta = new Alerta(Alert.AlertType.ERROR,
                         "Error inesperado",
                         "Hubo un error inesperado");
@@ -297,7 +301,7 @@ public class Receta {
             try {
                 ArrayList<String> mensajeRecibir = Conexion.sendMessage(mensajeEnviar);
                 switch (mensajeRecibir.get(0)) {
-                    case "RESPCONSULTA" -> {
+                    case "RESPCONSULTA": {
                         int i = 1;
                         while (i < mensajeRecibir.size()) {
                             Receta receta = new Receta(
@@ -312,9 +316,11 @@ public class Receta {
                             resultado.add(receta);
                         }
                     }
-                    case "RESPCONSULTAFAIL" -> {
+                    break;
+                    case "RESPCONSULTAFAIL": {
                     }
-                    default -> {
+                    break;
+                    default: {
                         Alerta alerta = new Alerta(Alert.AlertType.ERROR,
                                 "Error inesperado",
                                 "Hubo un error inesperado");
@@ -496,13 +502,14 @@ public class Receta {
             ArrayList<String> mensajeRecibir = Conexion.sendMessage(mensajeEnviar);
             Alerta alerta;
             switch (mensajeRecibir.get(0)) {
-                case "SUBIRRECETAOK" -> {
+                case "SUBIRRECETAOK": {
                     alerta = new Alerta(Alert.AlertType.CONFIRMATION,
                             "Receta subida",
                             "Su receta se ha subido exitosamente.");
                     alerta.showAndWait();
                 }
-                case "SUBIRRECETAFAIL" -> {
+                break;
+                case "SUBIRRECETAFAIL": {
                     alerta = new Alerta(Alert.AlertType.ERROR,
                             "Error al subir receta",
                             "Error: " + mensajeRecibir.get(1));

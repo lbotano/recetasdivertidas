@@ -187,7 +187,7 @@ public class RecetaController {
                 try {
                     ArrayList<String> ans = Conexion.sendMessage(msg);
                     switch (ans.get(0)){
-                        case "BORRARRECOK" -> {
+                        case "BORRARRECOK": {
                             Alerta alerta = new Alerta(Alert.AlertType.CONFIRMATION,
                                     "Borrado exitoso",
                                     "La receta se ha borrado con exito");
@@ -195,7 +195,8 @@ public class RecetaController {
                             Stage stage = (Stage) btnBorrar.getScene().getWindow();
                             stage.close();
                         }
-                        case "BORRARRECFAIL" -> {
+                        break;
+                        case "BORRARRECFAIL": {
                             Alerta alerta = new Alerta(Alert.AlertType.ERROR,
                                     "Error al borrar receta",
                                     ans.get(1));
