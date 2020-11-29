@@ -35,7 +35,7 @@ public class Multimedia {
         }
 
         // Si es un video de youtube, hace que la foto sea una miniatura.
-        this.img = new Image(esVideoYoutube ? YOUTUBE_IMG : url);
+        this.img = new Image(esVideoYoutube ? YOUTUBE_IMG : url, true);
     }
 
     // Multimedia para recibir

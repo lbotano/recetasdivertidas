@@ -49,7 +49,7 @@ DELIMITER //
 CREATE FUNCTION fnGetCalificacionPorUsuario(
     idReceta int,
 	nickname varchar(32)
-) RETURNS float
+) RETURNS int
 READS SQL DATA
 BEGIN
 	DECLARE rCalificacion float;
@@ -303,7 +303,8 @@ BEGIN
         rNombre,
         rDescripcion,
         fnGetCalificacionReceta(rID),
-        fnGetCalificacionesReceta(rID)
+        fnGetCalificacionesReceta(rID),
+        fnGetCalificacionPorUsuario(rID, uNickname)
 	FROM Receta WHERE rAutor = uNickname;
 END//
 DELIMITER ;
@@ -445,12 +446,15 @@ DROP PROCEDURE IF EXISTS spBuscarRecetasPorIngr;
 DELIMITER //
 CREATE PROCEDURE spBuscarRecetasPorIngr (
 	IN ingredientes JSON, -- JSON de un array de ingredientes (tienen que ser en string) Ej: ["1","4","3"]
-    IN pagina int -- Página de la búsqueda (0, 1, 2, etc)
+    IN pagina int, -- Página de la búsqueda (0, 1, 2, etc)
+    IN pUsuario nvarchar(32) -- Nickname del usuario que hace la consulta
 )
 BEGIN
     SET @pagina = pagina;
     SET @paginaHasta = pagina + 10;
     SET @ingredientes = ingredientes;
+    
+    SET @pUsuario = pUsuario;
     
     PREPARE stmt FROM 'SELECT
 			rID,
@@ -458,7 +462,8 @@ BEGIN
 			rNombre,
             rDescripcion,
             fnGetCalificacionReceta(rID),
-            fnGetCalificacionesReceta(rID)
+            fnGetCalificacionesReceta(rID),
+            fnGetCalificacionPorUsuario(rID, @pUsuario)
 		FROM (
 			SELECT
 				r.rID,
@@ -489,12 +494,14 @@ DROP PROCEDURE IF EXISTS spBuscarRecetasPorCatReceta;
 DELIMITER //
 CREATE PROCEDURE spBuscarRecetasPorCatReceta (
 	IN categorias JSON, -- JSON de un array de categorías (tienen que ser en string) Ej: ["1","4","3"]
-    IN pagina int -- Página de la búsqueda (0, 1, 2, 3, etc)
+    IN pagina int, -- Página de la búsqueda (0, 1, 2, 3, etc)
+    IN pUsuario nvarchar(32) -- Nickname del usuario que hace la consulta
 )
 BEGIN
     SET @pagina = pagina;
     SET @paginaHasta = pagina + 10;
     SET @categorias = categorias;
+    SET @pUsuario = pUsuario;
     
     PREPARE stmt FROM 'SELECT
 			rID,
@@ -502,7 +509,8 @@ BEGIN
 			rNombre,
             rDescripcion,
             fnGetCalificacionReceta(rID),
-            fnGetCalificacionesReceta(rID)
+            fnGetCalificacionesReceta(rID),
+            fnGetCalificacionPorUsuario(rID, @pUsuario)
 		FROM (
 			SELECT
 				r.rID,
@@ -533,12 +541,14 @@ DROP PROCEDURE IF EXISTS spBuscarRecetasPorCatIngr;
 DELIMITER //
 CREATE PROCEDURE spBuscarRecetasPorCatIngr (
 	IN categorias JSON, -- JSON de un array de categorías (tienen que ser en string) Ej: ["1","4","3"]
-    IN pagina int -- Página de la búsqueda (0, 1, 2, 3, etc)
+    IN pagina int, -- Página de la búsqueda (0, 1, 2, 3, etc)
+    IN pUsuario nvarchar(32)
 )
 BEGIN
     SET @pagina = pagina;
     SET @paginaHasta = pagina + 10;
     SET @categorias = categorias;
+    SET @pUsuario = pUsuario;
     
     PREPARE stmt FROM 'SELECT
 		rID,
@@ -546,7 +556,8 @@ BEGIN
 		rNombre,
         rDescripcion,
         fnGetCalificacionReceta(rID),
-        fnGetCalificacionesReceta(rID)
+        fnGetCalificacionesReceta(rID),
+        fnGetCalificacionPorUsuario(rID, @pUsuario)
 	FROM (
 		SELECT
 			r.rID,
@@ -582,6 +593,7 @@ DROP PROCEDURE IF EXISTS spBuscarRecetasPorTexto;
 DELIMITER //
 CREATE PROCEDURE spBuscarRecetasPorTexto (
 	texto TEXT, -- El texto a buscar
+    pUsuario nvarchar(32),
     pagina int
 )
 BEGIN
@@ -596,7 +608,8 @@ BEGIN
         rNombre,
         rDescripcion,
 		fnGetCalificacionReceta(rID),
-        fnGetCalificacionesReceta(rID)
+        fnGetCalificacionesReceta(rID),
+        fnGetCalificacionPorUsuario(rID, pUsuario)
 	FROM Receta
     WHERE
 		rNombre LIKE patron OR
@@ -685,6 +698,7 @@ DELIMITER ;
 DROP PROCEDURE IF EXISTS spSeleccionarTopRecetas;
 DELIMITER //
 CREATE PROCEDURE spSeleccionarTopRecetas(
+	pUsuario nvarchar(32),
 	pagina int
 )
 BEGIN
@@ -699,7 +713,8 @@ BEGIN
 		rNombre,
         rDescripcion,
         fnGetCalificacionReceta(rID),
-        fnGetCalificacionesReceta(rID)
+        fnGetCalificacionesReceta(rID),
+        fnGetCalificacionPorUsuario(rID, pUsuario)
     FROM Receta
     ORDER BY fnGetCalificacionReceta(rID) DESC, fnGetCalificacionesReceta(rID) DESC
     LIMIT paginaActual, paginaSiguiente;

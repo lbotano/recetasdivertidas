@@ -3,7 +3,6 @@ package io.github.recetasDivertidas.pkgRecetasDivertidas;
 import io.github.recetasDivertidas.pkgAplicacion.Alerta;
 import io.github.recetasDivertidas.pkgConexion.Conexion;
 import javafx.scene.control.Alert;
-import org.controlsfx.glyphfont.FontAwesome;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -17,6 +16,7 @@ public class Receta {
     private String instrucciones;
     private float calificacion;
     private int cantCalificaciones;
+    private int calificacionDelUsuario = 0;
     private final ArrayList<Ingrediente> ingredientes = new ArrayList<>();
     private final ArrayList<CategoriaReceta> categoriasReceta = new ArrayList<>();
     private final ArrayList<CategoriaIngrediente> categoriasIngrediente = new ArrayList<>();
@@ -31,6 +31,7 @@ public class Receta {
             String instrucciones,
             float calificacion,
             int cantCalificaciones,
+            int calificacionDelUsuario,
             List<Ingrediente> ingredientes,
             List<CategoriaReceta> categoriasReceta,
             List<CategoriaIngrediente> categoriasIngrediente,
@@ -43,6 +44,7 @@ public class Receta {
         this.instrucciones = instrucciones;
         this.calificacion = calificacion;
         this.cantCalificaciones = cantCalificaciones;
+        this.calificacionDelUsuario = calificacionDelUsuario;
         this.ingredientes.addAll(ingredientes);
         this.categoriasReceta.addAll(categoriasReceta);
         this.categoriasIngrediente.addAll(categoriasIngrediente);
@@ -50,13 +52,22 @@ public class Receta {
     }
 
     // Receta para resultado de búsqueda
-    public Receta(int id, String autor, String titulo, String descripcion, float calificacion, int cantCalificaciones) {
+    public Receta(
+            int id,
+            String autor,
+            String titulo,
+            String descripcion,
+            float calificacion,
+            int cantCalificaciones,
+            int calificacionDelUsuario
+    ) {
         this.id = id;
         this.autor = autor;
         this.titulo = titulo;
         this.descripcion = descripcion;
         this.calificacion = calificacion;
         this.cantCalificaciones = cantCalificaciones;
+        this.calificacionDelUsuario = calificacionDelUsuario;
     }
 
     // Receta para subir
@@ -114,8 +125,12 @@ public class Receta {
         return multimedia;
     }
 
-    // Devuelve la calificación del usuario logueado
     public int getCalificacionPropia() {
+        return calificacionDelUsuario;
+    }
+
+    // Devuelve la calificación del usuario logueado
+    public int actualizarCalificacionPropia() {
         ArrayList<String> mensajeEnviar = new ArrayList<>();
         mensajeEnviar.add("CONSCALIFUSUARIO");
         mensajeEnviar.add(RecetasDivertidas.username);
@@ -153,20 +168,23 @@ public class Receta {
         ArrayList<Receta> resultado = new ArrayList<>();
 
         // Verificar que la consulta sea correcta
-        if ((mensajeServidor.size() - 1) % 6 != 0 || !mensajeServidor.get(0).equals("RESPCONSULTA"))
+        if ((mensajeServidor.size() - 1) % 7 != 0 || !mensajeServidor.get(0).equals("RESPCONSULTA"))
             throw new MensajeServerInvalidoException();
 
-        for (int i = 1; i < mensajeServidor.size(); i += 6) {
+        int i = 1;
+        while (i < mensajeServidor.size()) {
             Receta receta = new Receta(
-                Integer.parseInt(mensajeServidor.get(i)),
-                mensajeServidor.get(i + 1),
-                mensajeServidor.get(i + 2),
-                mensajeServidor.get(i + 3),
-                Float.parseFloat(mensajeServidor.get(i + 4)),
-                Integer.parseInt(mensajeServidor.get(i + 5))
+                    Integer.parseInt(mensajeServidor.get(i++)),
+                    mensajeServidor.get(i++),
+                    mensajeServidor.get(i++),
+                    mensajeServidor.get(i++),
+                    Float.parseFloat(mensajeServidor.get(i++)),
+                    Integer.parseInt(mensajeServidor.get(i++)),
+                    Integer.parseInt(mensajeServidor.get(i++))
             );
             resultado.add(receta);
         }
+
         return resultado;
     }
 
@@ -185,14 +203,16 @@ public class Receta {
 
         switch (mensajeRecibir.get(0)) {
             case "RESPCONSULTA" -> {
-                for (int i = 1; i < mensajeRecibir.size(); i += 6) {
+                int i = 1;
+                while (i < mensajeRecibir.size()) {
                     Receta receta = new Receta(
-                            Integer.parseInt(mensajeRecibir.get(i)),
-                            mensajeRecibir.get(i + 1),
-                            mensajeRecibir.get(i + 2),
-                            mensajeRecibir.get(i + 3),
-                            Float.parseFloat(mensajeRecibir.get(i + 4)),
-                            Integer.parseInt(mensajeRecibir.get(i + 5))
+                            Integer.parseInt(mensajeRecibir.get(i++)),
+                            mensajeRecibir.get(i++),
+                            mensajeRecibir.get(i++),
+                            mensajeRecibir.get(i++),
+                            Float.parseFloat(mensajeRecibir.get(i++)),
+                            Integer.parseInt(mensajeRecibir.get(i++)),
+                            Integer.parseInt(mensajeRecibir.get(i++))
                     );
                     resultado.add(receta);
                 }
@@ -227,14 +247,16 @@ public class Receta {
 
         switch (mensajeRecibir.get(0)) {
             case "RESPCONSULTA" -> {
-                for (int i = 1; i < mensajeRecibir.size(); i += 6) {
+                int i = 1;
+                while (i < mensajeRecibir.size()) {
                     Receta receta = new Receta(
                             Integer.parseInt(mensajeRecibir.get(i)),
-                            mensajeRecibir.get(i + 1),
-                            mensajeRecibir.get(i + 2),
-                            mensajeRecibir.get(i + 3),
-                            Float.parseFloat(mensajeRecibir.get(i + 4)),
-                            Integer.parseInt(mensajeRecibir.get(i + 5))
+                            mensajeRecibir.get(i++),
+                            mensajeRecibir.get(i++),
+                            mensajeRecibir.get(i++),
+                            Float.parseFloat(mensajeRecibir.get(i++)),
+                            Integer.parseInt(mensajeRecibir.get(i++)),
+                            Integer.parseInt(mensajeRecibir.get(i++))
                     );
                     resultado.add(receta);
                 }
@@ -276,14 +298,16 @@ public class Receta {
                 ArrayList<String> mensajeRecibir = Conexion.sendMessage(mensajeEnviar);
                 switch (mensajeRecibir.get(0)) {
                     case "RESPCONSULTA" -> {
-                        for (int i = 1; i < mensajeRecibir.size(); i += 6) {
+                        int i = 1;
+                        while (i < mensajeRecibir.size()) {
                             Receta receta = new Receta(
-                                    Integer.parseInt(mensajeRecibir.get(i)),
-                                    mensajeRecibir.get(i + 1),
-                                    mensajeRecibir.get(i + 2),
-                                    mensajeRecibir.get(i + 3),
-                                    Float.parseFloat(mensajeRecibir.get(i + 4)),
-                                    Integer.parseInt(mensajeRecibir.get(i + 5))
+                                    Integer.parseInt(mensajeRecibir.get(i++)),
+                                    mensajeRecibir.get(i++),
+                                    mensajeRecibir.get(i++),
+                                    mensajeRecibir.get(i++),
+                                    Float.parseFloat(mensajeRecibir.get(i++)),
+                                    Integer.parseInt(mensajeRecibir.get(i++)),
+                                    Integer.parseInt(mensajeRecibir.get(i++))
                             );
                             resultado.add(receta);
                         }
@@ -332,13 +356,14 @@ public class Receta {
             String instrucciones = mensajeRecibir.get(5);
             float promedioCalificacion = Float.parseFloat(mensajeRecibir.get(6));
             int cantCalificaciones = Integer.parseInt(mensajeRecibir.get(7));
+            int calificacionDelUsuario = Integer.parseInt(mensajeRecibir.get(8));
 
             ArrayList<Ingrediente> ingredientes = new ArrayList<>();
             ArrayList<CategoriaReceta> categoriasReceta = new ArrayList<>();
             ArrayList<CategoriaIngrediente> categoriasIngrediente = new ArrayList<>();
             ArrayList<Multimedia> multimedia = new ArrayList<>();
 
-            int i = 8;
+            int i = 9;
 
             // Recibe los ingredinetes
             while (!mensajeRecibir.get(i).equals("CATEGORIASRECETA")) {
@@ -382,6 +407,7 @@ public class Receta {
                     instrucciones,
                     promedioCalificacion,
                     cantCalificaciones,
+                    calificacionDelUsuario,
                     ingredientes,
                     categoriasReceta,
                     categoriasIngrediente,

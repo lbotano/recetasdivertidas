@@ -21,7 +21,7 @@ public class MultimediaCargado {
     public void setMultimedia(String url){
         multimedia = new Multimedia(url);
         this.lblMultimedia.setText(url);
-        this.imgView.setImage(new Image(url));
+        this.imgView.setImage(new Image(url, true));
 
         root.setUserData(multimedia);
     }

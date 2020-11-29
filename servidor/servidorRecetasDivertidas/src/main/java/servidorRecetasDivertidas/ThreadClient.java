@@ -18,9 +18,9 @@ import jsonClasess.Multimedia;
 
 public class ThreadClient implements Runnable{
 	//referencia al objeto que maneja las conexiones a la base de datos
-	private ComboPooledDataSource cpds;
+	private final ComboPooledDataSource cpds;
 	//objeto que maneja el enlace con el cliente
-	private Socket socket;
+	private final Socket socket;
 	//objetos que guardan los mensajes que se transmiten
 	private ArrayList<String> answer;
 	private ArrayList<String> message;
@@ -35,11 +35,11 @@ public class ThreadClient implements Runnable{
 	private ObjectOutputStream out;
 	private ObjectInputStream in;
 
-	private static ThreadLocal<String> usuarioLogueado = new ThreadLocal<>();
-	private static ThreadLocal<Boolean> esAdmin = new ThreadLocal<>();
+	private static final ThreadLocal<String> usuarioLogueado = new ThreadLocal<>();
+	private static final ThreadLocal<Boolean> esAdmin = new ThreadLocal<>();
 
 	// Mensajes que se pueden ejecutar sin estar logueado
-	private String[] mensajesSinLogueo = {"LOGIN", "PREGUNTASSEG", "REGISTRO", "SERVIDORVIVE"};
+	private final String[] mensajesSinLogueo = {"LOGIN", "PREGUNTASSEG", "REGISTRO", "SERVIDORVIVE"};
 
 	
 	// SPs para usuario
@@ -47,12 +47,12 @@ public class ThreadClient implements Runnable{
 	private static final String CALIFICAR = "{call spCalificarReceta(?,?,?)}";
 	private static final String CAMBIARCONTRA = "{call spCambiarContrasena(?,?,?)}";
 	private static final String CONSCALIFUSUARIO = "{SELECT fnGetCalificacionPorUsuario(?,?)}";
-	private static final String CONSRECETASCATING = "{call spBuscarRecetasPorCatIngr(?,?)}";
-	private static final String CONSRECETASCATREC = "{call spBuscarRecetasPorCatReceta(?,?)}";
-	private static final String CONSRECETAING = "{call spBuscarRecetasPorIngr(?,?)}";
-	private static final String CONSRECETATEXT = "{call spBuscarRecetasPorTexto(?,?)}";
-	private static final String CONSTOPRECETAS = "{call spSeleccionarTopRecetas(?)}";
-	private static final String DATOSRECETA = "{call spGetDatosReceta(?)}";
+	private static final String CONSRECETASCATING = "{call spBuscarRecetasPorCatIngr(?,?,?)}";
+	private static final String CONSRECETASCATREC = "{call spBuscarRecetasPorCatReceta(?,?,?)}";
+	private static final String CONSRECETAING = "{call spBuscarRecetasPorIngr(?,?,?)}";
+	private static final String CONSRECETATEXT = "{call spBuscarRecetasPorTexto(?,?,?)}";
+	private static final String CONSTOPRECETAS = "{call spSeleccionarTopRecetas(?,?)}";
+	private static final String DATOSRECETA = "{call spGetDatosReceta(?,?)}";
 	private static final String INGREDIENTES = "{call spSeleccionarIngredientes()}";
 	private static final String LISTARCATREC = "SELECT * FROM CategoriaDeReceta ORDER BY cNombre;";
 	private static final String LISTARCATING = "SELECT * FROM CategoriaDeIngrediente ORDER BY cNombre;";
@@ -211,7 +211,7 @@ public class ThreadClient implements Runnable{
 				//cantidad de calificaciones
 				answer.add(String.valueOf(rs.getInt(6)));
 				//calificación por el usuario
-				answer.add(String.valueOf(rs.getFloat(7)));
+				answer.add(String.valueOf(rs.getInt(7)));
 				index++;
 			}
 			rs.close();
@@ -300,7 +300,8 @@ public class ThreadClient implements Runnable{
 	private void consTopRecetas(){
 		try {
 			stmt = conn.prepareCall(CONSTOPRECETAS);
-			stmt.setInt(1,Integer.parseInt(message.get(1)));
+			stmt.setString(1, usuarioLogueado.get());
+			stmt.setInt(2, Integer.parseInt(message.get(1)));
 			stmt.execute();
 
 			DatosConsultaRecetas(stmt.getResultSet());
@@ -317,6 +318,7 @@ public class ThreadClient implements Runnable{
 			stmt = conn.prepareCall(DATOSRECETA);
 			//pone la id de la receta
 			stmt.setString(1, message.get(1));
+			stmt.setString(2, usuarioLogueado.get());
 			stmt.execute();
 			/*El primer resultset se debe tomar despues de llamar a execute()
 			 * Si se llama a getMoreResults() primero, se perderia el primer resultset
@@ -382,15 +384,14 @@ public class ThreadClient implements Runnable{
 			// Se toman los datos de las categorias de recetas, categorias de ingredientes y multimedia
 			for (int i = 0; i < 3; i++) {
 				//Toma el proximo resultset, si no hay (o es un update) entonces error
-				if(!stmt.getMoreResults()) {
-					if(i == 0){
-						throw new SQLException("Error en la consulta: no se encontro las categorias de receta", "45000");
-					}else if (i == 1){
-						throw new SQLException("Error en la consulta: no se encontro las categorias de ingredietnes", "45000");
-					}else{
-						throw new SQLException("Error en la consulta: no se encontro la multimedia", "45000");
-					}
-				}
+				if (!stmt.getMoreResults())
+					if (i == 0) throw new SQLException(
+								"Error en la consulta: no se encontro las categorias de receta", "45000");
+					else if (i == 1) throw new SQLException(
+								"Error en la consulta: no se encontro las categorias de ingredietnes", "45000");
+					else throw new SQLException(
+								"Error en la consulta: no se encontro la multimedia", "45000");
+
 				rs = stmt.getResultSet();
 				while(rs.next()) {
 					//cId, id de la categoria (receta / ingrediente) / mID, id de multimedia
@@ -404,11 +405,8 @@ public class ThreadClient implements Runnable{
 				INDICE 1 = CATEGORIASING
 				INDICE 2 = MULTIMEDIA
 				 */
-				if(i == 0) {
-					answer.add("CATEGORIASING");
-				}else if (i == 1){
-					answer.add("MULTIMEDIA");
-				}
+				if (i == 0) answer.add("CATEGORIASING");
+				else if (i == 1) answer.add("MULTIMEDIA");
 			}
 			//si todo salio bien, pone el mensaje de ok
 			answer.add(0,"DATOSRECETAOK");
@@ -547,21 +545,22 @@ public class ThreadClient implements Runnable{
 
 				answer.add("RESPCONSULTA");
 				do {
-					//agarra los elementos de la fila y los pone en el aeeay de respuesta
-					answer.add(resultadoSP.getString(1));
-					answer.add(resultadoSP.getString(2));
-					answer.add(resultadoSP.getString(3));
-					answer.add(resultadoSP.getString(4));
-					answer.add(resultadoSP.getString(5));
-					answer.add(resultadoSP.getString(6));
-				//Mueve el cursor a la siguiente fila, si hay mas resultados devuelve true
+					// Agarra los elementos de la fila y los pone en el array de respuesta
+					answer.add(resultadoSP.getString(1)); // ID
+					answer.add(resultadoSP.getString(2)); // Autor
+					answer.add(resultadoSP.getString(3)); // Nombre
+					answer.add(resultadoSP.getString(4)); // Descripción
+					answer.add(resultadoSP.getString(5)); // Calificacion de la receta
+					answer.add(resultadoSP.getString(6)); // Cantidad de calificaciones de la receta
+					answer.add(resultadoSP.getString(7)); // Calificación por el usuario
+				// Mueve el cursor a la siguiente fila, si hay mas resultados devuelve true
 				} while (resultadoSP.next());
 			} else {
 				answer.add("RESPCONSULTAFAIL");
 				answer.add("Error al obtener las recetas de " + username);
 			}
 		
-		}catch (SQLException e) {
+		} catch (SQLException e) {
 			sqlExceptionHandler(e, "RECETASDEUSUARIOFAIL");
 		}
 	}
@@ -776,7 +775,7 @@ public class ThreadClient implements Runnable{
 	private void subirIng() {
 		try {
 			stmt = conn.prepareCall(SUBIRING);
-			ArrayList<Categoria> catIng = new ArrayList<Categoria>();
+			ArrayList<Categoria> catIng = new ArrayList<>();
 			//primer parametro: nombre del ingrediente
 			stmt.setString(1, message.get(1));
 			//Arma el json con los ingredientes
