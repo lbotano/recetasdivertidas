@@ -12,7 +12,6 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
 import servidorRecetasDivertidas.ThreadClient;
 
 public class ThreadServer implements Runnable {
-	private String name;
 	private int port;
 	private ExecutorService pool;
 	private int sizeThreadPool;
@@ -55,7 +54,7 @@ public class ThreadServer implements Runnable {
 			try {
 				socketListener.close();
 			} catch (IOException e) {
-				System.err.println("[ERROR] Error while trying to close server socket: " + name);
+				System.err.println("[ERROR] Error while trying to close server socket");
 				e.printStackTrace();
 			}
 		}

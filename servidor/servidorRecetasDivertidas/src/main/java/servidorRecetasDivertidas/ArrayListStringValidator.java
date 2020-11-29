@@ -13,18 +13,14 @@ public class ArrayListStringValidator {
 	//lo saque del codigo del cliente (camiloxd)
 	private final String patternMail ="^[a-zA-Z0-9_+&*-]+(?:\\."+
 								"[a-zA-Z0-9_+&*-]+)*@" +
-								"(?:[a-zA-Z0-9-]+\\.)+[a-z" +
+									"(?:[a-zA-Z0-9-]+\\.)+[a-z" +
 								"A-Z]{2,7}$";
 	private final String patternURL = "\\b(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]";
 
-			
-	
-	
 	public ArrayListStringValidator(ArrayList<String> a) {
 		stringsValidar = a;
 	}
-	//Cliente
-	//-----------------------------------------------------------------
+	//Cliente-----------------------------------------------------------------
 	
 	public boolean esSubirRecetaValido() {
 		//si no tiene estos datos, la estructura del mensaje es invalida.
@@ -114,8 +110,7 @@ public class ArrayListStringValidator {
 		return (nickname && contraNueva && respuesta);
 	}
 	
-	//Admin
-	//-----------------------------------
+	//Admin-----------------------------------
 	
 	public boolean esSubirCatValido() {
 		if(stringsValidar.size() != 2) {
@@ -137,8 +132,7 @@ public class ArrayListStringValidator {
 		}
 		return true;
 	}
-	//General
-	//-----------------------------------
+	//General-----------------------------------
 
 	public boolean vMail(String s) {
 		return Pattern.matches(patternMail, s);
